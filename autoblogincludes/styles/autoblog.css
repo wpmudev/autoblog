@@ -1,0 +1,101 @@
+/* @override http://dev.site/mu/wp-content/plugins/autoblog/autoblogincludes/styles/autoblog.css?ver=1 */
+
+div#entryholder {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+div.postbox {
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+
+input.deletecheck {
+	vertical-align: 0px;
+	margin-right: 10px;
+}
+
+div.inside table {
+	margin-top: 5px;
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+div.inside table tbody tr td.heading {
+	text-align: right;
+	width: 20%;
+	line-height: 1.4em;
+	padding: 5px 5px 5px 10px;
+}
+
+td.spacer {
+	background-color: #edf3fe;
+
+}
+
+div.inside table tbody tr td.spacer span {
+	text-shadow: 0 1px 0 #FFFFFF;
+	font-size: 12px;
+	color: #000;line-height: 1.4em;
+	margin-left: 10px;
+	font-style: normal;
+	font-weight: bold;
+}
+
+table tbody tr td p {
+	padding-left: 10px;
+	padding-top: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+div.inside table tbody tr td {
+	line-height: 1.4em;
+	padding-right: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	vertical-align: top;
+}
+
+input.long {
+	width: 70%;
+}
+input.short {
+	width: 50%;
+}
+
+div.inside table tbody tr td span {
+	font-size: 11px;
+	font-style: italic;
+}
+
+div.postbox h3.hndle {
+	margin: 0;
+	line-height: 1em;
+	font-size: 12px;
+	padding: 7px 9px;
+	cursor: auto;
+}
+
+div.postbox h3.hndle span {
+	padding: 6px 0;
+}
+
+div.postbox:hover div.handlediv {
+	background: transparent url(../images/menu-bits.gif) no-repeat scroll left -111px;
+}
+
+a.info {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: transparent url(../images/information.png) no-repeat 0 bottom;
+	margin-left: 5px;
+	opacity: 0.25;
+	vertical-align: text-bottom;
+}
+
+a.info:hover {
+	opacity: 1;
+}
+
