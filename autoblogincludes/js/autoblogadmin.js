@@ -11,6 +11,7 @@ function ab_changeBlog() {
 		jQuery(this).parents('div.postbox').find('select.cat').html('<option value="">Loading...</option>');
 
 		// Call JSON here
+		//ajaxurl
 		jQuery.getJSON("index.php?namespace=_autoblogadmin&call=_ajax&id=" + blog + "&action=_getblogauthorlist&callback=?",
 		        function(ret){
 					//var opts = "<option value=''>Select a League...</option>";
@@ -48,7 +49,7 @@ function ab_headings() {
 }
 
 function ab_delfeedcheck() {
-	if(confirm('Are you sure you want to delete this feed?')) {
+	if(confirm(autoblog.deletefeed)) {
 		return true;
 	} else {
 		return false;
@@ -56,7 +57,7 @@ function ab_delfeedcheck() {
 }
 
 function ab_processfeedcheck() {
-	if(confirm('Are you sure you want to process this feed?')) {
+	if(confirm(autoblog.processfeed)) {
 		return true;
 	} else {
 		return false;
