@@ -21,6 +21,8 @@ class autoblogpremium {
 		// Installation functions
 		register_activation_hook(__FILE__, array(&$this, 'install'));
 
+		add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
+
 		add_action('init', array(&$this, 'initialise_plugin'));
 		add_action('load-ms-admin_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog'));
 		add_action('admin_menu', array(&$this,'add_adminmenu'));
@@ -39,6 +41,16 @@ class autoblogpremium {
 
 	function autoblogpremium() {
 		$this->__construct();
+	}
+
+	function load_textdomain() {
+
+		$locale = apply_filters( 'autoblog_locale', get_locale() );
+		$mofile = autoblog_dir( "autoblogincludes/autoblog-$locale.mo" );
+
+		if ( file_exists( $mofile ) )
+			load_textdomain( 'autoblogtext', $mofile );
+
 	}
 
 	function install() {
