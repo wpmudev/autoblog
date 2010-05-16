@@ -12,7 +12,7 @@ function ab_changeBlog() {
 
 		// Call JSON here
 		//ajaxurl
-		jQuery.getJSON("index.php?namespace=_autoblogadmin&call=_ajax&id=" + blog + "&action=_getblogauthorlist&callback=?",
+		jQuery.getJSON(ajaxurl, {action: '_getblogauthorlist', id: blog, nocache: new Date().getTime() },
 		        function(ret){
 					//var opts = "<option value=''>Select a League...</option>";
 					var opts = "";
@@ -24,7 +24,7 @@ function ab_changeBlog() {
 					ths.parents('div.postbox').find('select.author').html(opts);
 		        });
 
-		jQuery.getJSON("index.php?namespace=_autoblogadmin&call=_ajax&id=" + blog + "&action=_getblogcategorylist&callback=?",
+		jQuery.getJSON(ajaxurl, {action: '_getblogcategorylist', id: blog, nocache: new Date().getTime()},
 		        function(ret){
 					//var opts = "<option value=''>Select a League...</option>";
 					var opts = "";
@@ -83,6 +83,7 @@ function ab_adminReady() {
 
 	ab_headings();
 
+	/*
 	jQuery("a.info").qtip({
 	   position: {
 	      corner: {
@@ -94,6 +95,7 @@ function ab_adminReady() {
 		      name: 'cream' // Inherit from preset style
 		   }
 	});
+	*/
 
 	jQuery('select.blog').change(ab_changeBlog);
 

@@ -21,10 +21,8 @@ class autoblogpremium {
 		// Installation functions
 		register_activation_hook(__FILE__, array(&$this, 'install'));
 
-		add_action('load-ms-admin_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog'));
-
 		add_action('init', array(&$this, 'initialise_plugin'));
-
+		add_action('load-ms-admin_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog'));
 		add_action('admin_menu', array(&$this,'add_adminmenu'));
 
 		foreach($this->tables as $table) {
@@ -615,8 +613,6 @@ class autoblogpremium {
 		echo "<br/><input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
 		echo "/>&nbsp;<span>" . __('Use original feeds tags as well (adding if necessary).','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Imported and use the tags originally associated with the post.', 'autoblogtext') . "'></a>";
 
-
-		//print_r($tags);
 		echo "</td>";
 		echo "</tr>";
 
@@ -814,7 +810,7 @@ class autoblogpremium {
 		echo '<div class="alignleft">';
 		echo '<input class="button-secondary delete save" type="submit" name="savenew" value="' . __('Save feed', 'autoblogtext') . '" />';
 		echo "&nbsp;";
-		echo "<a href='wpmu-admin.php?page=autoblog_admin'>";
+		echo "<a href='ms-admin.php?page=autoblog_admin'>";
 		echo __('&lt; cancel and return', 'autoblogtext');
 		echo "</a>";
 		echo '</div>';
@@ -827,7 +823,7 @@ class autoblogpremium {
 		echo '<div class="alignleft">';
 		echo '<input class="button-secondary delete save" type="submit" name="savenew" value="' . __('Add New', 'autoblogtext') . '" />';
 		echo "&nbsp;";
-		echo "<a href='wpmu-admin.php?page=autoblog_admin'>";
+		echo "<a href='ms-admin.php?page=autoblog_admin'>";
 		echo __('&lt; cancel and return', 'autoblogtext');
 		echo "</a>";
 		echo '</div>';
@@ -1100,18 +1096,18 @@ class autoblogpremium {
 					echo "<input type='checkbox' name='select[]' id='select-" . $table->feed_id . "' value='" . $table->feed_id . "' class='selectfeed' />";
 					echo '</td>';
 					echo '<td>';
-					echo '<a href="' . admin_url("wpmu-admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
+					echo '<a href="' . admin_url("ms-admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
 					if(!empty($details)) {
-						echo stripslashes($details['title']);
+						echo esc_html(stripslashes($details['title']));
 					} else {
 						echo __('No title set', 'autoblogtext');
 					}
 					echo '</a>';
 
 					echo '<div class="row-actions">';
-					echo "<a href='" . admin_url("wpmu-admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
-					echo "<a href='" . wp_nonce_url(admin_url("wpmu-admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
-					echo "<a href='" . wp_nonce_url(admin_url("wpmu-admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
+					echo "<a href='" . admin_url("ms-admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
+					echo "<a href='" . wp_nonce_url(admin_url("ms-admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
+					echo "<a href='" . wp_nonce_url(admin_url("ms-admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
 					echo '</div>';
 
 					echo '</td>';
@@ -1169,8 +1165,6 @@ class autoblogpremium {
 			echo '</div>';
 
 			echo "</form>";
-
-			//$this->show_table_template();
 
 			echo "</div>";	// wrap
 		}
