@@ -118,7 +118,26 @@ class autoblogpremium {
 	}
 
 	function add_admin_header_autoblog_options() {
+
+		global $action, $page;
+
+		wp_reset_vars( array('action', 'page') );
+
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
+
+		if(isset($_POST['action']) && $_POST['action'] == 'updateoptions') {
+
+			check_admin_referer('update-autoblog-options');
+
+			if($_POST['debugmode'] == 'yes') {
+				update_site_option('autoblog_debug', true);
+			} else {
+				delete_site_option('autoblog_debug');
+			}
+
+			wp_safe_redirect( add_query_arg('msg', 1, wp_get_referer()) );
+		}
+
 	}
 
 	function dashboard_iehead() {
@@ -1267,6 +1286,64 @@ class autoblogpremium {
 			echo "</div>";	// wrap
 		}
 
+	}
+
+	function handle_options_page() {
+
+		global $action, $page;
+
+		$messages = array();
+		$messages[1] = __('Your options have been updated.','membership');
+
+		?>
+		<div class='wrap nosubsub'>
+			<div class="icon32" id="icon-options-general"><br></div>
+			<h2><?php _e('Edit Options','membership'); ?></h2>
+
+			<?php
+			if ( isset($_GET['msg']) ) {
+				echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
+				$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+			}
+			?>
+
+			<form action='?page=<?php echo $page; ?>' method='post'>
+
+				<input type='hidden' name='page' value='<?php echo $page; ?>' />
+				<input type='hidden' name='action' value='updateoptions' />
+
+				<?php
+					wp_nonce_field('update-autoblog-options');
+				?>
+
+				<h3><?php _e('Debug mode','autoblog'); ?></h3>
+				<p><?php _e('Switch on debug mode and reporting.','autoblog'); ?></p>
+
+				<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row"><?php _e('Debug mode is','autoblog'); ?></th>
+						<td>
+							<?php
+								$debug = get_site_option('autoblog_debug', false);
+							?>
+							<select name='debugmode' id='debugmode'>
+								<option value="no" <?php if($debug == false) echo "selected='selected'"; ?>><?php _e('Disabled','autoblog'); ?></option>
+								<option value="yes" <?php if($debug == true) echo "selected='selected'"; ?>><?php _e('Enabled','autoblog'); ?></option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+				</table>
+
+				<p class="submit">
+					<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
+				</p>
+
+			</form>
+
+		</div> <!-- wrap -->
+		<?php
 	}
 
 	function get_blogs_of_site($siteid = false, $all = false) {
