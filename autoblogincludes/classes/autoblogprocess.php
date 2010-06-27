@@ -6,6 +6,8 @@ class autoblogcron {
 	var $tables = array('autoblog');
 	var $autoblog;
 
+	var $debug = false;
+
 	function __construct() {
 
 		global $wpdb;
@@ -22,6 +24,9 @@ class autoblogcron {
 		}
 
 		add_filter( 'wp_feed_cache_transient_lifetime', array(&$this, 'feed_cache') );
+
+		// override with option.
+		$this->debug = get_site_option('autoblog_debug', false);
 
 	}
 
@@ -310,6 +315,7 @@ class autoblogcron {
 
 			if ( !is_wp_error( $post_ID ) ) {
 				update_post_meta( $post_ID , 'original_source', $item->get_permalink() );
+				update_post_meta( $post_ID , 'original_feed', $ablog['url'] );
 			}
 		}
 
@@ -328,8 +334,6 @@ class autoblogcron {
 	function process_autoblog() {
 
 		global $wpdb;
-
-		$debug = get_site_option('autoblog_debug', 'no');
 
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentries(time());
