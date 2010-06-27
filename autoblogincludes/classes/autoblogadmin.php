@@ -98,7 +98,7 @@ class autoblogpremium {
 		wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
 		wp_enqueue_script('adash_js', autoblog_url('autoblogincludes/js/dashboard.js'), array('jquery'));
 
-		wp_localize_script( 'adash_js', 'autoblog', array( 'signups' => __('Signups','autoblog'), 'members' => __('Members','autoblog') ) );
+		wp_localize_script( 'adash_js', 'autoblog', array( 'imports' => __('Posts imported','autoblog') ) );
 
 		add_action ('admin_head', array(&$this, 'dashboard_iehead'));
 		add_action ('admin_head', array(&$this, 'dashboard_chartdata'));
@@ -119,6 +119,14 @@ class autoblogpremium {
 
 	function add_admin_header_autoblog_options() {
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
+	}
+
+	function dashboard_iehead() {
+		echo '<!--[if IE]><script language="javascript" type="text/javascript" src="' . autoblog_url('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
+	}
+
+	function dashboard_chartdata() {
+
 	}
 
 	function ajax__getblogcategorylist() {

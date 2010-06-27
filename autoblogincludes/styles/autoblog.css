@@ -99,3 +99,11 @@ a.info:hover {
 	opacity: 1;
 }
 
+.dashchart {
+	width: 100%;
+	min-height: 250px;
+	background: #fafafa;
+	margin-bottom: 30px;
+	margin-left: 5px;
+}
+
