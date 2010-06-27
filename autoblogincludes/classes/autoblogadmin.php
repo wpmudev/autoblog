@@ -24,7 +24,11 @@ class autoblogpremium {
 		add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
 
 		add_action('init', array(&$this, 'initialise_plugin'));
-		add_action('load-ms-admin_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog'));
+
+		add_action('load-toplevel_page_autoblog', array(&$this, 'add_admin_header_autoblog'));
+		add_action('load-autoblog_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog_admin'));
+		add_action('load-autoblog_page_autoblog_options', array(&$this, 'add_admin_header_autoblog_options'));
+
 		add_action('admin_menu', array(&$this,'add_adminmenu'));
 
 		foreach($this->tables as $table) {
@@ -90,6 +94,20 @@ class autoblogpremium {
 	}
 
 	function add_admin_header_autoblog() {
+
+		wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
+		wp_enqueue_script('adash_js', autoblog_url('autoblogincludes/js/dashboard.js'), array('jquery'));
+
+		wp_localize_script( 'adash_js', 'autoblog', array( 'signups' => __('Signups','autoblog'), 'members' => __('Members','autoblog') ) );
+
+		add_action ('admin_head', array(&$this, 'dashboard_iehead'));
+		add_action ('admin_head', array(&$this, 'dashboard_chartdata'));
+
+		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
+		wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
+	}
+
+	function add_admin_header_autoblog_admin() {
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 		wp_enqueue_script( 'qtip', autoblog_url('autoblogincludes/js/jquery.qtip-1.0.0-rc3.min.js'), array('jquery'), $this->build );
 		wp_enqueue_script( 'autoblogadminjs', autoblog_url('autoblogincludes/js/autoblogadmin.js'), array('jquery'), $this->build );
@@ -97,6 +115,10 @@ class autoblogpremium {
 		wp_localize_script( 'autoblogadminjs', 'autoblog', array( 	'deletefeed' => __('Are you sure you want to delete this feed?','autoblogtext'),
 																	'processfeed' => __('Are you sure you want to process this feed?','autoblogtext')
 																) );
+	}
+
+	function add_admin_header_autoblog_options() {
+		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 	}
 
 	function ajax__getblogcategorylist() {
@@ -174,7 +196,63 @@ class autoblogpremium {
 	}
 
 	function add_adminmenu() {
-		add_submenu_page('ms-admin.php', __('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 10, "autoblog_admin", array(&$this,'handle_admin_page'));
+
+		global $menu, $admin_page_hooks;
+
+		add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+
+		// Fix WP translation hook issue
+		if(isset($admin_page_hooks['autoblog'])) {
+			$admin_page_hooks['autoblog'] = 'autoblog';
+		}
+
+		// Add the sub menu
+		add_submenu_page('autoblog', __('Edit feeds','autoblog'), __('Edit feeds','autoblog'), 'manage_options', "autoblog_admin", array(&$this,'handle_admin_page'));
+		add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+
+	}
+
+	function handle_dash_page() {
+		?>
+		<div class='wrap nosubsub'>
+			<div class="icon32" id="icon-index"><br></div>
+			<h2><?php _e('Auto blog dashboard','autoblog'); ?></h2>
+
+			<div id="dashboard-widgets-wrap">
+
+			<div class="metabox-holder" id="dashboard-widgets">
+				<div style="width: 49%;" class="postbox-container">
+					<div class="meta-box-sortables ui-sortable" id="normal-sortables">
+						<?php
+						do_action( 'autoblog_dashboard_left' );
+						?>
+					</div>
+				</div>
+
+				<div style="width: 49%;" class="postbox-container">
+					<div class="meta-box-sortables ui-sortable" id="side-sortables">
+						<?php
+						do_action( 'autoblog_dashboard_right' );
+						?>
+					</div>
+				</div>
+
+				<div style="display: none; width: 49%;" class="postbox-container">
+					<div class="meta-box-sortables ui-sortable" id="column3-sortables" style="">
+					</div>
+				</div>
+
+				<div style="display: none; width: 49%;" class="postbox-container">
+					<div class="meta-box-sortables ui-sortable" id="column4-sortables" style="">
+					</div>
+				</div>
+			</div>
+
+			<div class="clear"></div>
+			</div>
+
+		</div> <!-- wrap -->
+		<?php
 	}
 
 	function show_table($key, $details) {
@@ -822,7 +900,7 @@ class autoblogpremium {
 		echo '<div class="alignleft">';
 		echo '<input class="button-secondary delete save" type="submit" name="savenew" value="' . __('Save feed', 'autoblogtext') . '" />';
 		echo "&nbsp;";
-		echo "<a href='ms-admin.php?page=autoblog_admin'>";
+		echo "<a href='admin.php?page=autoblog_admin'>";
 		echo __('&lt; cancel and return', 'autoblogtext');
 		echo "</a>";
 		echo '</div>';
@@ -835,7 +913,7 @@ class autoblogpremium {
 		echo '<div class="alignleft">';
 		echo '<input class="button-secondary delete save" type="submit" name="savenew" value="' . __('Add New', 'autoblogtext') . '" />';
 		echo "&nbsp;";
-		echo "<a href='ms-admin.php?page=autoblog_admin'>";
+		echo "<a href='admin.php?page=autoblog_admin'>";
 		echo __('&lt; cancel and return', 'autoblogtext');
 		echo "</a>";
 		echo '</div>';
@@ -868,7 +946,7 @@ class autoblogpremium {
 		echo '<div class="alignleft">';
 		echo '<input class="button-secondary delete save" type="submit" name="save" value="' . __('Update feed', 'autoblogtext') . '" />';
 		echo "&nbsp;";
-		echo "<a href='wpmu-admin.php?page=autoblog_admin'>";
+		echo "<a href='admin.php?page=autoblog_admin'>";
 		echo __('&lt; cancel and return', 'autoblogtext');
 		echo "</a>";
 		echo '</div>';
@@ -881,7 +959,7 @@ class autoblogpremium {
 		echo '<div class="alignleft">';
 		echo '<input class="button-secondary delete save" type="submit" name="save" value="' . __('Update feed', 'autoblogtext') . '" />';
 		echo "&nbsp;";
-		echo "<a href='wpmu-admin.php?page=autoblog_admin'>";
+		echo "<a href='admin.php?page=autoblog_admin'>";
 		echo __('&lt; cancel and return', 'autoblogtext');
 		echo "</a>";
 		echo '</div>';

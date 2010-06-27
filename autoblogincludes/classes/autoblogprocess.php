@@ -329,6 +329,8 @@ class autoblogcron {
 
 		global $wpdb;
 
+		$debug = get_site_option('autoblog_debug', 'no');
+
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentries(time());
 
