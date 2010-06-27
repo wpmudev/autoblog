@@ -1,4 +1,4 @@
-/* @override http://dev.site/mu/wp-content/plugins/autoblog/autoblogincludes/styles/autoblog.css?ver=1 */
+/* @override http://dev.site/wp-content/plugins/autoblog/autoblogincludes/styles/autoblog.css?ver=4 */
 
 div#entryholder {
 	margin-top: 10px;
@@ -105,5 +105,10 @@ a.info:hover {
 	background: #fafafa;
 	margin-bottom: 30px;
 	margin-left: 5px;
+}
+
+div.postbox div.inside p {
+	padding: 5px 10px;
+	margin: 5px 0;
 }
 

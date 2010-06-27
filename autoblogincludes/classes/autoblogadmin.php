@@ -105,6 +105,14 @@ class autoblogpremium {
 
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 		wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
+
+		// actions
+		add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_news') );
+
+		$debug = get_site_option('autoblog_debug', false);
+		if($debug) {
+			add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_debug') );
+		}
 	}
 
 	function add_admin_header_autoblog_admin() {
@@ -237,6 +245,52 @@ class autoblogpremium {
 		add_submenu_page('autoblog', __('Edit feeds','autoblog'), __('Edit feeds','autoblog'), 'manage_options', "autoblog_admin", array(&$this,'handle_admin_page'));
 		add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
 
+	}
+
+	function dashboard_news() {
+		global $page, $action;
+
+		$plugin = get_plugin_data(autoblog_dir('autoblog.php'));
+
+		$debug = get_site_option('autoblog_debug', false);
+
+		?>
+		<div class="postbox " id="dashboard_right_now">
+			<h3 class="hndle"><span><?php _e('Autoblog','autoblog'); ?></span></h3>
+			<div class="inside">
+				<?php
+				echo "<p>";
+				echo __('You are running Autoblog version ','autoblog') . "<strong>" . $plugin['Version'] . '</strong>';
+				echo "</p>";
+
+				echo "<p>";
+				echo __('Debug mode is ','autoblog') . "<strong>";
+				if($debug) {
+					echo __('Enabled','autoblog');
+				} else {
+					echo __('Disabled','autoblog');
+				}
+				echo '</strong>';
+				echo "</p>";
+				?>
+				<br class="clear">
+			</div>
+		</div>
+		<?php
+	}
+
+	function dashboard_debug() {
+		?>
+		<div class="postbox " id="dashboard_right_now">
+			<h3 class="hndle"><span><?php _e('Debug report','autoblog'); ?></span></h3>
+			<div class="inside">
+				<?php
+
+				?>
+				<br class="clear">
+			</div>
+		</div>
+		<?php
 	}
 
 	function handle_dash_page() {

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Auto Blog 3
-Version: 3
+Version: 3.1
 Plugin URI: http://premium.wpmudev.org
 Description: An automatic blog feed reading plugin.
 Author: Barry Getty (Incsub)
