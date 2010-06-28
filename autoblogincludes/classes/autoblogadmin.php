@@ -113,6 +113,9 @@ class autoblogpremium {
 		if($debug) {
 			add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_debug') );
 		}
+
+		add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_stats') );
+
 	}
 
 	function add_admin_header_autoblog_admin() {
@@ -291,6 +294,22 @@ class autoblogpremium {
 			</div>
 		</div>
 		<?php
+	}
+
+	function dashboard_stats() {
+
+		?>
+		<div class="postbox " id="dashboard_right_now">
+			<h3 class="hndle"><span><?php _e('Statistics','autoblog'); ?></span></h3>
+			<div class="inside">
+				<?php
+
+				?>
+				<br class="clear">
+			</div>
+		</div>
+		<?php
+
 	}
 
 	function handle_dash_page() {

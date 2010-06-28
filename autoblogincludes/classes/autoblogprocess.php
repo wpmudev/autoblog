@@ -93,6 +93,10 @@ class autoblogcron {
 				}
 
 			}
+		} else {
+			if($this->debug) {
+				// empty list or not processing
+			}
 		}
 
 		return true;
@@ -110,6 +114,9 @@ class autoblogcron {
 			$max = $feed->get_item_quantity();
 		} else {
 			$max = 0;
+			if($this->debug) {
+				// feed error
+			}
 		}
 
 		for ($x = 0; $x < $max; $x++) {
@@ -125,6 +132,9 @@ class autoblogcron {
 
 			if(count($results) > 0) {
 				// This post already exists so we shall stop here
+				if($this->debug) {
+					// first item already exists for this feed
+				}
 				break;
 			}
 
@@ -316,6 +326,10 @@ class autoblogcron {
 			if ( !is_wp_error( $post_ID ) ) {
 				update_post_meta( $post_ID , 'original_source', $item->get_permalink() );
 				update_post_meta( $post_ID , 'original_feed', $ablog['url'] );
+			} else {
+				if($this->debug) {
+					// error writing post
+				}
 			}
 		}
 
@@ -369,11 +383,17 @@ class autoblogcron {
 				}
 
 				if($process && !empty($details['url'])) {
-
 					$this->process_feed($ablog->feed_id, $details);
-
+				} else {
+					if($this->debug) {
+						// no uri or not processing
+					}
 				}
 
+			}
+		} else {
+			if($this->debug) {
+				// empty list or not processing
 			}
 		}
 
