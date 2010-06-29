@@ -283,17 +283,50 @@ class autoblogpremium {
 	}
 
 	function dashboard_debug() {
+
+		$sql = $this->db->prepare( "SELECT * FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 0, 25", $this->db->siteid, "autoblog_log_%");
+
+		$logs = $this->db->get_results( $sql );
+
 		?>
 		<div class="postbox " id="dashboard_right_now">
 			<h3 class="hndle"><span><?php _e('Debug report','autoblog'); ?></span></h3>
 			<div class="inside">
 				<?php
+				if(!empty($logs)) {
+					foreach($logs as $log) {
+						$val = unserialize($log->meta_value);
+						echo "<p>";
+						echo "<strong>" . date('Y-m-d \a\t H:i', (int) $val['timestamp']) . "</strong><br/>";
+						if(!empty($val['log'])) {
+							foreach($val['log'] as $key => $l) {
+								echo "&#8226; " . $l . "<br/>";
+							}
+						}
+						echo "</p>";
+					}
+				} else {
+					echo "<p>";
+					echo __('No debug logs are available, either you have not processed a feed or everything is running smoothly.','autoblog');
+					echo "</p>";
+				}
 
 				?>
 				<br class="clear">
 			</div>
 		</div>
 		<?php
+
+		// Get some columns to remove - as a tidy up
+		$sql2 = $this->db->prepare( "SELECT meta_id FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 25, 100", $this->db->siteid, "autoblog_log_%");
+		$ids = $this->db->get_col( $sql2 );
+
+		if(!empty($ids)) {
+			$sql3 = $this->db->prepare( "DELETE FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_id IN (" . implode(',', $ids) . ")", $this->db->siteid);
+			$this->db->query( $sql3 );
+		}
+
+
 	}
 
 	function dashboard_stats() {

@@ -117,6 +117,17 @@ class autoblogcron {
 
 	}
 
+	function process_the_feed($feed_id, $ablog) {
+
+		$results = $this->process_feed($feed_id, $ablog);
+
+		if(!empty($this->errors)) {
+			$this->record_error();
+		}
+
+		return $results;
+	}
+
 	function process_feed($feed_id, $ablog) {
 
 		// Load simple pie if required
@@ -125,7 +136,7 @@ class autoblogcron {
 		if(empty($ablog['url'])) {
 			if($this->debug) {
 				// feed error
-				$this->errors[] = __('Error: No feed URL','autoblog');
+				$this->errors[] = __('Error: No URL found for a feed','autoblog');
 			}
 			return false;
 		}
@@ -422,7 +433,7 @@ class autoblogcron {
 					if($this->debug) {
 						// no uri or not processing
 						if(empty($details['url'])) {
-							$this->errors[] = __('Error: No feed URL found.','autoblog');
+							$this->errors[] = __('Error: No URL found for a feed.','autoblog');
 						}
 					}
 				}
@@ -452,7 +463,7 @@ function process_feed($id, $details) {
 
 	global $abc;
 
-	return $abc->process_feed($id, $details);
+	return $abc->process_the_feed($id, $details);
 
 }
 
