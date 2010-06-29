@@ -331,12 +331,25 @@ class autoblogpremium {
 
 	function dashboard_stats() {
 
+		$autos = $this->get_autoblogentries();
+
 		?>
 		<div class="postbox " id="dashboard_right_now">
 			<h3 class="hndle"><span><?php _e('Statistics','autoblog'); ?></span></h3>
 			<div class="inside">
 				<?php
+					if(empty($autos)) {
+						echo "<p>";
+						echo __('You need to set up some feeds before we can produce statistics.','autoblog');
+						echo "</p>";
+					} else {
+						foreach($autos as $key => $a) {
+							$feed = unserialize($a->feed_meta);
+							echo "<p><strong>" . $feed['title'] . " - " . substr($feed['url'], 0, 30) . "</strong></p>";
+							echo "<div id='feedchart-" . $a->feed_id . "' class='dashchart'></div>";
 
+						}
+					}
 				?>
 				<br class="clear">
 			</div>

@@ -1,7 +1,7 @@
 function autoblogSetWidth() {
 
-	jQuer('.dashchart').each( function(index) {
-		var width = jQuery(this).parents('div.inner').width();
+	jQuery('.dashchart').each( function(index) {
+		var width = jQuery(this).parents('div.inside').width();
 		jQuery(this).width((width - 10) + 'px');
 	});
 
@@ -75,12 +75,12 @@ function autoblogReBuildChartThree() {
 
 function autoblogReportReady() {
 
-	memSetWidth();
-	memReBuildCharts();
+	autoblogSetWidth();
+	autoblogReBuildCharts();
 
 	jQuery(window).resize( function() {
-		memSetWidth();
-		memReBuildCharts();
+		autoblogSetWidth();
+		autoblogReBuildCharts();
 	});
 
 }
