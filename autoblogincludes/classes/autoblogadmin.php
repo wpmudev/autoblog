@@ -95,16 +95,16 @@ class autoblogpremium {
 
 	function add_admin_header_autoblog() {
 
-		wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
-		wp_enqueue_script('adash_js', autoblog_url('autoblogincludes/js/dashboard.js'), array('jquery'));
+		//wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
+		//wp_enqueue_script('adash_js', autoblog_url('autoblogincludes/js/dashboard.js'), array('jquery'));
 
-		wp_localize_script( 'adash_js', 'autoblog', array( 'imports' => __('Posts imported','autoblog') ) );
+		//wp_localize_script( 'adash_js', 'autoblog', array( 'imports' => __('Posts imported','autoblog') ) );
 
-		add_action ('admin_head', array(&$this, 'dashboard_iehead'));
-		add_action ('admin_head', array(&$this, 'dashboard_chartdata'));
+		//add_action ('admin_head', array(&$this, 'dashboard_iehead'));
+		//add_action ('admin_head', array(&$this, 'dashboard_chartdata'));
 
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
-		wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
+		//wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
 
 		// actions
 		add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_news') );
