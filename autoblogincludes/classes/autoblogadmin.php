@@ -111,10 +111,10 @@ class autoblogpremium {
 
 		$debug = get_site_option('autoblog_debug', false);
 		if($debug) {
-			add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_debug') );
+			add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_debug') );
 		}
 
-		add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_stats') );
+		//add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_stats') );
 
 	}
 
@@ -328,6 +328,8 @@ class autoblogpremium {
 
 
 	}
+
+
 
 	function dashboard_stats() {
 
