@@ -7,8 +7,37 @@ function autoblogSetWidth() {
 
 }
 
+function autoblogBuildChart( thedata, theid ) {
+
+	alert(thedata);
+
+	var options = {
+	    bars: { show: true, barWidth: 1.0, align: "center" },
+		points: { show: true, barWidth: 1.0 },
+		lines: { show: true, barWidth: 1.0 },
+		grid: { hoverable: true, backgroundColor: { colors: ["#fff", "#eee"] } },
+		xaxis: { ticks: autoblogdata.ticks },
+		yaxis: { tickDecimals: 0, min: 0},
+		legend: {
+		    show: true,
+		    position: "nw" }
+	  };
+
+		autoplot = jQuery.plot(jQuery('#feedchart-' + theid), [ {
+			data: eval('autoblogdata.feed-' + theid),
+			label: autoblog.imports
+		} ], options
+		);
+
+
+}
+
 function autoblogReBuildCharts() {
-	memReBuildCharts();
+	jQuery('.dashchart').each( function(index) {
+		var theid = jQuery(this).attr('id');
+		theid = theid.replace('feedchart-','');
+		autoblogBuildChart( 'feed-' + theid, theid);
+	});
 }
 
 function autoblogReBuildChartOne() {

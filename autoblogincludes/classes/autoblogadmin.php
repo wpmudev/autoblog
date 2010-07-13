@@ -95,26 +95,26 @@ class autoblogpremium {
 
 	function add_admin_header_autoblog() {
 
-		//wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
-		//wp_enqueue_script('adash_js', autoblog_url('autoblogincludes/js/dashboard.js'), array('jquery'));
+		wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
 
-		//wp_localize_script( 'adash_js', 'autoblog', array( 'imports' => __('Posts imported','autoblog') ) );
-
-		//add_action ('admin_head', array(&$this, 'dashboard_iehead'));
-		//add_action ('admin_head', array(&$this, 'dashboard_chartdata'));
+		add_action ('admin_head', array(&$this, 'dashboard_iehead'));
+		add_action ('admin_head', array(&$this, 'dashboard_chartdata'));
 
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
-		//wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
+		wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
+
+		wp_localize_script( 'autoblogdashjs', 'autoblog', array( 'imports' => __('Posts imported','autoblog') ) );
+
 
 		// actions
 		add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_news') );
 
 		$debug = get_site_option('autoblog_debug', false);
 		if($debug) {
-			add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_debug') );
+			add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_debug') );
 		}
 
-		//add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_stats') );
+		add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_stats') );
 
 	}
 
@@ -155,7 +155,93 @@ class autoblogpremium {
 		echo '<!--[if IE]><script language="javascript" type="text/javascript" src="' . autoblog_url('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
 	}
 
+	function get_data($results, $str = false) {
+
+		$data = array();
+
+		foreach( (array) $results as $key => $res) {
+			if($str) {
+				$data[] = "[ " . $key . ", '" . $res . "' ]";
+			} else {
+				$data[] = "[ " . $key . ", " . $res . " ]";
+			}
+		}
+
+		return "[ " . implode(", ", $data) . " ]";
+
+	}
+
 	function dashboard_chartdata() {
+
+		$autos = $this->get_autoblogentries();
+		$results = array();
+		$fres = array();
+		$ticks = array();
+		$data = array();
+
+		foreach($autos as $key => $auto) {
+			$feed = unserialize($auto->feed_meta);
+
+			if($feed['blog'] != $this->db->blogid && function_exists('switch_to_blog')) {
+				switch_to_blog( $feed['blog'] );
+
+			}
+
+			$sql = $this->db->prepare( "SELECT DATE(p.post_date) AS thedate, count(*) AS thecount FROM {$this->db->posts} AS p, {$this->db->postmeta} AS pm WHERE p.ID = pm.post_id AND pm.meta_key = %s AND pm.meta_value = %s AND p.post_date >= %s GROUP BY DATE(p.post_date) ORDER BY p.post_date DESC", 'original_feed', $feed['url'], date("Y-m-d", strtotime('-20 days')) );
+			$results[$auto->feed_id] = $this->db->get_results( $sql );
+
+			if(function_exists('restore_current_blog')) {
+				restore_current_blog();
+			}
+		}
+
+
+		for($n=0; $n < 14; $n++) {
+			$ticks[14 - $n] = date("j/n", strtotime('-' . $n . ' days'));
+		}
+
+		foreach($results as $key => $res) {
+			$fres[$key] = array();
+
+			foreach($res as $ikey => $ires) {
+				$fres[$key][$ires->thedate] = $ires->thecount;
+			}
+
+			for($n=0; $n < 15; $n++) {
+				$thedate = date("Y-m-d", strtotime('-' . $n . ' days'));
+				if(!array_key_exists($thedate, $fres[$key])) {
+					$fres[$key][$thedate] = 0;
+				}
+			}
+
+			foreach($fres[$key] as $fkey => $fval) {
+				$newdate = date("j/n", strtotime($fkey));
+				unset($fres[$key][$fkey]);
+				if(array_search($newdate, $ticks)) {
+					$fres[$key][array_search($newdate, $ticks)] = $fval;
+				}
+
+			}
+		}
+
+		if(!empty($results)) {
+			echo "\n" . '<script type="text/javascript">';
+			echo "\n" . '/* <![CDATA[ */ ' . "\n";
+
+			echo "var autoblogdata = {\n";
+
+			foreach($fres as $key => $data) {
+				echo "feed-" . $key . " : " . $this->get_data($data) . ",\n";
+			}
+
+			echo "ticks : " . $this->get_data($ticks, true) . "\n";
+
+			echo "};\n";
+
+			echo "\n" . '/* ]]> */ ';
+			echo '</script>';
+		}
+
 
 	}
 
