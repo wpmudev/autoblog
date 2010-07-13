@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: Auto Blog 3
-Version: 3.1 beta
+Plugin Name: AutoBlog
+Version: 3.1
 Plugin URI: http://premium.wpmudev.org
 Description: An automatic blog feed reading plugin.
 Author: Barry Getty (Incsub)
@@ -32,7 +32,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Using SimplePie
 //define('SIMPLEPIE_USERAGENT', 'PUT AGENT HERE');
 
-require_once('autoblogincludes/classes/functions.php');
+require_once('autoblogincludes/includes/config.php');
+require_once('autoblogincludes/includes/functions.php');
 // Set up my location
 set_autoblog_url(__FILE__);
 set_autoblog_dir(__FILE__);

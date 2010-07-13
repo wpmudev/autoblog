@@ -22,13 +22,13 @@ class autoblogcron {
 		$this->db =& $wpdb;
 
 		foreach($this->tables as $table) {
-			$this->$table = $this->db->base_prefix . $table;
+			$this->$table = autoblog_db_prefix($this->db, $table);
 		}
 
 		add_filter( 'wp_feed_cache_transient_lifetime', array(&$this, 'feed_cache') );
 
 		// override with option.
-		$this->debug = get_site_option('autoblog_debug', false);
+		$this->debug = get_autoblog_option('autoblog_debug', false);
 
 	}
 
@@ -78,7 +78,7 @@ class autoblogcron {
 							"log" => $this->errors
 						);
 
-		update_site_option('autoblog_log_' . $thetime, $errors);
+		update_autoblog_option('autoblog_log_' . $thetime, $errors);
 
 	}
 
@@ -87,14 +87,14 @@ class autoblogcron {
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentriesforids($ids);
 
-		$lastprocessing = get_site_option('autoblog_processing', strtotime('-1 week'));
+		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week'));
 		if($lastprocessing == 'yes' || $lastprocessing == 'no' || $lastprocessing == 'np') {
 			$lastprocessing = strtotime('-1 hour');
-			update_site_option('autoblog_processing', $lastprocessing);
+			update_autoblog_option('autoblog_processing', $lastprocessing);
 		}
 
 		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes')) {
-			update_site_option('autoblog_processing', time());
+			update_autoblog_option('autoblog_processing', time());
 
 			foreach( (array) $autoblogs as $key => $ablog) {
 
@@ -399,14 +399,14 @@ class autoblogcron {
 		//Or processing limit
 		$timelimit = 3; // max seconds for processing
 
-		$lastprocessing = get_site_option('autoblog_processing', strtotime('-1 week'));
+		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week'));
 		if($lastprocessing == 'yes' || $lastprocessing == 'no' || $lastprocessing == 'np') {
 			$lastprocessing = strtotime('-1 hour');
-			update_site_option('autoblog_processing', $lastprocessing);
+			update_autoblog_option('autoblog_processing', $lastprocessing);
 		}
 
 		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes')) {
-			update_site_option('autoblog_processing', time());
+			update_autoblog_option('autoblog_processing', time());
 
 			foreach( (array) $autoblogs as $key => $ablog) {
 

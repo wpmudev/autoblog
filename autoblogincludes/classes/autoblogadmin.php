@@ -32,11 +32,11 @@ class autoblogpremium {
 		add_action('admin_menu', array(&$this,'add_adminmenu'));
 
 		foreach($this->tables as $table) {
-			$this->$table = $this->db->base_prefix . $table;
+			$this->$table = autoblog_db_prefix($this->db, $table);
 		}
 
 		// check for installation
-		if(get_site_option('autoblog_installed', 0) < $this->build) {
+		if(get_autoblog_option('autoblog_installed', 0) < $this->build) {
 			// create the database table
 			$this->install();
 		}
@@ -77,7 +77,7 @@ class autoblogpremium {
 				$this->db->query($sql);
 			}
 
-			update_site_option('autoblog_installed', $this->build);
+			update_autoblog_option('autoblog_installed', $this->build);
 
 	}
 
@@ -104,7 +104,6 @@ class autoblogpremium {
 		wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
 
 		wp_localize_script( 'autoblogdashjs', 'autoblog', array( 'imports' => __('Posts imported','autoblog') ) );
-
 
 		// actions
 		add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_news') );
@@ -141,9 +140,9 @@ class autoblogpremium {
 			check_admin_referer('update-autoblog-options');
 
 			if($_POST['debugmode'] == 'yes') {
-				update_site_option('autoblog_debug', true);
+				update_autoblog_option('autoblog_debug', true);
 			} else {
-				delete_site_option('autoblog_debug');
+				delete_autoblog_option('autoblog_debug');
 			}
 
 			wp_safe_redirect( add_query_arg('msg', 1, wp_get_referer()) );
@@ -347,7 +346,7 @@ class autoblogpremium {
 
 		$plugin = get_plugin_data(autoblog_dir('autoblog.php'));
 
-		$debug = get_site_option('autoblog_debug', false);
+		$debug = get_autoblog_option('autoblog_debug', false);
 
 		?>
 		<div class="postbox " id="dashboard_right_now">
