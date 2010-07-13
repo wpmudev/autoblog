@@ -456,7 +456,7 @@ class autoblogpremium {
 		?>
 		<div class='wrap nosubsub'>
 			<div class="icon32" id="icon-index"><br></div>
-			<h2><?php _e('Auto blog dashboard','autoblog'); ?></h2>
+			<h2><?php _e('Autoblog dashboard','autoblog'); ?></h2>
 
 			<div id="dashboard-widgets-wrap">
 
