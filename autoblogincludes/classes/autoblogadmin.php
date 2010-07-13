@@ -196,7 +196,7 @@ class autoblogpremium {
 		}
 
 
-		for($n=0; $n < 14; $n++) {
+		for($n=0; $n < 15; $n++) {
 			$ticks[14 - $n] = date("j/n", strtotime('-' . $n . ' days'));
 		}
 
@@ -217,7 +217,7 @@ class autoblogpremium {
 			foreach($fres[$key] as $fkey => $fval) {
 				$newdate = date("j/n", strtotime($fkey));
 				unset($fres[$key][$fkey]);
-				if(array_search($newdate, $ticks)) {
+				if(array_search($newdate, $ticks) !== false) {
 					$fres[$key][array_search($newdate, $ticks)] = $fval;
 				}
 
@@ -230,9 +230,15 @@ class autoblogpremium {
 
 			echo "var autoblogdata = {\n";
 
+			echo "feeds : [";
+
 			foreach($fres as $key => $data) {
-				echo "feed-" . $key . " : " . $this->get_data($data) . ",\n";
+				echo "[ " . $key . ", ";
+				echo $this->get_data($data) . "";
+				echo " ], \n";
 			}
+
+			echo "],\n";
 
 			echo "ticks : " . $this->get_data($ticks, true) . "\n";
 
@@ -423,7 +429,7 @@ class autoblogpremium {
 
 		?>
 		<div class="postbox " id="dashboard_right_now">
-			<h3 class="hndle"><span><?php _e('Statistics','autoblog'); ?></span></h3>
+			<h3 class="hndle"><span><?php _e('Statistics - posts per day','autoblog'); ?></span></h3>
 			<div class="inside">
 				<?php
 					if(empty($autos)) {
