@@ -381,6 +381,10 @@ class autoblogcron {
 		$update['nextcheck'] = time() + (intval($ablog['processfeed']) * 60);
 
 		$this->db->update($this->autoblog, $update, array("feed_id" => $feed_id));
+		// switch us back to the previous blog
+		if(!empty($ablog['blog'])) {
+			restore_current_blog();
+		}
 
 		return true;
 

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: AutoBlog
-Version: 3.1
+Version: 3.1.1
 Plugin URI: http://premium.wpmudev.org
 Description: An automatic blog feed reading plugin.
 Author: Barry Getty (Incsub)
@@ -10,7 +10,7 @@ WDP ID: 96
 */
 
 /*
-Copyright 2007-2009 Incsub (http://incsub.com)
+Copyright 2007-2010 Incsub (http://incsub.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License (Version 2 - GPLv2) as published by
