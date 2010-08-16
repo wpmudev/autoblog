@@ -159,6 +159,22 @@ class autoblogcron {
 			}
 		}
 
+		if(!empty($ablog['startfrom']) && $ablog['startfrom'] > time()) {
+			// We aren't processing this feed yet
+			if($this->debug) {
+				// feed error
+				$this->errors[] = __('Date margin: Not processing feed yet - ','autoblog') . $ablog['url'];
+			}
+		}
+
+		if(!empty($ablog['endon']) && $ablog['endon'] < time()) {
+			// We aren't processing this feed yet
+			if($this->debug) {
+				// feed error
+				$this->errors[] = __('Date margin: Stopped processing feed - ','autoblog') . $ablog['url'];
+			}
+		}
+
 		for ($x = 0; $x < $max; $x++) {
 			$item = $feed->get_item($x);
 
@@ -179,8 +195,8 @@ class autoblogcron {
 				break;
 			}
 
-			$post_title = $item->get_title();
-			$post_content = $item->get_content();
+			$post_title = trim( $item->get_title() );
+			$post_content = trim( $item->get_content() );
 
 			// Set up the defaults
 			$matchall = true; $matchany = true; $matchphrase = true; $matchnone = true; $matchtags = true;
@@ -242,7 +258,7 @@ class autoblogcron {
 					$posttags = array();
 					foreach ($thecats as $category)
 					{
-							$posttags[] = $category->get_label();
+							$posttags[] = trim( $category->get_label() );
 					}
 
 					foreach((array) $words as $key => $word) {
@@ -328,7 +344,7 @@ class autoblogcron {
 				if(!empty($thecats)) {
 					foreach ($thecats as $category)
 					{
-							$tags[] = $category->get_label();
+							$tags[] = trim( $category->get_label() );
 					}
 				}
 
@@ -349,7 +365,7 @@ class autoblogcron {
 
 			if(!empty($ablog['source'])) {
 				// Add the original source to the bottom of the post
-				$post_content .= "<p><a href='" . $item->get_permalink() . "'";
+				$post_content .= "<p><a href='" . trim( $item->get_permalink() ) . "'";
 				if(!empty($ablog['nofollow']) && addslashes($ablog['nofollow']) == '1') {
 					$post_content .= " rel='nofollow'";
 				}
@@ -365,8 +381,8 @@ class autoblogcron {
 			$post_ID = wp_insert_post($post_data);
 
 			if ( !is_wp_error( $post_ID ) ) {
-				update_post_meta( $post_ID , 'original_source', $item->get_permalink() );
-				update_post_meta( $post_ID , 'original_feed', $ablog['url'] );
+				update_post_meta( $post_ID , 'original_source', trim( $item->get_permalink() ) );
+				update_post_meta( $post_ID , 'original_feed', trim( $ablog['url'] ) );
 			} else {
 				if($this->debug) {
 					// error writing post
