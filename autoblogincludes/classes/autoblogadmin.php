@@ -778,6 +778,90 @@ class autoblogpremium {
 		echo "</td>";
 		echo "</tr>";
 
+		// New fields
+
+		$startfrom = $table['startfrom'];
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Starting from','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[startfromday]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=31; $n++) {
+			echo "<option value='$n'";
+			if(!empty($startfrom) && $n == date('j', $startfrom)) {
+				echo " selected='selected'";
+			}
+			echo ">" . $n . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[startfrommonth]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=12; $n++) {
+			echo "<option value='$n'";
+			if(!empty($startfrom) && $n == date('n', $startfrom)) {
+				echo " selected='selected'";
+			}
+			echo ">" . date('M', strtotime(date('Y-' . $n . '-1'))) . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[startfromyear]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=date("Y") - 1; $n<=date("Y") + 9; $n++) {
+			echo "<option value='$n'";
+			if(!empty($startfrom) && $n == date('Y', $startfrom)) {
+				echo " selected='selected'";
+			}
+			echo ">" . $n . "</option>";
+		}
+		echo "</select>";
+		echo "<a href='#' class='info' title='" . __('Set the date you want to start processing posts from.', 'autoblogtext') . "'></a>";
+		echo "</td>";
+		echo "</tr>";
+
+		$endon = $table['endon'];
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Ending on','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[endonday]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=31; $n++) {
+			echo "<option value='$n'";
+			if(!empty($endon) && $n == date('j', $endon)) {
+				echo " selected='selected'";
+			}
+			echo ">" . $n . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[endonmonth]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=12; $n++) {
+			echo "<option value='$n'";
+			if(!empty($endon) && $n == date('n', $endon)) {
+				echo " selected='selected'";
+			}
+			echo ">" . date('M', strtotime(date('Y-' . $n . '-1'))) . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[endonyear]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=date("Y") - 1; $n<=date("Y") + 9; $n++) {
+			echo "<option value='$n'";
+			if(!empty($endon) && $n == date('Y', $endon)) {
+				echo " selected='selected'";
+			}
+			echo ">" . $n . "</option>";
+		}
+		echo "</select>";
+		echo "<a href='#' class='info' title='" . __('Set the date you want to stop processing posts from this feed.', 'autoblogtext') . "'></a>";
+		echo "</td>";
+		echo "</tr>";
+
 		echo "</table>";
 
 		echo '</div>';
@@ -1056,6 +1140,60 @@ class autoblogpremium {
 		echo "</td>";
 		echo "</tr>";
 
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Starting from','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[startfromday]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=31; $n++) {
+			echo "<option value='$n'>" . $n . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[startfrommonth]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=12; $n++) {
+			echo "<option value='$n'>" . date('M', strtotime(date('Y-' . $n . '-1'))) . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[startfromyear]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=date("Y") - 1; $n<=date("Y") + 9; $n++) {
+			echo "<option value='$n'>" . $n . "</option>";
+		}
+		echo "</select>";
+		echo "<a href='#' class='info' title='" . __('Set the date you want to start processing posts from.', 'autoblogtext') . "'></a>";
+		echo "</td>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Ending on','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[endonday]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=31; $n++) {
+			echo "<option value='$n'>" . $n . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[endonmonth]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=1; $n<=12; $n++) {
+			echo "<option value='$n'>" . date('M', strtotime(date('Y-' . $n . '-1'))) . "</option>";
+		}
+		echo "</select>&nbsp;";
+		echo "<select name='abtble[endonyear]' class='field'>";
+		echo "<option value=''></option>";
+		for($n=date("Y") - 1; $n<=date("Y") + 9; $n++) {
+			echo "<option value='$n'>" . $n . "</option>";
+		}
+		echo "</select>";
+		echo "<a href='#' class='info' title='" . __('Set the date you want to stop processing posts from this feed.', 'autoblogtext') . "'></a>";
+		echo "</td>";
+		echo "</tr>";
+
 		echo "</table>";
 
 		echo '</div>';
@@ -1211,6 +1349,10 @@ class autoblogpremium {
 
 	}
 
+	function update_admin_page() {
+
+	}
+
 	function handle_admin_page() {
 
 		$showlist = true;
@@ -1231,7 +1373,6 @@ class autoblogpremium {
 					// Adding a new feed
 
 					$feed = array();
-					$feed['feed_meta'] = serialize($_POST['abtble']);
 					$feed['lastupdated'] = 0;
 
 					if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
@@ -1240,15 +1381,23 @@ class autoblogpremium {
 						$feed['nextcheck'] = 0;
 					}
 
-
 					$feed['site_id'] = $this->db->siteid;
 					$feed['blog_id'] = $this->db->blogid;
 
-					if($this->db->insert($this->autoblog, $feed)) {
+					if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
+						$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
+					}
 
+					if(!empty($_POST['abtble']['endonday']) && !empty($_POST['abtble']['endonmonth']) && !empty($_POST['abtble']['endonyear'])) {
+						$_POST['abtble']['endon'] = strtotime($_POST['abtble']['endonyear'] . '-' . $_POST['abtble']['endonmonth'] . '-' . $_POST['abtble']['endonday']);
+					}
+					$feed['feed_meta'] = serialize($_POST['abtble']);
+
+					$id = $this->db->insert($this->autoblog, $feed);
+					if(!is_wp_error($id)) {
 						echo '<div id="message" class="updated fade"><p>' . sprintf(__("Your feed has been added.", 'autoblogtext')) . '</p></div>';
 					} else {
-						echo '<div id="message" class="error fade"><p>' . sprintf(__("Your feed could not be added.", 'autoblogtext')) . '</p></div>';
+						echo '<div id="message" class="error fade"><p>' . $id->get_error_mssage() . '</p></div>';
 					}
 
 				}
@@ -1256,17 +1405,26 @@ class autoblogpremium {
 				if(!empty($_POST['save'])) {
 					// Saving a feed
 					$feed = array();
-					$feed['feed_meta'] = serialize($_POST['abtble']);
 					if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
 						$feed['nextcheck'] = time() + (intval($_POST['abtble']['processfeed']) * 60);
 					} else {
 						$feed['nextcheck'] = 0;
 					}
 
-					if($this->db->update($this->autoblog, $feed, array( "feed_id" => mysql_real_escape_string($_POST['feed_id'])) ) ) {
+					if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
+						$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
+					}
+
+					if(!empty($_POST['abtble']['endonday']) && !empty($_POST['abtble']['endonmonth']) && !empty($_POST['abtble']['endonyear'])) {
+						$_POST['abtble']['endon'] = strtotime($_POST['abtble']['endonyear'] . '-' . $_POST['abtble']['endonmonth'] . '-' . $_POST['abtble']['endonday']);
+					}
+					$feed['feed_meta'] = serialize($_POST['abtble']);
+
+					$id = $this->db->update($this->autoblog, $feed, array( "feed_id" => mysql_real_escape_string($_POST['feed_id'])) );
+					if( !is_wp_error($id) ) {
 						echo '<div id="message" class="updated fade"><p>' . sprintf(__("Your feed has been updated.", 'autoblogtext')) . '</p></div>';
 					} else {
-						echo '<div id="message" class="error fade"><p>' . sprintf(__("Your feed could not be updated.", 'autoblogtext')) . '</p></div>';
+						echo '<div id="message" class="error fade"><p>' . $id->get_error_mssage() . '</p></div>';
 					}
 
 				}
