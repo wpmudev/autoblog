@@ -1,7 +1,7 @@
 <?php
 class autoblogpremium {
 
-	var $build = 4;
+	var $build = 5;
 
 	var $db;
 

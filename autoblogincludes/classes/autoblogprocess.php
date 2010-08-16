@@ -363,13 +363,29 @@ class autoblogcron {
 				$post_date_gmt = date('Y-m-d H:i:s', strtotime($thedate) + ( get_option( 'gmt_offset' ) * 3600 ));
 			}
 
+			// Check the post dates - just in case, we only want posts within our window
+			$thedate = $item->get_date();
+			$thepostdate = strtotime($thedate);
+			if(!empty($ablog['startfrom']) && $ablog['startfrom'] > $thepostdate) {
+				// We aren't processing this feed yet
+				continue;
+			}
+
+			if(!empty($ablog['endon']) && $ablog['endon'] < $thepostdate) {
+				// We aren't processing this feed yet
+				continue;
+			}
+
 			if(!empty($ablog['source'])) {
 				// Add the original source to the bottom of the post
 				$post_content .= "<p><a href='" . trim( $item->get_permalink() ) . "'";
 				if(!empty($ablog['nofollow']) && addslashes($ablog['nofollow']) == '1') {
 					$post_content .= " rel='nofollow'";
 				}
-				$post_content .= ">" . stripslashes($ablog['source']) . "</a></p>";
+				$thesource = stripslashes($ablog['source']);
+				$thesource = str_replace('%POSTURL%', trim( $item->get_permalink() ), $thesource);
+				$thesource = str_replace('%FEEDURL%', trim( $ablog['url'] ), $thesource);
+				$post_content .= ">" . $thesource . "</a></p>";
 			}
 
 			// Move internal variables to correctly labelled ones
