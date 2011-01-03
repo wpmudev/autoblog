@@ -1,5 +1,0 @@
-Plugin Name: Autoblog
-Author: Barry Getty (Incsub)
-
-Please see the online installation instructions for this plugin:
-http://premium.wpmudev.org/project/autoblog
