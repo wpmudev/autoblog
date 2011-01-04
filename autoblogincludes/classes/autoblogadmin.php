@@ -50,7 +50,7 @@ class autoblogpremium {
 	function load_textdomain() {
 
 		$locale = apply_filters( 'autoblog_locale', get_locale() );
-		$mofile = autoblog_dir( "autoblogincludes/autoblog-$locale.mo" );
+		$mofile = autoblog_dir( "autoblogincludes/languages/autoblog-$locale.mo" );
 
 		if ( file_exists( $mofile ) )
 			load_textdomain( 'autoblogtext', $mofile );
@@ -93,7 +93,22 @@ class autoblogpremium {
 
 	}
 
+	function add_update_check() {
+		/* -------------------- Update Notifications Notice -------------------- */
+		if ( !function_exists( 'wdp_un_check' ) ) {
+		  add_action( 'admin_notices', 'wdp_un_check', 5 );
+		  add_action( 'network_admin_notices', 'wdp_un_check', 5 );
+		  function wdp_un_check() {
+		    if ( !class_exists( 'WPMUDEV_Update_Notifications' ) && current_user_can( 'edit_users' ) )
+		      echo '<div class="error fade"><p>' . __('Please install the latest version of <a href="http://premium.wpmudev.org/project/update-notifications/" title="Download Now &raquo;">our free Update Notifications plugin</a> which helps you stay up-to-date with the most stable, secure versions of WPMU DEV themes and plugins. <a href="http://premium.wpmudev.org/wpmu-dev/update-notifications-plugin-information/">More information &raquo;</a>', 'wpmudev') . '</a></p></div>';
+		  }
+		}
+		/* --------------------------------------------------------------------- */
+	}
+
 	function add_admin_header_autoblog() {
+
+		$this->add_update_check();
 
 		wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
 
@@ -118,6 +133,9 @@ class autoblogpremium {
 	}
 
 	function add_admin_header_autoblog_admin() {
+
+		$this->add_update_check();
+
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 		wp_enqueue_script( 'qtip', autoblog_url('autoblogincludes/js/jquery.qtip-1.0.0-rc3.min.js'), array('jquery'), $this->build );
 		wp_enqueue_script( 'autoblogadminjs', autoblog_url('autoblogincludes/js/autoblogadmin.js'), array('jquery'), $this->build );
@@ -132,6 +150,8 @@ class autoblogpremium {
 		global $action, $page;
 
 		wp_reset_vars( array('action', 'page') );
+
+		$this->add_update_check();
 
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 

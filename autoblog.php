@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: AutoBlog
-Version: 3.2 beta
-Plugin URI: http://premium.wpmudev.org
+Version: 3.3
+Plugin URI: http://premium.wpmudev.org/project/autoblog
 Description: An automatic blog feed reading plugin.
 Author: Barry Getty (Incsub)
 Author URI: http://caffeinatedb.com
@@ -31,6 +31,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 // Using SimplePie
 //define('SIMPLEPIE_USERAGENT', 'PUT AGENT HERE');
+
+if ( !is_multisite() )
+     exit( 'The autoblog plugin is only compatible with WordPress Multisite.' );
 
 require_once('autoblogincludes/includes/config.php');
 require_once('autoblogincludes/includes/functions.php');
