@@ -420,6 +420,7 @@ class autoblogcron {
 			if ( !is_wp_error( $post_ID ) ) {
 				update_post_meta( $post_ID , 'original_source', trim( $item->get_permalink() ) );
 				update_post_meta( $post_ID , 'original_feed', trim( $ablog['url'] ) );
+				update_post_meta( $post_ID , 'original_imported_time', time() );
 			} else {
 				if($this->debug) {
 					// error writing post

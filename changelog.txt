@@ -4,6 +4,15 @@ Author: Barry Getty (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
+3.4
+----------------------------------------------------------------------
+Single WP install capability
+Added plugins folder for autoblog extensions / add-ons
+Added pre and post processing hooks
+Added pre insert filters
+Added post insert hooks
+Added option to select which post type you want to insert posts as
+
 3.3
 ----------------------------------------------------------------------
 WP 3.1 compatiblity
