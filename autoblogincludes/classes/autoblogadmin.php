@@ -30,11 +30,13 @@ class autoblogpremium {
 		add_action('load-autoblog_page_autoblog_options', array(&$this, 'add_admin_header_autoblog_options'));
 
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_network_admin')) {
+			if(function_exists('is_network_admin') && is_network_admin()) {
 				add_action('network_admin_menu', array(&$this,'add_adminmenu'));
 			} else {
 				add_action('admin_menu', array(&$this,'add_adminmenu'));
 			}
+		} else {
+			add_action('admin_menu', array(&$this,'add_adminmenu'));
 		}
 
 		foreach($this->tables as $table) {
@@ -345,7 +347,18 @@ class autoblogpremium {
 
 		global $menu, $admin_page_hooks;
 
-		add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+		if(function_exists('is_multisite') && is_multisite()) {
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+				if(function_exists('is_network_admin') && is_network_admin()) {
+					add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+				}
+			} else {
+				add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+			}
+		} else {
+			add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+		}
+
 
 		// Fix WP translation hook issue
 		if(isset($admin_page_hooks['autoblog'])) {
@@ -465,7 +478,6 @@ class autoblogpremium {
 			</div>
 		</div>
 		<?php
-
 	}
 
 	function handle_dash_page() {
@@ -517,6 +529,13 @@ class autoblogpremium {
 
 		$table = maybe_unserialize($details->feed_meta);
 
+		if(empty($table['blog'])) {
+			$table['blog'] = $blog_id;
+		}
+		if(empty($table['posttype'])) {
+			$table['posttype'] = 'post';
+		}
+
 		echo '<div class="postbox" id="ab-' . $details->feed_id . '">';
 
 		echo '<h3 class="hndle"><span>' . __('Feed : ','autoblogtext') . esc_html(stripslashes($table['title'])) . '</span></h3>';
@@ -547,29 +566,57 @@ class autoblogpremium {
 		echo "<tr><td colspan='2'>&nbsp;</td></tr>";
 
 		// Blogs
+		if(function_exists('is_multisite') && is_multisite()) {
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+				echo "<tr>";
+				echo "<td valign='top' class='heading'>";
+				echo __('Add posts to','autoblogtext');
+				echo "</td>";
+				echo "<td valign='top' class=''>";
+
+				echo "<select name='abtble[blog]' class='field blog'>";
+				$blogs = $this->get_blogs_of_site();
+				if($blogs) {
+					foreach( $blogs as $bkey => $blog) {
+						echo "<option value='$bkey'";
+						if($table['blog'] == $blog->id) {
+							echo " selected='selected'";
+						} else {
+							echo "";
+						}
+						echo ">" . $blog->domain . $blog->path . "</option>";
+					}
+				}
+				echo "</select>" . "<a href='#' class='info' title='" . __('Select a blog to add the post to.', 'autoblogtext') . "'></a>";
+
+				echo "</td>";
+				echo "</tr>";
+			}
+		} else {
+			echo "<input type='hidden' name='abtble[blog]' value='" . $blog_id . "' />";
+		}
+
+		// Post type
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
-		echo __('Add posts to','autoblogtext');
+		echo __('Post type for new posts','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
 
-		echo "<select name='abtble[blog]' class='field blog'>";
-		$blogs = $this->get_blogs_of_site();
-		if($blogs) {
-			foreach( $blogs as $bkey => $blog) {
-				echo "<option value='$bkey'";
-				if($table['blog'] == $blog->id) {
-					echo " selected='selected'";
-				} else {
-					echo "";
-				}
-				echo ">" . $blog->domain . $blog->path . "</option>";
-			}
+		$output = 'objects'; // names or objects
+		$post_types = get_post_types( '' , $output );
+
+		echo "<select name='abtble[posttype]' class='field'>";
+		foreach ($post_types as $key => $post_type ) {
+			echo "<option value='" . $key . "'";
+			echo $table['posttype'] == $key ? " selected='selected'" : "";
+			echo ">" . $post_type->name . "</option>";
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select a blog to add the post to.', 'autoblogtext') . "'></a>";
+		echo "</select>" . "<a href='#' class='info' title='" . __('Select the post type the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
 		echo "</tr>";
+
 
 		// Status
 		echo "<tr>";
@@ -925,19 +972,47 @@ class autoblogpremium {
 
 		echo "<tr><td colspan='2'>&nbsp;</td></tr>";
 
+
 		// Blogs
+		if(function_exists('is_multisite') && is_multisite()) {
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+				echo "<tr>";
+				echo "<td valign='top' class='heading'>";
+				echo __('Add posts to','autoblogtext');
+				echo "</td>";
+				echo "<td valign='top' class=''>";
+
+				echo "<select name='abtble[blog]' class='field blog'>";
+				$blogs = $this->get_blogs_of_site();
+				foreach( (array) $blogs as $bkey => $blog) {
+					echo "<option value='$bkey'>" . $blog->domain . $blog->path . "</option>";
+				}
+				echo "</select>" . "<a href='#' class='info' title='" . __('Select a blog to add the post to.', 'autoblogtext') . "'></a>";
+
+				echo "</td>";
+				echo "</tr>";
+			}
+		} else {
+			echo "<input type='hidden' name='abtble[blog]' value='" . $blog_id . "' />";
+		}
+
+		// Post type
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
-		echo __('Add posts to','autoblogtext');
+		echo __('Post type for new posts','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
 
-		echo "<select name='abtble[blog]' class='field blog'>";
-		$blogs = $this->get_blogs_of_site();
-		foreach( (array) $blogs as $bkey => $blog) {
-			echo "<option value='$bkey'>" . $blog->domain . $blog->path . "</option>";
+		$output = 'objects'; // names or objects
+		$post_types = get_post_types( '' , $output );
+
+		echo "<select name='abtble[posttype]' class='field'>";
+		foreach ($post_types as $key => $post_type ) {
+			echo "<option value='" . $key . "'";
+			echo $table['posttype'] == $key ? " selected='selected'" : "";
+			echo ">" . $post_type->name . "</option>";
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select a blog to add the post to.', 'autoblogtext') . "'></a>";
+		echo "</select>" . "<a href='#' class='info' title='" . __('Select the post type the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
 		echo "</tr>";
@@ -1221,7 +1296,15 @@ class autoblogpremium {
 
 	function get_autoblogentries() {
 
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d ORDER BY feed_id ASC", $this->db->siteid );
+		if(function_exists('is_multisite') && is_multisite()) {
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d ORDER BY feed_id ASC", $this->db->siteid );
+			} else {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $this->db->blogid );
+			}
+		} else {
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $this->db->blogid );
+		}
 
 		$results = $this->db->get_results($sql);
 
@@ -1231,7 +1314,15 @@ class autoblogpremium {
 
 	function get_autoblogentry($id) {
 
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id );
+		if(function_exists('is_multisite') && is_multisite()) {
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id );
+			} else {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id, $this->db->blogid );
+			}
+		} else {
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id, $this->db->blogid );
+		}
 
 		$results = $this->db->get_row($sql);
 

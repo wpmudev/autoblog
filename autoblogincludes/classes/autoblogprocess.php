@@ -42,7 +42,15 @@ class autoblogcron {
 
 	function get_autoblogentries($timestamp) {
 
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0  ORDER BY nextcheck ASC", $this->db->siteid, $timestamp );
+		if(function_exists('is_multisite') && is_multisite()) {
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->db->siteid, $timestamp );
+			} else {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->db->siteid, $this->db->blogid, $timestamp );
+			}
+		} else {
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->db->siteid, $this->db->blogid, $timestamp );
+		}
 
 		$results = $this->db->get_results($sql);
 
