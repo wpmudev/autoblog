@@ -104,17 +104,19 @@ class autoblogcron {
 		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes')) {
 			update_autoblog_option('autoblog_processing', time());
 
+			do_action('autoblog_pre_process_feeds');
+
 			foreach( (array) $autoblogs as $key => $ablog) {
-
 				$details = unserialize($ablog->feed_meta);
-
 				if(!empty($details['url'])) {
-
+					do_action('autoblog_pre_process_feed', $ablog->feed_id, $details);
 					$this->process_feed($ablog->feed_id, $details);
-
+					do_action('autoblog_post_process_feed', $ablog->feed_id, $details);
 				}
-
 			}
+
+			do_action('autoblog_post_process_feeds');
+
 		}
 
 		if(!empty($this->errors)) {
@@ -127,13 +129,100 @@ class autoblogcron {
 
 	function process_the_feed($feed_id, $ablog) {
 
+		do_action('autoblog_pre_process_feed', $feed_id, $ablog);
 		$results = $this->process_feed($feed_id, $ablog);
+		do_action('autoblog_post_process_feed', $feed_id, $ablog);
 
 		if(!empty($this->errors)) {
 			$this->record_error();
 		}
 
 		return $results;
+	}
+
+	function check_feed_item($ablog, $item) {
+		// Set up the defaults
+		$post_title = trim( $item->get_title() );
+		$post_content = trim( $item->get_content() );
+
+		$matchall = true; $matchany = true; $matchphrase = true; $matchnone = true; $matchtags = true;
+
+		if(!empty($ablog['allwords'])) {
+			$words = array_map('trim', explode(',', $ablog['allwords']));
+			$matchall = true;
+			foreach((array) $words as $key => $word) {
+				$words[$key] = "/" . $word . "/i";
+				if(!preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
+					$matchall = false;
+					break;
+				}
+			}
+		}
+
+		if(!empty($ablog['anywords'])) {
+			$words = array_map('trim', explode(',', $ablog['anywords']));
+			$matchany = false;
+			foreach((array) $words as $key => $word) {
+				$words[$key] = "/" . $word . "/i";
+				if(preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
+					$matchany = true;
+					break;
+				}
+			}
+		}
+
+		if(!empty($ablog['phrase'])) {
+			$words = array($ablog['phrase']);
+			$matchphrase = false;
+			foreach((array) $words as $key => $word) {
+				$words[$key] = "/" . trim($word) . "/i";
+				if(preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
+					$matchphrase = true;
+					break;
+				}
+			}
+		}
+
+		if(!empty($ablog['nonewords'])) {
+			$words = array_map('trim', explode(',', $ablog['nonewords']));
+			$matchnone = true;
+			foreach((array) $words as $key => $word) {
+				$words[$key] = "/" . trim($word) . "/i";
+				if(preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
+					$matchnone = false;
+					break;
+				}
+			}
+		}
+
+		if(!empty($ablog['anytags'])) {
+			$words = array_map('trim', explode(',', $ablog['anytags']));
+			$matchtags = true;
+
+			$thecats = $item->get_categories();
+			if(!empty($thecats)) {
+				$posttags = array();
+				foreach ($thecats as $category)
+				{
+						$posttags[] = trim( $category->get_label() );
+				}
+
+				foreach((array) $words as $key => $word) {
+					if(!in_array($word, $posttags)) {
+						$matchtags = false;
+						break;
+					}
+				}
+			} else {
+				$matchtags = false;
+			}
+		}
+
+		if($matchall && $matchany && $matchphrase && $matchnone && $matchtags) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	function process_feed($feed_id, $ablog) {
@@ -206,83 +295,7 @@ class autoblogcron {
 			$post_title = trim( $item->get_title() );
 			$post_content = trim( $item->get_content() );
 
-			// Set up the defaults
-			$matchall = true; $matchany = true; $matchphrase = true; $matchnone = true; $matchtags = true;
-
-			if(!empty($ablog['allwords'])) {
-				$words = explode(',', $ablog['allwords']);
-				$matchall = true;
-				foreach((array) $words as $key => $word) {
-					$words[$key] = "/" . trim($word) . "/i";
-					if(!preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
-						$matchall = false;
-						break;
-					}
-				}
-			}
-
-			if(!empty($ablog['anywords'])) {
-				$words = explode(',', $ablog['anywords']);
-				$matchany = false;
-				foreach((array) $words as $key => $word) {
-					$words[$key] = "/" . trim($word) . "/i";
-					if(preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
-						$matchany = true;
-						break;
-					}
-				}
-			}
-
-			if(!empty($ablog['phrase'])) {
-				$words = array($ablog['phrase']);
-				$matchphrase = false;
-				foreach((array) $words as $key => $word) {
-					$words[$key] = "/" . trim($word) . "/i";
-					if(preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
-						$matchphrase = true;
-						break;
-					}
-				}
-			}
-
-			if(!empty($ablog['nonewords'])) {
-				$words = explode(',', $ablog['nonewords']);
-				$matchnone = true;
-				foreach((array) $words as $key => $word) {
-					$words[$key] = "/" . trim($word) . "/i";
-					if(preg_match_all($words[$key], $post_title . " " . $post_content, $matches)) {
-						$matchnone = false;
-						break;
-					}
-				}
-			}
-
-			if(!empty($ablog['anytags'])) {
-				$words = explode(',', $ablog['anytags']);
-				$matchtags = true;
-
-				$thecats = $item->get_categories();
-				if(!empty($thecats)) {
-					$posttags = array();
-					foreach ($thecats as $category)
-					{
-							$posttags[] = trim( $category->get_label() );
-					}
-
-					foreach((array) $words as $key => $word) {
-						if(!in_array(trim($word), $posttags)) {
-							$matchtags = false;
-							break;
-						}
-					}
-				} else {
-					$matchtags = false;
-				}
-			}
-
-			if($matchall && $matchany && $matchphrase && $matchnone && $matchtags) {
-			} else {
-				// Go to the next one
+			if(!$this->check_feed_item($ablog, $item)) {
 				continue;
 			}
 
@@ -340,10 +353,7 @@ class autoblogcron {
 			// Set up the tags
 			$tags = array();
 			if(!empty($ablog['tag'])) {
-				$tags = explode(',', $ablog['tag']);
-				foreach($tags as $key => $tag) {
-					$tags[$key] = trim($tag);
-				}
+				$tags = array_map('trim', explode(',', $ablog['tag']));
 			}
 
 			$thecats = array();
@@ -361,6 +371,7 @@ class autoblogcron {
 			$tax_input = array( "post_tag" => $tags);
 
 			$post_status = $ablog['poststatus'];
+			$post_type = $ablog['posttype'];
 
 			if($ablog['postdate'] != 'existing') {
 				$post_date = current_time('mysql');
@@ -400,9 +411,11 @@ class autoblogcron {
 			$post_author = $author;
 			$blog_ID = $bid;
 
-			$post_data = compact('blog_ID', 'post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_title', 'post_category', 'post_status', 'tax_input');
+			$post_data = compact('blog_ID', 'post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_title', 'post_category', 'post_status', 'post_type', 'tax_input');
 
+			$post_data = apply_filters( 'autoblog_pre_post_insert', $post_data, $ablog, $item );
 			$post_ID = wp_insert_post($post_data);
+			do_action( 'autoblog_post_post_insert', $post_ID, $ablog, $item );
 
 			if ( !is_wp_error( $post_ID ) ) {
 				update_post_meta( $post_ID , 'original_source', trim( $item->get_permalink() ) );
@@ -472,7 +485,9 @@ class autoblogcron {
 				}
 
 				if($process && !empty($details['url'])) {
+					do_action('autoblog_pre_process_feed', $ablog->feed_id, $details);
 					$this->process_feed($ablog->feed_id, $details);
+					do_action('autoblog_post_process_feed', $ablog->feed_id, $details);
 				} else {
 					if($this->debug) {
 						// no uri or not processing

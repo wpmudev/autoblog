@@ -99,4 +99,20 @@ function autoblog_db_prefix(&$wpdb, $table) {
 	}
 
 }
+
+function load_autoblog_plugins() {
+	if ( is_dir( autoblog_dir('autoblogincludes/plugins') ) ) {
+		if ( $dh = opendir( autoblog_dir('autoblogincludes/plugins') ) ) {
+			$auto_plugins = array ();
+			while ( ( $plugin = readdir( $dh ) ) !== false )
+				if ( substr( $plugin, -4 ) == '.php' )
+					$auto_plugins[] = $plugin;
+			closedir( $dh );
+			sort( $auto_plugins );
+			foreach( $auto_plugins as $auto_plugin )
+				include_once( autoblog_dir('autoblogincludes/plugins/' . $auto_plugin) );
+		}
+	}
+
+}
 ?>

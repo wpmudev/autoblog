@@ -32,9 +32,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Using SimplePie
 //define('SIMPLEPIE_USERAGENT', 'PUT AGENT HERE');
 
-if ( !is_multisite() )
-     exit( 'The autoblog plugin is only compatible with WordPress Multisite.' );
-
 require_once('autoblogincludes/includes/config.php');
 require_once('autoblogincludes/includes/functions.php');
 // Set up my location
@@ -51,4 +48,5 @@ if(is_admin()) {
 require_once('autoblogincludes/classes/autoblogprocess.php');
 $abc =& new autoblogcron();
 
+load_autoblog_plugins();
 ?>
