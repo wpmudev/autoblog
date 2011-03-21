@@ -926,6 +926,8 @@ class autoblogpremium {
 		echo "</td>";
 		echo "</tr>";
 
+		do_action( 'autoblog_feed_edit_form_end', $key, $details );
+
 		echo "</table>";
 
 		echo '</div>';
@@ -1285,6 +1287,8 @@ class autoblogpremium {
 		echo "<a href='#' class='info' title='" . __('Set the date you want to stop processing posts from this feed.', 'autoblogtext') . "'></a>";
 		echo "</td>";
 		echo "</tr>";
+
+		do_action( 'autoblog_feed_edit_form_end', $key, '' );
 
 		echo "</table>";
 
