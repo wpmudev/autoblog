@@ -276,7 +276,7 @@ class autoblogcron {
 			$item = $feed->get_item($x);
 
 			// Switch to the correct blog
-			if(!empty($ablog['blog'])) {
+			if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {
 				switch_to_blog( (int) $ablog['blog'] );
 				$bid = (int) $ablog['blog'];
 			}
@@ -436,7 +436,7 @@ class autoblogcron {
 
 		$this->db->update($this->autoblog, $update, array("feed_id" => $feed_id));
 		// switch us back to the previous blog
-		if(!empty($ablog['blog'])) {
+		if(!empty($ablog['blog']) && function_exists('restore_current_blog')) {
 			restore_current_blog();
 		}
 

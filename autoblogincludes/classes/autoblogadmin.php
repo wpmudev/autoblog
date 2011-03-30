@@ -705,9 +705,9 @@ class autoblogpremium {
 		echo "</td>";
 		echo "<td valign='top' class=''>";
 
-		switch_to_blog($table['blog']);
+		if(function_exists('switch_to_blog') switch_to_blog($table['blog']);
 		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => $table['category'], 'hierarchical' => true, 'show_option_none' => __('None'), 'class' => 'field cat'));
-		restore_current_blog();
+		if(function_exists('restore_current_blog') restore_current_blog();
 
 		echo "<a href='#' class='info' title='" . __('Assign this category to the imported posts.', 'autoblogtext') . "'></a>";
 
