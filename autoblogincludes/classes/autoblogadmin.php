@@ -28,6 +28,8 @@ class autoblogpremium {
 		add_action('load-toplevel_page_autoblog', array(&$this, 'add_admin_header_autoblog'));
 		add_action('load-autoblog_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog_admin'));
 		add_action('load-autoblog_page_autoblog_options', array(&$this, 'add_admin_header_autoblog_options'));
+		add_action('load-autoblog_page_autoblog_plugins', array(&$this, 'add_admin_header_autoblog_plugins'));
+
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_network_admin') && is_network_admin()) {
@@ -166,6 +168,18 @@ class autoblogpremium {
 
 			wp_safe_redirect( add_query_arg('msg', 1, wp_get_referer()) );
 		}
+
+	}
+
+	function add_admin_header_autoblog_plugins() {
+
+		global $action, $page;
+
+		wp_reset_vars( array('action', 'page') );
+
+		$this->add_update_check();
+
+		$this->handle_plugins_panel_updates();
 
 	}
 
@@ -368,6 +382,8 @@ class autoblogpremium {
 		// Add the sub menu
 		add_submenu_page('autoblog', __('Edit feeds','autoblog'), __('Edit feeds','autoblog'), 'manage_options', "autoblog_admin", array(&$this,'handle_admin_page'));
 		add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+
+		add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
 
 	}
 
@@ -1833,6 +1849,248 @@ class autoblogpremium {
 				<p class="submit">
 					<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
 				</p>
+
+			</form>
+
+		</div> <!-- wrap -->
+		<?php
+	}
+
+	function handle_plugins_panel_updates() {
+		global $action, $page;
+
+		wp_reset_vars( array('action', 'page') );
+
+		if(isset($_GET['doaction']) || isset($_GET['doaction2'])) {
+			if(addslashes($_GET['action']) == 'toggle' || addslashes($_GET['action2']) == 'toggle') {
+				$action = 'bulk-toggle';
+			}
+		}
+
+		$active = get_option('autoblog_activated_plugins', array());
+
+		switch(addslashes($action)) {
+
+			case 'deactivate':	$key = addslashes($_GET['plugin']);
+								if(!empty($key)) {
+									check_admin_referer('toggle-plugin-' . $key);
+
+									$found = array_search($key, $active);
+									if($found !== false) {
+										unset($active[$found]);
+										update_option('autoblog_activated_plugins', array_unique($active));
+										wp_safe_redirect( add_query_arg( 'msg', 5, wp_get_referer() ) );
+									} else {
+										wp_safe_redirect( add_query_arg( 'msg', 6, wp_get_referer() ) );
+									}
+								}
+								break;
+
+			case 'activate':	$key = addslashes($_GET['plugin']);
+								if(!empty($key)) {
+									check_admin_referer('toggle-plugin-' . $key);
+
+									if(!in_array($key, $active)) {
+										$active[] = $key;
+										update_option('autoblog_activated_plugins', array_unique($active));
+										wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
+									} else {
+										wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
+									}
+								}
+								break;
+
+			case 'bulk-toggle':
+								check_admin_referer('bulk-plugins');
+								foreach($_GET['plugincheck'] AS $key) {
+									$found = array_search($key, $active);
+									if($found !== false) {
+										unset($active[$found]);
+									} else {
+										$active[] = $key;
+									}
+								}
+								update_option('autoblog_activated_plugins', array_unique($active));
+								wp_safe_redirect( add_query_arg( 'msg', 7, wp_get_referer() ) );
+								break;
+
+		}
+	}
+
+	function handle_plugins_panel() {
+		global $action, $page;
+
+		wp_reset_vars( array('action', 'page') );
+
+		$messages = array();
+		$messages[1] = __('Plugin updated.','autoblog');
+		$messages[2] = __('Plugin not updated.','autoblog');
+
+		$messages[3] = __('Plugin activated.','autoblog');
+		$messages[4] = __('Plugin not activated.','autoblog');
+
+		$messages[5] = __('Plugin deactivated.','autoblog');
+		$messages[6] = __('Plugin not deactivated.','autoblog');
+
+		$messages[7] = __('Plugin activation toggled.','autoblog');
+
+		?>
+		<div class='wrap'>
+			<div class="icon32" id="icon-plugins"><br></div>
+			<h2><?php _e('Edit Plugins','autoblog'); ?></h2>
+
+			<?php
+			if ( isset($_GET['msg']) ) {
+				echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
+				$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+			}
+
+			?>
+
+			<form method="get" action="?page=<?php echo esc_attr($page); ?>" id="posts-filter">
+
+			<input type='hidden' name='page' value='<?php echo esc_attr($page); ?>' />
+
+			<div class="tablenav">
+
+			<div class="alignleft actions">
+			<select name="action">
+			<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
+			<option value="toggle"><?php _e('Toggle activation'); ?></option>
+			</select>
+			<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply'); ?>">
+
+			</div>
+
+			<div class="alignright actions"></div>
+
+			<br class="clear">
+			</div>
+
+			<div class="clear"></div>
+
+			<?php
+				wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-plugins');
+
+				$columns = array(	"name"		=>	__('Plugin Name', 'membership'),
+									"file" 		=> 	__('Plugin File','membership'),
+									"active"	=>	__('Active','membership')
+								);
+
+				$columns = apply_filters('autoblog_plugincolumns', $columns);
+
+				$plugins = get_autoblog_plugins();
+
+				$active = get_option('autoblog_activated_plugins', array());
+
+			?>
+
+			<table cellspacing="0" class="widefat fixed">
+				<thead>
+				<tr>
+				<th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox"></th>
+				<?php
+					foreach($columns as $key => $col) {
+						?>
+						<th style="" class="manage-column column-<?php echo $key; ?>" id="<?php echo $key; ?>" scope="col"><?php echo $col; ?></th>
+						<?php
+					}
+				?>
+				</tr>
+				</thead>
+
+				<tfoot>
+				<tr>
+				<th style="" class="manage-column column-cb check-column" scope="col"><input type="checkbox"></th>
+				<?php
+					reset($columns);
+					foreach($columns as $key => $col) {
+						?>
+						<th style="" class="manage-column column-<?php echo $key; ?>" id="<?php echo $key; ?>" scope="col"><?php echo $col; ?></th>
+						<?php
+					}
+				?>
+				</tr>
+				</tfoot>
+
+				<tbody>
+					<?php
+					if($plugins) {
+						foreach($plugins as $key => $plugin) {
+							$default_headers = array(
+								                'Name' => 'Plugin Name',
+												'Author' => 'Author',
+												'Description'	=>	'Description',
+												'AuthorURI' => 'Author URI'
+								        );
+
+							$plugin_data = get_file_data( autoblog_dir('autoblogincludes/plugins/' . $plugin), $default_headers, 'plugin' );
+
+							if(empty($plugin_data['Name'])) {
+								continue;
+							}
+
+							?>
+							<tr valign="middle" class="alternate" id="plugin-<?php echo $plugin; ?>">
+								<th class="check-column" scope="row"><input type="checkbox" value="<?php echo esc_attr($plugin); ?>" name="plugincheck[]"></th>
+								<td class="column-name">
+									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>" . __(' by ', 'membership') . "<a href='" . esc_attr($plugin_data['AuthorURI']) . "'>" . esc_html($plugin_data['Author']) . "</a>"; ?>
+									<?php if(!empty($plugin_data['Description'])) {
+										?><br/><?php echo esc_html($plugin_data['Description']);
+										}
+
+										$actions = array();
+
+										if(in_array($plugin, $active)) {
+											$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Deactivate') . "</a></span>";
+										} else {
+											$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Activate') . "</a></span>";
+										}
+									?>
+									<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
+									</td>
+
+								<td class="column-name">
+									<?php echo esc_html($plugin); ?>
+									</td>
+								<td class="column-active">
+									<?php
+										if(in_array($plugin, $active)) {
+											echo "<strong>" . __('Active', 'membership') . "</strong>";
+										} else {
+											echo __('Inactive', 'membership');
+										}
+									?>
+								</td>
+						    </tr>
+							<?php
+						}
+					} else {
+						$columncount = count($columns) + 1;
+						?>
+						<tr valign="middle" class="alternate" >
+							<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Plugns where found for this install.','membership'); ?></td>
+					    </tr>
+						<?php
+					}
+					?>
+
+				</tbody>
+			</table>
+
+
+			<div class="tablenav">
+
+			<div class="alignleft actions">
+			<select name="action2">
+				<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
+				<option value="toggle"><?php _e('Toggle activation'); ?></option>
+			</select>
+			<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="Apply">
+			</div>
+			<div class="alignright actions"></div>
+			<br class="clear">
+			</div>
 
 			</form>
 
