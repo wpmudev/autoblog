@@ -390,7 +390,7 @@ class autoblogpremium {
 	function dashboard_news() {
 		global $page, $action;
 
-		$plugin = get_plugin_data(autoblog_dir('autoblog.php'));
+		$plugin = get_plugin_data(autoblog_dir('autoblogpremium.php'));
 
 		$debug = get_autoblog_option('autoblog_debug', false);
 
@@ -1485,6 +1485,15 @@ class autoblogpremium {
 
 		$showlist = true;
 
+		$current_offset = get_option('gmt_offset');
+		$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
+		/*
+		$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
+		<?php if ( get_option('timezone_string') || !empty($current_offset) ) : ?>
+			<span id="local-time"><?php printf(__('Local time is <code>%1$s</code>'), date_i18n($timezone_format)); ?></span>
+		<?php endif; ?>
+		*/
+
 		if(isset($_POST['action']) && addslashes($_POST['action']) == 'autoblog') {
 
 			check_admin_referer('autoblog');
@@ -1504,7 +1513,7 @@ class autoblogpremium {
 					$feed['lastupdated'] = 0;
 
 					if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
-						$feed['nextcheck'] = time() + (intval($_POST['abtble']['processfeed']) * 60);
+						$feed['nextcheck'] = current_time('timestamp') + (intval($_POST['abtble']['processfeed']) * 60);
 					} else {
 						$feed['nextcheck'] = 0;
 					}
@@ -1534,7 +1543,7 @@ class autoblogpremium {
 					// Saving a feed
 					$feed = array();
 					if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
-						$feed['nextcheck'] = time() + (intval($_POST['abtble']['processfeed']) * 60);
+						$feed['nextcheck'] = current_time('timestamp') + (intval($_POST['abtble']['processfeed']) * 60);
 					} else {
 						$feed['nextcheck'] = 0;
 					}
@@ -1741,7 +1750,8 @@ class autoblogpremium {
 					echo '<td style="text-align: right;">';
 
 					if($table->lastupdated != 0) {
-						echo date("j M Y : H:i", $table->lastupdated);
+						echo date_i18n($timezone_format, $table->lastupdated);
+						//echo date("j M Y : H:i", $table->lastupdated);
 					} else {
 						echo __('Never', 'autoblogtext');
 					}
@@ -1751,7 +1761,8 @@ class autoblogpremium {
 					echo '<td style="text-align: right;">';
 
 					if($table->nextcheck != 0) {
-						echo date("j M Y : H:i", $table->nextcheck);
+						echo date_i18n($timezone_format, $table->nextcheck, 'gmt');
+						//echo date("j M Y : H:i", $table->nextcheck);
 					} else {
 						echo __('Never', 'autoblogtext');
 					}

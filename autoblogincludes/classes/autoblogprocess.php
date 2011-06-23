@@ -80,7 +80,7 @@ class autoblogcron {
 
 	function record_error() {
 
-		$thetime = time();
+		$thetime = current_time('timestamp');
 
 		$errors = array(	"timestamp" => $thetime,
 							"log" => $this->errors
@@ -95,14 +95,14 @@ class autoblogcron {
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentriesforids($ids);
 
-		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week'));
+		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week', current_time('timestamp')));
 		if($lastprocessing == 'yes' || $lastprocessing == 'no' || $lastprocessing == 'np') {
-			$lastprocessing = strtotime('-1 hour');
+			$lastprocessing = strtotime('-1 hour', current_time('timestamp'));
 			update_autoblog_option('autoblog_processing', $lastprocessing);
 		}
 
-		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes')) {
-			update_autoblog_option('autoblog_processing', time());
+		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes', current_time('timestamp'))) {
+			update_autoblog_option('autoblog_processing', current_time('timestamp'));
 
 			do_action('autoblog_pre_process_feeds');
 
@@ -431,8 +431,8 @@ class autoblogcron {
 
 		// Update the next feed read date
 		$update = array();
-		$update['lastupdated'] = time();
-		$update['nextcheck'] = time() + (intval($ablog['processfeed']) * 60);
+		$update['lastupdated'] = current_time('timestamp');
+		$update['nextcheck'] = current_time('timestamp') + (intval($ablog['processfeed']) * 60);
 
 		$this->db->update($this->autoblog, $update, array("feed_id" => $feed_id));
 		// switch us back to the previous blog
@@ -449,22 +449,22 @@ class autoblogcron {
 		global $wpdb;
 
 		// grab the feeds
-		$autoblogs = $this->get_autoblogentries(time());
+		$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
 
 		// Our starting time
-		$timestart = time();
+		$timestart = current_time('timestamp');
 
 		//Or processing limit
 		$timelimit = 3; // max seconds for processing
 
-		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week'));
+		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week', current_time('timestamp')));
 		if($lastprocessing == 'yes' || $lastprocessing == 'no' || $lastprocessing == 'np') {
-			$lastprocessing = strtotime('-1 hour');
+			$lastprocessing = strtotime('-1 hour', current_time('timestamp'));
 			update_autoblog_option('autoblog_processing', $lastprocessing);
 		}
 
-		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes')) {
-			update_autoblog_option('autoblog_processing', time());
+		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes', current_time('timestamp'))) {
+			update_autoblog_option('autoblog_processing', current_time('timestamp'));
 
 			foreach( (array) $autoblogs as $key => $ablog) {
 
