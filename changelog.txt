@@ -4,6 +4,13 @@ Author: Barry Getty (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
+3.5
+----------------------------------------------------------------------
+Fixed local timezones parsing and editing
+Added plugins section and admin interface
+Added Twitter feed parser add-on and widget
+Added initial youtube feed parser add-on
+
 3.4.1
 ----------------------------------------------------------------------
 Checks added around the switch_to_blog and restore_current_blog calls
