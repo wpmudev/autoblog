@@ -122,10 +122,10 @@ class A_Widget_Recent_Tweets extends WP_Widget {
 ?>
 		<?php echo $before_widget; ?>
 		<?php if ( $title ) echo $before_title . $title . $after_title; ?>
-		<ul>
+		<ul class='tweets'>
 		<?php  while ($r->have_posts()) : $r->the_post(); ?>
-		<li><?php the_content(); ?>
-		<a href='<?php echo get_post_meta(get_the_id(), 'original_source', true); ?>'>#</a> - <?php echo get_the_date(); ?><br/>
+		<li class='tweet'><?php the_content(); ?>
+		<a href='<?php echo get_post_meta(get_the_id(), 'original_source', true); ?>'>#</a> - <?php echo get_the_date() . __(' at ', 'autoblog' ) . get_the_time(); ?>
 		</li>
 		<?php endwhile; ?>
 		</ul>
