@@ -125,6 +125,8 @@ class A_Widget_Recent_Tweets extends WP_Widget {
 		<ul>
 		<?php  while ($r->have_posts()) : $r->the_post(); ?>
 		<li><?php the_content(); ?>
+		<a href='<?php echo get_post_meta(get_the_id(), 'original_source', true); ?>'>#</a> - <?php echo get_the_date(); ?><br/>
+		</li>
 		<?php endwhile; ?>
 		</ul>
 		<?php echo $after_widget; ?>
