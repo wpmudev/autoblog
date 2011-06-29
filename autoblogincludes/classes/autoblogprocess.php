@@ -365,7 +365,6 @@ class autoblogcron {
 							$tags[] = trim( $category->get_label() );
 					}
 				}
-
 			}
 
 			$tax_input = array( "post_tag" => $tags);

@@ -583,7 +583,7 @@ class autoblogpremium {
 
 		// Blogs
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+			if(function_exists('is_plugin_active_for_network') && !is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
 				echo "<tr>";
 				echo "<td valign='top' class='heading'>";
 				echo __('Add posts to','autoblogtext');
@@ -729,6 +729,18 @@ class autoblogpremium {
 
 		echo "</td>";
 		echo "</tr>";
+
+			echo "<tr>";
+			echo "<td valign='top' class='heading'>";
+			echo __('Treat feed categories as','autoblogtext');
+			echo "</td>";
+			echo "<td valign='top' class=''>";
+			echo "<select name='abtble[feedcatsare]'>";
+			echo "<option value='tags' " . selected(esc_attr(stripslashes($table['feedcatsare'])), 'tags') . ">" . __('tags', 'autoblogtext') . "</option>";
+			echo "<option value='categories' " . selected(esc_attr(stripslashes($table['feedcatsare'])), 'categories') . ">" . __('categories', 'autoblogtext') . "</option>";
+			echo "</select>";
+			echo "</td>";
+			echo "</tr>";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -993,7 +1005,7 @@ class autoblogpremium {
 
 		// Blogs
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+			if(function_exists('is_plugin_active_for_network') && !is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
 				echo "<tr>";
 				echo "<td valign='top' class='heading'>";
 				echo __('Add posts to','autoblogtext');
@@ -1124,6 +1136,18 @@ class autoblogpremium {
 
 		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => '', 'hierarchical' => true, 'show_option_none' => __('None'), 'class' => 'field cat'));
 		echo "<a href='#' class='info' title='" . __('Assign this category to the imported posts.', 'autoblogtext') . "'></a>";
+		echo "</td>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Treat feed categories as','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[feedcatsare]'>";
+		echo "<option value='tags'>" . __('tags', 'autoblogtext') . "</option>";
+		echo "<option value='categories'>" . __('categories', 'autoblogtext') . "</option>";
+		echo "</select>";
 		echo "</td>";
 		echo "</tr>";
 
