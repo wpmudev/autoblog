@@ -130,8 +130,12 @@ function load_autoblog_plugins() {
 					$auto_plugins[] = $plugin;
 			closedir( $dh );
 			sort( $auto_plugins );
-			foreach( $auto_plugins as $auto_plugin )
-				include_once( autoblog_dir('autoblogincludes/plugins/' . $auto_plugin) );
+			foreach( $auto_plugins as $auto_plugin ) {
+				if(in_array($auto_plugin, $plugins)) {
+					include_once( autoblog_dir('autoblogincludes/plugins/' . $auto_plugin) );
+				}
+			}
+
 		}
 	}
 }
