@@ -583,7 +583,7 @@ class autoblogpremium {
 
 		// Blogs
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && !is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
+			if(function_exists('is_network_admin') && is_network_admin()) {
 				echo "<tr>";
 				echo "<td valign='top' class='heading'>";
 				echo __('Add posts to','autoblogtext');
@@ -1005,7 +1005,7 @@ class autoblogpremium {
 
 		// Blogs
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && !is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
+			if(function_exists('is_network_admin') && is_network_admin()) {
 				echo "<tr>";
 				echo "<td valign='top' class='heading'>";
 				echo __('Add posts to','autoblogtext');
@@ -1341,7 +1341,7 @@ class autoblogpremium {
 	function get_autoblogentries() {
 
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+			if(function_exists('is_network_admin') && is_network_admin()) {
 				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d ORDER BY feed_id ASC", $this->db->siteid );
 			} else {
 				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $this->db->blogid );
@@ -1359,7 +1359,7 @@ class autoblogpremium {
 	function get_autoblogentry($id) {
 
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+			if(function_exists('is_network_admin') && is_network_admin()) {
 				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id );
 			} else {
 				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id, $this->db->blogid );
