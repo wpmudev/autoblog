@@ -381,9 +381,16 @@ class autoblogpremium {
 
 		// Add the sub menu
 		add_submenu_page('autoblog', __('Edit feeds','autoblog'), __('Edit feeds','autoblog'), 'manage_options', "autoblog_admin", array(&$this,'handle_admin_page'));
-		add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
 
-		add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
+		if(function_exists('is_multisite') && is_multisite()) {
+			if(!function_exists('is_network_admin') || !is_network_admin()) {
+				add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+				add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
+			}
+		} else {
+			add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+			add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
+		}
 
 	}
 
