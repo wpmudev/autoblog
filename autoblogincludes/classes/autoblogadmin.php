@@ -386,11 +386,19 @@ class autoblogpremium {
 			if(!function_exists('is_network_admin') || !is_network_admin()) {
 				add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
 				add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
+
+				do_action('autoblog_site_menu');
+			} else {
+				do_action('autoblog_network_menu');
 			}
 		} else {
 			add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
 			add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
+
+			do_action('autoblog_site_menu');
 		}
+
+		do_action('autoblog_global_menu');
 
 	}
 
@@ -1845,12 +1853,12 @@ class autoblogpremium {
 		global $action, $page;
 
 		$messages = array();
-		$messages[1] = __('Your options have been updated.','membership');
+		$messages[1] = __('Your options have been updated.','autoblogtext');
 
 		?>
 		<div class='wrap nosubsub'>
 			<div class="icon32" id="icon-options-general"><br></div>
-			<h2><?php _e('Edit Options','membership'); ?></h2>
+			<h2><?php _e('Edit Options','autoblogtext'); ?></h2>
 
 			<?php
 			if ( isset($_GET['msg']) ) {
@@ -1869,19 +1877,19 @@ class autoblogpremium {
 				?>
 
 				<h3><?php _e('Debug mode','autoblog'); ?></h3>
-				<p><?php _e('Switch on debug mode and reporting.','autoblog'); ?></p>
+				<p><?php _e('Switch on debug mode and reporting.','autoblogtext'); ?></p>
 
 				<table class="form-table">
 				<tbody>
 					<tr valign="top">
-						<th scope="row"><?php _e('Debug mode is','autoblog'); ?></th>
+						<th scope="row"><?php _e('Debug mode is','autoblogtext'); ?></th>
 						<td>
 							<?php
 								$debug = get_site_option('autoblog_debug', false);
 							?>
 							<select name='debugmode' id='debugmode'>
-								<option value="no" <?php if($debug == false) echo "selected='selected'"; ?>><?php _e('Disabled','autoblog'); ?></option>
-								<option value="yes" <?php if($debug == true) echo "selected='selected'"; ?>><?php _e('Enabled','autoblog'); ?></option>
+								<option value="no" <?php if($debug == false) echo "selected='selected'"; ?>><?php _e('Disabled','autoblogtext'); ?></option>
+								<option value="yes" <?php if($debug == true) echo "selected='selected'"; ?>><?php _e('Enabled','autoblogtext'); ?></option>
 							</select>
 						</td>
 					</tr>
@@ -1889,7 +1897,7 @@ class autoblogpremium {
 				</table>
 
 				<p class="submit">
-					<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
+					<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'autoblogtext') ?>" />
 				</p>
 
 			</form>
