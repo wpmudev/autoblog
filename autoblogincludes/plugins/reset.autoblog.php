@@ -9,10 +9,21 @@ Author URI: http://caffeinatedb.com
 function AB_handle_reset_panel() {
 	global $action, $page;
 
+	wp_reset_vars( array('action', 'page') );
+
 	$messages = array();
 	$messages[1] = __('Autoblog has been reset.','autoblogtext');
 
-	$lastprocessing = get_autoblog_option('autoblog_processing', false));
+	if(isset($_POST['action']) && esc_attr($_POST['action']) == 'reset') {
+		check_admin_referer('update-autoblog-reset');
+
+		delete_autoblog_option('autoblog_processing');
+		$msg = 1;
+	} else {
+		$msg = $_GET['msg'];
+	}
+
+	$lastprocessing = get_autoblog_option('autoblog_processing', false);
 
 	?>
 	<div class='wrap nosubsub'>
@@ -20,8 +31,8 @@ function AB_handle_reset_panel() {
 		<h2><?php _e('Autoblog Reset','autoblogtext'); ?></h2>
 
 		<?php
-		if ( isset($_GET['msg']) ) {
-			echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
+		if ( isset($msg) ) {
+			echo '<div id="message" class="updated fade"><p>' . $messages[(int) $msg] . '</p></div>';
 			$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
 		}
 		?>
@@ -32,28 +43,29 @@ function AB_handle_reset_panel() {
 				wp_nonce_field('update-autoblog-reset');
 			?>
 
-			<h3><?php _e('Debug mode','autoblog'); ?></h3>
-			<p><?php _e('Switch on debug mode and reporting.','autoblogtext'); ?></p>
+			<h3><?php _e('Processing timestamp','autoblogtext'); ?></h3>
 
 			<table class="form-table">
 			<tbody>
 				<tr valign="top">
-					<th scope="row"><?php _e('Debug mode is','autoblog'); ?></th>
-					<td>
+					<th scope="row" valign='top'><?php _e('Autoblog processing last occured:','autoblogtext'); ?></th>
+					<td valign='top'><strong>
 						<?php
-							$debug = get_site_option('autoblog_debug', false);
-						?>
-						<select name='debugmode' id='debugmode'>
-							<option value="no" <?php if($debug == false) echo "selected='selected'"; ?>><?php _e('Disabled','autoblog'); ?></option>
-							<option value="yes" <?php if($debug == true) echo "selected='selected'"; ?>><?php _e('Enabled','autoblog'); ?></option>
-						</select>
+						if($lastprocessing === false || empty($lastprocessing)) {
+							_e('Never', 'autoblogtext');
+						} else {
+							echo date("jS F Y H:i:s", $lastprocessing );
+						}
+
+						?></strong>
 					</td>
 				</tr>
 			</tbody>
 			</table>
 
 			<p class="submit">
-				<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Reset Now') ?>" />
+				<input type='hidden' name='action' value='reset' />
+				<input type="submit" name="submit" class="button-primary" value="<?php esc_attr_e('Reset Now') ?>" />
 			</p>
 
 		</form>
