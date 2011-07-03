@@ -754,6 +754,9 @@ class autoblogpremium {
 			echo "<option value='tags' " . selected(esc_attr(stripslashes($table['feedcatsare'])), 'tags') . ">" . __('tags', 'autoblogtext') . "</option>";
 			echo "<option value='categories' " . selected(esc_attr(stripslashes($table['feedcatsare'])), 'categories') . ">" . __('categories', 'autoblogtext') . "</option>";
 			echo "</select>";
+			echo "&nbsp;<input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
+			if($table['originalcategories'] == '1') echo " checked='checked'";
+			echo "/>&nbsp;<span>" . __('Add any that do not exist.','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Create any tags or categories that are needed.', 'autoblogtext') . "'></a>";
 
 			echo "</td>";
 		echo "</tr>\n";
@@ -764,9 +767,6 @@ class autoblogpremium {
 		echo "</td>";
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[tag]' value='" . esc_attr(stripslashes($table['tag'])) . "' class='long tag field' />" . "<a href='#' class='info' title='" . __('Enter a comma separated list of tags to add.', 'autoblogtext') . "'></a>";
-		echo "<br/><input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
-		if($table['originalcategories'] == '1') echo " checked='checked'";
-		echo "/>&nbsp;<span>" . __('Use original feeds tags as well (adding if necessary).','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Imported and use the tags originally associated with the post.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
 		echo "</tr>\n";
@@ -1162,6 +1162,9 @@ class autoblogpremium {
 		echo "<option value='tags'>" . __('tags', 'autoblogtext') . "</option>";
 		echo "<option value='categories'>" . __('categories', 'autoblogtext') . "</option>";
 		echo "</select>";
+		echo "&nbsp;<input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
+		echo "/>&nbsp;<span>" . __('Add any that do not exist.','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Create any tags or categories that are needed.', 'autoblogtext') . "'></a>";
+
 		echo "</td>";
 		echo "</tr>";
 
@@ -1171,8 +1174,6 @@ class autoblogpremium {
 		echo "</td>";
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[tag]' value='' class='long tag field' />" . "<a href='#' class='info' title='" . __('Enter a comma separated list of tags to add.', 'autoblogtext') . "'></a>";
-		echo "<br/><input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
-		echo "/>&nbsp;<span>" . __('Use original feeds tags as well (adding if necessary).','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Imported and use the tags originally associated with the post.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
 		echo "</tr>";

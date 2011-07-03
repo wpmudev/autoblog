@@ -356,16 +356,48 @@ class autoblogcron {
 				$tags = array_map('trim', explode(',', $ablog['tag']));
 			}
 
-			$thecats = array();
-			if($ablog['originalcategories'] == '1') {
-				$thecats = $item->get_categories();
-				if(!empty($thecats)) {
-					foreach ($thecats as $category)
-					{
-							$tags[] = trim( $category->get_label() );
-					}
-				}
+			switch($ablog['feedcatsare']) {
+				case 'categories':	//$term = get_term_by('name', $cat_name, 'category');
+									$thecats = array();
+									$thecats = $item->get_categories();
+									if(!empty($thecats)) {
+										foreach ($thecats as $category)
+										{
+											$cat_name = trim( $category->get_label() );
+											$term_id = category_exists($cat_name);
+											if(!empty($term_id)) {
+												$post_category[] = $term_id;
+											} else {
+												// need to check and add cat if required
+												if($ablog['originalcategories'] == '1') {
+													// yes so add
+													$term_id = wp_create_category($cat_name);
+													if(!empty($term_id)) {
+														$post_category[] = $term_id;
+													}
+												}
+											}
+
+										}
+									}
+									break;
+
+
+				case 'tags':		// carry on as default as well
+				default:			$thecats = array();
+									if($ablog['originalcategories'] == '1') {
+										$thecats = $item->get_categories();
+										if(!empty($thecats)) {
+											foreach ($thecats as $category)
+											{
+													$tags[] = trim( $category->get_label() );
+											}
+										}
+									}
+									break;
 			}
+
+
 
 			$tax_input = array( "post_tag" => $tags);
 
