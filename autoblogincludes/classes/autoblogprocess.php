@@ -397,8 +397,6 @@ class autoblogcron {
 									break;
 			}
 
-
-
 			$tax_input = array( "post_tag" => $tags);
 
 			$post_status = $ablog['poststatus'];
