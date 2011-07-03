@@ -4,6 +4,13 @@ Author: Barry Getty (Incsub)
 Change Log:
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
+3.5.1
+----------------------------------------------------------------------
+Fixed plugins activation
+Added reset autoblog plugin
+Added Network admin interface to let admin user to add feeds and posts
+to other blogs/sites.
+
 3.5
 ----------------------------------------------------------------------
 Fixed local timezones parsing and editing

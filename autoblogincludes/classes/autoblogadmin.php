@@ -572,7 +572,7 @@ class autoblogpremium {
 		echo '<h3 class="hndle"><span>' . __('Feed : ','autoblogtext') . esc_html(stripslashes($table['title'])) . '</span></h3>';
 		echo '<div class="inside">';
 
-		echo "<table width='100%'>";
+		echo "<table width='100%'>\n";
 
 		// Title
 		echo "<tr>";
@@ -582,7 +582,7 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[title]' value='" . esc_attr(stripslashes($table['title'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('Enter a memorable title.','autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		// URL
 		echo "<tr>";
@@ -592,9 +592,9 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[url]' value='" . esc_attr(stripslashes($table['url'])) . "' class='long url field' />" . "<a href='#' class='info' title='" . __('Enter the feed URL.','autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
-		echo "<tr><td colspan='2'>&nbsp;</td></tr>";
+		echo "<tr><td colspan='2'>&nbsp;</td></tr>\n";
 
 		// Blogs
 		if(function_exists('is_multisite') && is_multisite()) {
@@ -621,7 +621,7 @@ class autoblogpremium {
 				echo "</select>" . "<a href='#' class='info' title='" . __('Select a blog to add the post to.', 'autoblogtext') . "'></a>";
 
 				echo "</td>";
-				echo "</tr>";
+				echo "</tr>\n";
 			}
 		} else {
 			echo "<input type='hidden' name='abtble[blog]' value='" . $blog_id . "' />";
@@ -646,7 +646,7 @@ class autoblogpremium {
 		echo "</select>" . "<a href='#' class='info' title='" . __('Select the post type the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 
 		// Status
@@ -663,7 +663,7 @@ class autoblogpremium {
 		echo "</select>" . "<a href='#' class='info' title='" . __('Select the status the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		// Post dates
 		echo "<tr>";
@@ -678,9 +678,9 @@ class autoblogpremium {
 		echo "</select>" . "<a href='#' class='info' title='" . __('Select the date imported posts will have.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>";
+		echo "<tr><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>\n";
 
 		$blogusers = get_users_of_blog( $table['blog'] );
 
@@ -705,7 +705,7 @@ class autoblogpremium {
 		//print_r($blogusers);
 
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -725,11 +725,10 @@ class autoblogpremium {
 		echo "</select>" . "<a href='#' class='info' title='" . __('If the feed author does not exist in your blog then use this author.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr><td colspan='2' class='spacer'><span>" . __('Categories and Tags','autoblogtext') . "</span></td></tr>";
 
-		//
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
 		echo __('Assign posts to this category','autoblogtext');
@@ -743,19 +742,21 @@ class autoblogpremium {
 		echo "<a href='#' class='info' title='" . __('Assign this category to the imported posts.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
-			echo "<tr>";
+		echo "<tr>";
 			echo "<td valign='top' class='heading'>";
 			echo __('Treat feed categories as','autoblogtext');
 			echo "</td>";
+
 			echo "<td valign='top' class=''>";
 			echo "<select name='abtble[feedcatsare]'>";
 			echo "<option value='tags' " . selected(esc_attr(stripslashes($table['feedcatsare'])), 'tags') . ">" . __('tags', 'autoblogtext') . "</option>";
 			echo "<option value='categories' " . selected(esc_attr(stripslashes($table['feedcatsare'])), 'categories') . ">" . __('categories', 'autoblogtext') . "</option>";
 			echo "</select>";
+
 			echo "</td>";
-			echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -767,13 +768,11 @@ class autoblogpremium {
 		if($table['originalcategories'] == '1') echo " checked='checked'";
 		echo "/>&nbsp;<span>" . __('Use original feeds tags as well (adding if necessary).','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Imported and use the tags originally associated with the post.', 'autoblogtext') . "'></a>";
 
-
-		//print_r($tags);
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post Filtering','autoblogtext') . "</span></td></tr>";
-		echo "<tr><td colspan='2'><p>" . __('Include posts that contain (separate words with commas)','autoblogtext') . "</p></td></tr>";
+		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post Filtering','autoblogtext') . "</span></td></tr>\n";
+		echo "<tr><td colspan='2'><p>" . __('Include posts that contain (separate words with commas)','autoblogtext') . "</p></td></tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -782,7 +781,7 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[allwords]' value='" . esc_attr(stripslashes($table['allwords'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have ALL of these words in the title or content.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -791,7 +790,7 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[anywords]' value='" . esc_attr(stripslashes($table['anywords'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have ANY of these words in the title or content.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -800,7 +799,7 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[phrase]' value='" . esc_attr(stripslashes($table['phrase'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have this exact phrase in the title or content.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -809,7 +808,7 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[nonewords]' value='" . esc_attr(stripslashes($table['nonewords'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must NOT have any of these words in the title or content.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -820,10 +819,10 @@ class autoblogpremium {
 		echo "<br/>";
 		echo "<span>" . __('Tags should be comma separated','autoblogtext') . "</span>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post excerpts','autoblogtext') . "</span></td></tr>";
+		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post excerpts','autoblogtext') . "</span></td></tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -835,7 +834,7 @@ class autoblogpremium {
 		echo "<option value='2'"; echo ($table['useexcerpt'] == '2') ? " selected='selected'" : ""; echo ">" . __('Use Excerpt','autoblogtext') . "</option>";
 		echo "</select>" . "<a href='#' class='info' title='" . __('Use the full post (if available) or create an excerpt.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -849,7 +848,7 @@ class autoblogpremium {
 		echo "<option value='paragraphs'"; echo ($table['excerptnumberof'] == 'paragraphs') ? " selected='selected'" : ""; echo ">" . __('Paragraphs','autoblogtext') . "</option>";
 		echo "</select>" . "<a href='#' class='info' title='" . __('Specify the size of the excerpt to create (if selected)', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -862,10 +861,10 @@ class autoblogpremium {
 		if($table['nofollow'] == '1') echo "checked='checked' ";
 		echo "/>&nbsp;<span>" . __('Ensure this link is a nofollow one','autoblogtext') . "</span>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>";
+		echo "<tr><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -883,7 +882,7 @@ class autoblogpremium {
 		echo "<option value='1449'"; echo ($table['processfeed'] == '1449') ? " selected='selected'" : ""; echo ">" . __('every day','autoblogtext') . "</option>";
 		echo "</select>" . "<a href='#' class='info' title='" . __('Set the time delay for processing this feed, irregularly updated feeds do not need to be checked very often.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		// New fields
 
@@ -926,7 +925,7 @@ class autoblogpremium {
 		echo "</select>";
 		echo "<a href='#' class='info' title='" . __('Set the date you want to start processing posts from.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		$endon = $table['endon'];
 
@@ -967,15 +966,15 @@ class autoblogpremium {
 		echo "</select>";
 		echo "<a href='#' class='info' title='" . __('Set the date you want to stop processing posts from this feed.', 'autoblogtext') . "'></a>";
 		echo "</td>";
-		echo "</tr>";
+		echo "</tr>\n";
 
 		do_action( 'autoblog_feed_edit_form_end', $key, $details );
 
-		echo "</table>";
+		echo "</table>\n";
 
-		echo '</div>';
+		echo '</div> <!-- inside -->';
 
-		echo '</div>';
+		echo '</div> <!-- postbox -->';
 
 	}
 
@@ -1464,6 +1463,8 @@ class autoblogpremium {
 
 		echo '</div>';
 
+		echo '</form>';
+
 		echo "</div>";
 
 	}
@@ -1510,7 +1511,7 @@ class autoblogpremium {
 
 		echo '</div>';
 
-		echo '</div>';
+		echo '</form>';
 
 		echo "</div>";
 
@@ -1526,12 +1527,6 @@ class autoblogpremium {
 
 		$current_offset = get_option('gmt_offset');
 		$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
-		/*
-		$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
-		<?php if ( get_option('timezone_string') || !empty($current_offset) ) : ?>
-			<span id="local-time"><?php printf(__('Local time is <code>%1$s</code>'), date_i18n($timezone_format)); ?></span>
-		<?php endif; ?>
-		*/
 
 		if(isset($_POST['action']) && addslashes($_POST['action']) == 'autoblog') {
 
