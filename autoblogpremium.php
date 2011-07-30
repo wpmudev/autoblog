@@ -42,11 +42,11 @@ set_autoblog_dir(__FILE__);
 if(is_admin()) {
 	require_once('autoblogincludes/classes/autoblogadmin.php');
 
-	$abp =& new autoblogpremium();
+	$abp = new autoblogpremium();
 }
 
 require_once('autoblogincludes/classes/autoblogprocess.php');
-$abc =& new autoblogcron();
+$abc = new autoblogcron();
 
 load_autoblog_plugins();
 ?>

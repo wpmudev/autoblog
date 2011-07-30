@@ -65,7 +65,7 @@ function AB_handle_reset_panel() {
 
 			<p class="submit">
 				<input type='hidden' name='action' value='reset' />
-				<input type="submit" name="submit" class="button-primary" value="<?php esc_attr_e('Reset Now') ?>" />
+				<input type="submit" name="submit" class="button-primary" value="<?php esc_attr_e('Reset Now','autoblogtext') ?>" />
 			</p>
 
 		</form>
@@ -75,7 +75,7 @@ function AB_handle_reset_panel() {
 }
 
 function AB_reset_menu_add() {
-	add_submenu_page('autoblog', __('Autoblog Reset','autoblog'), __('Reset Autoblog','autoblog'), 'manage_options', "autoblog_reset", 'AB_handle_reset_panel');
+	add_submenu_page('autoblog', __('Autoblog Reset','autoblogtext'), __('Reset Autoblog','autoblogtext'), 'manage_options', "autoblog_reset", 'AB_handle_reset_panel');
 
 }
 

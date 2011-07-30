@@ -119,7 +119,7 @@ class autoblogpremium {
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 		wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
 
-		wp_localize_script( 'autoblogdashjs', 'autoblog', array( 'imports' => __('Posts imported','autoblog') ) );
+		wp_localize_script( 'autoblogdashjs', 'autoblog', array( 'imports' => __('Posts imported','autoblogtext') ) );
 
 		// actions
 		add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_news') );
@@ -184,7 +184,7 @@ class autoblogpremium {
 	}
 
 	function dashboard_iehead() {
-		echo '<!--[if IE]><script language="javascript" type="text/javascript" src="' . autoblog_url('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
+		echo '<!--[if IE lt 8]><script language="javascript" type="text/javascript" src="' . autoblog_url('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
 	}
 
 	function get_data($results, $str = false) {
@@ -294,7 +294,7 @@ class autoblogpremium {
 			}
 			$result = array('errorcode' => '200', 'data' => $cu);
 		} else {
-			$result = array('errorcode' => '500', 'message' => 'No blog.');
+			$result = array('errorcode' => '500', 'message' => __('No blog.','autoblogtext') );
 		}
 		$this->return_json($result);
 
@@ -311,7 +311,7 @@ class autoblogpremium {
 			}
 			$result = array('errorcode' => '200', 'data' => $bu);
 		} else {
-			$result = array('errorcode' => '500', 'message' => 'No blog.');
+			$result = array('errorcode' => '500', 'message' => __('No blog.','autoblogtext'));
 		}
 		$this->return_json($result);
 
@@ -329,7 +329,7 @@ class autoblogpremium {
 			}
 			$result = array('errorcode' => '200', 'data' => $cu);
 		} else {
-			$result = array('errorcode' => '500', 'message' => 'No blog.');
+			$result = array('errorcode' => '500', 'message' => __('No blog.','autoblogtext'));
 		}
 		$this->return_json($result);
 
@@ -364,13 +364,13 @@ class autoblogpremium {
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
 				if(function_exists('is_network_admin') && is_network_admin()) {
-					add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+					add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblogtext'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 				}
 			} else {
-				add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+				add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblogtext'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 			}
 		} else {
-			add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblog'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+			add_menu_page(__('Auto Blog','autoblog'), __('Auto Blog','autoblogtext'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 		}
 
 
@@ -380,20 +380,20 @@ class autoblogpremium {
 		}
 
 		// Add the sub menu
-		add_submenu_page('autoblog', __('Edit feeds','autoblog'), __('Edit feeds','autoblog'), 'manage_options', "autoblog_admin", array(&$this,'handle_admin_page'));
+		add_submenu_page('autoblog', __('Edit feeds','autoblogtext'), __('Edit feeds','autoblogtext'), 'manage_options', "autoblog_admin", array(&$this,'handle_admin_page'));
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(!function_exists('is_network_admin') || !is_network_admin()) {
-				add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
-				add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
+				add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Edit Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+				add_submenu_page('autoblog', __('Autoblog Plugins','autoblogtext'), __('Edit Plugins','autoblogtext'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
 
 				do_action('autoblog_site_menu');
 			} else {
 				do_action('autoblog_network_menu');
 			}
 		} else {
-			add_submenu_page('autoblog', __('Edit Options','autoblog'), __('Edit Options','autoblog'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
-			add_submenu_page('autoblog', __('Autoblog Plugins','autoblog'), __('Edit Plugins','autoblog'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
+			add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Edit Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+			add_submenu_page('autoblog', __('Autoblog Plugins','autoblogtext'), __('Edit Plugins','autoblogtext'), 'manage_options', "autoblog_plugins", array(&$this,'handle_plugins_panel'));
 
 			do_action('autoblog_site_menu');
 		}
@@ -411,19 +411,19 @@ class autoblogpremium {
 
 		?>
 		<div class="postbox " id="dashboard_right_now">
-			<h3 class="hndle"><span><?php _e('Autoblog','autoblog'); ?></span></h3>
+			<h3 class="hndle"><span><?php _e('Autoblog','autoblogtext'); ?></span></h3>
 			<div class="inside">
 				<?php
 				echo "<p>";
-				echo __('You are running Autoblog version ','autoblog') . "<strong>" . $plugin['Version'] . '</strong>';
+				echo __('You are running Autoblog version ','autoblogtext') . "<strong>" . $plugin['Version'] . '</strong>';
 				echo "</p>";
 
 				echo "<p>";
-				echo __('Debug mode is ','autoblog') . "<strong>";
+				echo __('Debug mode is ','autoblogtext') . "<strong>";
 				if($debug) {
-					echo __('Enabled','autoblog');
+					echo __('Enabled','autoblogtext');
 				} else {
-					echo __('Disabled','autoblog');
+					echo __('Disabled','autoblogtext');
 				}
 				echo '</strong>';
 				echo "</p>";
@@ -442,7 +442,7 @@ class autoblogpremium {
 
 		?>
 		<div class="postbox " id="dashboard_right_now">
-			<h3 class="hndle"><span><?php _e('Debug report','autoblog'); ?></span></h3>
+			<h3 class="hndle"><span><?php _e('Debug report','autoblogtext'); ?></span></h3>
 			<div class="inside">
 				<?php
 				if(!empty($logs)) {
@@ -459,7 +459,7 @@ class autoblogpremium {
 					}
 				} else {
 					echo "<p>";
-					echo __('No debug logs are available, either you have not processed a feed or everything is running smoothly.','autoblog');
+					echo __('No debug logs are available, either you have not processed a feed or everything is running smoothly.','autoblogtext');
 					echo "</p>";
 				}
 
@@ -489,12 +489,12 @@ class autoblogpremium {
 
 		?>
 		<div class="postbox " id="dashboard_right_now">
-			<h3 class="hndle"><span><?php _e('Statistics - posts per day','autoblog'); ?></span></h3>
+			<h3 class="hndle"><span><?php _e('Statistics - posts per day','autoblogtext'); ?></span></h3>
 			<div class="inside">
 				<?php
 					if(empty($autos)) {
 						echo "<p>";
-						echo __('You need to set up some feeds before we can produce statistics.','autoblog');
+						echo __('You need to set up some feeds before we can produce statistics.','autautoblogtextoblog');
 						echo "</p>";
 					} else {
 						foreach($autos as $key => $a) {
@@ -515,7 +515,7 @@ class autoblogpremium {
 		?>
 		<div class='wrap nosubsub'>
 			<div class="icon32" id="icon-index"><br></div>
-			<h2><?php _e('Autoblog dashboard','autoblog'); ?></h2>
+			<h2><?php _e('Autoblog dashboard','autoblogtext'); ?></h2>
 
 			<div id="dashboard-widgets-wrap">
 
@@ -657,9 +657,9 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 
 		echo "<select name='abtble[poststatus]' class='field'>";
-		echo "<option value='publish'"; echo $table['poststatus'] == 'publish' ? " selected='selected'" : "";  echo ">" . __('Published') . "</option>";
-		echo "<option value='pending'"; echo  $table['poststatus'] == 'pending' ? " selected='selected'" : "";  echo ">" . __('Pending Review') . "</option>";
-		echo "<option value='draft'"; echo  $table['poststatus'] == 'draft' ? " selected='selected'" : "";  echo ">" . __('Draft') . "</option>";
+		echo "<option value='publish'"; echo $table['poststatus'] == 'publish' ? " selected='selected'" : "";  echo ">" . __('Published','autoblogtext') . "</option>";
+		echo "<option value='pending'"; echo  $table['poststatus'] == 'pending' ? " selected='selected'" : "";  echo ">" . __('Pending Review','autoblogtext') . "</option>";
+		echo "<option value='draft'"; echo  $table['poststatus'] == 'draft' ? " selected='selected'" : "";  echo ">" . __('Draft','autoblogtext') . "</option>";
 		echo "</select>" . "<a href='#' class='info' title='" . __('Select the status the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
@@ -673,8 +673,8 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 
 		echo "<select name='abtble[postdate]' class='field'>";
-		echo "<option value='current'"; echo $table['postdate'] == 'current' ? " selected='selected'" : "";  echo ">" . __('Imported date') . "</option>";
-		echo "<option value='existing'"; echo  $table['postdate'] == 'existing' ? " selected='selected'" : "";  echo ">" . __('Original posts date') . "</option>";
+		echo "<option value='current'"; echo $table['postdate'] == 'current' ? " selected='selected'" : "";  echo ">" . __('Imported date','autoblogtext') . "</option>";
+		echo "<option value='existing'"; echo  $table['postdate'] == 'existing' ? " selected='selected'" : "";  echo ">" . __('Original posts date','autoblogtext') . "</option>";
 		echo "</select>" . "<a href='#' class='info' title='" . __('Select the date imported posts will have.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
@@ -736,7 +736,7 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 
 		if(function_exists('switch_to_blog')) switch_to_blog($table['blog']);
-		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => $table['category'], 'hierarchical' => true, 'show_option_none' => __('None'), 'class' => 'field cat'));
+		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => $table['category'], 'hierarchical' => true, 'show_option_none' => __('None','autoblogtext'), 'class' => 'field cat'));
 		if(function_exists('restore_current_blog')) restore_current_blog();
 
 		echo "<a href='#' class='info' title='" . __('Assign this category to the imported posts.', 'autoblogtext') . "'></a>";
@@ -1069,9 +1069,9 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 
 		echo "<select name='abtble[poststatus]' class='field'>";
-		echo "<option value='publish'>" . __('Published') . "</option>";
-		echo "<option value='pending'>" . __('Pending Review') . "</option>";
-		echo "<option value='draft'>" . __('Draft') . "</option>";
+		echo "<option value='publish'>" . __('Published', 'autoblogtext') . "</option>";
+		echo "<option value='pending'>" . __('Pending Review', 'autoblogtext') . "</option>";
+		echo "<option value='draft'>" . __('Draft', 'autoblogtext') . "</option>";
 		echo "</select>" . "<a href='#' class='info' title='" . __('Select the status the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
@@ -1085,8 +1085,8 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 
 		echo "<select name='abtble[postdate]' class='field'>";
-		echo "<option value='current'>" . __('Imported date') . "</option>";
-		echo "<option value='existing'>" . __('Original posts date') . "</option>";
+		echo "<option value='current'>" . __('Imported date','autoblogtext') . "</option>";
+		echo "<option value='existing'>" . __('Original posts date','autoblogtext') . "</option>";
 		echo "</select>" . "<a href='#' class='info' title='" . __('Select the date imported posts will have.', 'autoblogtext') . "'></a>";
 
 		echo "</td>";
@@ -1969,21 +1969,21 @@ class autoblogpremium {
 		wp_reset_vars( array('action', 'page') );
 
 		$messages = array();
-		$messages[1] = __('Plugin updated.','autoblog');
-		$messages[2] = __('Plugin not updated.','autoblog');
+		$messages[1] = __('Plugin updated.','autoblogtext');
+		$messages[2] = __('Plugin not updated.','autoblogtext');
 
-		$messages[3] = __('Plugin activated.','autoblog');
-		$messages[4] = __('Plugin not activated.','autoblog');
+		$messages[3] = __('Plugin activated.','autoblogtext');
+		$messages[4] = __('Plugin not activated.','autoblogtext');
 
-		$messages[5] = __('Plugin deactivated.','autoblog');
-		$messages[6] = __('Plugin not deactivated.','autoblog');
+		$messages[5] = __('Plugin deactivated.','autoblogtext');
+		$messages[6] = __('Plugin not deactivated.','autoblogtext');
 
-		$messages[7] = __('Plugin activation toggled.','autoblog');
+		$messages[7] = __('Plugin activation toggled.','autoblogtext');
 
 		?>
 		<div class='wrap'>
 			<div class="icon32" id="icon-plugins"><br></div>
-			<h2><?php _e('Edit Plugins','autoblog'); ?></h2>
+			<h2><?php _e('Edit Plugins','autoblogtext'); ?></h2>
 
 			<?php
 			if ( isset($_GET['msg']) ) {
@@ -2001,10 +2001,10 @@ class autoblogpremium {
 
 			<div class="alignleft actions">
 			<select name="action">
-			<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
-			<option value="toggle"><?php _e('Toggle activation'); ?></option>
+			<option selected="selected" value=""><?php _e('Bulk Actions','autoblogtext'); ?></option>
+			<option value="toggle"><?php _e('Toggle activation','autoblogtext'); ?></option>
 			</select>
-			<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply'); ?>">
+			<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply','autoblogtext'); ?>">
 
 			</div>
 
@@ -2018,9 +2018,9 @@ class autoblogpremium {
 			<?php
 				wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-plugins');
 
-				$columns = array(	"name"		=>	__('Plugin Name', 'membership'),
-									"file" 		=> 	__('Plugin File','membership'),
-									"active"	=>	__('Active','membership')
+				$columns = array(	"name"		=>	__('Plugin Name', 'autoblogtext'),
+									"file" 		=> 	__('Plugin File','autoblogtext'),
+									"active"	=>	__('Active','autoblogtext')
 								);
 
 				$columns = apply_filters('autoblog_plugincolumns', $columns);
@@ -2080,7 +2080,7 @@ class autoblogpremium {
 							<tr valign="middle" class="alternate" id="plugin-<?php echo $plugin; ?>">
 								<th class="check-column" scope="row"><input type="checkbox" value="<?php echo esc_attr($plugin); ?>" name="plugincheck[]"></th>
 								<td class="column-name">
-									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>" . __(' by ', 'membership') . "<a href='" . esc_attr($plugin_data['AuthorURI']) . "'>" . esc_html($plugin_data['Author']) . "</a>"; ?>
+									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>" . __(' by ', 'autoblogtext') . "<a href='" . esc_attr($plugin_data['AuthorURI']) . "'>" . esc_html($plugin_data['Author']) . "</a>"; ?>
 									<?php if(!empty($plugin_data['Description'])) {
 										?><br/><?php echo esc_html($plugin_data['Description']);
 										}
@@ -2088,9 +2088,9 @@ class autoblogpremium {
 										$actions = array();
 
 										if(in_array($plugin, $active)) {
-											$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Deactivate') . "</a></span>";
+											$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Deactivate','autoblogtext') . "</a></span>";
 										} else {
-											$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Activate') . "</a></span>";
+											$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;plugin=" . $plugin . "", 'toggle-plugin-' . $plugin) . "'>" . __('Activate','autoblogtext') . "</a></span>";
 										}
 									?>
 									<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
@@ -2102,9 +2102,9 @@ class autoblogpremium {
 								<td class="column-active">
 									<?php
 										if(in_array($plugin, $active)) {
-											echo "<strong>" . __('Active', 'membership') . "</strong>";
+											echo "<strong>" . __('Active', 'autoblogtext') . "</strong>";
 										} else {
-											echo __('Inactive', 'membership');
+											echo __('Inactive', 'autoblogtext');
 										}
 									?>
 								</td>
@@ -2115,7 +2115,7 @@ class autoblogpremium {
 						$columncount = count($columns) + 1;
 						?>
 						<tr valign="middle" class="alternate" >
-							<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Plugns where found for this install.','membership'); ?></td>
+							<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Plugns where found for this install.','autoblogtext'); ?></td>
 					    </tr>
 						<?php
 					}
@@ -2129,8 +2129,8 @@ class autoblogpremium {
 
 			<div class="alignleft actions">
 			<select name="action2">
-				<option selected="selected" value=""><?php _e('Bulk Actions'); ?></option>
-				<option value="toggle"><?php _e('Toggle activation'); ?></option>
+				<option selected="selected" value=""><?php _e('Bulk Actions','autoblogtext'); ?></option>
+				<option value="toggle"><?php _e('Toggle activation','autoblogtext'); ?></option>
 			</select>
 			<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="Apply">
 			</div>

@@ -23,19 +23,19 @@ class A_twitter_addon {
 	function initialise_addon() {
 
 		register_post_type('tweet', array(	'labels' => array(
-																					'name' => __('Tweets', 'autoblog'),
-																					'singular_name' => __('Tweet', 'autoblog'),
-																					'add_new' => __( 'Add New', 'autoblog' ),
-																					'add_new_item' => __( 'Add New Tweet', 'autoblog' ),
-																					'edit' => __( 'Edit', 'autoblog' ),
-																					'edit_item' => __( 'Edit Tweet', 'autoblog' ),
-																					'new_item' => __( 'New Tweet', 'autoblog' ),
-																					'view' => __( 'View Tweet', 'autoblog' ),
-																					'view_item' => __( 'View Tweet', 'autoblog' ),
-																					'search_items' => __( 'Search Tweets', 'autoblog' ),
-																					'not_found' => __( 'No Tweets found', 'autoblog' ),
-																					'not_found_in_trash' => __( 'No Tweets found in Trash', 'autoblog' ),
-																					'parent' => __( 'Parent Tweet', 'autoblog' ),
+																					'name' => __('Tweets', 'autoblogtext'),
+																					'singular_name' => __('Tweet', 'autoblogtext'),
+																					'add_new' => __( 'Add New', 'autoblogtext' ),
+																					'add_new_item' => __( 'Add New Tweet', 'autoblogtext' ),
+																					'edit' => __( 'Edit', 'autoblogtext' ),
+																					'edit_item' => __( 'Edit Tweet', 'autoblogtext' ),
+																					'new_item' => __( 'New Tweet', 'autoblogtext' ),
+																					'view' => __( 'View Tweet', 'autoblogtext' ),
+																					'view_item' => __( 'View Tweet', 'autoblogtext' ),
+																					'search_items' => __( 'Search Tweets', 'autoblogtext' ),
+																					'not_found' => __( 'No Tweets found', 'autoblogtext' ),
+																					'not_found_in_trash' => __( 'No Tweets found in Trash', 'autoblogtext' ),
+																					'parent' => __( 'Parent Tweet', 'autoblogtext' ),
 																				),
 																	'public' => true,
 																	'show_ui' => true,
@@ -43,7 +43,7 @@ class A_twitter_addon {
 																	'exclude_from_search' => true,
 																	'hierarchical' => false,
 																	'supports' => array( 'title', 'editor', 'custom-fields', 'thumbnail', 'page-attributes' ),
-																	'rewrite' => array( 'slug' => __('tweet','autoblog'),
+																	'rewrite' => array( 'slug' => __('tweet','autoblogtext'),
 																						'with_front' => false )
 																)
 											);
@@ -90,8 +90,8 @@ class A_twitter_addon {
 class A_Widget_Recent_Tweets extends WP_Widget {
 
 	function A_Widget_Recent_Tweets() {
-		$widget_ops = array('classname' => 'widget_recent_tweets', 'description' => __( "The most recent tweets on your site") );
-		$this->WP_Widget('recent-tweets', __('Recent Tweets'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_recent_tweets', 'description' => __( 'The most recent tweets on your site','autoblogtext') );
+		$this->WP_Widget('recent-tweets', __('Recent Tweets','autoblogtext'), $widget_ops);
 		$this->alt_option_name = 'widget_recent_tweets';
 
 		add_action( 'save_post', array(&$this, 'flush_widget_cache') );
@@ -113,7 +113,7 @@ class A_Widget_Recent_Tweets extends WP_Widget {
 		ob_start();
 		extract($args);
 
-		$title = apply_filters('widget_title', empty($instance['title']) ? __('Recent Posts') : $instance['title'], $instance, $this->id_base);
+		$title = apply_filters('widget_title', empty($instance['title']) ? __('Recent Posts','autoblogtext') : $instance['title'], $instance, $this->id_base);
 		if ( ! $number = absint( $instance['number'] ) )
  			$number = 10;
 
@@ -125,7 +125,7 @@ class A_Widget_Recent_Tweets extends WP_Widget {
 		<ul class='tweets'>
 		<?php  while ($r->have_posts()) : $r->the_post(); ?>
 		<li class='tweet'><?php the_content(); ?>
-		<a href='<?php echo get_post_meta(get_the_id(), 'original_source', true); ?>'>#</a> - <?php echo get_the_date() . __(' at ', 'autoblog' ) . get_the_time(); ?>
+		<a href='<?php echo get_post_meta(get_the_id(), 'original_source', true); ?>'>#</a> - <?php echo get_the_date() . __(' at ', 'autoblogtext' ) . get_the_time(); ?>
 		</li>
 		<?php endwhile; ?>
 		</ul>
@@ -164,7 +164,7 @@ class A_Widget_Recent_Tweets extends WP_Widget {
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of tweets to show:'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of tweets to show:','autoblogtext'); ?></label>
 		<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
 <?php
 	}

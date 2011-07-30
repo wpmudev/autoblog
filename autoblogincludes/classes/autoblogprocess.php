@@ -233,7 +233,7 @@ class autoblogcron {
 		if(empty($ablog['url'])) {
 			if($this->debug) {
 				// feed error
-				$this->errors[] = __('Error: No URL found for a feed','autoblog');
+				$this->errors[] = __('Error: No URL found for a feed','autoblogtext');
 			}
 			return false;
 		}
@@ -245,14 +245,14 @@ class autoblogcron {
 			if($max == 0) {
 				if($this->debug) {
 					// feed error
-					$this->errors[] = __('Notice: No entries retrieved for feed - ','autoblog') . $ablog['url'];
+					$this->errors[] = __('Notice: No entries retrieved for feed - ','autoblogtext') . $ablog['url'];
 				}
 			}
 		} else {
 			$max = 0;
 			if($this->debug) {
 				// feed error
-				$this->errors[] = __('Error: ','autoblog') . $feed->get_error_message();
+				$this->errors[] = __('Error: ','autoblogtext') . $feed->get_error_message();
 			}
 		}
 
@@ -260,7 +260,7 @@ class autoblogcron {
 			// We aren't processing this feed yet
 			if($this->debug) {
 				// feed error
-				$this->errors[] = __('Date margin: Not processing feed yet - ','autoblog') . $ablog['url'];
+				$this->errors[] = __('Date margin: Not processing feed yet - ','autoblogtext') . $ablog['url'];
 			}
 		}
 
@@ -268,7 +268,7 @@ class autoblogcron {
 			// We aren't processing this feed yet
 			if($this->debug) {
 				// feed error
-				$this->errors[] = __('Date margin: Stopped processing feed - ','autoblog') . $ablog['url'];
+				$this->errors[] = __('Date margin: Stopped processing feed - ','autoblogtext') . $ablog['url'];
 			}
 		}
 
@@ -287,7 +287,7 @@ class autoblogcron {
 				// This post already exists so we shall stop here
 				if($this->debug) {
 					// first item already exists for this feed
-					$this->errors[] = __('Notice: No new entries in feed - ','autoblog') . $ablog['url'];
+					$this->errors[] = __('Notice: No new entries in feed - ','autoblogtext') . $ablog['url'];
 				}
 				break;
 			}
@@ -484,7 +484,7 @@ class autoblogcron {
 		$timestart = current_time('timestamp');
 
 		//Or processing limit
-		$timelimit = 3; // max seconds for processing
+		$timelimit = AUTOBLOG_PROCESSING_TIMELIMIT; // max seconds for processing
 
 		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week', current_time('timestamp')));
 		if($lastprocessing == 'yes' || $lastprocessing == 'no' || $lastprocessing == 'np') {
@@ -500,7 +500,7 @@ class autoblogcron {
 				if(time() > $timestart + $timelimit) {
 					if($this->debug) {
 						// time out
-						$this->errors[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblog');
+						$this->errors[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
 					}
 					break;
 				}
@@ -522,7 +522,7 @@ class autoblogcron {
 					if($this->debug) {
 						// no uri or not processing
 						if(empty($details['url'])) {
-							$this->errors[] = __('Error: No URL found for a feed.','autoblog');
+							$this->errors[] = __('Error: No URL found for a feed.','autoblogtext');
 						}
 					}
 				}
