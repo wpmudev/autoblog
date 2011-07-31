@@ -144,6 +144,8 @@ class autoblogpremium {
 		wp_localize_script( 'autoblogadminjs', 'autoblog', array( 	'deletefeed' => __('Are you sure you want to delete this feed?','autoblogtext'),
 																	'processfeed' => __('Are you sure you want to process this feed?','autoblogtext')
 																) );
+
+		$this->update_admin_page();
 	}
 
 	function add_admin_header_autoblog_options() {
@@ -1520,144 +1522,125 @@ class autoblogpremium {
 
 	function update_admin_page() {
 
-	}
+		global $action, $page;
 
-	function handle_admin_page() {
+		wp_reset_vars( array('action', 'page'));
 
-		$showlist = true;
-
-		$current_offset = get_option('gmt_offset');
-		$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
-
-		if(isset($_POST['action']) && addslashes($_POST['action']) == 'autoblog') {
+		if(!empty($action) && $action == 'autoblog') {
 
 			check_admin_referer('autoblog');
 
-			if(isset($_POST['add'])) {
-				// We are adding a new feed
-				$this->handle_addnew_page();
-				$showlist = false;
-			} else {
-				// We are doing something else
 
-				//save
-				if(!empty($_POST['savenew'])) {
-					// Adding a new feed
+			//save
+			if(!empty($_POST['savenew'])) {
+				// Adding a new feed
 
-					$feed = array();
-					$feed['lastupdated'] = 0;
+				$feed = array();
+				$feed['lastupdated'] = 0;
 
-					if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
-						$feed['nextcheck'] = current_time('timestamp') + (intval($_POST['abtble']['processfeed']) * 60);
-					} else {
-						$feed['nextcheck'] = 0;
-					}
-
-					$feed['site_id'] = $this->db->siteid;
-					$feed['blog_id'] = $this->db->blogid;
-
-					if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
-						$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
-					}
-
-					if(!empty($_POST['abtble']['endonday']) && !empty($_POST['abtble']['endonmonth']) && !empty($_POST['abtble']['endonyear'])) {
-						$_POST['abtble']['endon'] = strtotime($_POST['abtble']['endonyear'] . '-' . $_POST['abtble']['endonmonth'] . '-' . $_POST['abtble']['endonday']);
-					}
-					$feed['feed_meta'] = serialize($_POST['abtble']);
-
-					$id = $this->db->insert($this->autoblog, $feed);
-					if(!is_wp_error($id)) {
-						echo '<div id="message" class="updated fade"><p>' . sprintf(__("Your feed has been added.", 'autoblogtext')) . '</p></div>';
-					} else {
-						echo '<div id="message" class="error fade"><p>' . $id->get_error_mssage() . '</p></div>';
-					}
-
+				if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
+					$feed['nextcheck'] = current_time('timestamp') + (intval($_POST['abtble']['processfeed']) * 60);
+				} else {
+					$feed['nextcheck'] = 0;
 				}
 
-				if(!empty($_POST['save'])) {
-					// Saving a feed
-					$feed = array();
-					if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
-						$feed['nextcheck'] = current_time('timestamp') + (intval($_POST['abtble']['processfeed']) * 60);
-					} else {
-						$feed['nextcheck'] = 0;
-					}
+				$feed['site_id'] = $this->db->siteid;
+				$feed['blog_id'] = $this->db->blogid;
 
-					if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
-						$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
-					}
-
-					if(!empty($_POST['abtble']['endonday']) && !empty($_POST['abtble']['endonmonth']) && !empty($_POST['abtble']['endonyear'])) {
-						$_POST['abtble']['endon'] = strtotime($_POST['abtble']['endonyear'] . '-' . $_POST['abtble']['endonmonth'] . '-' . $_POST['abtble']['endonday']);
-					}
-					$feed['feed_meta'] = serialize($_POST['abtble']);
-
-					$id = $this->db->update($this->autoblog, $feed, array( "feed_id" => mysql_real_escape_string($_POST['feed_id'])) );
-					if( !is_wp_error($id) ) {
-						echo '<div id="message" class="updated fade"><p>' . sprintf(__("Your feed has been updated.", 'autoblogtext')) . '</p></div>';
-					} else {
-						echo '<div id="message" class="error fade"><p>' . $id->get_error_mssage() . '</p></div>';
-					}
-
+				if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
+					$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
 				}
 
-				if(!empty($_POST['delete'])) {
-					$deletekeys = (array) $_POST['deletecheck'];
-					if(!empty($_POST['select'])) {
-						$todelete = array();
-						foreach($_POST['select'] as $key => $value) {
-							$todelete[] = mysql_real_escape_string($value);
-						}
-						if($this->deletefeeds($todelete)) {
-							echo '<div id="message" class="updated fade"><p>' . sprintf(__("The selected feeds have been deleted.", 'autoblogtext')) . '</p></div>';
-						} else {
-							echo '<div id="message" class="error fade"><p>' . sprintf(__("Please select a feed to delete.", 'autoblogtext')) . '</p></div>';
-						}
+				if(!empty($_POST['abtble']['endonday']) && !empty($_POST['abtble']['endonmonth']) && !empty($_POST['abtble']['endonyear'])) {
+					$_POST['abtble']['endon'] = strtotime($_POST['abtble']['endonyear'] . '-' . $_POST['abtble']['endonmonth'] . '-' . $_POST['abtble']['endonday']);
+				}
+				$feed['feed_meta'] = serialize($_POST['abtble']);
 
-					} else {
-						echo '<div id="message" class="error fade"><p>' . sprintf(__("Please select a feed to delete.", 'autoblogtext')) . '</p></div>';
-					}
-
-
+				$id = $this->db->insert($this->autoblog, $feed);
+				if(!is_wp_error($id)) {
+					wp_safe_redirect( add_query_arg( 'msg', 1, wp_get_referer() ) );
+				} else {
+					wp_safe_redirect( add_query_arg( 'err', 1, wp_get_referer() ) );
 				}
 
-				if(!empty($_POST['process'])) {
-					if(!empty($_POST['select'])) {
-						$toprocess = array();
-						foreach($_POST['select'] as $key => $value) {
-							$toprocess[] = mysql_real_escape_string($value);
-						}
-						if(process_feeds($toprocess)) {
-							echo '<div id="message" class="updated fade"><p>' . sprintf(__("The selected feeds have been processed.", 'autoblogtext')) . '</p></div>';
-						} else {
-							echo '<div id="message" class="error fade"><p>' . sprintf(__("Please select a feed to process.", 'autoblogtext')) . '</p></div>';
-						}
+			}
 
-					} else {
-						echo '<div id="message" class="error fade"><p>' . sprintf(__("Please select a feed to process.", 'autoblogtext')) . '</p></div>';
-					}
-
+			if(!empty($_POST['save'])) {
+				// Saving a feed
+				$feed = array();
+				if(isset($_POST['abtble']['processfeed']) && is_numeric($_POST['abtble']['processfeed']) && intval($_POST['abtble']['processfeed']) > 0) {
+					$feed['nextcheck'] = current_time('timestamp') + (intval($_POST['abtble']['processfeed']) * 60);
+				} else {
+					$feed['nextcheck'] = 0;
 				}
 
-				$showlist = true;
+				if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
+					$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
+				}
+
+				if(!empty($_POST['abtble']['endonday']) && !empty($_POST['abtble']['endonmonth']) && !empty($_POST['abtble']['endonyear'])) {
+					$_POST['abtble']['endon'] = strtotime($_POST['abtble']['endonyear'] . '-' . $_POST['abtble']['endonmonth'] . '-' . $_POST['abtble']['endonday']);
+				}
+				$feed['feed_meta'] = serialize($_POST['abtble']);
+
+				$id = $this->db->update($this->autoblog, $feed, array( "feed_id" => mysql_real_escape_string($_POST['feed_id'])) );
+				if( !is_wp_error($id) ) {
+					wp_safe_redirect( add_query_arg( 'msg', 2, wp_get_referer() ) );
+				} else {
+					wp_safe_redirect( add_query_arg( 'err', 2, wp_get_referer() ) );
+				}
+
+			}
+
+			if(!empty($_POST['delete'])) {
+				$deletekeys = (array) $_POST['deletecheck'];
+				if(!empty($_POST['select'])) {
+					$todelete = array();
+					foreach($_POST['select'] as $key => $value) {
+						$todelete[] = mysql_real_escape_string($value);
+					}
+					if($this->deletefeeds($todelete)) {
+						wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
+					} else {
+						wp_safe_redirect( add_query_arg( 'err', 3, wp_get_referer() ) );
+					}
+
+				} else {
+					wp_safe_redirect( add_query_arg( 'err', 5, wp_get_referer() ) );
+				}
+
+
+			}
+
+			if(!empty($_POST['process'])) {
+				if(!empty($_POST['select'])) {
+					$toprocess = array();
+					foreach($_POST['select'] as $key => $value) {
+						$toprocess[] = mysql_real_escape_string($value);
+					}
+					if(process_feeds($toprocess)) {
+						wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
+					} else {
+						wp_safe_redirect( add_query_arg( 'err', 3, wp_get_referer() ) );
+					}
+
+				} else {
+					wp_safe_redirect( add_query_arg( 'err', 6, wp_get_referer() ) );
+				}
 
 			}
 
 		} else {
 			// Edit a feed
-			if(isset($_GET['edit']) && is_numeric(addslashes($_GET['edit']))) {
-				$this->handle_edit_page(addslashes($_GET['edit']));
-				$showlist = false;
-			}
+
 			// Delete a feed
 			if(isset($_GET['delete']) && is_numeric(addslashes($_GET['delete']))) {
 				check_admin_referer('autoblogdelete');
 				if($this->deletefeed(addslashes($_GET['delete']))) {
-					echo '<div id="message" class="updated fade"><p>' . sprintf(__("Your feed has been deleted.", 'autoblogtext')) . '</p></div>';
+					wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
 				} else {
-					echo '<div id="message" class="error fade"><p>' . sprintf(__("Your feed could not be deleted.", 'autoblogtext')) . '</p></div>';
+					wp_safe_redirect( add_query_arg( 'err', 3, wp_get_referer() ) );
 				}
-				$showlist = true;
 			}
 			// Process a feed
 			if(isset($_GET['process']) && is_numeric(addslashes($_GET['process']))) {
@@ -1668,179 +1651,223 @@ class autoblogpremium {
 				if(!empty($feed->feed_meta)) {
 					$details = unserialize($feed->feed_meta);
 					if(process_feed($feed->feed_id, $details)) {
-						echo '<div id="message" class="updated fade"><p>' . sprintf(__("The feed has been processed.", 'autoblogtext')) . '</p></div>';
+						wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
 					} else {
-						echo '<div id="message" class="error fade"><p>' . sprintf(__("Your feed could not be processed.", 'autoblogtext')) . '</p></div>';
+						wp_safe_redirect( add_query_arg( 'err', 4, wp_get_referer() ) );
 					}
 				}
-				$showlist = true;
 
 			}
 		}
 
-		if($showlist) {
-			echo "<div class='wrap'>";
+	}
 
-			// Show the heading
-			echo '<div class="icon32" id="icon-edit"><br/></div>';
-			echo "<h2>" . __('Auto Blog Feeds','autoblogtext') . "</h2>";
+	function handle_admin_page() {
 
-			echo "<br/>";
+		global $action, $page;
 
-			echo "<form action='' method='post'>";
-			echo "<input type='hidden' name='action' value='autoblog' />";
+		$showlist = true;
 
-			wp_nonce_field( 'autoblog' );
+		$current_offset = get_option('gmt_offset');
+		$timezone_format = _x('Y-m-d G:i:s', 'timezone date format');
 
-			echo '<div class="tablenav">';
-			echo '<div class="alignleft">';
-			echo '<input class="button-secondary delete save" type="submit" name="add" value="' . __('Add New', 'autoblogtext') . '" />';
-			echo '<input class="button-secondary addnew process" type="submit" name="process" value="' . __('Process selected', 'autoblogtext') . '" />';
-			echo '</div>';
+		$messages = array();
+		$messages[1] = __('Your feed has been added.','autoblogtext');
+		$messages[2] = __('Your feed has been updated.','autoblogtext');
+		$messages[3] = __('Your feed(s) have been deleted.','autoblogtext');
+		$messages[4] = __('Your feed(s) has been processed.','autoblogtext');
 
-			echo '<div class="alignright">';
-			echo '<input class="button-secondary del" type="submit" name="delete" value="' . __('Delete selected', 'autoblogtext') . '" />';
-			echo '</div>';
+		$errors = array();
+		$errors[1] = __('Your feed could not be added.','autoblogtext');
+		$errors[2] = __('Your feed could not be updated.','autoblogtext');
+		$errors[3] = __('Your feed(s) could not be deleted.','autoblogtext');
+		$errors[4] = __('Your feed(s) could not be processed.','autoblogtext');
 
-			echo '</div>';
+		$errors[5] = __('Please select a feed to delete.','autoblogtext');
+		$errors[6] = __('Please select a feed to process.','autoblogtext');
 
-			// New table based layout
-			echo '<table width="100%" cellpadding="3" cellspacing="3" class="widefat" style="width: 100%;">';
-			echo '<thead>';
-			echo '<tr>';
-			echo '<th scope="col" class="manage-column column-cb check-column">';
-			echo "<input type='checkbox' name='select-all' id='select-all' value='all' />";
-			echo '</th>';
-			echo '<th scope="col">';
-			echo __('Feed title','autoblogtext');
-			echo '</th>';
-			echo '<th scope="col" style="text-align: right;">';
-			echo __('Last processed','autoblogtext');
-			echo '</th>';
-			echo '<th scope="col" style="text-align: right;">';
-			echo __('Next check','autoblogtext');
-			echo '</th>';
-			echo '</tr>';
-			echo '</thead>';
+		if(isset($_POST['add'])) {
+			// We are adding a new feed
+			$this->handle_addnew_page();
+			return;
+		}
 
-			echo '<tfoot>';
-			echo '<tr>';
-			echo '<th scope="col" class="manage-column column-cb check-column">';
-			echo '&nbsp;';
-			echo '</th>';
-			echo '<th scope="col">';
-			echo __('Feed title','autoblogtext');
-			echo '</th>';
-			echo '<th scope="col" style="text-align: right;">';
-			echo __('Last processed','autoblogtext');
-			echo '</th>';
-			echo '<th scope="col" style="text-align: right;">';
-			echo __('Next check','autoblogtext');
-			echo '</th>';
-			echo '</tr>';
-			echo '</tfoot>';
+		if(isset($_GET['edit']) && is_numeric(addslashes($_GET['edit']))) {
+			$this->handle_edit_page(addslashes($_GET['edit']));
+			return;
+		}
 
-			echo '<tbody id="the-list">';
+		echo "<div class='wrap'>";
 
-			$autoblogs = $this->get_autoblogentries();
+		// Show the heading
+		echo '<div class="icon32" id="icon-edit"><br/></div>';
+		echo "<h2>" . __('Auto Blog Feeds','autoblogtext') . "</h2>";
 
-			if(!empty($autoblogs)) {
+		echo "<br/>";
 
-				foreach($autoblogs as $key => $table) {
+		if ( isset($_GET['msg']) ) {
+			echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
+			$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+		}
 
-					$details = maybe_unserialize($table->feed_meta);
-					//$this->show_table($key, $table);
-					echo '<tr>';
-					echo '<td>';
-					echo "<input type='checkbox' name='select[]' id='select-" . $table->feed_id . "' value='" . $table->feed_id . "' class='selectfeed' />";
-					echo '</td>';
-					echo '<td>';
-					if(function_exists('is_network_admin') && is_network_admin() ) {
-						echo '<a href="' . network_admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
-					} else {
-						echo '<a href="' . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
-					}
+		if ( isset($_GET['err']) ) {
+			echo '<div id="message" class="error fade"><p>' . $errors[(int) $_GET['err']] . '</p></div>';
+			$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+		}
 
-					if(!empty($details)) {
-						echo esc_html(stripslashes($details['title']));
-					} else {
-						echo __('No title set', 'autoblogtext');
-					}
-					echo '</a>';
+		echo "<form action='' method='post'>";
+		echo "<input type='hidden' name='action' value='autoblog' />";
 
-					//network_admin_url
-					echo '<div class="row-actions">';
-					if(function_exists('is_network_admin') && is_network_admin() ) {
-						echo "<a href='" . network_admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
-						echo "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
-						echo "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
-						} else {
-						echo "<a href='" . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
-						echo "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
-						echo "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
-					}
-					echo '</div>';
+		wp_nonce_field( 'autoblog' );
 
-					echo '</td>';
-					echo '<td style="text-align: right;">';
+		echo '<div class="tablenav">';
+		echo '<div class="alignleft">';
+		echo '<input class="button-secondary delete save" type="submit" name="add" value="' . __('Add New', 'autoblogtext') . '" />';
+		echo '<input class="button-secondary addnew process" type="submit" name="process" value="' . __('Process selected', 'autoblogtext') . '" />';
+		echo '</div>';
 
-					if($table->lastupdated != 0) {
-						echo date_i18n($timezone_format, $table->lastupdated);
-						//echo date("j M Y : H:i", $table->lastupdated);
-					} else {
-						echo __('Never', 'autoblogtext');
-					}
+		echo '<div class="alignright">';
+		echo '<input class="button-secondary del" type="submit" name="delete" value="' . __('Delete selected', 'autoblogtext') . '" />';
+		echo '</div>';
 
+		echo '</div>';
 
-					echo '</td>';
-					echo '<td style="text-align: right;">';
+		// New table based layout
+		echo '<table width="100%" cellpadding="3" cellspacing="3" class="widefat" style="width: 100%;">';
+		echo '<thead>';
+		echo '<tr>';
+		echo '<th scope="col" class="manage-column column-cb check-column">';
+		echo "<input type='checkbox' name='select-all' id='select-all' value='all' />";
+		echo '</th>';
+		echo '<th scope="col">';
+		echo __('Feed title','autoblogtext');
+		echo '</th>';
+		echo '<th scope="col" style="text-align: right;">';
+		echo __('Last processed','autoblogtext');
+		echo '</th>';
+		echo '<th scope="col" style="text-align: right;">';
+		echo __('Next check','autoblogtext');
+		echo '</th>';
+		echo '</tr>';
+		echo '</thead>';
 
-					if($table->nextcheck != 0) {
-						echo date_i18n($timezone_format, $table->nextcheck, 'gmt');
-						//echo date("j M Y : H:i", $table->nextcheck);
-					} else {
-						echo __('Never', 'autoblogtext');
-					}
+		echo '<tfoot>';
+		echo '<tr>';
+		echo '<th scope="col" class="manage-column column-cb check-column">';
+		echo '&nbsp;';
+		echo '</th>';
+		echo '<th scope="col">';
+		echo __('Feed title','autoblogtext');
+		echo '</th>';
+		echo '<th scope="col" style="text-align: right;">';
+		echo __('Last processed','autoblogtext');
+		echo '</th>';
+		echo '<th scope="col" style="text-align: right;">';
+		echo __('Next check','autoblogtext');
+		echo '</th>';
+		echo '</tr>';
+		echo '</tfoot>';
 
+		echo '<tbody id="the-list">';
 
-					echo '</td>';
+		$autoblogs = $this->get_autoblogentries();
 
-					echo '</tr>';
+		if(!empty($autoblogs)) {
 
-				}
+			foreach($autoblogs as $key => $table) {
 
-			} else {
-
+				$details = maybe_unserialize($table->feed_meta);
+				//$this->show_table($key, $table);
 				echo '<tr>';
 				echo '<td>';
+				echo "<input type='checkbox' name='select[]' id='select-" . $table->feed_id . "' value='" . $table->feed_id . "' class='selectfeed' />";
 				echo '</td>';
-				echo '<td colspan="3">';
-				echo __('You do not have any feeds setup - please click Add New to get started','autoblogtext');
+				echo '<td>';
+				if(function_exists('is_network_admin') && is_network_admin() ) {
+					echo '<a href="' . network_admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
+				} else {
+					echo '<a href="' . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
+				}
+
+				if(!empty($details)) {
+					echo esc_html(stripslashes($details['title']));
+				} else {
+					echo __('No title set', 'autoblogtext');
+				}
+				echo '</a>';
+
+				//network_admin_url
+				echo '<div class="row-actions">';
+				if(function_exists('is_network_admin') && is_network_admin() ) {
+					echo "<a href='" . network_admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
+					echo "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
+					echo "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
+					} else {
+					echo "<a href='" . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
+					echo "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
+					echo "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
+				}
+				echo '</div>';
+
 				echo '</td>';
+				echo '<td style="text-align: right;">';
+
+				if($table->lastupdated != 0) {
+					echo date_i18n($timezone_format, $table->lastupdated);
+					//echo date("j M Y : H:i", $table->lastupdated);
+				} else {
+					echo __('Never', 'autoblogtext');
+				}
+
+
+				echo '</td>';
+				echo '<td style="text-align: right;">';
+
+				if($table->nextcheck != 0) {
+					echo date_i18n($timezone_format, $table->nextcheck, 'gmt');
+					//echo date("j M Y : H:i", $table->nextcheck);
+				} else {
+					echo __('Never', 'autoblogtext');
+				}
+
+
+				echo '</td>';
+
 				echo '</tr>';
 
 			}
 
-			echo '</tbody>';
+		} else {
 
-			echo '</table>';
+			echo '<tr>';
+			echo '<td>';
+			echo '</td>';
+			echo '<td colspan="3">';
+			echo __('You do not have any feeds setup - please click Add New to get started','autoblogtext');
+			echo '</td>';
+			echo '</tr>';
 
-			echo '<div class="tablenav">';
-			echo '<div class="alignleft">';
-			echo '<input class="button-secondary delete save" type="submit" name="add" value="' . __('Add New', 'autoblogtext') . '" />';
-			echo '<input class="button-secondary addnew process" type="submit" name="process" value="' . __('Process selected', 'autoblogtext') . '" />';
-			echo '</div>';
-
-			echo '<div class="alignright">';
-			echo '<input class="button-secondary del" type="submit" name="delete" value="' . __('Delete selected', 'autoblogtext') . '" />';
-			echo '</div>';
-
-			echo '</div>';
-
-			echo "</form>";
-
-			echo "</div>";	// wrap
 		}
+
+		echo '</tbody>';
+
+		echo '</table>';
+
+		echo '<div class="tablenav">';
+		echo '<div class="alignleft">';
+		echo '<input class="button-secondary delete save" type="submit" name="add" value="' . __('Add New', 'autoblogtext') . '" />';
+		echo '<input class="button-secondary addnew process" type="submit" name="process" value="' . __('Process selected', 'autoblogtext') . '" />';
+		echo '</div>';
+
+		echo '<div class="alignright">';
+		echo '<input class="button-secondary del" type="submit" name="delete" value="' . __('Delete selected', 'autoblogtext') . '" />';
+		echo '</div>';
+
+		echo '</div>';
+
+		echo "</form>";
+
+		echo "</div>";	// wrap
 
 	}
 
