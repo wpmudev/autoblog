@@ -624,9 +624,27 @@ class autoblogpremium {
 
 				echo "</td>";
 				echo "</tr>\n";
+			} else {
+				echo "<tr>";
+				echo "<td valign='top' class='heading'>";
+				echo __('Add posts to','autoblogtext');
+				echo "</td>";
+				echo "<td valign='top' class=''>";
+				echo "<strong>" . esc_html(get_blog_option( (int) $table['blog'], 'blogname' )) . "</strong>";
+				echo "<input type='hidden' name='abtble[blog]' value='" . $table['blog'] . "' />";
+				echo "</td>";
+				echo "</tr>";
 			}
 		} else {
-			echo "<input type='hidden' name='abtble[blog]' value='" . $blog_id . "' />";
+			echo "<tr>";
+			echo "<td valign='top' class='heading'>";
+			echo __('Add posts to','autoblogtext');
+			echo "</td>";
+			echo "<td valign='top' class=''>";
+			echo "<strong>" . esc_html(get_blog_option( (int) $table['blog'], 'blogname' )) . "</strong>";
+			echo "<input type='hidden' name='abtble[blog]' value='" . $table['blog'] . "' />";
+			echo "</td>";
+			echo "</tr>";
 		}
 
 		// Post type
@@ -1037,9 +1055,28 @@ class autoblogpremium {
 
 				echo "</td>";
 				echo "</tr>";
+			} else {
+				echo "<tr>";
+				echo "<td valign='top' class='heading'>";
+				echo __('Add posts to','autoblogtext');
+				echo "</td>";
+				echo "<td valign='top' class=''>";
+				echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+				echo "<input type='hidden' name='abtble[blog]' value='" . $this->db->blogid . "' />";
+				echo "</td>";
+				echo "</tr>";
 			}
 		} else {
-			echo "<input type='hidden' name='abtble[blog]' value='" . $blog_id . "' />";
+			echo "<tr>";
+			echo "<td valign='top' class='heading'>";
+			echo __('Add posts to','autoblogtext');
+			echo "</td>";
+			echo "<td valign='top' class=''>";
+			echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+			echo "<input type='hidden' name='abtble[blog]' value='" . $this->db->blogid . "' />";
+			echo "</td>";
+			echo "</tr>";
+
 		}
 
 		// Post type
@@ -1545,7 +1582,8 @@ class autoblogpremium {
 				}
 
 				$feed['site_id'] = $this->db->siteid;
-				$feed['blog_id'] = $this->db->blogid;
+				$feed['blog_id'] = (int) $_POST['abtble']['blog'];
+
 
 				if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
 					$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
@@ -1573,6 +1611,9 @@ class autoblogpremium {
 				} else {
 					$feed['nextcheck'] = 0;
 				}
+
+				$feed['site_id'] = $this->db->siteid;
+				$feed['blog_id'] = (int) $_POST['abtble']['blog'];
 
 				if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
 					$_POST['abtble']['startfrom'] = strtotime($_POST['abtble']['startfromyear'] . '-' . $_POST['abtble']['startfrommonth'] . '-' . $_POST['abtble']['startfromday']);
@@ -1686,6 +1727,7 @@ class autoblogpremium {
 		$errors[5] = __('Please select a feed to delete.','autoblogtext');
 		$errors[6] = __('Please select a feed to process.','autoblogtext');
 
+		// Handle the editing and adding pages
 		if(isset($_POST['add'])) {
 			// We are adding a new feed
 			$this->handle_addnew_page();
@@ -1697,6 +1739,7 @@ class autoblogpremium {
 			return;
 		}
 
+		// If we are still here then we are wanting to view the list
 		echo "<div class='wrap'>";
 
 		// Show the heading
@@ -1742,6 +1785,17 @@ class autoblogpremium {
 		echo '<th scope="col">';
 		echo __('Feed title','autoblogtext');
 		echo '</th>';
+
+		echo '<th scope="col">';
+		echo __('Feed post type','autoblogtext');
+		echo '</th>';
+
+		if(is_network_admin()) {
+			echo '<th scope="col">';
+			echo __('Feed target','autoblogtext');
+			echo '</th>';
+		}
+
 		echo '<th scope="col" style="text-align: right;">';
 		echo __('Last processed','autoblogtext');
 		echo '</th>';
@@ -1759,6 +1813,17 @@ class autoblogpremium {
 		echo '<th scope="col">';
 		echo __('Feed title','autoblogtext');
 		echo '</th>';
+
+		echo '<th scope="col">';
+		echo __('Feed post type','autoblogtext');
+		echo '</th>';
+
+		if(is_network_admin()) {
+			echo '<th scope="col">';
+			echo __('Feed target','autoblogtext');
+			echo '</th>';
+		}
+
 		echo '<th scope="col" style="text-align: right;">';
 		echo __('Last processed','autoblogtext');
 		echo '</th>';
@@ -1810,6 +1875,18 @@ class autoblogpremium {
 				echo '</div>';
 
 				echo '</td>';
+
+				echo "<td>";
+				echo $details['posttype'];
+				echo "</td>";
+
+				if(is_network_admin()) {
+					echo "<td>";
+					echo esc_html(get_blog_option( $table->blog_id, 'blogname' ));
+					echo "</td>";
+				}
+
+
 				echo '<td style="text-align: right;">';
 
 				if($table->lastupdated != 0) {
@@ -1818,7 +1895,6 @@ class autoblogpremium {
 				} else {
 					echo __('Never', 'autoblogtext');
 				}
-
 
 				echo '</td>';
 				echo '<td style="text-align: right;">';
@@ -1829,7 +1905,6 @@ class autoblogpremium {
 				} else {
 					echo __('Never', 'autoblogtext');
 				}
-
 
 				echo '</td>';
 
