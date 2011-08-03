@@ -101,7 +101,7 @@ class autoblogcron {
 			update_autoblog_option('autoblog_processing', $lastprocessing);
 		}
 
-		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes', current_time('timestamp'))) {
+		if(!empty($autoblogs) && $lastprocessing <= strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
 			update_autoblog_option('autoblog_processing', current_time('timestamp'));
 
 			do_action('autoblog_pre_process_feeds');
@@ -492,7 +492,7 @@ class autoblogcron {
 			update_autoblog_option('autoblog_processing', $lastprocessing);
 		}
 
-		if(!empty($autoblogs) && $lastprocessing <= strtotime('-30 minutes', current_time('timestamp'))) {
+		if(!empty($autoblogs) && $lastprocessing <= strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
 			update_autoblog_option('autoblog_processing', current_time('timestamp'));
 
 			foreach( (array) $autoblogs as $key => $ablog) {

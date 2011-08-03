@@ -63,7 +63,7 @@ class autoblogpremium {
 		$mofile = autoblog_dir( "autoblogincludes/languages/autoblog-$locale.mo" );
 
 		if ( file_exists( $mofile ) )
-			load_textdomain( 'autoblogtext', $mofile );
+			load_plugin_textdomain( 'autoblogtext', $mofile );
 
 	}
 
@@ -1596,9 +1596,9 @@ class autoblogpremium {
 
 				$id = $this->db->insert($this->autoblog, $feed);
 				if(!is_wp_error($id)) {
-					wp_safe_redirect( add_query_arg( 'msg', 1, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'msg', 1, 'admin.php?page=' . $page ) );
 				} else {
-					wp_safe_redirect( add_query_arg( 'err', 1, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'err', 1, 'admin.php?page=' . $page ) );
 				}
 
 			}
@@ -1626,9 +1626,9 @@ class autoblogpremium {
 
 				$id = $this->db->update($this->autoblog, $feed, array( "feed_id" => mysql_real_escape_string($_POST['feed_id'])) );
 				if( !is_wp_error($id) ) {
-					wp_safe_redirect( add_query_arg( 'msg', 2, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'msg', 2, 'admin.php?page=' . $page ) );
 				} else {
-					wp_safe_redirect( add_query_arg( 'err', 2, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'err', 2, 'admin.php?page=' . $page ) );
 				}
 
 			}
@@ -1641,13 +1641,13 @@ class autoblogpremium {
 						$todelete[] = mysql_real_escape_string($value);
 					}
 					if($this->deletefeeds($todelete)) {
-						wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
+						wp_safe_redirect( add_query_arg( 'msg', 3, 'admin.php?page=' . $page ) );
 					} else {
-						wp_safe_redirect( add_query_arg( 'err', 3, wp_get_referer() ) );
+						wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
 					}
 
 				} else {
-					wp_safe_redirect( add_query_arg( 'err', 5, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'err', 5, 'admin.php?page=' . $page ) );
 				}
 
 
@@ -1660,13 +1660,13 @@ class autoblogpremium {
 						$toprocess[] = mysql_real_escape_string($value);
 					}
 					if(process_feeds($toprocess)) {
-						wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
+						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 					} else {
-						wp_safe_redirect( add_query_arg( 'err', 3, wp_get_referer() ) );
+						wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
 					}
 
 				} else {
-					wp_safe_redirect( add_query_arg( 'err', 6, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'err', 6, 'admin.php?page=' . $page ) );
 				}
 
 			}
@@ -1678,9 +1678,9 @@ class autoblogpremium {
 			if(isset($_GET['delete']) && is_numeric(addslashes($_GET['delete']))) {
 				check_admin_referer('autoblogdelete');
 				if($this->deletefeed(addslashes($_GET['delete']))) {
-					wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'msg', 3, 'admin.php?page=' . $page ) );
 				} else {
-					wp_safe_redirect( add_query_arg( 'err', 3, wp_get_referer() ) );
+					wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
 				}
 			}
 			// Process a feed
@@ -1692,9 +1692,9 @@ class autoblogpremium {
 				if(!empty($feed->feed_meta)) {
 					$details = unserialize($feed->feed_meta);
 					if(process_feed($feed->feed_id, $details)) {
-						wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
+						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 					} else {
-						wp_safe_redirect( add_query_arg( 'err', 4, wp_get_referer() ) );
+						wp_safe_redirect( add_query_arg( 'err', 4, 'admin.php?page=' . $page ) );
 					}
 				}
 
@@ -1794,15 +1794,23 @@ class autoblogpremium {
 			echo '<th scope="col">';
 			echo __('Feed target','autoblogtext');
 			echo '</th>';
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Last processed *','autoblogtext');
+			echo '</th>';
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Next check *','autoblogtext');
+			echo '</th>';
+			echo '</tr>';
+		} else {
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Last processed','autoblogtext');
+			echo '</th>';
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Next check','autoblogtext');
+			echo '</th>';
+			echo '</tr>';
 		}
 
-		echo '<th scope="col" style="text-align: right;">';
-		echo __('Last processed','autoblogtext');
-		echo '</th>';
-		echo '<th scope="col" style="text-align: right;">';
-		echo __('Next check','autoblogtext');
-		echo '</th>';
-		echo '</tr>';
 		echo '</thead>';
 
 		echo '<tfoot>';
@@ -1822,15 +1830,23 @@ class autoblogpremium {
 			echo '<th scope="col">';
 			echo __('Feed target','autoblogtext');
 			echo '</th>';
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Last processed *','autoblogtext');
+			echo '</th>';
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Next check *','autoblogtext');
+			echo '</th>';
+			echo '</tr>';
+		} else {
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Last processed','autoblogtext');
+			echo '</th>';
+			echo '<th scope="col" style="text-align: right;">';
+			echo __('Next check','autoblogtext');
+			echo '</th>';
+			echo '</tr>';
 		}
 
-		echo '<th scope="col" style="text-align: right;">';
-		echo __('Last processed','autoblogtext');
-		echo '</th>';
-		echo '<th scope="col" style="text-align: right;">';
-		echo __('Next check','autoblogtext');
-		echo '</th>';
-		echo '</tr>';
 		echo '</tfoot>';
 
 		echo '<tbody id="the-list">';
@@ -1900,8 +1916,7 @@ class autoblogpremium {
 				echo '<td style="text-align: right;">';
 
 				if($table->nextcheck != 0) {
-					echo date_i18n($timezone_format, $table->nextcheck, 'gmt');
-					//echo date("j M Y : H:i", $table->nextcheck);
+					echo date_i18n($timezone_format, $table->nextcheck);
 				} else {
 					echo __('Never', 'autoblogtext');
 				}
@@ -1941,6 +1956,11 @@ class autoblogpremium {
 		echo '</div>';
 
 		echo "</form>";
+
+		if(is_network_admin()) {
+			echo "<p>" . __('* Times and dates are local to each site.', 'autoblogtext') . "</p>";
+
+		}
 
 		echo "</div>";	// wrap
 
