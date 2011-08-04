@@ -630,7 +630,11 @@ class autoblogpremium {
 				echo __('Add posts to','autoblogtext');
 				echo "</td>";
 				echo "<td valign='top' class=''>";
-				echo "<strong>" . esc_html(get_blog_option( (int) $table['blog'], 'blogname' )) . "</strong>";
+				if(function_exists('get_blog_option')) {
+					echo "<strong>" . esc_html(get_blog_option( (int) $table['blog'], 'blogname' )) . "</strong>";
+				} else {
+					echo "<strong>" . esc_html(get_option( 'blogname' )) . "</strong>";
+				}
 				echo "<input type='hidden' name='abtble[blog]' value='" . $table['blog'] . "' />";
 				echo "</td>";
 				echo "</tr>";
@@ -641,7 +645,11 @@ class autoblogpremium {
 			echo __('Add posts to','autoblogtext');
 			echo "</td>";
 			echo "<td valign='top' class=''>";
-			echo "<strong>" . esc_html(get_blog_option( (int) $table['blog'], 'blogname' )) . "</strong>";
+			if(function_exists('get_blog_option')) {
+				echo "<strong>" . esc_html(get_blog_option( (int) $table['blog'], 'blogname' )) . "</strong>";
+			} else {
+				echo "<strong>" . esc_html(get_option( 'blogname' )) . "</strong>";
+			}
 			echo "<input type='hidden' name='abtble[blog]' value='" . $table['blog'] . "' />";
 			echo "</td>";
 			echo "</tr>";
@@ -1061,7 +1069,11 @@ class autoblogpremium {
 				echo __('Add posts to','autoblogtext');
 				echo "</td>";
 				echo "<td valign='top' class=''>";
-				echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+				if(function_exists('get_blog_option')) {
+					echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+				} else {
+					echo "<strong>" . esc_html(get_option( 'blogname' )) . "</strong>";
+				}
 				echo "<input type='hidden' name='abtble[blog]' value='" . $this->db->blogid . "' />";
 				echo "</td>";
 				echo "</tr>";
@@ -1072,7 +1084,11 @@ class autoblogpremium {
 			echo __('Add posts to','autoblogtext');
 			echo "</td>";
 			echo "<td valign='top' class=''>";
-			echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+			if(function_exists('get_blog_option')) {
+				echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+			} else {
+				echo "<strong>" . esc_html(get_option( 'blogname' )) . "</strong>";
+			}
 			echo "<input type='hidden' name='abtble[blog]' value='" . $this->db->blogid . "' />";
 			echo "</td>";
 			echo "</tr>";
@@ -1790,7 +1806,7 @@ class autoblogpremium {
 		echo __('Feed post type','autoblogtext');
 		echo '</th>';
 
-		if(is_network_admin()) {
+		if(function_exists('is_network_admin') && is_network_admin()) {
 			echo '<th scope="col">';
 			echo __('Feed target','autoblogtext');
 			echo '</th>';
@@ -1826,7 +1842,7 @@ class autoblogpremium {
 		echo __('Feed post type','autoblogtext');
 		echo '</th>';
 
-		if(is_network_admin()) {
+		if(function_exists('is_network_admin') && is_network_admin()) {
 			echo '<th scope="col">';
 			echo __('Feed target','autoblogtext');
 			echo '</th>';
@@ -1896,7 +1912,7 @@ class autoblogpremium {
 				echo $details['posttype'];
 				echo "</td>";
 
-				if(is_network_admin()) {
+				if(function_exists('is_network_admin') && is_network_admin()) {
 					echo "<td>";
 					echo esc_html(get_blog_option( $table->blog_id, 'blogname' ));
 					echo "</td>";
@@ -1957,7 +1973,7 @@ class autoblogpremium {
 
 		echo "</form>";
 
-		if(is_network_admin()) {
+		if(function_exists('is_network_admin') && is_network_admin()) {
 			echo "<p>" . __('* Times and dates are local to each site.', 'autoblogtext') . "</p>";
 
 		}
