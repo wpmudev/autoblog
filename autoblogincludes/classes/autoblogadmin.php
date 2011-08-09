@@ -1816,7 +1816,6 @@ class autoblogpremium {
 			echo '<th scope="col" style="text-align: right;">';
 			echo __('Next check *','autoblogtext');
 			echo '</th>';
-			echo '</tr>';
 		} else {
 			echo '<th scope="col" style="text-align: right;">';
 			echo __('Last processed','autoblogtext');
@@ -1824,9 +1823,10 @@ class autoblogpremium {
 			echo '<th scope="col" style="text-align: right;">';
 			echo __('Next check','autoblogtext');
 			echo '</th>';
-			echo '</tr>';
 		}
 
+		do_action('autoblog_admin_columns');
+		echo '</tr>';
 		echo '</thead>';
 
 		echo '<tfoot>';
@@ -1852,7 +1852,6 @@ class autoblogpremium {
 			echo '<th scope="col" style="text-align: right;">';
 			echo __('Next check *','autoblogtext');
 			echo '</th>';
-			echo '</tr>';
 		} else {
 			echo '<th scope="col" style="text-align: right;">';
 			echo __('Last processed','autoblogtext');
@@ -1860,9 +1859,10 @@ class autoblogpremium {
 			echo '<th scope="col" style="text-align: right;">';
 			echo __('Next check','autoblogtext');
 			echo '</th>';
-			echo '</tr>';
 		}
 
+		do_action('autoblog_admin_columns');
+		echo '</tr>';
 		echo '</tfoot>';
 
 		echo '<tbody id="the-list">';
@@ -1938,6 +1938,8 @@ class autoblogpremium {
 				}
 
 				echo '</td>';
+
+				do_action('autoblog_admin_columns_data', $table);
 
 				echo '</tr>';
 

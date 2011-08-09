@@ -17,7 +17,11 @@ class autoblogcron {
 		// check if a modulous of 5 mintutes and if so add the init hook.
 		$min = date("i");
 
-		add_action('init', array(&$this,'process_autoblog'));
+		if(defined('AUTOBLOG_PROCESS_EVERY_PAGE_LOAD') && AUTOBLOG_PROCESS_EVERY_PAGE_LOAD === true) {
+			add_action('init', array(&$this,'always_process_autoblog'));
+		} else {
+			add_action('init', array(&$this,'process_autoblog'));
+		}
 
 		$this->db =& $wpdb;
 
@@ -50,6 +54,11 @@ class autoblogcron {
 			}
 		} else {
 			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->db->siteid, $this->db->blogid, $timestamp );
+		}
+
+		if(defined('AUTOBLOG_FORCE_PROCESS_ALL') && AUTOBLOG_FORCE_PROCESS_ALL === true) {
+			// Override and force to grab all feeds from the site
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->db->siteid, $timestamp );
 		}
 
 		$results = $this->db->get_results($sql);
@@ -470,6 +479,63 @@ class autoblogcron {
 		}
 
 		return true;
+
+	}
+
+	function always_process_autoblog() {
+
+		global $wpdb;
+
+		// grab the feeds
+		$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
+
+		// Our starting time
+		$timestart = current_time('timestamp');
+
+		if(!empty($autoblogs)) {
+
+			foreach( (array) $autoblogs as $key => $ablog) {
+
+				if(time() > $timestart + $timelimit) {
+					if($this->debug) {
+						// time out
+						$this->errors[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
+					}
+					break;
+				}
+
+				$details = unserialize($ablog->feed_meta);
+				$process = false;
+
+				if(isset($details['processfeed']) && $details['processfeed'] > 0) {
+					$process = true;
+				} else {
+					$process = false;
+				}
+
+				if($process && !empty($details['url'])) {
+					do_action('autoblog_pre_process_feed', $ablog->feed_id, $details);
+					$this->process_feed($ablog->feed_id, $details);
+					do_action('autoblog_post_process_feed', $ablog->feed_id, $details);
+				} else {
+					if($this->debug) {
+						// no uri or not processing
+						if(empty($details['url'])) {
+							$this->errors[] = __('Error: No URL found for a feed.','autoblogtext');
+						}
+					}
+				}
+
+			}
+		} else {
+			if($this->debug) {
+				// empty list or not processing
+			}
+		}
+
+		if(!empty($this->errors)) {
+			$this->record_error();
+		}
 
 	}
 

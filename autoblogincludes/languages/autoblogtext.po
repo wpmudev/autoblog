@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-03 02:41+0100\n"
-"PO-Revision-Date: 2011-08-03 02:41+0100\n"
+"POT-Creation-Date: 2011-08-09 23:52+0100\n"
+"PO-Revision-Date: 2011-08-09 23:52+0100\n"
 "Last-Translator: Barry <barry@mapinated.com>\n"
 "Language-Team: Incsub <barry@incsub.com>\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:389
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:397
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1979
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1997
 msgid "Edit Options"
 msgstr ""
 
@@ -54,7 +54,7 @@ msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:390
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:398
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2108
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2126
 msgid "Edit Plugins"
 msgstr ""
 
@@ -71,12 +71,12 @@ msgid "Debug mode is "
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:426
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2010
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2028
 msgid "Enabled"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:428
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2009
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2027
 msgid "Disabled"
 msgstr ""
 
@@ -105,17 +105,17 @@ msgid "Feed : "
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:582
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1020
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1028
 msgid "Your Title"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:585
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1023
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1031
 msgid "Enter a memorable title."
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:592
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1030
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1038
 msgid "Feed URL"
 msgstr ""
 
@@ -125,645 +125,659 @@ msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:606
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:630
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:641
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1045
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1061
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1072
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:645
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1053
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1069
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1084
 msgid "Add posts to"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:623
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1054
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1062
 msgid "Select a blog to add the post to."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:653
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1085
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:661
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1101
 msgid "Post type for new posts"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:666
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1098
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:674
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1114
 msgid "Select the post type the imported posts will have in the blog."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:675
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1106
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:683
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1122
 msgid "Default status for new posts"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:680
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1111
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:688
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1127
 msgid "Published"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:681
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1112
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:689
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1128
 msgid "Pending Review"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:682
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1113
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:690
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1129
 msgid "Draft"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:683
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1114
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:691
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1130
 msgid "Select the status the imported posts will have in the blog."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:691
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1122
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:699
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1138
 msgid "Set the date for new posts"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:696
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1127
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:704
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1143
 msgid "Imported date"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:697
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1128
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:705
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1144
 msgid "Original posts date"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:698
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1129
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:706
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1145
 msgid "Select the date imported posts will have."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:703
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1134
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:711
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1150
 msgid "Author details"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:709
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1140
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:717
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1156
 msgid "Set author for new posts"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:714
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1145
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:722
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1161
 msgid "Use feed author"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:723
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1154
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:731
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1170
 msgid "Select the author you want to use for the posts, or attempt to use the original feed author."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:732
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1163
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:740
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1179
 msgid "If author in feed does not exist locally use"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:745
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1176
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:753
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1192
 msgid "If the feed author does not exist in your blog then use this author."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:750
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1181
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:758
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1197
 msgid "Categories and Tags"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:754
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1186
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:762
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1202
 msgid "Assign posts to this category"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:759
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1190
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:767
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1206
 msgid "None"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:762
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1191
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:770
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1207
 msgid "Assign this category to the imported posts."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:769
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1197
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:777
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1213
 msgid "Treat feed categories as"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:774
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1201
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:782
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1217
 msgid "tags"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:775
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1202
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:783
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1218
 msgid "categories"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:779
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1205
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:787
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1221
 msgid "Add any that do not exist."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:779
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1205
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:787
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1221
 msgid "Create any tags or categories that are needed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:786
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1212
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:794
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1228
 msgid "Add these tags to the posts"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:789
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1215
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:797
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1231
 msgid "Enter a comma separated list of tags to add."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:794
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1220
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:802
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1236
 msgid "Post Filtering"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:795
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1221
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:803
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1237
 msgid "Include posts that contain (separate words with commas)"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:799
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1225
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:807
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1241
 msgid "All of these words"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:802
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1228
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:810
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1244
 msgid "A post to be imported must have ALL of these words in the title or content."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:808
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1234
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:816
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1250
 msgid "Any of these words"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:811
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1237
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:819
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1253
 msgid "A post to be imported must have ANY of these words in the title or content."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:817
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1243
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:825
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1259
 msgid "The exact phrase"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:820
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1246
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:828
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1262
 msgid "A post to be imported must have this exact phrase in the title or content."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:826
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1252
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:834
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1268
 msgid "None of these words"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:829
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1255
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:837
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1271
 msgid "A post to be imported must NOT have any of these words in the title or content."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:835
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1261
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:843
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1277
 msgid "Any of these tags"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:838
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1264
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:846
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1280
 msgid "A post to be imported must be marked with any of these categories or tags."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:840
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1266
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:848
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1282
 msgid "Tags should be comma separated"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:845
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1270
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:853
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1286
 msgid "Post excerpts"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:849
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1274
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:857
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1290
 msgid "Use full post or an excerpt"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:853
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1278
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:861
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1294
 msgid "Use Full Post"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:854
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1279
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:862
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1295
 msgid "Use Excerpt"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:855
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1280
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:863
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1296
 msgid "Use the full post (if available) or create an excerpt."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:861
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1286
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:869
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1302
 msgid "For excerpts use"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:866
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1291
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:874
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1307
 msgid "Words"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:867
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1292
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:875
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1308
 msgid "Sentences"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:868
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1293
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:876
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1309
 msgid "Paragraphs"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:869
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1294
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:877
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1310
 msgid "Specify the size of the excerpt to create (if selected)"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:875
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1300
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:883
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1316
 msgid "Link to original source"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:878
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1303
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:886
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1319
 msgid "If you want to link back to original source, enter a phrase to use here."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:882
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1305
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:890
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1321
 msgid "Ensure this link is a nofollow one"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:887
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1311
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:895
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1327
 msgid "Feed Processing"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:891
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1315
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:899
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1331
 msgid "Process this feed"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:895
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1319
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:903
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1335
 msgid "Never (paused)"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:896
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1320
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:904
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1336
 msgid "every 30 minutes"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:897
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1321
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:905
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1337
 msgid "every hour"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:898
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1322
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:906
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1338
 msgid "every 1 hour 30 minutes"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:899
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1323
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:907
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1339
 msgid "every 2 hours"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:900
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1324
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:908
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1340
 msgid "every 2 hours 30 minutes"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:901
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1325
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:909
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1341
 msgid "every 5 hours"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:902
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1326
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:910
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1342
 msgid "every day"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:903
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1327
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:911
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1343
 msgid "Set the time delay for processing this feed, irregularly updated feeds do not need to be checked very often."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:913
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1333
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:921
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1349
 msgid "Starting from"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:946
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1354
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:954
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1370
 msgid "Set the date you want to start processing posts from."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:954
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1360
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:962
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1376
 msgid "Ending on"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:987
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1381
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:995
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1397
 msgid "Set the date you want to stop processing posts from this feed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1012
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1020
 msgid "New Feed"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1033
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1041
 msgid "Enter the feed URL"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1472
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1520
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1747
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1488
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1536
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1763
 msgid "Auto Blog Feeds"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1484
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1500
 msgid "Save feed"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1487
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1500
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1535
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1548
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1503
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1516
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1551
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1564
 msgid "&lt; cancel and return"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1497
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1768
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1948
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1513
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1784
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1966
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/plugins/twitter.addon.php:28
 msgid "Add New"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1532
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1545
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1548
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1561
 msgid "Update feed"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1716
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1732
 msgid "Your feed has been added."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1717
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1733
 msgid "Your feed has been updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1718
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1734
 msgid "Your feed(s) have been deleted."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1719
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1735
 msgid "Your feed(s) has been processed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1722
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1738
 msgid "Your feed could not be added."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1723
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1739
 msgid "Your feed could not be updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1724
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1740
 msgid "Your feed(s) could not be deleted."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1725
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1741
 msgid "Your feed(s) could not be processed."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1727
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1743
 msgid "Please select a feed to delete."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1728
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1744
 msgid "Please select a feed to process."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1769
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1949
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1785
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1967
 msgid "Process selected"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1773
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1953
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1789
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1971
 msgid "Delete selected"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1786
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1822
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1802
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1838
 msgid "Feed title"
-msgstr ""
-
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1790
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1826
-msgid "Feed post type"
-msgstr ""
-
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1795
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1831
-msgid "Feed target"
-msgstr ""
-
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1798
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1834
-msgid "Last processed *"
-msgstr ""
-
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1801
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1837
-msgid "Next check *"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1806
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1842
+msgid "Feed post type"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1811
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1847
+msgid "Feed target"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1814
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1850
+msgid "Last processed *"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1817
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1853
+msgid "Next check *"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1821
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1857
 msgid "Last processed"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1809
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1845
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1824
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1860
 msgid "Next check"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1876
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1892
 msgid "No title set"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1883
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1887
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1899
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1903
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/plugins/twitter.addon.php:30
 msgid "Edit"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1884
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1888
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1900
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1904
 msgid "Delete"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1885
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1889
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1901
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1905
 msgid "Process"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1912
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1921
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1928
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1937
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/plugins/reset.autoblog.php:55
 msgid "Never"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1936
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1954
 msgid "You do not have any feeds setup - please click Add New to get started"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1961
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1979
 msgid "* Times and dates are local to each site."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1974
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1992
 msgid "Your options have been updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1997
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2015
 msgid "Debug mode"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:1998
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2016
 msgid "Switch on debug mode and reporting."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2003
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2021
 msgid "Debug mode is"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2094
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2112
 msgid "Plugin updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2095
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2113
 msgid "Plugin not updated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2097
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2115
 msgid "Plugin activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2098
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2116
 msgid "Plugin not activated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2100
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2118
 msgid "Plugin deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2101
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2119
 msgid "Plugin not deactivated."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2103
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2121
 msgid "Plugin activation toggled."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2126
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2254
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2144
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2272
 msgid "Bulk Actions"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2127
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2255
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2145
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2273
 msgid "Toggle activation"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2129
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2147
 msgid "Apply"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2143
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2161
 msgid "Plugin Name"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2144
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2162
 msgid "Plugin File"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2145
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2227
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2163
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2245
 msgid "Active"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2205
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2223
 msgid " by "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2213
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2231
 msgid "Deactivate"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2215
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2233
 msgid "Activate"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2229
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2247
 msgid "Inactive"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2240
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogadmin.php:2258
 msgid "No Plugns where found for this install."
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:236
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:245
 msgid "Error: No URL found for a feed"
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:248
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:257
 msgid "Notice: No entries retrieved for feed - "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:255
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:456
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:264
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:465
 msgid "Error: "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:263
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:272
 msgid "Date margin: Not processing feed yet - "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:271
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:280
 msgid "Date margin: Stopped processing feed - "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:290
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:299
 msgid "Notice: No new entries in feed - "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:503
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:502
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:569
 msgid "Notice: Processing stopped due to "
 msgstr ""
 
-#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:525
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:524
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/classes/autoblogprocess.php:591
 msgid "Error: No URL found for a feed."
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/includes/functions.php:8
 msgid "Please install the latest version of <a href=\"http://premium.wpmudev.org/project/update-notifications/\" title=\"Download Now &raquo;\">our free Update Notifications plugin</a> which helps you stay up-to-date with the most stable, secure versions of WPMU DEV themes and plugins. <a href=\"http://premium.wpmudev.org/wpmu-dev/update-notifications-plugin-information/\">More information &raquo;</a>"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/plugins/check.feedentries.php:12
+msgid "Feed Check"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/plugins/check.feedentries.php:26
+msgid "Ok"
+msgstr ""
+
+#: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/plugins/check.feedentries.php:28
+msgid "Problem"
 msgstr ""
 
 #: /Users/barrygetty/Work/wordpress/plugins/autoblog/autoblogincludes/plugins/reset.autoblog.php:15
