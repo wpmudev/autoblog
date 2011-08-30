@@ -1070,11 +1070,11 @@ class autoblogpremium {
 				echo "</td>";
 				echo "<td valign='top' class=''>";
 				if(function_exists('get_blog_option')) {
-					echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+					echo "<strong>" . esc_html(get_blog_option( $blog_id, 'blogname' )) . "</strong>";
 				} else {
 					echo "<strong>" . esc_html(get_option( 'blogname' )) . "</strong>";
 				}
-				echo "<input type='hidden' name='abtble[blog]' value='" . $this->db->blogid . "' />";
+				echo "<input type='hidden' name='abtble[blog]' value='" . $blog_id . "' />";
 				echo "</td>";
 				echo "</tr>";
 			}
@@ -1085,11 +1085,11 @@ class autoblogpremium {
 			echo "</td>";
 			echo "<td valign='top' class=''>";
 			if(function_exists('get_blog_option')) {
-				echo "<strong>" . esc_html(get_blog_option( $this->db->blogid, 'blogname' )) . "</strong>";
+				echo "<strong>" . esc_html(get_blog_option( $blog_id, 'blogname' )) . "</strong>";
 			} else {
 				echo "<strong>" . esc_html(get_option( 'blogname' )) . "</strong>";
 			}
-			echo "<input type='hidden' name='abtble[blog]' value='" . $this->db->blogid . "' />";
+			echo "<input type='hidden' name='abtble[blog]' value='" . $blog_id . "' />";
 			echo "</td>";
 			echo "</tr>";
 
@@ -1410,14 +1410,20 @@ class autoblogpremium {
 
 	function get_autoblogentries() {
 
+		$site_id = $this->db->siteid;
+		if($site_id == 0) $site_id = 1;
+
+		$blog_id = $this->db->blogid;
+		if($blog_id == 0) $blog_id = 1;
+
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_network_admin') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d ORDER BY feed_id ASC", $this->db->siteid );
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $timestamp );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $this->db->blogid );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $blog_id, $timestamp );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $this->db->blogid );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $blog_id, $timestamp );
 		}
 
 		$results = $this->db->get_results($sql);
@@ -1428,14 +1434,20 @@ class autoblogpremium {
 
 	function get_autoblogentry($id) {
 
+		$site_id = $this->db->siteid;
+		if($site_id == 0) $site_id = 1;
+
+		$blog_id = $this->db->blogid;
+		if($blog_id == 0) $blog_id = 1;
+
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_network_admin') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $site_id, $id );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id, $this->db->blogid );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $site_id, $id, $blog_id );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->db->siteid, $id, $this->db->blogid );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $site_id, $id, $blog_id );
 		}
 
 		$results = $this->db->get_row($sql);
@@ -1446,7 +1458,10 @@ class autoblogpremium {
 
 	function deletefeed($id) {
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d", $this->db->siteid, $id);
+		$site_id = $this->db->siteid;
+		if($site_id == 0) $site_id = 1;
+
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d", $site_id, $id);
 
 		return $this->db->query($sql);
 
@@ -1459,7 +1474,10 @@ class autoblogpremium {
 
 	function deletefeeds($ids) {
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id IN (0, " . implode(',', $ids) . ")", $this->db->siteid);
+		$site_id = $this->db->siteid;
+		if($site_id == 0) $site_id = 1;
+
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id IN (0, " . implode(',', $ids) . ")", $tsite_id);
 
 		return $this->db->query($sql);
 	}
@@ -1597,7 +1615,10 @@ class autoblogpremium {
 					$feed['nextcheck'] = 0;
 				}
 
-				$feed['site_id'] = $this->db->siteid;
+				$site_id = $this->db->siteid;
+				if($site_id == 0) $site_id = 1;
+
+				$feed['site_id'] = $site_id;
 				$feed['blog_id'] = (int) $_POST['abtble']['blog'];
 
 
@@ -1628,7 +1649,10 @@ class autoblogpremium {
 					$feed['nextcheck'] = 0;
 				}
 
-				$feed['site_id'] = $this->db->siteid;
+				$site_id = $this->db->siteid;
+				if($site_id == 0) $site_id = 1;
+
+				$feed['site_id'] = $site_id;
 				$feed['blog_id'] = (int) $_POST['abtble']['blog'];
 
 				if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
