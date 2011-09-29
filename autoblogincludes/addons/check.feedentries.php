@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Check Feed Entries
+Addon Name: Check Feed Entries
 Description: Check to make sure blog id entries match in each feed entry.
 Author: Barry (Incsub)
 Author URI: http://caffeinatedb.com

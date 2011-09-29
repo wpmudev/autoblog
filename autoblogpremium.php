@@ -48,5 +48,5 @@ if(is_admin()) {
 require_once('autoblogincludes/classes/autoblogprocess.php');
 $abc = new autoblogcron();
 
-load_autoblog_plugins();
+load_autoblog_addons();
 ?>

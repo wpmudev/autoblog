@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Autoblog Reset
+Addon Name: Autoblog Reset
 Description: Allows the Autoblog timer to be reset.
 Author: Barry (Incsub)
 Author URI: http://caffeinatedb.com

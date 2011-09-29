@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Youtube Add-on
+Addon Name: Youtube Add-on
 Description: Experimental YouTube rss feeds importer - changes content to embedded video.
 Author: Barry (Incsub)
 Author URI: http://caffeinatedb.com
