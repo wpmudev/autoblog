@@ -1669,6 +1669,7 @@ class autoblogpremium {
 			}
 
 			if(!empty($_POST['delete'])) {
+				check_admin_referer('autoblog');
 				$deletekeys = (array) $_POST['deletecheck'];
 				if(!empty($_POST['select'])) {
 					$todelete = array();
@@ -1689,11 +1690,13 @@ class autoblogpremium {
 			}
 
 			if(!empty($_POST['process'])) {
+				check_admin_referer('autoblog');
 				if(!empty($_POST['select'])) {
 					$toprocess = array();
 					foreach($_POST['select'] as $key => $value) {
 						$toprocess[] = mysql_real_escape_string($value);
 					}
+
 					if(process_feeds($toprocess)) {
 						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 					} else {
