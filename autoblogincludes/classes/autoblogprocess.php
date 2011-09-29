@@ -10,6 +10,9 @@ class autoblogcron {
 
 	var $errors = array();
 
+	var $siteid = 1;
+	var $blogid = 1;
+
 	function __construct() {
 
 		global $wpdb;
@@ -34,6 +37,18 @@ class autoblogcron {
 		// override with option.
 		$this->debug = get_autoblog_option('autoblog_debug', false);
 
+		if(!empty($this->db->siteid) || $this->db->siteid != 0) {
+			$this->siteid = 1;
+		} else {
+			$this->siteid = $this->db->siteid;
+		}
+
+		if(!empty($this->db->blogid) || $this->db->blogid != 0) {
+			$this->blogid = 1;
+		} else {
+			$this->blogid = $this->db->blogid;
+		}
+
 	}
 
 	function autoblogcron() {
@@ -46,25 +61,19 @@ class autoblogcron {
 
 	function get_autoblogentries($timestamp) {
 
-		$site_id = $this->db->siteid;
-		if($site_id == 0) $site_id = 1;
-
-		$blog_id = $this->db->blogid;
-		if($blog_id == 0) $blog_id = 1;
-
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $timestamp );
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->siteid, $timestamp );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $blog_id, $timestamp );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->siteid, $this->blogid, $timestamp );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $blog_id, $timestamp );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->siteid, $this->blogid, $timestamp );
 		}
 
 		if(defined('AUTOBLOG_FORCE_PROCESS_ALL') && AUTOBLOG_FORCE_PROCESS_ALL === true) {
 			// Override and force to grab all feeds from the site
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $timestamp );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $this->siteid, $timestamp );
 		}
 
 		$results = $this->db->get_results($sql);
@@ -75,10 +84,7 @@ class autoblogcron {
 
 	function get_autoblogentriesforids($ids) {
 
-		$site_id = $this->db->siteid;
-		if($site_id == 0) $site_id = 1;
-
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id IN (0, " . implode(',', $ids) . ") ORDER BY nextcheck ASC", $site_id, $timestamp );
+		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id IN (0, " . implode(',', $ids) . ") ORDER BY nextcheck ASC", $this->siteid, $timestamp );
 
 		$results = $this->db->get_results($sql);
 
@@ -88,10 +94,7 @@ class autoblogcron {
 
 	function get_autoblogentry($id) {
 
-		$site_id = $this->db->siteid;
-		if($site_id == 0) $site_id = 1;
-
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $site_id, $id );
+		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $this->siteid, $id );
 
 		$results = $this->db->get_row($sql);
 

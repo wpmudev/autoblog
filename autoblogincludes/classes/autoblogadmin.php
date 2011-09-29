@@ -12,6 +12,9 @@ class autoblogpremium {
 	var $tables = array('autoblog');
 	var $autoblog;
 
+	var $siteid = 1;
+	var $blogid = 1;
+
 	function __construct() {
 
 		global $wpdb;
@@ -49,6 +52,18 @@ class autoblogpremium {
 		if(get_autoblog_option('autoblog_installed', 0) < $this->build) {
 			// create the database table
 			$this->install();
+		}
+
+		if(!empty($this->db->siteid) || $this->db->siteid != 0) {
+			$this->siteid = 1;
+		} else {
+			$this->siteid = $this->db->siteid;
+		}
+
+		if(!empty($this->db->blogid) || $this->db->blogid != 0) {
+			$this->blogid = 1;
+		} else {
+			$this->blogid = $this->db->blogid;
 		}
 
 	}
@@ -1410,20 +1425,14 @@ class autoblogpremium {
 
 	function get_autoblogentries() {
 
-		$site_id = $this->db->siteid;
-		if($site_id == 0) $site_id = 1;
-
-		$blog_id = $this->db->blogid;
-		if($blog_id == 0) $blog_id = 1;
-
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $timestamp );
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && is_network_admin()) {
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d ORDER BY nextcheck ASC", $this->siteid );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $blog_id, $timestamp );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $site_id, $blog_id, $timestamp );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
 		}
 
 		$results = $this->db->get_results($sql);
@@ -1434,20 +1443,14 @@ class autoblogpremium {
 
 	function get_autoblogentry($id) {
 
-		$site_id = $this->db->siteid;
-		if($site_id == 0) $site_id = 1;
-
-		$blog_id = $this->db->blogid;
-		if($blog_id == 0) $blog_id = 1;
-
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_network_admin') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $site_id, $id );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $this->siteid, $id );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $site_id, $id, $blog_id );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $site_id, $id, $blog_id );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
 		}
 
 		$results = $this->db->get_row($sql);
@@ -1458,10 +1461,7 @@ class autoblogpremium {
 
 	function deletefeed($id) {
 
-		$site_id = $this->db->siteid;
-		if($site_id == 0) $site_id = 1;
-
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d", $site_id, $id);
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d", $this->siteid, $id);
 
 		return $this->db->query($sql);
 
@@ -1474,10 +1474,7 @@ class autoblogpremium {
 
 	function deletefeeds($ids) {
 
-		$site_id = $this->db->siteid;
-		if($site_id == 0) $site_id = 1;
-
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id IN (0, " . implode(',', $ids) . ")", $tsite_id);
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id IN (0, " . implode(',', $ids) . ")", $this->siteid);
 
 		return $this->db->query($sql);
 	}
@@ -1615,10 +1612,7 @@ class autoblogpremium {
 					$feed['nextcheck'] = 0;
 				}
 
-				$site_id = $this->db->siteid;
-				if($site_id == 0) $site_id = 1;
-
-				$feed['site_id'] = $site_id;
+				$feed['site_id'] = $this->siteid;
 				$feed['blog_id'] = (int) $_POST['abtble']['blog'];
 
 
@@ -1649,10 +1643,7 @@ class autoblogpremium {
 					$feed['nextcheck'] = 0;
 				}
 
-				$site_id = $this->db->siteid;
-				if($site_id == 0) $site_id = 1;
-
-				$feed['site_id'] = $site_id;
+				$feed['site_id'] = $this->siteid;
 				$feed['blog_id'] = (int) $_POST['abtble']['blog'];
 
 				if(!empty($_POST['abtble']['startfromday']) && !empty($_POST['abtble']['startfrommonth']) && !empty($_POST['abtble']['startfromyear'])) {
