@@ -723,6 +723,8 @@ class autoblogpremium {
 		echo "</td>";
 		echo "</tr>\n";
 
+		do_action( 'autoblog_feed_edit_form_details_end', $key, $details );
+
 		echo "<tr><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>\n";
 
 		$blogusers = get_users_of_blog( $table['blog'] );
@@ -1161,6 +1163,8 @@ class autoblogpremium {
 
 		echo "</td>";
 		echo "</tr>";
+
+		do_action( 'autoblog_feed_edit_form_details_end', $key, '' );
 
 		echo "<tr><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>";
 
