@@ -54,13 +54,13 @@ class autoblogpremium {
 			$this->install();
 		}
 
-		if(!empty($this->db->siteid) || $this->db->siteid != 0) {
+		if(empty($this->db->siteid) || $this->db->siteid == 0) {
 			$this->siteid = 1;
 		} else {
 			$this->siteid = $this->db->siteid;
 		}
 
-		if(!empty($this->db->blogid) || $this->db->blogid != 0) {
+		if(empty($this->db->blogid) || $this->db->blogid == 0) {
 			$this->blogid = 1;
 		} else {
 			$this->blogid = $this->db->blogid;
@@ -78,7 +78,7 @@ class autoblogpremium {
 		$mofile = autoblog_dir( "autoblogincludes/languages/autoblog-$locale.mo" );
 
 		if ( file_exists( $mofile ) )
-			load_plugin_textdomain( 'autoblogtext', $mofile );
+			load_textdomain( 'autoblogtext', $mofile );
 
 	}
 
@@ -511,7 +511,7 @@ class autoblogpremium {
 				<?php
 					if(empty($autos)) {
 						echo "<p>";
-						echo __('You need to set up some feeds before we can produce statistics.','autautoblogtextoblog');
+						echo __('You need to set up some feeds before we can produce statistics.','autoblogtext');
 						echo "</p>";
 					} else {
 						foreach($autos as $key => $a) {
