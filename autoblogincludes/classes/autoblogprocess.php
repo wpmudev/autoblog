@@ -249,6 +249,13 @@ class autoblogcron {
 		}
 	}
 
+	function category_exists($cat_name, $parent = 0) {
+		$id = term_exists($cat_name, 'category', $parent);
+		if ( is_array($id) )
+			$id = $id['term_id'];
+		return $id;
+	}
+
 	function process_feed($feed_id, $ablog) {
 
 		// Load simple pie if required
@@ -388,7 +395,7 @@ class autoblogcron {
 										foreach ($thecats as $category)
 										{
 											$cat_name = trim( $category->get_label() );
-											$term_id = category_exists($cat_name);
+											$term_id = $this->category_exists($cat_name);
 											if(!empty($term_id)) {
 												$post_category[] = $term_id;
 											} else {
