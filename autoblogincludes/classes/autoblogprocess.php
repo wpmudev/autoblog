@@ -415,13 +415,16 @@ class autoblogcron {
 
 
 				case 'tags':		// carry on as default as well
-				default:			$thecats = array();
-									if($ablog['originalcategories'] == '1') {
-										$thecats = $item->get_categories();
-										if(!empty($thecats)) {
-											foreach ($thecats as $category)
-											{
-													$tags[] = trim( $category->get_label() );
+				default:			if( defined('AUTOBLOG_HANDLE_FAKE_TAGS') && AUTOBLOG_HANDLE_FAKE_TAGS == true ) {
+									} else {
+										$thecats = array();
+										if($ablog['originalcategories'] == '1') {
+											$thecats = $item->get_categories();
+											if(!empty($thecats)) {
+												foreach ($thecats as $category)
+												{
+														$tags[] = trim( $category->get_label() );
+												}
 											}
 										}
 									}
@@ -481,6 +484,21 @@ class autoblogcron {
 				update_post_meta( $post_ID , 'original_source', trim( $item->get_permalink() ) );
 				update_post_meta( $post_ID , 'original_feed', trim( $ablog['url'] ) );
 				update_post_meta( $post_ID , 'original_imported_time', time() );
+
+				// Handle fake tags importing
+				if( defined('AUTOBLOG_HANDLE_FAKE_TAGS') && AUTOBLOG_HANDLE_FAKE_TAGS == true ) {
+					$thecats = array();
+					if($ablog['originalcategories'] == '1') {
+						$thecats = $item->get_categories();
+						if(!empty($thecats)) {
+							foreach ($thecats as $category)
+							{
+								$tags[] = trim( $category->get_label() );
+							}
+						}
+					}
+				}
+
 			} else {
 				if($this->debug) {
 					// error writing post
