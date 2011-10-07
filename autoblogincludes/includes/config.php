@@ -16,7 +16,9 @@ if(!defined('AUTOBLOG_FORCE_PROCESS_ALL')) define( 'AUTOBLOG_FORCE_PROCESS_ALL',
 // Will check for feeds to process on every page load rather than using the limit defined above
 if(!defined('AUTOBLOG_PROCESS_EVERY_PAGE_LOAD')) define( 'AUTOBLOG_PROCESS_EVERY_PAGE_LOAD', false);
 
+// Uses a different, more processing intensive, method of adding tags to a post for sites that have tag based issues
 if(!defined('AUTOBLOG_HANDLE_FAKE_TAGS')) define( 'AUTOBLOG_HANDLE_FAKE_TAGS', true);
 
+// To see feeds from older versions of the plugin that have yet to be repaired.
 if(!defined('AUTOBLOG_LAZY_ID')) define( 'AUTOBLOG_LAZY_ID', true);
 ?>
