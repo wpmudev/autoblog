@@ -16,7 +16,7 @@ if(!defined('AUTOBLOG_FORCE_PROCESS_ALL')) define( 'AUTOBLOG_FORCE_PROCESS_ALL',
 // Will check for feeds to process on every page load rather than using the limit defined above
 if(!defined('AUTOBLOG_PROCESS_EVERY_PAGE_LOAD')) define( 'AUTOBLOG_PROCESS_EVERY_PAGE_LOAD', false);
 
-if(!defined('AUTOBLOG_HANDLE_FAKE_TAGS')) define( 'AUTOBLOG_HANDLE_FAKE_TAGS', false);
+if(!defined('AUTOBLOG_HANDLE_FAKE_TAGS')) define( 'AUTOBLOG_HANDLE_FAKE_TAGS', true);
 
 if(!defined('AUTOBLOG_LAZY_ID')) define( 'AUTOBLOG_LAZY_ID', true);
 ?>

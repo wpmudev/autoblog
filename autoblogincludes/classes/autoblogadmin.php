@@ -87,8 +87,8 @@ class autoblogpremium {
 			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->autoblog . "' ") != $this->autoblog) {
 				$sql = "CREATE TABLE `" . $this->autoblog . "` (
 				  	  `feed_id` bigint(20) NOT NULL auto_increment,
-					  `site_id` bigint(20) default NULL,
-					  `blog_id` bigint(20) default NULL,
+					  `site_id` bigint(20) default '1',
+					  `blog_id` bigint(20) default '1',
 					  `feed_meta` text,
 					  `active` int(11) default NULL,
 					  `nextcheck` bigint(20) default NULL,
@@ -1433,10 +1433,10 @@ class autoblogpremium {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && is_network_admin()) {
 				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d ORDER BY nextcheck ASC", $this->siteid );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND blog_id = %d) ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND blog_id = %d ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND blog_id = %d) ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
 		}
 
 		$results = $this->db->get_results($sql);
@@ -1449,12 +1449,12 @@ class autoblogpremium {
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_network_admin') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d ORDER BY feed_id ASC", $this->siteid, $id );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d) ORDER BY feed_id ASC", $this->siteid, $id );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d AND blog_id = %d) ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d AND blog_id = %d ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d AND blog_id = %d) ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
 		}
 
 		$results = $this->db->get_row($sql);
@@ -1465,7 +1465,7 @@ class autoblogpremium {
 
 	function deletefeed($id) {
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id = %d", $this->siteid, $id);
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d)", $this->siteid, $id);
 
 		return $this->db->query($sql);
 
@@ -1478,7 +1478,7 @@ class autoblogpremium {
 
 	function deletefeeds($ids) {
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id = %d AND feed_id IN (0, " . implode(',', $ids) . ")", $this->siteid);
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE (site_id = %d AND feed_id IN (0, " . implode(',', $ids) . "))", $this->siteid);
 
 		return $this->db->query($sql);
 	}
