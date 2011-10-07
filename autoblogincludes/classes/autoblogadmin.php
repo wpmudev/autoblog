@@ -1429,14 +1429,22 @@ class autoblogpremium {
 
 	function get_autoblogentries() {
 
+		if(defined('AUTOBLOG_LAZY_ID') && AUTOBLOG_LAZY_ID == true) {
+			$sites = array( $this->siteid, 0 );
+			$blogs = array( $this->blogid, 0 );
+		} else {
+			$sites = array( $this->siteid );
+			$blogs = array( $this->blogid );
+		}
+
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id = %d ORDER BY nextcheck ASC", $this->siteid );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") ORDER BY nextcheck ASC" );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND blog_id = %d) ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC" );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND blog_id = %d) ORDER BY nextcheck ASC", $this->siteid, $this->blogid );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC" );
 		}
 
 		$results = $this->db->get_results($sql);
@@ -1447,14 +1455,22 @@ class autoblogpremium {
 
 	function get_autoblogentry($id) {
 
+		if(defined('AUTOBLOG_LAZY_ID') && AUTOBLOG_LAZY_ID == true) {
+			$sites = array( $this->siteid, 0 );
+			$blogs = array( $this->blogid, 0 );
+		} else {
+			$sites = array( $this->siteid );
+			$blogs = array( $this->blogid );
+		}
+
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_network_admin') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d) ORDER BY feed_id ASC", $this->siteid, $id );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d ORDER BY feed_id ASC", $id );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d AND blog_id = %d) ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d AND blog_id  IN (" . implode(',', $blogs) . ") ORDER BY feed_id ASC", $id );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d AND blog_id = %d) ORDER BY feed_id ASC", $this->siteid, $id, $this->blogid );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d AND blog_id  IN (" . implode(',', $blogs) . ") ORDER BY feed_id ASC", $id );
 		}
 
 		$results = $this->db->get_row($sql);
@@ -1465,7 +1481,15 @@ class autoblogpremium {
 
 	function deletefeed($id) {
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE (site_id = %d AND feed_id = %d)", $this->siteid, $id);
+		if(defined('AUTOBLOG_LAZY_ID') && AUTOBLOG_LAZY_ID == true) {
+			$sites = array( $this->siteid, 0 );
+			$blogs = array( $this->blogid, 0 );
+		} else {
+			$sites = array( $this->siteid );
+			$blogs = array( $this->blogid );
+		}
+
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d", $id);
 
 		return $this->db->query($sql);
 
@@ -1478,7 +1502,15 @@ class autoblogpremium {
 
 	function deletefeeds($ids) {
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE (site_id = %d AND feed_id IN (0, " . implode(',', $ids) . "))", $this->siteid);
+		if(defined('AUTOBLOG_LAZY_ID') && AUTOBLOG_LAZY_ID == true) {
+			$sites = array( $this->siteid, 0 );
+			$blogs = array( $this->blogid, 0 );
+		} else {
+			$sites = array( $this->siteid );
+			$blogs = array( $this->blogid );
+		}
+
+		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id IN (0, " . implode(',', $ids) . ")");
 
 		return $this->db->query($sql);
 	}
@@ -1972,7 +2004,7 @@ class autoblogpremium {
 			echo '<tr>';
 			echo '<td>';
 			echo '</td>';
-			echo '<td colspan="3">';
+			echo '<td colspan="5">';
 			echo __('You do not have any feeds setup - please click Add New to get started','autoblogtext');
 			echo '</td>';
 			echo '</tr>';
