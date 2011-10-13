@@ -483,14 +483,16 @@ class autoblogcron {
 
 			if(!empty($ablog['source'])) {
 				// Add the original source to the bottom of the post
-				$post_content .= "<p><a href='" . trim( $item->get_permalink() ) . "'";
+				$sourcecontent = "<p><a href='" . trim( $item->get_permalink() ) . "'";
 				if(!empty($ablog['nofollow']) && addslashes($ablog['nofollow']) == '1') {
-					$post_content .= " rel='nofollow'";
+					$sourcecontent .= " rel='nofollow'";
 				}
 				$thesource = stripslashes($ablog['source']);
 				$thesource = str_replace('%POSTURL%', trim( $item->get_permalink() ), $thesource);
 				$thesource = str_replace('%FEEDURL%', trim( $ablog['url'] ), $thesource);
-				$post_content .= ">" . $thesource . "</a></p>";
+				$sourcecontent .= ">" . $thesource . "</a></p>";
+
+				$post_content .= apply_filters( 'autoblog_source_link', $sourcecontent, $ablog );
 			}
 
 			// Move internal variables to correctly labelled ones
@@ -506,6 +508,7 @@ class autoblogcron {
 			if ( !is_wp_error( $post_ID ) ) {
 				update_post_meta( $post_ID , 'original_source', trim( $item->get_permalink() ) );
 				update_post_meta( $post_ID , 'original_feed', trim( $ablog['url'] ) );
+				update_post_meta( $post_ID , 'original_feed_title', trim( $ablog['title'] ) );
 				update_post_meta( $post_ID , 'original_imported_time', time() );
 
 				// Handle fake tags importing
