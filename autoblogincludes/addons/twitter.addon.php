@@ -60,7 +60,7 @@ class A_twitter_addon {
 
 		extract($post_data);
 
-		if($post_type == 'tweet') {
+		if($post_type == 'tweet' || strpos($item->get_permalink(), 'twitter.com') !== false) {
 			$post_title = $this->strip_account($post_title);
 			$post_content = $this->twitterify($post_content);
 		}

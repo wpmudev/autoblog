@@ -13,7 +13,7 @@ class A_youtube_addon {
 		add_action('init', array(&$this, 'initialise_addon'));
 		add_action( 'widgets_init', array(&$this, 'register_widgets') );
 
-		add_filter( 'autoblog_pre_post_insert', array(&$this, 'process_tweet'), 10, 3 );
+		add_filter( 'autoblog_pre_post_insert', array(&$this, 'process_video'), 10, 3 );
 	}
 
 	function A_youtube_addon() {
@@ -28,7 +28,7 @@ class A_youtube_addon {
 
 	}
 
-	function process_tweet( $post_data, $ablog, $item ) {
+	function process_video( $post_data, $ablog, $item ) {
 
 		extract($post_data);
 
