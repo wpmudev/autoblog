@@ -1988,7 +1988,15 @@ class autoblogpremium {
 				echo '<td style="text-align: right;">';
 
 				if($table->nextcheck != 0) {
+
+					if($table->nextcheck <= time()) {
+						echo "<span style='color: red;'>";
+					}
 					echo date_i18n($timezone_format, $table->nextcheck);
+					if($table->nextcheck <= time()) {
+						echo "</span>";
+					}
+
 				} else {
 					echo __('Never', 'autoblogtext');
 				}

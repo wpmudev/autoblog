@@ -4,6 +4,7 @@ Addon Name: Check Feed Entries
 Description: Check to make sure blog id entries match in each feed entry.
 Author: Barry (Incsub)
 Author URI: http://caffeinatedb.com
+Network: True
 */
 
 function AB_add_check_column() {
