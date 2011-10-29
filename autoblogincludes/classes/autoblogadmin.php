@@ -201,7 +201,7 @@ class autoblogpremium {
 	}
 
 	function dashboard_iehead() {
-		echo '<!--[if IE lt 8]><script language="javascript" type="text/javascript" src="' . autoblog_url('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
+		echo '<!--[if lt IE 8]><script language="javascript" type="text/javascript" src="' . autoblog_url('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
 	}
 
 	function get_data($results, $str = false) {
@@ -406,6 +406,8 @@ class autoblogpremium {
 
 				do_action('autoblog_site_menu');
 			} else {
+
+				add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), 'manage_options', "autoblog_addons", array(&$this,'handle_networkaddons_panel'));
 				do_action('autoblog_network_menu');
 			}
 		} else {
@@ -1729,7 +1731,7 @@ class autoblogpremium {
 						$toprocess[] = mysql_real_escape_string($value);
 					}
 
-					if(process_feeds($toprocess)) {
+					if(ab_process_feeds($toprocess)) {
 						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 					} else {
 						wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
@@ -1761,7 +1763,7 @@ class autoblogpremium {
 
 				if(!empty($feed->feed_meta)) {
 					$details = unserialize($feed->feed_meta);
-					if(process_feed($feed->feed_id, $details)) {
+					if(ab_process_feed($feed->feed_id, $details)) {
 						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 					} else {
 						wp_safe_redirect( add_query_arg( 'err', 4, 'admin.php?page=' . $page ) );
@@ -2101,13 +2103,79 @@ class autoblogpremium {
 
 		wp_reset_vars( array('action', 'page') );
 
+		if(function_exists('is_network_admin') && is_network_admin()) {
+			$this->handle_networkaddons_panel_updates();
+		} else {
+			if(isset($_GET['doaction']) || isset($_GET['doaction2'])) {
+				if(addslashes($_GET['action']) == 'toggle' || addslashes($_GET['action2']) == 'toggle') {
+					$action = 'bulk-toggle';
+				}
+			}
+
+			$active = get_option('autoblog_activated_addons', array());
+
+			switch(addslashes($action)) {
+
+				case 'deactivate':	$key = addslashes($_GET['addon']);
+									if(!empty($key)) {
+										check_admin_referer('toggle-addon-' . $key);
+
+										$found = array_search($key, $active);
+										if($found !== false) {
+											unset($active[$found]);
+											update_option('autoblog_activated_addons', array_unique($active));
+											wp_safe_redirect( add_query_arg( 'msg', 5, wp_get_referer() ) );
+										} else {
+											wp_safe_redirect( add_query_arg( 'msg', 6, wp_get_referer() ) );
+										}
+									}
+									break;
+
+				case 'activate':	$key = addslashes($_GET['addon']);
+									if(!empty($key)) {
+										check_admin_referer('toggle-addon-' . $key);
+
+										if(!in_array($key, $active)) {
+											$active[] = $key;
+											update_option('autoblog_activated_addons', array_unique($active));
+											wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
+										} else {
+											wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
+										}
+									}
+									break;
+
+				case 'bulk-toggle':
+									check_admin_referer('bulk-addons');
+									foreach($_GET['addoncheck'] AS $key) {
+										$found = array_search($key, $active);
+										if($found !== false) {
+											unset($active[$found]);
+										} else {
+											$active[] = $key;
+										}
+									}
+									update_option('autoblog_activated_addons', array_unique($active));
+									wp_safe_redirect( add_query_arg( 'msg', 7, wp_get_referer() ) );
+									break;
+
+			}
+		}
+
+	}
+
+	function handle_networkaddons_panel_updates() {
+		global $action, $page;
+
+		wp_reset_vars( array('action', 'page') );
+
 		if(isset($_GET['doaction']) || isset($_GET['doaction2'])) {
 			if(addslashes($_GET['action']) == 'toggle' || addslashes($_GET['action2']) == 'toggle') {
 				$action = 'bulk-toggle';
 			}
 		}
 
-		$active = get_option('autoblog_activated_addons', array());
+		$active = get_blog_option(1, 'autoblog_networkactivated_addons', array());
 
 		switch(addslashes($action)) {
 
@@ -2118,7 +2186,7 @@ class autoblogpremium {
 									$found = array_search($key, $active);
 									if($found !== false) {
 										unset($active[$found]);
-										update_option('autoblog_activated_addons', array_unique($active));
+										update_blog_option(1, 'autoblog_networkactivated_addons', array_unique($active));
 										wp_safe_redirect( add_query_arg( 'msg', 5, wp_get_referer() ) );
 									} else {
 										wp_safe_redirect( add_query_arg( 'msg', 6, wp_get_referer() ) );
@@ -2132,7 +2200,7 @@ class autoblogpremium {
 
 									if(!in_array($key, $active)) {
 										$active[] = $key;
-										update_option('autoblog_activated_addons', array_unique($active));
+										update_blog_option(1, 'autoblog_networkactivated_addons', array_unique($active));
 										wp_safe_redirect( add_query_arg( 'msg', 3, wp_get_referer() ) );
 									} else {
 										wp_safe_redirect( add_query_arg( 'msg', 4, wp_get_referer() ) );
@@ -2150,7 +2218,7 @@ class autoblogpremium {
 										$active[] = $key;
 									}
 								}
-								update_option('autoblog_activated_addons', array_unique($active));
+								update_blog_option(1, 'autoblog_networkactivated_addons', array_unique($active));
 								wp_safe_redirect( add_query_arg( 'msg', 7, wp_get_referer() ) );
 								break;
 
@@ -2222,6 +2290,7 @@ class autoblogpremium {
 				$plugins = get_autoblog_addons();
 
 				$active = get_option('autoblog_activated_addons', array());
+				$networkactive = get_option('autoblog_networkactivated_addons', array());
 
 			?>
 
@@ -2261,7 +2330,194 @@ class autoblogpremium {
 								                'Name' => 'Addon Name',
 												'Author' => 'Author',
 												'Description'	=>	'Description',
-												'AuthorURI' => 'Author URI'
+												'AuthorURI' => 'Author URI',
+												'Network'	=>	'Network'
+								        );
+
+							$plugin_data = get_file_data( autoblog_dir('autoblogincludes/addons/' . $plugin), $default_headers, 'plugin' );
+
+							if(empty($plugin_data['Name']) || (!empty($plugin_data['Name']) && $plugin_data['Network'] == 'True')) {
+								continue;
+							}
+
+							if(in_array($plugin, $networkactive)) {
+								continue;
+							}
+
+							?>
+							<tr valign="middle" class="alternate" id="plugin-<?php echo $plugin; ?>">
+								<th class="check-column" scope="row"><input type="checkbox" value="<?php echo esc_attr($plugin); ?>" name="addoncheck[]"></th>
+								<td class="column-name">
+									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>" . __(' by ', 'autoblogtext') . "<a href='" . esc_attr($plugin_data['AuthorURI']) . "'>" . esc_html($plugin_data['Author']) . "</a>"; ?>
+									<?php if(!empty($plugin_data['Description'])) {
+										?><br/><?php echo esc_html($plugin_data['Description']);
+										}
+
+										$actions = array();
+
+										if(in_array($plugin, $active)) {
+											$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;addon=" . $plugin . "", 'toggle-addon-' . $plugin) . "'>" . __('Deactivate','autoblogtext') . "</a></span>";
+										} else {
+											$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;addon=" . $plugin . "", 'toggle-addon-' . $plugin) . "'>" . __('Activate','autoblogtext') . "</a></span>";
+										}
+									?>
+									<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
+									</td>
+
+								<td class="column-name">
+									<?php echo esc_html($plugin); ?>
+									</td>
+								<td class="column-active">
+									<?php
+										if(in_array($plugin, $active)) {
+											echo "<strong>" . __('Active', 'autoblogtext') . "</strong>";
+										} else {
+											echo __('Inactive', 'autoblogtext');
+										}
+									?>
+								</td>
+						    </tr>
+							<?php
+						}
+					} else {
+						$columncount = count($columns) + 1;
+						?>
+						<tr valign="middle" class="alternate" >
+							<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Add-ons where found for this install.','autoblogtext'); ?></td>
+					    </tr>
+						<?php
+					}
+					?>
+
+				</tbody>
+			</table>
+
+
+			<div class="tablenav">
+
+			<div class="alignleft actions">
+			<select name="action2">
+				<option selected="selected" value=""><?php _e('Bulk Actions','autoblogtext'); ?></option>
+				<option value="toggle"><?php _e('Toggle activation','autoblogtext'); ?></option>
+			</select>
+			<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="Apply">
+			</div>
+			<div class="alignright actions"></div>
+			<br class="clear">
+			</div>
+
+			</form>
+
+		</div> <!-- wrap -->
+		<?php
+	}
+
+	function handle_networkaddons_panel() {
+		global $action, $page;
+
+		wp_reset_vars( array('action', 'page') );
+
+		$messages = array();
+		$messages[1] = __('Add-on updated.','autoblogtext');
+		$messages[2] = __('Add-on not updated.','autoblogtext');
+
+		$messages[3] = __('Add-on activated.','autoblogtext');
+		$messages[4] = __('Add-on not activated.','autoblogtext');
+
+		$messages[5] = __('Add-on deactivated.','autoblogtext');
+		$messages[6] = __('Add-on not deactivated.','autoblogtext');
+
+		$messages[7] = __('Add-on activation toggled.','autoblogtext');
+
+		?>
+		<div class='wrap'>
+			<div class="icon32" id="icon-plugins"><br></div>
+			<h2><?php _e('Edit Add-ons','autoblogtext'); ?></h2>
+
+			<?php
+			if ( isset($_GET['msg']) ) {
+				echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
+				$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+			}
+
+			?>
+
+			<form method="get" action="?page=<?php echo esc_attr($page); ?>" id="posts-filter">
+
+			<input type='hidden' name='page' value='<?php echo esc_attr($page); ?>' />
+
+			<div class="tablenav">
+
+			<div class="alignleft actions">
+			<select name="action">
+			<option selected="selected" value=""><?php _e('Bulk Actions','autoblogtext'); ?></option>
+			<option value="toggle"><?php _e('Toggle activation','autoblogtext'); ?></option>
+			</select>
+			<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply','autoblogtext'); ?>">
+
+			</div>
+
+			<div class="alignright actions"></div>
+
+			<br class="clear">
+			</div>
+
+			<div class="clear"></div>
+
+			<?php
+				wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-addons');
+
+				$columns = array(	"name"		=>	__('Add-on Name', 'autoblogtext'),
+									"file" 		=> 	__('Add-on File','autoblogtext'),
+									"active"	=>	__('Active','autoblogtext')
+								);
+
+				$columns = apply_filters('autoblog_addoncolumns', $columns);
+
+				$plugins = get_autoblog_addons();
+
+				$active = get_option('autoblog_networkactivated_addons', array());
+
+			?>
+
+			<table cellspacing="0" class="widefat fixed">
+				<thead>
+				<tr>
+				<th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox"></th>
+				<?php
+					foreach($columns as $key => $col) {
+						?>
+						<th style="" class="manage-column column-<?php echo $key; ?>" id="<?php echo $key; ?>" scope="col"><?php echo $col; ?></th>
+						<?php
+					}
+				?>
+				</tr>
+				</thead>
+
+				<tfoot>
+				<tr>
+				<th style="" class="manage-column column-cb check-column" scope="col"><input type="checkbox"></th>
+				<?php
+					reset($columns);
+					foreach($columns as $key => $col) {
+						?>
+						<th style="" class="manage-column column-<?php echo $key; ?>" id="<?php echo $key; ?>" scope="col"><?php echo $col; ?></th>
+						<?php
+					}
+				?>
+				</tr>
+				</tfoot>
+
+				<tbody>
+					<?php
+					if($plugins) {
+						foreach($plugins as $key => $plugin) {
+							$default_headers = array(
+								                'Name' => 'Addon Name',
+												'Author' => 'Author',
+												'Description'	=>	'Description',
+												'AuthorURI' => 'Author URI',
+												'Network'	=>	'Network'
 								        );
 
 							$plugin_data = get_file_data( autoblog_dir('autoblogincludes/addons/' . $plugin), $default_headers, 'plugin' );
@@ -2282,9 +2538,9 @@ class autoblogpremium {
 										$actions = array();
 
 										if(in_array($plugin, $active)) {
-											$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;addon=" . $plugin . "", 'toggle-addon-' . $plugin) . "'>" . __('Deactivate','autoblogtext') . "</a></span>";
+											$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=deactivate&amp;addon=" . $plugin . "", 'toggle-addon-' . $plugin) . "'>" . __('Network Deactivate','autoblogtext') . "</a></span>";
 										} else {
-											$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;addon=" . $plugin . "", 'toggle-addon-' . $plugin) . "'>" . __('Activate','autoblogtext') . "</a></span>";
+											$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url("?page=" . $page. "&amp;action=activate&amp;addon=" . $plugin . "", 'toggle-addon-' . $plugin) . "'>" . __('Network Activate','autoblogtext') . "</a></span>";
 										}
 									?>
 									<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>

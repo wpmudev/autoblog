@@ -37,13 +37,13 @@ class autoblogcron {
 		// override with option.
 		$this->debug = get_autoblog_option('autoblog_debug', false);
 
-		if(!empty($this->db->siteid) || $this->db->siteid != 0) {
+		if(empty($this->db->siteid) || $this->db->siteid == 0) {
 			$this->siteid = 1;
 		} else {
 			$this->siteid = $this->db->siteid;
 		}
 
-		if(!empty($this->db->blogid) || $this->db->blogid != 0) {
+		if(empty($this->db->blogid) || $this->db->blogid == 0) {
 			$this->blogid = 1;
 		} else {
 			$this->blogid = $this->db->blogid;
@@ -143,15 +143,7 @@ class autoblogcron {
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentriesforids($ids);
 
-		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week', current_time('timestamp')));
-		if($lastprocessing == 'yes' || $lastprocessing == 'no' || $lastprocessing == 'np') {
-			$lastprocessing = strtotime('-1 hour', current_time('timestamp'));
-			update_autoblog_option('autoblog_processing', $lastprocessing);
-		}
-
-		if(!empty($autoblogs) && $lastprocessing <= strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
-			update_autoblog_option('autoblog_processing', current_time('timestamp'));
-
+		if(!empty($autoblogs)) {
 			do_action('autoblog_pre_process_feeds');
 
 			foreach( (array) $autoblogs as $key => $ablog) {
@@ -164,7 +156,6 @@ class autoblogcron {
 			}
 
 			do_action('autoblog_post_process_feeds');
-
 		}
 
 		if(!empty($this->errors)) {
@@ -671,13 +662,13 @@ class autoblogcron {
 
 }
 
-function process_autoblog() {
+function ab_process_autoblog() {
 	global $abc;
 
 	$abc->process_autoblog();
 }
 
-function process_feed($id, $details) {
+function ab_process_feed($id, $details) {
 
 	global $abc;
 
@@ -685,7 +676,7 @@ function process_feed($id, $details) {
 
 }
 
-function process_feeds($ids) {
+function ab_process_feeds($ids) {
 
 	global $abc;
 

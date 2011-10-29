@@ -143,6 +143,35 @@ function load_autoblog_addons() {
 	}
 }
 
+function load_networkautoblog_addons() {
+
+	if(!function_exists('is_multisite') || !is_multisite()) {
+		return;
+	}
+
+	$plugins = get_blog_option(1, 'autoblog_networkactivated_addons', array());
+
+	if ( is_dir( autoblog_dir('autoblogincludes/addons') ) ) {
+		if ( $dh = opendir( autoblog_dir('autoblogincludes/addons') ) ) {
+			$auto_plugins = array ();
+			while ( ( $plugin = readdir( $dh ) ) !== false )
+				if ( substr( $plugin, -4 ) == '.php' )
+					$auto_plugins[] = $plugin;
+			closedir( $dh );
+			sort( $auto_plugins );
+
+			$auto_plugins = apply_filters('autoblog_available_addons', $auto_plugins);
+
+			foreach( $auto_plugins as $auto_plugin ) {
+				if(in_array($auto_plugin, $plugins)) {
+					include_once( autoblog_dir('autoblogincludes/addons/' . $auto_plugin) );
+				}
+			}
+
+		}
+	}
+}
+
 function load_all_autoblog_addons() {
 	if ( is_dir( autoblog_dir('autoblogincludes/addons') ) ) {
 		if ( $dh = opendir( autoblog_dir('autoblogincludes/addons') ) ) {
