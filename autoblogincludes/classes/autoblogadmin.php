@@ -2298,7 +2298,12 @@ class autoblogpremium {
 				$plugins = get_autoblog_addons();
 
 				$active = get_option('autoblog_activated_addons', array());
-				$networkactive = get_option('autoblog_networkactivated_addons', array());
+				if(function_exists('get_blog_option')) {
+					$networkactive = get_blog_option(1, 'autoblog_networkactivated_addons', array());
+				} else {
+					$networkactive = array();
+				}
+
 
 			?>
 
