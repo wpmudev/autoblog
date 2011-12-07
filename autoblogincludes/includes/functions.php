@@ -134,7 +134,7 @@ function load_autoblog_addons() {
 			$auto_plugins = apply_filters('autoblog_available_addons', $auto_plugins);
 
 			foreach( $auto_plugins as $auto_plugin ) {
-				if(in_array($auto_plugin, $plugins)) {
+				if(in_array($auto_plugin, (array) $plugins)) {
 					include_once( autoblog_dir('autoblogincludes/addons/' . $auto_plugin) );
 				}
 			}
@@ -163,7 +163,7 @@ function load_networkautoblog_addons() {
 			$auto_plugins = apply_filters('autoblog_available_addons', $auto_plugins);
 
 			foreach( $auto_plugins as $auto_plugin ) {
-				if(in_array($auto_plugin, $plugins)) {
+				if(in_array($auto_plugin, (array) $plugins)) {
 					include_once( autoblog_dir('autoblogincludes/addons/' . $auto_plugin) );
 				}
 			}

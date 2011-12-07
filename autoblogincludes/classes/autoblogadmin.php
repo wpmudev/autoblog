@@ -153,7 +153,6 @@ class autoblogpremium {
 		$this->add_update_check();
 
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
-		wp_enqueue_script( 'qtip', autoblog_url('autoblogincludes/js/jquery.qtip-1.0.0-rc3.min.js'), array('jquery'), $this->build );
 		wp_enqueue_script( 'autoblogadminjs', autoblog_url('autoblogincludes/js/autoblogadmin.js'), array('jquery'), $this->build );
 
 		wp_localize_script( 'autoblogadminjs', 'autoblog', array( 	'deletefeed' => __('Are you sure you want to delete this feed?','autoblogtext'),

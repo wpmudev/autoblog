@@ -83,20 +83,6 @@ function ab_adminReady() {
 
 	ab_headings();
 
-	/*
-	jQuery("a.info").qtip({
-	   position: {
-	      corner: {
-	         target: 'rightMiddle',
-	         tooltip: 'leftMiddle'
-	      }
-	   },
-		style: {
-		      name: 'cream' // Inherit from preset style
-		   }
-	});
-	*/
-
 	jQuery('select.blog').change(ab_changeBlog);
 
 	jQuery('a.deletefeed').click(ab_delfeedcheck);
