@@ -1,4 +1,4 @@
-/* @override http://dev.site/wp-content/plugins/autoblog/autoblogincludes/styles/autoblog.css?ver=4 */
+/* @override http://dev.site/wp-content/plugins/autoblog/autoblogincludes/styles/autoblog.css?ver=5 */
 
 div#entryholder {
 	margin-top: 10px;
@@ -111,4 +111,9 @@ div.postbox div.inside p {
 	padding: 5px 10px;
 	margin: 5px 0;
 }
+
+#the-list tr td.check-column input {
+	margin-left: 8px;
+}
+
 

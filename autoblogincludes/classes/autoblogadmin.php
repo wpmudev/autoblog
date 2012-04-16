@@ -15,6 +15,9 @@ class autoblogpremium {
 	var $siteid = 1;
 	var $blogid = 1;
 
+	// Class variable to hold a link to the tooltips class
+	var $_tips;
+
 	function __construct() {
 
 		global $wpdb;
@@ -32,7 +35,6 @@ class autoblogpremium {
 		add_action('load-autoblog_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog_admin'));
 		add_action('load-autoblog_page_autoblog_options', array(&$this, 'add_admin_header_autoblog_options'));
 		add_action('load-autoblog_page_autoblog_addons', array(&$this, 'add_admin_header_autoblog_addons'));
-
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_network_admin') && is_network_admin()) {
@@ -65,6 +67,10 @@ class autoblogpremium {
 		} else {
 			$this->blogid = $this->db->blogid;
 		}
+
+		// Instantiate the tooltips class and set the icon
+		$this->_tips = new WpmuDev_HelpTooltips();
+		$this->_tips->set_icon_url(autoblog_url('autoblogincludes/images/information.png'));
 
 	}
 
@@ -1778,6 +1784,13 @@ class autoblogpremium {
 
 		global $action, $page;
 
+		// Handle the editing and adding pages
+		if(isset($_GET['action']) && $_GET['action'] == 'add') {
+			// We are adding a new feed
+			$this->handle_addnew_page();
+			return;
+		}
+
 		$showlist = true;
 
 		$current_offset = get_option('gmt_offset');
@@ -1798,13 +1811,6 @@ class autoblogpremium {
 		$errors[5] = __('Please select a feed to delete.','autoblogtext');
 		$errors[6] = __('Please select a feed to process.','autoblogtext');
 
-		// Handle the editing and adding pages
-		if(isset($_POST['add'])) {
-			// We are adding a new feed
-			$this->handle_addnew_page();
-			return;
-		}
-
 		if(isset($_GET['edit']) && is_numeric(addslashes($_GET['edit']))) {
 			$this->handle_edit_page(addslashes($_GET['edit']));
 			return;
@@ -1815,7 +1821,7 @@ class autoblogpremium {
 
 		// Show the heading
 		echo '<div class="icon32" id="icon-edit"><br/></div>';
-		echo "<h2>" . __('Auto Blog Feeds','autoblogtext') . "</h2>";
+		echo "<h2>" . __('Auto Blog Feeds','autoblogtext') . '<a class="add-new-h2" href="admin.php?page=' . $page . '&action=add">' . __('Add New','membership') . '</a></h2>';
 
 		echo "<br/>";
 
@@ -1835,13 +1841,18 @@ class autoblogpremium {
 		wp_nonce_field( 'autoblog' );
 
 		echo '<div class="tablenav">';
-		echo '<div class="alignleft">';
-		echo '<input class="button-secondary delete save" type="submit" name="add" value="' . __('Add New', 'autoblogtext') . '" />';
-		echo '<input class="button-secondary addnew process" type="submit" name="process" value="' . __('Process selected', 'autoblogtext') . '" />';
+		echo '<div class="alignleft actions">';
+		?>
+			<select name="action">
+			<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
+			<option value="process"><?php _e('Process', 'autoblogtext'); ?></option>
+			<option value="delete"><?php _e('Delete', 'autoblogtext'); ?></option>
+			</select>
+			<input type="submit" class="button-secondary action" id="doaction" name="doaction" value="<?php _e('Apply', 'popover'); ?>">
+		<?php
 		echo '</div>';
 
-		echo '<div class="alignright">';
-		echo '<input class="button-secondary del" type="submit" name="delete" value="' . __('Delete selected', 'autoblogtext') . '" />';
+		echo '<div class="alignright actions">';
 		echo '</div>';
 
 		echo '</div>';
@@ -1851,7 +1862,7 @@ class autoblogpremium {
 		echo '<thead>';
 		echo '<tr>';
 		echo '<th scope="col" class="manage-column column-cb check-column">';
-		echo "<input type='checkbox' name='select-all' id='select-all' value='all' />";
+		echo "<input type='checkbox' />";
 		echo '</th>';
 		echo '<th scope="col">';
 		echo __('Feed title','autoblogtext');
@@ -1887,7 +1898,7 @@ class autoblogpremium {
 		echo '<tfoot>';
 		echo '<tr>';
 		echo '<th scope="col" class="manage-column column-cb check-column">';
-		echo '&nbsp;';
+		echo "<input type='checkbox'/>";
 		echo '</th>';
 		echo '<th scope="col">';
 		echo __('Feed title','autoblogtext');
@@ -1931,9 +1942,9 @@ class autoblogpremium {
 				$details = maybe_unserialize($table->feed_meta);
 				//$this->show_table($key, $table);
 				echo '<tr>';
-				echo '<td>';
-				echo "<input type='checkbox' name='select[]' id='select-" . $table->feed_id . "' value='" . $table->feed_id . "' class='selectfeed' />";
-				echo '</td>';
+				?>
+				<td class="check-column" scope="row"><input type="checkbox" value="<?php echo $table->feed_id; ?>" name="select[]"></td>
+				<?php
 				echo '<td>';
 				if(function_exists('is_network_admin') && is_network_admin() ) {
 					echo '<a href="' . network_admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
@@ -2025,13 +2036,18 @@ class autoblogpremium {
 		echo '</table>';
 
 		echo '<div class="tablenav">';
-		echo '<div class="alignleft">';
-		echo '<input class="button-secondary delete save" type="submit" name="add" value="' . __('Add New', 'autoblogtext') . '" />';
-		echo '<input class="button-secondary addnew process" type="submit" name="process" value="' . __('Process selected', 'autoblogtext') . '" />';
+		echo '<div class="alignleft actions">';
+		?>
+			<select name="action2">
+			<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
+			<option value="process"><?php _e('Process', 'autoblogtext'); ?></option>
+			<option value="delete"><?php _e('Delete', 'autoblogtext'); ?></option>
+			</select>
+			<input type="submit" class="button-secondary action" id="doaction2" name="doaction2" value="<?php _e('Apply', 'popover'); ?>">
+		<?php
 		echo '</div>';
 
-		echo '<div class="alignright">';
-		echo '<input class="button-secondary del" type="submit" name="delete" value="' . __('Delete selected', 'autoblogtext') . '" />';
+		echo '<div class="alignright actions">';
 		echo '</div>';
 
 		echo '</div>';
@@ -2065,7 +2081,7 @@ class autoblogpremium {
 				$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
 			}
 			?>
-
+			<div id="poststuff" class="metabox-holder m-settings">
 			<form action='?page=<?php echo $page; ?>' method='post'>
 
 				<input type='hidden' name='page' value='<?php echo $page; ?>' />
@@ -2075,32 +2091,36 @@ class autoblogpremium {
 					wp_nonce_field('update-autoblog-options');
 				?>
 
-				<h3><?php _e('Debug mode','autoblog'); ?></h3>
-				<p><?php _e('Switch on debug mode and reporting.','autoblogtext'); ?></p>
+				<div class="postbox">
+					<h3 class="hndle" style='cursor:auto;'><span><?php _e('Debug mode','autoblog'); ?></span></h3>
+					<div class="inside">
+						<p><?php _e('Switch on debug mode and reporting.','autoblogtext'); ?></p>
 
-				<table class="form-table">
-				<tbody>
-					<tr valign="top">
-						<th scope="row"><?php _e('Debug mode is','autoblogtext'); ?></th>
-						<td>
-							<?php
-								$debug = get_site_option('autoblog_debug', false);
-							?>
-							<select name='debugmode' id='debugmode'>
-								<option value="no" <?php if($debug == false) echo "selected='selected'"; ?>><?php _e('Disabled','autoblogtext'); ?></option>
-								<option value="yes" <?php if($debug == true) echo "selected='selected'"; ?>><?php _e('Enabled','autoblogtext'); ?></option>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-				</table>
+						<table class="form-table">
+						<tbody>
+							<tr valign="top">
+								<th scope="row"><?php _e('Debug mode is','autoblogtext'); ?></th>
+								<td>
+									<?php
+										$debug = get_site_option('autoblog_debug', false);
+									?>
+									<select name='debugmode' id='debugmode'>
+										<option value="no" <?php if($debug == false) echo "selected='selected'"; ?>><?php _e('Disabled','autoblogtext'); ?></option>
+										<option value="yes" <?php if($debug == true) echo "selected='selected'"; ?>><?php _e('Enabled','autoblogtext'); ?></option>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+				</div>
 
 				<p class="submit">
 					<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'autoblogtext') ?>" />
 				</p>
 
 			</form>
-
+			</div>
 		</div> <!-- wrap -->
 		<?php
 	}
