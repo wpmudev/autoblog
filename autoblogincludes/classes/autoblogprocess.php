@@ -52,9 +52,8 @@ class autoblogcron {
 			$this->checkperiod = '5mins';
 		}
 		add_action( 'init', array(&$this, 'set_up_schedule') );
-		add_action( 'autoblog_process_feeds', array(&$this, 'process_autoblog') );
+		add_action( 'autoblog_process_feeds', array(&$this, 'always_process_autoblog') );
 		add_filter( 'cron_schedules', array(&$this, 'add_time_period') );
-
 
 	}
 
@@ -618,6 +617,9 @@ class autoblogcron {
 
 	}
 
+	/*
+	* This process_autoblog function should not be used now as the system is switched over to using a cron job
+	*/
 	function process_autoblog() {
 
 		global $wpdb;
