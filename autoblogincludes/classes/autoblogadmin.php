@@ -1707,45 +1707,82 @@ class autoblogpremium {
 
 			}
 
-			if(!empty($_POST['delete'])) {
-				check_admin_referer('autoblog');
-				$deletekeys = (array) $_POST['deletecheck'];
-				if(!empty($_POST['select'])) {
-					$todelete = array();
-					foreach($_POST['select'] as $key => $value) {
-						$todelete[] = mysql_real_escape_string($value);
-					}
-					if($this->deletefeeds($todelete)) {
-						wp_safe_redirect( add_query_arg( 'msg', 3, 'admin.php?page=' . $page ) );
-					} else {
-						wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
-					}
+			if(isset($_POST['doaction'])) {
+				switch($_POST['bulkaction']) {
+					case 'process':	check_admin_referer('autoblog');
+									if(!empty($_POST['select'])) {
+										$toprocess = array();
+										foreach($_POST['select'] as $key => $value) {
+											$toprocess[] = mysql_real_escape_string($value);
+										}
 
-				} else {
-					wp_safe_redirect( add_query_arg( 'err', 5, 'admin.php?page=' . $page ) );
+										if(ab_process_feeds($toprocess)) {
+											wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
+										} else {
+											wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
+										}
+
+									} else {
+										wp_safe_redirect( add_query_arg( 'err', 6, 'admin.php?page=' . $page ) );
+									}
+									break;
+
+					case 'delete':	check_admin_referer('autoblog');
+									if(!empty($_POST['select'])) {
+										$todelete = array();
+										foreach($_POST['select'] as $key => $value) {
+											$todelete[] = mysql_real_escape_string($value);
+										}
+										if($this->deletefeeds($todelete)) {
+											wp_safe_redirect( add_query_arg( 'msg', 3, 'admin.php?page=' . $page ) );
+										} else {
+											wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
+										}
+
+									} else {
+										wp_safe_redirect( add_query_arg( 'err', 5, 'admin.php?page=' . $page ) );
+									}
+									break;
 				}
-
-
 			}
 
-			if(!empty($_POST['process'])) {
-				check_admin_referer('autoblog');
-				if(!empty($_POST['select'])) {
-					$toprocess = array();
-					foreach($_POST['select'] as $key => $value) {
-						$toprocess[] = mysql_real_escape_string($value);
-					}
+			if(isset($_POST['doaction2'])) {
+				switch($_POST['bulkaction2']) {
+					case 'process':	check_admin_referer('autoblog');
+									if(!empty($_POST['select'])) {
+										$toprocess = array();
+										foreach($_POST['select'] as $key => $value) {
+											$toprocess[] = mysql_real_escape_string($value);
+										}
 
-					if(ab_process_feeds($toprocess)) {
-						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
-					} else {
-						wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
-					}
+										if(ab_process_feeds($toprocess)) {
+											wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
+										} else {
+											wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
+										}
 
-				} else {
-					wp_safe_redirect( add_query_arg( 'err', 6, 'admin.php?page=' . $page ) );
+									} else {
+										wp_safe_redirect( add_query_arg( 'err', 6, 'admin.php?page=' . $page ) );
+									}
+									break;
+
+					case 'delete':	check_admin_referer('autoblog');
+									if(!empty($_POST['select'])) {
+										$todelete = array();
+										foreach($_POST['select'] as $key => $value) {
+											$todelete[] = mysql_real_escape_string($value);
+										}
+										if($this->deletefeeds($todelete)) {
+											wp_safe_redirect( add_query_arg( 'msg', 3, 'admin.php?page=' . $page ) );
+										} else {
+											wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
+										}
+
+									} else {
+										wp_safe_redirect( add_query_arg( 'err', 5, 'admin.php?page=' . $page ) );
+									}
+									break;
 				}
-
 			}
 
 		} else {
@@ -1843,7 +1880,7 @@ class autoblogpremium {
 		echo '<div class="tablenav">';
 		echo '<div class="alignleft actions">';
 		?>
-			<select name="action">
+			<select name="bulkaction">
 			<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
 			<option value="process"><?php _e('Process', 'autoblogtext'); ?></option>
 			<option value="delete"><?php _e('Delete', 'autoblogtext'); ?></option>
@@ -2038,7 +2075,7 @@ class autoblogpremium {
 		echo '<div class="tablenav">';
 		echo '<div class="alignleft actions">';
 		?>
-			<select name="action2">
+			<select name="bulkaction2">
 			<option selected="selected" value=""><?php _e('Bulk Actions', 'popover'); ?></option>
 			<option value="process"><?php _e('Process', 'autoblogtext'); ?></option>
 			<option value="delete"><?php _e('Delete', 'autoblogtext'); ?></option>
