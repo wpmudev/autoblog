@@ -920,6 +920,20 @@ class autoblogpremium {
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
+		echo __('Import the most recent','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[poststoimport]' class='field'>";
+		echo "<option value='0' " . selected('0', $table['poststoimport']) . ">" . __('posts.','autoblogtext') . "</option>";
+		for($n=1; $n <= 100; $n++) {
+			echo "<option value='" . $n . "' " . selected($n, $table['poststoimport']) . ">" . $n . ' ' . __('added posts.','autoblogtext') . "</option>";
+		}
+		echo "</select>" . $this->_tips->add_tip( __('You can set this to only import a specific number of new posts rather than as many as the plugin can manage.','autoblogtext') );
+		echo "</td>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
 		echo __('Process this feed','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
@@ -1363,6 +1377,20 @@ class autoblogpremium {
 
 
 		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Import the most recent','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[poststoimport]' class='field'>";
+		echo "<option value='0'>" . __('posts.','autoblogtext') . "</option>";
+		for($n=1; $n <= 100; $n++) {
+			echo "<option value='" . $n . "'>" . $n . ' ' . __('added posts.','autoblogtext') . "</option>";
+		}
+		echo "</select>" . $this->_tips->add_tip( __('You can set this to only import a specific number of new posts rather than as many as the plugin can manage.','autoblogtext') );
+		echo "</td>";
+		echo "</tr>";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";

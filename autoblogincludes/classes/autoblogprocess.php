@@ -81,8 +81,8 @@ class autoblogcron {
 	}
 
 	function set_up_schedule() {
-		if ( !wp_next_scheduled( 'process_autoblog' ) ) {
-				wp_schedule_event(time(), $this->checkperiod, 'process_autoblog');
+		if ( !wp_next_scheduled( 'autoblog_process_feeds' ) ) {
+				wp_schedule_event(time(), $this->checkperiod, 'autoblog_process_feeds');
 			}
 	}
 
@@ -571,10 +571,6 @@ class autoblogcron {
 
 		global $wpdb;
 
-		echo "boo";
-
-		wp_mail('barry@caffeinatedb.com', 'Processing', 'Oy doing some processing');
-
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
 
@@ -743,5 +739,6 @@ function ab_always_process_autoblog() {
 	$abc->always_process_autoblog();
 }
 add_action( 'autoblog_process_feeds', 'ab_always_process_autoblog' );
+
 
 ?>
