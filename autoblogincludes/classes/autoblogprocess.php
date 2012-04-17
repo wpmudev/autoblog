@@ -314,11 +314,16 @@ class autoblogcron {
 		$feed = fetch_feed($ablog['url']);
 
 		if(!is_wp_error($feed)) {
-			$max = $feed->get_item_quantity();
-			if($max == 0) {
-				if($this->debug) {
-					// feed error
-					$this->errors[] = __('Notice: No entries retrieved for feed - ','autoblogtext') . $ablog['url'];
+
+			if(isset($ablog['poststoimport']) && (int) $ablog['poststoimport'] != 0) {
+				$max = (int) $ablog['poststoimport'];
+			} else {
+				$max = $feed->get_item_quantity();
+				if($max == 0) {
+					if($this->debug) {
+						// feed error
+						$this->errors[] = __('Notice: No entries retrieved for feed - ','autoblogtext') . $ablog['url'];
+					}
 				}
 			}
 		} else {
