@@ -604,7 +604,7 @@ class autoblogpremium {
 		echo __('Your Title','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[title]' value='" . esc_attr(stripslashes($table['title'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('Enter a memorable title.','autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[title]' value='" . esc_attr(stripslashes($table['title'])) . "' class='long title field' />" . $this->_tips->add_tip(  __('Enter a memorable title.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -614,7 +614,7 @@ class autoblogpremium {
 		echo __('Feed URL','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[url]' value='" . esc_attr(stripslashes($table['url'])) . "' class='long url field' />" . "<a href='#' class='info' title='" . __('Enter the feed URL.','autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[url]' value='" . esc_attr(stripslashes($table['url'])) . "' class='long url field' />" . $this->_tips->add_tip(  __('Enter the feed URL.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -642,7 +642,7 @@ class autoblogpremium {
 						echo ">" . $blog->domain . $blog->path . "</option>";
 					}
 				}
-				echo "</select>" . "<a href='#' class='info' title='" . __('Select a blog to add the post to.', 'autoblogtext') . "'></a>";
+				echo "</select>" . $this->_tips->add_tip(  __('Select a blog to add the post to.', 'autoblogtext') );
 
 				echo "</td>";
 				echo "</tr>\n";
@@ -693,7 +693,7 @@ class autoblogpremium {
 			echo $table['posttype'] == $key ? " selected='selected'" : "";
 			echo ">" . $post_type->name . "</option>";
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the post type the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('Select the post type the imported posts will have in the blog.', 'autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>\n";
@@ -710,7 +710,7 @@ class autoblogpremium {
 		echo "<option value='publish'"; echo $table['poststatus'] == 'publish' ? " selected='selected'" : "";  echo ">" . __('Published','autoblogtext') . "</option>";
 		echo "<option value='pending'"; echo  $table['poststatus'] == 'pending' ? " selected='selected'" : "";  echo ">" . __('Pending Review','autoblogtext') . "</option>";
 		echo "<option value='draft'"; echo  $table['poststatus'] == 'draft' ? " selected='selected'" : "";  echo ">" . __('Draft','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the status the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('Select the status the imported posts will have in the blog.', 'autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>\n";
@@ -725,14 +725,14 @@ class autoblogpremium {
 		echo "<select name='abtble[postdate]' class='field'>";
 		echo "<option value='current'"; echo $table['postdate'] == 'current' ? " selected='selected'" : "";  echo ">" . __('Imported date','autoblogtext') . "</option>";
 		echo "<option value='existing'"; echo  $table['postdate'] == 'existing' ? " selected='selected'" : "";  echo ">" . __('Original posts date','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the date imported posts will have.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('Select the date imported posts will have.', 'autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>\n";
 
 		do_action( 'autoblog_feed_edit_form_details_end', $key, $details );
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>\n";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>\n";
 
 		$blogusers = get_users_of_blog( $table['blog'] );
 
@@ -752,7 +752,7 @@ class autoblogpremium {
 				echo "</option>";
 			}
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the author you want to use for the posts, or attempt to use the original feed author.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('Select the author you want to use for the posts, or attempt to use the original feed author.', 'autoblogtext') );
 
 		//print_r($blogusers);
 
@@ -774,12 +774,12 @@ class autoblogpremium {
 				echo "</option>";
 			}
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('If the feed author does not exist in your blog then use this author.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('If the feed author does not exist in your blog then use this author.', 'autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>\n";
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Categories and Tags','autoblogtext') . "</span></td></tr>";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Categories and Tags','autoblogtext') . "</span></td></tr>";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -791,7 +791,7 @@ class autoblogpremium {
 		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => $table['category'], 'hierarchical' => true, 'show_option_none' => __('None','autoblogtext'), 'class' => 'field cat'));
 		if(function_exists('restore_current_blog')) restore_current_blog();
 
-		echo "<a href='#' class='info' title='" . __('Assign this category to the imported posts.', 'autoblogtext') . "'></a>";
+		echo $this->_tips->add_tip(  __('Assign this category to the imported posts.', 'autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>\n";
@@ -808,7 +808,7 @@ class autoblogpremium {
 			echo "</select>";
 			echo "&nbsp;<input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
 			if($table['originalcategories'] == '1') echo " checked='checked'";
-			echo "/>&nbsp;<span>" . __('Add any that do not exist.','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Create any tags or categories that are needed.', 'autoblogtext') . "'></a>";
+			echo "/>&nbsp;<span>" . __('Add any that do not exist.','autoblogtext') . "</span>" . $this->_tips->add_tip(  __('Create any tags or categories that are needed.', 'autoblogtext') );
 
 			echo "</td>";
 		echo "</tr>\n";
@@ -818,12 +818,12 @@ class autoblogpremium {
 		echo __('Add these tags to the posts','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[tag]' value='" . esc_attr(stripslashes($table['tag'])) . "' class='long tag field' />" . "<a href='#' class='info' title='" . __('Enter a comma separated list of tags to add.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[tag]' value='" . esc_attr(stripslashes($table['tag'])) . "' class='long tag field' />" . $this->_tips->add_tip(  __('Enter a comma separated list of tags to add.', 'autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>\n";
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post Filtering','autoblogtext') . "</span></td></tr>\n";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Post Filtering','autoblogtext') . "</span></td></tr>\n";
 		echo "<tr><td colspan='2'><p>" . __('Include posts that contain (separate words with commas)','autoblogtext') . "</p></td></tr>\n";
 
 		echo "<tr>";
@@ -831,7 +831,7 @@ class autoblogpremium {
 		echo __('All of these words','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[allwords]' value='" . esc_attr(stripslashes($table['allwords'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have ALL of these words in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[allwords]' value='" . esc_attr(stripslashes($table['allwords'])) . "' class='long title field' />" . $this->_tips->add_tip(  __('A post to be imported must have ALL of these words in the title or content.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -840,7 +840,7 @@ class autoblogpremium {
 		echo __('Any of these words','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[anywords]' value='" . esc_attr(stripslashes($table['anywords'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have ANY of these words in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[anywords]' value='" . esc_attr(stripslashes($table['anywords'])) . "' class='long title field' />" . $this->_tips->add_tip(  __('A post to be imported must have ANY of these words in the title or content.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -849,7 +849,7 @@ class autoblogpremium {
 		echo __('The exact phrase','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[phrase]' value='" . esc_attr(stripslashes($table['phrase'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have this exact phrase in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[phrase]' value='" . esc_attr(stripslashes($table['phrase'])) . "' class='long title field' />" . $this->_tips->add_tip(  __('A post to be imported must have this exact phrase in the title or content.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -858,7 +858,7 @@ class autoblogpremium {
 		echo __('None of these words','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[nonewords]' value='" . esc_attr(stripslashes($table['nonewords'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must NOT have any of these words in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[nonewords]' value='" . esc_attr(stripslashes($table['nonewords'])) . "' class='long title field' />" . $this->_tips->add_tip(  __('A post to be imported must NOT have any of these words in the title or content.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -867,14 +867,14 @@ class autoblogpremium {
 		echo __('Any of these tags','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[anytags]' value='" . esc_attr(stripslashes($table['anytags'])) . "' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must be marked with any of these categories or tags.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[anytags]' value='" . esc_attr(stripslashes($table['anytags'])) . "' class='long title field' />" . $this->_tips->add_tip(  __('A post to be imported must be marked with any of these categories or tags.', 'autoblogtext') );
 		echo "<br/>";
 		echo "<span>" . __('Tags should be comma separated','autoblogtext') . "</span>";
 		echo "</td>";
 		echo "</tr>\n";
 
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post excerpts','autoblogtext') . "</span></td></tr>\n";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Post excerpts','autoblogtext') . "</span></td></tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -884,7 +884,7 @@ class autoblogpremium {
 		echo "<select name='abtble[useexcerpt]' class='field'>";
 		echo "<option value='1'"; echo ($table['useexcerpt'] == '1') ? " selected='selected'" : ""; echo ">" . __('Use Full Post','autoblogtext') . "</option>";
 		echo "<option value='2'"; echo ($table['useexcerpt'] == '2') ? " selected='selected'" : ""; echo ">" . __('Use Excerpt','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Use the full post (if available) or create an excerpt.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('Use the full post (if available) or create an excerpt.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -898,7 +898,7 @@ class autoblogpremium {
 		echo "<option value='words'"; echo ($table['excerptnumberof'] == 'words') ? " selected='selected'" : ""; echo ">" . __('Words','autoblogtext') . "</option>";
 		echo "<option value='sentences'"; echo ($table['excerptnumberof'] == 'sentences') ? " selected='selected'" : ""; echo ">" . __('Sentences','autoblogtext') . "</option>";
 		echo "<option value='paragraphs'"; echo ($table['excerptnumberof'] == 'paragraphs') ? " selected='selected'" : ""; echo ">" . __('Paragraphs','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Specify the size of the excerpt to create (if selected)', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('Specify the size of the excerpt to create (if selected)', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -907,7 +907,7 @@ class autoblogpremium {
 		echo __('Link to original source','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[source]' value='" . esc_attr(stripslashes($table['source'])) . "' class='long source field' />" . "<a href='#' class='info' title='" . __('If you want to link back to original source, enter a phrase to use here.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[source]' value='" . esc_attr(stripslashes($table['source'])) . "' class='long source field' />" . $this->_tips->add_tip(  __('If you want to link back to original source, enter a phrase to use here.', 'autoblogtext') );
 		echo "<br/>";
 		echo "<input type='checkbox' name='abtble[nofollow]' value='1' ";
 		if($table['nofollow'] == '1') echo "checked='checked' ";
@@ -916,7 +916,7 @@ class autoblogpremium {
 		echo "</tr>\n";
 
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>\n";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>\n";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -932,7 +932,7 @@ class autoblogpremium {
 		echo "<option value='150'"; echo ($table['processfeed'] == '150') ? " selected='selected'" : ""; echo ">" . __('every 2 hours 30 minutes','autoblogtext') . "</option>";
 		echo "<option value='300'"; echo ($table['processfeed'] == '300') ? " selected='selected'" : ""; echo ">" . __('every 5 hours','autoblogtext') . "</option>";
 		echo "<option value='1449'"; echo ($table['processfeed'] == '1449') ? " selected='selected'" : ""; echo ">" . __('every day','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Set the time delay for processing this feed, irregularly updated feeds do not need to be checked very often.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip(  __('Set the time delay for processing this feed, irregularly updated feeds do not need to be checked very often.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -975,7 +975,7 @@ class autoblogpremium {
 			echo ">" . $n . "</option>";
 		}
 		echo "</select>";
-		echo "<a href='#' class='info' title='" . __('Set the date you want to start processing posts from.', 'autoblogtext') . "'></a>";
+		echo $this->_tips->add_tip(  __('Set the date you want to start processing posts from.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
@@ -1016,13 +1016,25 @@ class autoblogpremium {
 			echo ">" . $n . "</option>";
 		}
 		echo "</select>";
-		echo "<a href='#' class='info' title='" . __('Set the date you want to stop processing posts from this feed.', 'autoblogtext') . "'></a>";
+		echo $this->_tips->add_tip(  __('Set the date you want to stop processing posts from this feed.', 'autoblogtext') );
 		echo "</td>";
 		echo "</tr>\n";
 
 		do_action( 'autoblog_feed_edit_form_end', $key, $details );
 
 		echo "</table>\n";
+
+		echo '<div class="tablenav">';
+		echo '<div class="alignright">';
+		echo "<a href='admin.php?page=autoblog_admin'>";
+		echo __('Cancel', 'autoblogtext');
+		echo "</a>";
+		echo "&nbsp;";
+		echo "&nbsp;";
+		echo "&nbsp;";
+		echo '<input class="button-primary delete save" type="submit" name="save" value="' . __('Update feed', 'autoblogtext') . '" />';
+		echo '</div>';
+		echo '</div>';
 
 		echo '</div> <!-- inside -->';
 
@@ -1052,7 +1064,7 @@ class autoblogpremium {
 		echo __('Your Title','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[title]' value='' class='long title field' />" . "<a href='#' class='info' title='" . __('Enter a memorable title.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[title]' value='' class='long title field' />" . $this->_tips->add_tip( __('Enter a memorable title.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1062,7 +1074,7 @@ class autoblogpremium {
 		echo __('Feed URL','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[url]' value='' class='long url field' />" . "<a href='#' class='info' title='" . __('Enter the feed URL', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[url]' value='' class='long url field' />" . $this->_tips->add_tip( __('Enter the feed URL.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1083,7 +1095,7 @@ class autoblogpremium {
 				foreach( (array) $blogs as $bkey => $blog) {
 					echo "<option value='$bkey'>" . $blog->domain . $blog->path . "</option>";
 				}
-				echo "</select>" . "<a href='#' class='info' title='" . __('Select a blog to add the post to.', 'autoblogtext') . "'></a>";
+				echo "</select>" . $this->_tips->add_tip( __('Select a blog to add the post to.','autoblogtext') );
 
 				echo "</td>";
 				echo "</tr>";
@@ -1135,7 +1147,7 @@ class autoblogpremium {
 			echo $table['posttype'] == $key ? " selected='selected'" : "";
 			echo ">" . $post_type->name . "</option>";
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the post type the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('Select the post type the imported posts will have in the blog.','autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>";
@@ -1151,7 +1163,7 @@ class autoblogpremium {
 		echo "<option value='publish'>" . __('Published', 'autoblogtext') . "</option>";
 		echo "<option value='pending'>" . __('Pending Review', 'autoblogtext') . "</option>";
 		echo "<option value='draft'>" . __('Draft', 'autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the status the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('Select the status the imported posts will have in the blog.','autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>";
@@ -1166,14 +1178,14 @@ class autoblogpremium {
 		echo "<select name='abtble[postdate]' class='field'>";
 		echo "<option value='current'>" . __('Imported date','autoblogtext') . "</option>";
 		echo "<option value='existing'>" . __('Original posts date','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the date imported posts will have.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('Select the date imported posts will have.','autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>";
 
 		do_action( 'autoblog_feed_edit_form_details_end', $key, '' );
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>";
 
 		$blogusers = get_users_of_blog( $blog_id );
 
@@ -1193,7 +1205,7 @@ class autoblogpremium {
 				echo "</option>";
 			}
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('Select the author you want to use for the posts, or attempt to use the original feed author.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('Select the author you want to use for the posts, or attempt to use the original feed author.','autoblogtext') );
 
 		//print_r($blogusers);
 
@@ -1215,12 +1227,12 @@ class autoblogpremium {
 				echo "</option>";
 			}
 		}
-		echo "</select>" . "<a href='#' class='info' title='" . __('If the feed author does not exist in your blog then use this author.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('If the feed author does not exist in your blog then use this author.','autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>";
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Categories and Tags','autoblogtext') . "</span></td></tr>";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Categories and Tags','autoblogtext') . "</span></td></tr>";
 
 		//
 		echo "<tr>";
@@ -1230,7 +1242,7 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 
 		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => '', 'hierarchical' => true, 'show_option_none' => __('None'), 'class' => 'field cat'));
-		echo "<a href='#' class='info' title='" . __('Assign this category to the imported posts.', 'autoblogtext') . "'></a>";
+		echo "" . $this->_tips->add_tip( __('Assign this category to the imported posts.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1244,7 +1256,7 @@ class autoblogpremium {
 		echo "<option value='categories'>" . __('categories', 'autoblogtext') . "</option>";
 		echo "</select>";
 		echo "&nbsp;<input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
-		echo "/>&nbsp;<span>" . __('Add any that do not exist.','autoblogtext') . "</span>" . "<a href='#' class='info' title='" . __('Create any tags or categories that are needed.', 'autoblogtext') . "'></a>";
+		echo "/>&nbsp;<span>" . __('Add any that do not exist.','autoblogtext') . "</span>" . $this->_tips->add_tip( __('Create any tags or categories that are needed.','autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>";
@@ -1254,12 +1266,12 @@ class autoblogpremium {
 		echo __('Add these tags to the posts','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[tag]' value='' class='long tag field' />" . "<a href='#' class='info' title='" . __('Enter a comma separated list of tags to add.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[tag]' value='' class='long tag field' />" . $this->_tips->add_tip( __('Enter a comma separated list of tags to add.','autoblogtext') );
 
 		echo "</td>";
 		echo "</tr>";
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post Filtering','autoblogtext') . "</span></td></tr>";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Post Filtering','autoblogtext') . "</span></td></tr>";
 		echo "<tr><td colspan='2'><p>" . __('Include posts that contain (separate words with commas)','autoblogtext') . "</p></td></tr>";
 
 		echo "<tr>";
@@ -1267,7 +1279,7 @@ class autoblogpremium {
 		echo __('All of these words','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[allwords]' value='' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have ALL of these words in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[allwords]' value='' class='long title field' />" . $this->_tips->add_tip( __('A post to be imported must have ALL of these words in the title or content.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1276,7 +1288,7 @@ class autoblogpremium {
 		echo __('Any of these words','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[anywords]' value='' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have ANY of these words in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[anywords]' value='' class='long title field' />" . $this->_tips->add_tip( __('A post to be imported must have ANY of these words in the title or content.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1285,7 +1297,7 @@ class autoblogpremium {
 		echo __('The exact phrase','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[phrase]' value='' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must have this exact phrase in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[phrase]' value='' class='long title field' />" . $this->_tips->add_tip( __('A post to be imported must have this exact phrase in the title or content.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1294,7 +1306,7 @@ class autoblogpremium {
 		echo __('None of these words','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[nonewords]' value='' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must NOT have any of these words in the title or content.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[nonewords]' value='' class='long title field' />" . $this->_tips->add_tip( __('A post to be imported must NOT have any of these words in the title or content.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1303,13 +1315,13 @@ class autoblogpremium {
 		echo __('Any of these tags','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[anytags]' value='' class='long title field' />" . "<a href='#' class='info' title='" . __('A post to be imported must be marked with any of these categories or tags.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[anytags]' value='' class='long title field' />" . $this->_tips->add_tip( __('A post to be imported must be marked with any of these categories or tags.','autoblogtext') );
 		echo "<br/>";
 		echo "<span>" . __('Tags should be comma separated','autoblogtext') . "</span>";
 		echo "</td>";
 		echo "</tr>";
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Post excerpts','autoblogtext') . "</span></td></tr>";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Post excerpts','autoblogtext') . "</span></td></tr>";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -1319,7 +1331,7 @@ class autoblogpremium {
 		echo "<select name='abtble[useexcerpt]' class='field'>";
 		echo "<option value='1'>" . __('Use Full Post','autoblogtext') . "</option>";
 		echo "<option value='2'>" . __('Use Excerpt','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Use the full post (if available) or create an excerpt.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('Use the full post (if available) or create an excerpt.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1333,7 +1345,7 @@ class autoblogpremium {
 		echo "<option value='words'>" . __('Words','autoblogtext') . "</option>";
 		echo "<option value='sentences'>" . __('Sentences','autoblogtext') . "</option>";
 		echo "<option value='paragraphs'>" . __('Paragraphs','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Specify the size of the excerpt to create (if selected)', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('Specify the size of the excerpt to create (if selected)','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1342,7 +1354,7 @@ class autoblogpremium {
 		echo __('Link to original source','autoblogtext');
 		echo "</td>";
 		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[source]' value='' class='long source field' />" . "<a href='#' class='info' title='" . __('If you want to link back to original source, enter a phrase to use here.', 'autoblogtext') . "'></a>";
+		echo "<input type='text' name='abtble[source]' value='' class='long source field' />" . $this->_tips->add_tip( __('If you want to link back to original source, enter a phrase to use here.','autoblogtext') );
 		echo "<br/>";
 		echo "<input type='checkbox' name='abtble[nofollow]' value='1' />&nbsp;<span>" . __('Ensure this link is a nofollow one','autoblogtext') . "</span>";
 
@@ -1350,7 +1362,7 @@ class autoblogpremium {
 		echo "</tr>";
 
 
-		echo "<tr><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>";
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>";
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -1366,7 +1378,7 @@ class autoblogpremium {
 		echo "<option value='150'>" . __('every 2 hours 30 minutes','autoblogtext') . "</option>";
 		echo "<option value='300'>" . __('every 5 hours','autoblogtext') . "</option>";
 		echo "<option value='1449'>" . __('every day','autoblogtext') . "</option>";
-		echo "</select>" . "<a href='#' class='info' title='" . __('Set the time delay for processing this feed, irregularly updated feeds do not need to be checked very often.', 'autoblogtext') . "'></a>";
+		echo "</select>" . $this->_tips->add_tip( __('Set the time delay for processing this feed, irregularly updated feeds do not need to be checked very often.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1393,7 +1405,7 @@ class autoblogpremium {
 			echo "<option value='$n'>" . $n . "</option>";
 		}
 		echo "</select>";
-		echo "<a href='#' class='info' title='" . __('Set the date you want to start processing posts from.', 'autoblogtext') . "'></a>";
+		echo "" . $this->_tips->add_tip( __('Set the date you want to start processing posts from.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
@@ -1420,13 +1432,25 @@ class autoblogpremium {
 			echo "<option value='$n'>" . $n . "</option>";
 		}
 		echo "</select>";
-		echo "<a href='#' class='info' title='" . __('Set the date you want to stop processing posts from this feed.', 'autoblogtext') . "'></a>";
+		echo "" . $this->_tips->add_tip( __('Set the date you want to stop processing posts from this feed.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
 
 		do_action( 'autoblog_feed_edit_form_end', $key, '' );
 
 		echo "</table>";
+
+		echo '<div class="tablenav">';
+		echo '<div class="alignright">';
+		echo "<a href='admin.php?page=autoblog_admin'>";
+		echo __('Cancel', 'autoblogtext');
+		echo "</a>";
+		echo "&nbsp;";
+		echo "&nbsp;";
+		echo "&nbsp;";
+		echo '<input class="button-primary delete save" type="submit" name="savenew" value="' . __('Add feed', 'autoblogtext') . '" />';
+		echo '</div>';
+		echo '</div>';
 
 		echo '</div>';
 
@@ -1553,29 +1577,7 @@ class autoblogpremium {
 
 		wp_nonce_field( 'autoblog' );
 
-		echo '<div class="tablenav">';
-		echo '<div class="alignleft">';
-		echo '<input class="button-secondary delete save" type="submit" name="savenew" value="' . __('Save feed', 'autoblogtext') . '" />';
-		echo "&nbsp;";
-		echo "<a href='admin.php?page=autoblog_admin'>";
-		echo __('&lt; cancel and return', 'autoblogtext');
-		echo "</a>";
-		echo '</div>';
-
-		echo '</div>';
-
 		$this->show_table_template($stamp);
-
-		echo '<div class="tablenav">';
-		echo '<div class="alignleft">';
-		echo '<input class="button-secondary delete save" type="submit" name="savenew" value="' . __('Add New', 'autoblogtext') . '" />';
-		echo "&nbsp;";
-		echo "<a href='admin.php?page=autoblog_admin'>";
-		echo __('&lt; cancel and return', 'autoblogtext');
-		echo "</a>";
-		echo '</div>';
-
-		echo '</div>';
 
 		echo '</form>';
 
@@ -1601,29 +1603,7 @@ class autoblogpremium {
 
 		wp_nonce_field( 'autoblog' );
 
-		echo '<div class="tablenav">';
-		echo '<div class="alignleft">';
-		echo '<input class="button-secondary delete save" type="submit" name="save" value="' . __('Update feed', 'autoblogtext') . '" />';
-		echo "&nbsp;";
-		echo "<a href='admin.php?page=autoblog_admin'>";
-		echo __('&lt; cancel and return', 'autoblogtext');
-		echo "</a>";
-		echo '</div>';
-
-		echo '</div>';
-
 		$this->show_table($id, $feed);
-
-		echo '<div class="tablenav">';
-		echo '<div class="alignleft">';
-		echo '<input class="button-secondary delete save" type="submit" name="save" value="' . __('Update feed', 'autoblogtext') . '" />';
-		echo "&nbsp;";
-		echo "<a href='admin.php?page=autoblog_admin'>";
-		echo __('&lt; cancel and return', 'autoblogtext');
-		echo "</a>";
-		echo '</div>';
-
-		echo '</div>';
 
 		echo '</form>';
 

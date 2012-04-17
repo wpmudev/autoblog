@@ -52,8 +52,11 @@ class autoblogcron {
 			$this->checkperiod = '5mins';
 		}
 		add_action( 'init', array(&$this, 'set_up_schedule') );
-		add_action( 'autoblog_process_feeds', array(&$this, 'always_process_autoblog') );
+		//add_action( 'autoblog_process_feeds', array(&$this, 'always_process_autoblog') );
 		add_filter( 'cron_schedules', array(&$this, 'add_time_period') );
+
+		// Add in filter for the_post to add in the source content at the bottom
+		add_filter( 'the_content', array(&$this, 'append_original_source'), 999, 1 );
 
 	}
 
@@ -496,20 +499,6 @@ class autoblogcron {
 				continue;
 			}
 
-			if(!empty($ablog['source'])) {
-				// Add the original source to the bottom of the post
-				$sourcecontent = "<p><a href='" . trim( $item->get_permalink() ) . "'";
-				if(!empty($ablog['nofollow']) && addslashes($ablog['nofollow']) == '1') {
-					$sourcecontent .= " rel='nofollow'";
-				}
-				$thesource = stripslashes($ablog['source']);
-				$thesource = str_replace('%POSTURL%', trim( $item->get_permalink() ), $thesource);
-				$thesource = str_replace('%FEEDURL%', trim( $ablog['url'] ), $thesource);
-				$sourcecontent .= ">" . $thesource . "</a></p>";
-
-				$post_content .= apply_filters( 'autoblog_source_link', $sourcecontent, $ablog );
-			}
-
 			// Move internal variables to correctly labelled ones
 			$post_author = $author;
 			$blog_ID = $bid;
@@ -525,6 +514,24 @@ class autoblogcron {
 				update_post_meta( $post_ID , 'original_feed', trim( $ablog['url'] ) );
 				update_post_meta( $post_ID , 'original_feed_title', trim( $ablog['title'] ) );
 				update_post_meta( $post_ID , 'original_imported_time', time() );
+				update_post_meta( $post_ID , 'original_feed_id', $feed_id );
+
+				if(!empty($ablog['source'])) {
+					// Add the original source to the bottom of the post
+					$sourcecontent = "<a href='" . trim( $item->get_permalink() ) . "'";
+					if(!empty($ablog['nofollow']) && addslashes($ablog['nofollow']) == '1') {
+						$sourcecontent .= " rel='nofollow'";
+					}
+					$thesource = stripslashes($ablog['source']);
+					$thesource = str_replace('%POSTURL%', trim( $item->get_permalink() ), $thesource);
+					$thesource = str_replace('%FEEDURL%', trim( $ablog['url'] ), $thesource);
+					$sourcecontent .= ">" . $thesource . "</a>";
+
+					$sourcecontent = apply_filters( 'autoblog_source_link', $sourcecontent, $ablog );
+
+					update_post_meta( $post_ID , 'original_source_link_html', $sourcecontent );
+				}
+
 
 				// Handle fake tags importing
 				if( defined('AUTOBLOG_HANDLE_FAKE_TAGS') && AUTOBLOG_HANDLE_FAKE_TAGS == true ) {
@@ -563,6 +570,10 @@ class autoblogcron {
 	function always_process_autoblog() {
 
 		global $wpdb;
+
+		echo "boo";
+
+		wp_mail('barry@caffeinatedb.com', 'Processing', 'Oy doing some processing');
 
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
@@ -687,12 +698,21 @@ class autoblogcron {
 
 	}
 
-}
+	// This function appends the source to the bottom of the content if it exists.
+	function append_original_source( $content ) {
 
-function ab_process_autoblog() {
-	global $abc;
+		global $post;
 
-	$abc->process_autoblog();
+		$source = get_post_meta( $post->ID, 'original_source_link_html', true );
+		if(!empty($source)) {
+			$content .= "<p>" . $source . "</p>";
+		}
+
+
+		return $content;
+
+	}
+
 }
 
 function ab_process_feed($id, $details) {
@@ -710,4 +730,18 @@ function ab_process_feeds($ids) {
 	return $abc->process_feeds($ids);
 
 }
+
+function ab_process_autoblog() {
+	global $abc;
+
+	$abc->process_autoblog();
+}
+
+function ab_always_process_autoblog() {
+	global $abc;
+
+	$abc->always_process_autoblog();
+}
+add_action( 'autoblog_process_feeds', 'ab_always_process_autoblog' );
+
 ?>

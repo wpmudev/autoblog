@@ -8,6 +8,12 @@ div#entryholder {
 div.postbox {
 	margin-top: 5px;
 	margin-bottom: 15px;
+	background: #fff;
+}
+
+div.postbox div.inside {
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 input.deletecheck {
@@ -28,8 +34,8 @@ div.inside table tbody tr td.heading {
 	padding: 5px 5px 5px 10px;
 }
 
-td.spacer {
-	background-color: #edf3fe;
+tr.spacer, td.spacer {
+	background-color: #ececec;
 
 }
 
