@@ -13,18 +13,14 @@ class autoblogcron {
 	var $siteid = 1;
 	var $blogid = 1;
 
+	var $checkperiod = '10mins';
+
 	function __construct() {
 
 		global $wpdb;
 
 		// check if a modulous of 5 mintutes and if so add the init hook.
 		$min = date("i");
-
-		if(defined('AUTOBLOG_PROCESS_EVERY_PAGE_LOAD') && AUTOBLOG_PROCESS_EVERY_PAGE_LOAD === true) {
-			add_action('init', array(&$this,'always_process_autoblog'));
-		} else {
-			add_action('init', array(&$this,'process_autoblog'));
-		}
 
 		$this->db =& $wpdb;
 
@@ -49,6 +45,17 @@ class autoblogcron {
 			$this->blogid = $this->db->blogid;
 		}
 
+		// Action to be called by the cron job
+		if(defined('AUTOBLOG_PROCESSING_CHECKLIMIT') && AUTOBLOG_PROCESSING_CHECKLIMIT == 10) {
+			$this->checkperiod = '10mins';
+		} else {
+			$this->checkperiod = '5mins';
+		}
+		add_action( 'init', array(&$this, 'set_up_schedule') );
+		add_action( 'autoblog_process_feeds', array(&$this, 'process_autoblog') );
+		add_filter( 'cron_schedules', array(&$this, 'add_time_period') );
+
+
 	}
 
 	function autoblogcron() {
@@ -57,6 +64,24 @@ class autoblogcron {
 
 	function feed_cache($ignore) {
 		return 5*60;
+	}
+
+	function add_time_period( $periods ) {
+
+		if(!is_array($periods)) {
+			$periods = array();
+		}
+
+		$periods['10mins'] = array( 'interval' => 600, 'display' => __('Every 10 Mins', 'autoblogtext') );
+		$periods['5mins'] = array( 'interval' => 300, 'display' => __('Every 5 Mins', 'autoblogtext') );
+
+		return $periods;
+	}
+
+	function set_up_schedule() {
+		if ( !wp_next_scheduled( 'process_autoblog' ) ) {
+				wp_schedule_event(time(), $this->checkperiod, 'process_autoblog');
+			}
 	}
 
 	function get_autoblogentries($timestamp) {

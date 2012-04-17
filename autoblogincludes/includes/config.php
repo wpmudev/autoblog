@@ -7,7 +7,7 @@ if(!defined('AUTOBLOG_GLOBAL')) define( 'AUTOBLOG_GLOBAL', true );
 // Processing will stop after 3 seconds (default) so as not to overload your server
 if(!defined('AUTOBLOG_PROCESSING_TIMELIMIT')) define( 'AUTOBLOG_PROCESSING_TIMELIMIT', 6);
 
-// Processing will take place every 30 minutes.
+// Processing will take place every 10 minutes (options are 10 or 5).
 if(!defined('AUTOBLOG_PROCESSING_CHECKLIMIT')) define( 'AUTOBLOG_PROCESSING_CHECKLIMIT', 10);
 
 // In a multisite install will attempt to process feeds for all sites rather than just local ones
