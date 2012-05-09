@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: AutoBlog
-Version: 3.7
+Version: 3.8
 Plugin URI: http://premium.wpmudev.org/project/autoblog
-Description: An automatic blog feed reading plugin.
+Description: This plugin automatically posts content from RSS feeds to different blogs on your WordPress Multisite...
 Author: Barry (Incsub)
 Author URI: http://incsub.com
 WDP ID: 97

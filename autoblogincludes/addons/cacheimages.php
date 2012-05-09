@@ -1,7 +1,7 @@
 <?php
 /*
-Addon Name: Cache images locally
-Description: Imports and caches any images in imported posts locally.
+Addon Name: Import images
+Description: Imports any images in a post to the media library and attaches them to the imported post.
 Author: Barry (Incsub)
 Author URI: http://premium.wpmudev.org
 */

@@ -2359,7 +2359,6 @@ class autoblogpremium {
 				wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-addons');
 
 				$columns = array(	"name"		=>	__('Add-on Name', 'autoblogtext'),
-									"file" 		=> 	__('Add-on File','autoblogtext'),
 									"active"	=>	__('Active','autoblogtext')
 								);
 
@@ -2431,7 +2430,7 @@ class autoblogpremium {
 							<tr valign="middle" class="alternate" id="plugin-<?php echo $plugin; ?>">
 								<th class="check-column" scope="row"><input type="checkbox" value="<?php echo esc_attr($plugin); ?>" name="addoncheck[]"></th>
 								<td class="column-name">
-									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>" . __(' by ', 'autoblogtext') . "<a href='" . esc_attr($plugin_data['AuthorURI']) . "'>" . esc_html($plugin_data['Author']) . "</a>"; ?>
+									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>"; ?>
 									<?php if(!empty($plugin_data['Description'])) {
 										?><br/><?php echo esc_html($plugin_data['Description']);
 										}
@@ -2447,9 +2446,6 @@ class autoblogpremium {
 									<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
 									</td>
 
-								<td class="column-name">
-									<?php echo esc_html($plugin); ?>
-									</td>
 								<td class="column-active">
 									<?php
 										if(in_array($plugin, $active)) {
@@ -2551,7 +2547,6 @@ class autoblogpremium {
 				wp_original_referer_field(true, 'previous'); wp_nonce_field('bulk-addons');
 
 				$columns = array(	"name"		=>	__('Add-on Name', 'autoblogtext'),
-									"file" 		=> 	__('Add-on File','autoblogtext'),
 									"active"	=>	__('Active','autoblogtext')
 								);
 
@@ -2613,7 +2608,7 @@ class autoblogpremium {
 							<tr valign="middle" class="alternate" id="plugin-<?php echo $plugin; ?>">
 								<th class="check-column" scope="row"><input type="checkbox" value="<?php echo esc_attr($plugin); ?>" name="addoncheck[]"></th>
 								<td class="column-name">
-									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>" . __(' by ', 'autoblogtext') . "<a href='" . esc_attr($plugin_data['AuthorURI']) . "'>" . esc_html($plugin_data['Author']) . "</a>"; ?>
+									<strong><?php echo esc_html($plugin_data['Name']) . "</strong>"; ?>
 									<?php if(!empty($plugin_data['Description'])) {
 										?><br/><?php echo esc_html($plugin_data['Description']);
 										}
@@ -2629,9 +2624,6 @@ class autoblogpremium {
 									<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
 									</td>
 
-								<td class="column-name">
-									<?php echo esc_html($plugin); ?>
-									</td>
 								<td class="column-active">
 									<?php
 										if(in_array($plugin, $active)) {
