@@ -198,22 +198,22 @@ function autoblog_time2str($ts)
 
 		$diff = current_time( 'timestamp' ) - $ts;
 		if($diff == 0)
-			return 'now';
+			return __('now', 'autoblogtext');
 		elseif($diff > 0)
 		{
 			$day_diff = floor($diff / 86400);
 			if($day_diff == 0)
 			{
-				if($diff < 60) return 'just now';
-				if($diff < 120) return '1 minute ago';
-				if($diff < 3600) return floor($diff / 60) . ' minutes ago';
-				if($diff < 7200) return '1 hour ago';
-				if($diff < 86400) return floor($diff / 3600) . ' hours ago';
+				if($diff < 60) return __('just now', 'autoblogtext');
+				if($diff < 120) return __('1 minute ago', 'autoblogtext');
+				if($diff < 3600) return floor($diff / 60) . __(' minutes ago', 'autoblogtext');
+				if($diff < 7200) return __('1 hour ago', 'autoblogtext');
+				if($diff < 86400) return floor($diff / 3600) . __(' hours ago', 'autoblogtext');
 			}
-			if($day_diff == 1) return 'Yesterday';
-			if($day_diff < 7) return $day_diff . ' days ago';
-			if($day_diff < 31) return ceil($day_diff / 7) . ' weeks ago';
-			if($day_diff < 60) return 'last month';
+			if($day_diff == 1) return __('Yesterday', 'autoblogtext');
+			if($day_diff < 7) return $day_diff . __(' days ago', 'autoblogtext');
+			if($day_diff < 31) return ceil($day_diff / 7) . __(' weeks ago', 'autoblogtext');
+			if($day_diff < 60) return __('last month', 'autoblogtext');
 			return date('F Y', $ts);
 		}
 		else
@@ -222,16 +222,16 @@ function autoblog_time2str($ts)
 			$day_diff = floor($diff / 86400);
 			if($day_diff == 0)
 			{
-				if($diff < 120) return 'in a minute';
-				if($diff < 3600) return 'in ' . floor($diff / 60) . ' minutes';
-				if($diff < 7200) return 'in an hour';
-				if($diff < 86400) return 'in ' . floor($diff / 3600) . ' hours';
+				if($diff < 120) return __('in a minute', 'autoblogtext');
+				if($diff < 3600) return __('in ', 'autoblogtext') . floor($diff / 60) . __(' minutes', 'autoblogtext');
+				if($diff < 7200) return __('in an hour', 'autoblogtext');
+				if($diff < 86400) return __('in ', 'autoblogtext') . floor($diff / 3600) . __(' hours', 'autoblogtext');
 			}
-			if($day_diff == 1) return 'Tomorrow';
+			if($day_diff == 1) return __('Tomorrow', 'autoblogtext');
 			if($day_diff < 4) return date('l', $ts);
-			if($day_diff < 7 + (7 - date('w'))) return 'next week';
-			if(ceil($day_diff / 7) < 4) return 'in ' . ceil($day_diff / 7) . ' weeks';
-			if(date('n', $ts) == date('n') + 1) return 'next month';
+			if($day_diff < 7 + (7 - date('w'))) return __('next week', 'autoblogtext');
+			if(ceil($day_diff / 7) < 4) return __('in ', 'autoblogtext') . ceil($day_diff / 7) . __(' weeks', 'autoblogtext');
+			if(date('n', $ts) == date('n') + 1) return __('next month', 'autoblogtext');
 			return date('F Y', $ts);
 		}
 	}
