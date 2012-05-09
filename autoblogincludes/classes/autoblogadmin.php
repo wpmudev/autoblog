@@ -2033,7 +2033,10 @@ class autoblogpremium {
 				echo '<td style="text-align: right;">';
 
 				if($table->lastupdated != 0) {
-					echo date_i18n($timezone_format, $table->lastupdated);
+					echo "<abbr title='" . date_i18n($timezone_format, $table->lastupdated) . "'>";
+					echo autoblog_time2str( $table->lastupdated );
+					echo "</abbr>";
+					//echo date_i18n($timezone_format, $table->lastupdated);
 					//echo date("j M Y : H:i", $table->lastupdated);
 				} else {
 					echo __('Never', 'autoblogtext');
@@ -2047,7 +2050,10 @@ class autoblogpremium {
 					if($table->nextcheck <= time()) {
 						echo "<span style='color: red;'>";
 					}
-					echo date_i18n($timezone_format, $table->nextcheck);
+					echo "<abbr title='" . date_i18n($timezone_format, $table->nextcheck) . "'>";
+					echo autoblog_time2str($table->nextcheck );
+					echo "</abbr>";
+					//echo date_i18n($timezone_format, $table->nextcheck);
 					if($table->nextcheck <= time()) {
 						echo "</span>";
 					}
