@@ -512,7 +512,6 @@ class autoblogcron {
 
 			$post_data = apply_filters( 'autoblog_pre_post_insert', $post_data, $ablog, $item );
 			$post_ID = wp_insert_post($post_data);
-			do_action( 'autoblog_post_post_insert', $post_ID, $ablog, $item );
 
 			if ( !is_wp_error( $post_ID ) ) {
 				update_post_meta( $post_ID , 'original_source', trim( $item->get_permalink() ) );
@@ -555,6 +554,8 @@ class autoblogcron {
 					$this->errors[] = __('Error: ','autoblog') . $post_ID->get_error_message();
 				}
 			}
+
+			do_action( 'autoblog_post_post_insert', $post_ID, $ablog, $item );
 		}
 
 		// Update the next feed read date
