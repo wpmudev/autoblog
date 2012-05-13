@@ -548,14 +548,14 @@ class autoblogcron {
 					}
 				}
 
+				do_action( 'autoblog_post_post_insert', $post_ID, $ablog, $item );
+
 			} else {
 				if($this->debug) {
 					// error writing post
 					$this->errors[] = __('Error: ','autoblog') . $post_ID->get_error_message();
 				}
 			}
-
-			do_action( 'autoblog_post_post_insert', $post_ID, $ablog, $item );
 		}
 
 		// Update the next feed read date
