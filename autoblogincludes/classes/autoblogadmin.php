@@ -1821,6 +1821,24 @@ class autoblogpremium {
 				}
 
 			}
+
+			// Test feeds
+			if(isset($_GET['test']) && is_numeric(addslashes($_GET['process']))) {
+				check_admin_referer('autoblogtest');
+
+				$feed = $this->get_autoblogentry(addslashes($_GET['process']));
+
+				if(!empty($feed->feed_meta)) {
+					$details = unserialize($feed->feed_meta);
+
+					if(ab_test_feed($feed->feed_id, $details)) {
+						wp_safe_redirect( add_query_arg( 'msg', 5, 'admin.php?page=' . $page ) );
+					} else {
+						wp_safe_redirect( add_query_arg( 'err', 5, 'admin.php?page=' . $page ) );
+					}
+
+				}
+			}
 		}
 
 	}
@@ -1846,12 +1864,14 @@ class autoblogpremium {
 		$messages[2] = __('Your feed has been updated.','autoblogtext');
 		$messages[3] = __('Your feed(s) have been deleted.','autoblogtext');
 		$messages[4] = __('Your feed(s) has been processed.','autoblogtext');
+		$messages[5] = __('Your feed(s) has been tested.','autoblogtext');
 
 		$errors = array();
 		$errors[1] = __('Your feed could not be added.','autoblogtext');
 		$errors[2] = __('Your feed could not be updated.','autoblogtext');
 		$errors[3] = __('Your feed(s) could not be deleted.','autoblogtext');
 		$errors[4] = __('Your feed(s) could not be processed.','autoblogtext');
+		$errors[5] = __('Your feed(s) could not be tested.','autoblogtext');
 
 		$errors[5] = __('Please select a feed to delete.','autoblogtext');
 		$errors[6] = __('Please select a feed to process.','autoblogtext');
@@ -2006,15 +2026,25 @@ class autoblogpremium {
 
 				//network_admin_url
 				echo '<div class="row-actions">';
+				$actions = array();
 				if(function_exists('is_network_admin') && is_network_admin() ) {
-					echo "<a href='" . network_admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
-					echo "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
-					echo "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
-					} else {
-					echo "<a href='" . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a> | ";
-					echo "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a> | ";
-					echo "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
+					$actions[] = "<a href='" . network_admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a>";
+					$actions[] = "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a>";
+					$actions[] = "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
+
+					$actions[] = "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;test=" . $table->feed_id), 'autoblogtest') . "' class='testfeed'>" . __('Test', 'autoblogtext') . "</a>";
+					$actions = apply_filters( 'autoblog_networkadmin_actions', $actions, $table->feed_id );
+				} else {
+					$actions[] = "<a href='" . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a>";
+					$actions[] = "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a>";
+					$actions[] = "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
+
+					$actions[] = "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;test=" . $table->feed_id), 'autoblogtest') . "' class='testfeed'>" . __('Test', 'autoblogtext') . "</a>";
+					$actions = apply_filters( 'autoblog_networkadmin_actions', $actions, $table->feed_id );
 				}
+
+				echo implode(' | ', $actions);
+
 				echo '</div>';
 
 				echo '</td>';

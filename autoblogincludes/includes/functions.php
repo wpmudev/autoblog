@@ -235,4 +235,41 @@ function autoblog_time2str($ts)
 			return date('F Y', $ts);
 		}
 	}
+
+	function ab_process_feed($id, $details) {
+
+		global $abc;
+
+		return $abc->process_the_feed($id, $details);
+
+	}
+
+	function ab_process_feeds($ids) {
+
+		global $abc;
+
+		return $abc->process_feeds($ids);
+
+	}
+
+	function ab_process_autoblog() {
+		global $abc;
+
+		$abc->process_autoblog();
+	}
+
+	function ab_always_process_autoblog() {
+		global $abc;
+
+		$abc->always_process_autoblog();
+	}
+	add_action( 'autoblog_process_all_feeds', 'ab_always_process_autoblog' );
+
+	function ab_test_feed($id, $details) {
+
+		global $abc;
+
+		return $abc->test_the_feed($id, $details);
+
+	}
 ?>
