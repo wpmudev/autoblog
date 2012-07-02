@@ -1808,10 +1808,10 @@ class autoblogpremium {
 			}
 
 			// Test feeds
-			if(isset($_GET['test']) && is_numeric(addslashes($_GET['process']))) {
+			if(isset($_GET['test']) && is_numeric(addslashes($_GET['test']))) {
 				check_admin_referer('autoblogtest');
 
-				$feed = $this->get_autoblogentry(addslashes($_GET['process']));
+				$feed = $this->get_autoblogentry(addslashes($_GET['test']));
 
 				if(!empty($feed->feed_meta)) {
 					$details = unserialize($feed->feed_meta);
@@ -1850,7 +1850,7 @@ class autoblogpremium {
 		$messages[3] = __('Your feed(s) have been deleted.','autoblogtext');
 		$messages[4] = __('Your feed(s) has been processed.','autoblogtext');
 
-		$messages[7] = __('Your feed(s) has been tested.','autoblogtext');
+		$messages[7] = __('Your feed has been tested.','autoblogtext');
 		$messages[8] = __('Your feed(s) has been processed.','autoblogtext');
 
 		$errors = array();
@@ -1862,7 +1862,7 @@ class autoblogpremium {
 		$errors[5] = __('Please select a feed to delete.','autoblogtext');
 		$errors[6] = __('Please select a feed to process.','autoblogtext');
 
-		$errors[7] = __('Your feed(s) could not be tested.','autoblogtext');
+		$errors[7] = __('Your feed could not be tested.','autoblogtext');
 		$errors[8] = __('No new entries in your feed(s).','autoblogtext');
 
 
@@ -1888,6 +1888,14 @@ class autoblogpremium {
 		if ( isset($_GET['err']) ) {
 			echo '<div id="message" class="error fade"><p>' . $errors[(int) $_GET['err']] . '</p></div>';
 			$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
+		}
+
+		$testlog = get_autoblog_option('autoblog_last_test_log', false);
+
+		if(!empty($testlog) && $testlog !== false) {
+			echo '<div id="testmessage" class="updated fade"><p>';
+			echo implode( '<br/>', $testlog['log'] );
+			echo '</p></div>';
 		}
 
 		echo "<form action='' method='post'>";

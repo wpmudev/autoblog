@@ -10,6 +10,8 @@ class autoblogcron {
 
 	var $msgs = array();
 
+	var $testingmsgs = array();
+
 	var $siteid = 1;
 	var $blogid = 1;
 
@@ -165,6 +167,18 @@ class autoblogcron {
 
 	}
 
+	function record_testingmsg() {
+
+		$thetime = current_time('timestamp');
+
+		$msgs = array(	"timestamp" => $thetime,
+							"log" => $this->testingmsgs
+						);
+
+		update_autoblog_option('autoblog_last_test_log', $msgs);
+
+	}
+
 	function process_feeds($ids) {
 
 		// grab the feeds
@@ -199,13 +213,13 @@ class autoblogcron {
 		$results = $this->test_feed($feed_id, $ablog);
 		do_action('autoblog_post_test_feed', $feed_id, $ablog);
 
-		if(!empty($this->msgs)) {
-			$this->record_msg();
+		if(!empty($this->testingmsgs)) {
+			$this->record_testingmsg();
 		} else {
 
 		}
 
-		return $results;
+		return true;
 	}
 
 	function process_the_feed($feed_id, $ablog) {
@@ -315,14 +329,23 @@ class autoblogcron {
 		return $id;
 	}
 
-	function process_feed($feed_id, $ablog) {
+	function test_feed($feed_id, $ablog) {
+
+		$this->testingmsgs[] = __('<strong>Feed Testing Results</strong>', 'autoblogtext');
 
 		// Load simple pie if required
-		if ( !function_exists('fetch_feed') ) require_once (ABSPATH . WPINC . '/feed.php');
+		if ( !function_exists('fetch_feed') && file_exists(ABSPATH . WPINC . '/feed.php') ) {
+			require_once (ABSPATH . WPINC . '/feed.php');
+		}
+
+		// Check again in case the load didn't work
+		if ( !function_exists('fetch_feed') ) {
+			$this->testingmsgs[] = __('<strong>Error:</strong> Can not locate the feed reading file.','autoblogtext');
+		}
 
 		if(empty($ablog['url'])) {
 
-			$this->msgs[] = __('Error: No URL found for a feed','autoblogtext');
+			$this->testingmsgs[] = __('<strong>Error:</strong> There is no URL setup for this feed','autoblogtext');
 
 			return false;
 		}
@@ -338,7 +361,7 @@ class autoblogcron {
 				if($max == 0) {
 
 					// feed error
-					$this->msgs[] = __('Notice: No entries retrieved for feed - ','autoblogtext') . $ablog['url'];
+					$this->testingmsgs[] = __('<strong>Notice:</strong> I can not find any entries in your feed.','autoblogtext');
 
 				}
 			}
@@ -346,14 +369,14 @@ class autoblogcron {
 			$max = 0;
 
 			// feed error
-			$this->msgs[] = __('Error: ','autoblogtext') . $feed->get_error_message();
+			$this->testingmsgs[] = __('<strong>Error:</strong> ','autoblogtext') . $feed->get_error_message();
 
 		}
 
 		if(!empty($ablog['startfrom']) && $ablog['startfrom'] > time()) {
 			// We aren't processing this feed yet
 			// feed error
-			$this->msgs[] = __('Date margin: Not processing feed yet - ','autoblogtext') . $ablog['url'];
+			$this->testingmsgs[] = __('<strong>Notice:</strong> We are not within the date period for processing this feed yet.','autoblogtext');
 
 		}
 
@@ -361,7 +384,250 @@ class autoblogcron {
 			// We aren't processing this feed yet
 
 			// feed error
-			$this->msgs[] = __('Date margin: Stopped processing feed - ','autoblogtext') . $ablog['url'];
+			$this->testingmsgs[] = __('<strong>Notice:</strong> We are not within the date period for processing this feed anymore.','autoblogtext');
+
+		}
+
+		$processed_count = 0;
+
+		for ($x = 0; $x < $max; $x++) {
+			$item = $feed->get_item($x);
+
+			// Switch to the correct blog
+			if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {
+				switch_to_blog( (int) $ablog['blog'] );
+				$bid = (int) $ablog['blog'];
+			}
+
+			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
+			$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
+
+			$post_title = trim( $item->get_title() );
+			$post_content = trim( $item->get_content() );
+
+			if(count($results) > 0) {
+				// This post already exists so we shall stop here
+				if( $processed_count == 0) {
+					// first item already exists for this feed
+					$this->testingmsgs[] = __('<strong>Notice:</strong> I have already imported the first post in the feed "','autoblogtext') . $post_title . __('" so I would have stopped processing.','autoblogtext');
+				} else {
+					// reached an entry we have already imported
+					$this->testingmsgs[] = __('<strong>Notice:</strong> Reached an already imported the post in the feed "','autoblogtext') . $post_title . __('" so I would have stopped processing.','autoblogtext');
+
+				}
+
+				break;
+			}
+
+			if(!$this->check_feed_item($ablog, $item)) {
+				continue;
+			}
+
+			// Still here so lets process some stuff
+			if($ablog['useexcerpt'] != '1') {
+				// Create an excerpt
+				$post_content = strip_tags($item->get_content());
+
+				switch($ablog['excerptnumberof']) {
+					case 'words':	$find = ' ';
+									break;
+					case 'sentences':
+									$find = '.';
+									break;
+					case 'paragraphs':
+									$find = "\n\n";
+									break;
+				}
+
+				$splitcontent = explode($find, $post_content);
+				$post_content = '';
+				for($n = 0; $n < (int) $ablog['excerptnumber']; $n++) {
+					if(isset($splitcontent[$n])) $post_content .= $splitcontent[$n] . $find;
+				}
+			}
+
+			// Set up the author
+			if($ablog['author'] == '0') {
+				// Try the original author
+				$author = $item->get_author(); if($author) $author = $author->get_name();
+				if(function_exists('get_userdatabylogin') && !empty($author)) {
+					$author = get_userdatabylogin($author);
+				} else {
+					$author = false;
+				}
+
+				if(!$author) {
+					$author = $ablog['altauthor'];
+				}
+			} else {
+				// Use a different author
+				$author = $ablog['author'];
+			}
+
+			// Set up the category
+			if((int) $ablog['category'] >= 0) {
+				// Grab the first main category
+				$cats = array((int) $ablog['category']);
+			} else {
+				$cats = array();
+			}
+
+			$post_category = $cats;
+
+			// Set up the tags
+			$tags = array();
+			if(!empty($ablog['tag'])) {
+				$tags = array_map('trim', explode(',', $ablog['tag']));
+			}
+
+			switch($ablog['feedcatsare']) {
+				case 'categories':	//$term = get_term_by('name', $cat_name, 'category');
+									$thecats = array();
+									$thecats = $item->get_categories();
+									if(!empty($thecats)) {
+										foreach ($thecats as $category)
+										{
+											$cat_name = trim( $category->get_label() );
+											$term_id = $this->category_exists($cat_name);
+											if(!empty($term_id)) {
+												$post_category[] = $term_id;
+											} else {
+												// need to check and add cat if required
+												if($ablog['originalcategories'] == '1') {
+													// yes so add
+													$term_id = wp_create_category($cat_name);
+													if(!empty($term_id)) {
+														$post_category[] = $term_id;
+													}
+												}
+											}
+
+										}
+									}
+									break;
+
+
+				case 'tags':		// carry on as default as well
+				default:
+									$thecats = array();
+									if($ablog['originalcategories'] == '1') {
+										$thecats = $item->get_categories();
+										if(!empty($thecats)) {
+											foreach ($thecats as $category)
+											{
+													$tags[] = trim( $category->get_label() );
+											}
+										}
+									}
+
+									break;
+			}
+
+			$tax_input = array( "post_tag" => $tags);
+
+			$post_status = $ablog['poststatus'];
+			$post_type = $ablog['posttype'];
+
+			if($ablog['postdate'] != 'existing') {
+				$post_date = current_time('mysql');
+				$post_date_gmt = current_time('mysql', 1);
+			} else {
+				$thedate = $item->get_date();
+				$post_date = date('Y-m-d H:i:s', strtotime($thedate));
+				$post_date_gmt = date('Y-m-d H:i:s', strtotime($thedate) + ( get_option( 'gmt_offset' ) * 3600 ));
+			}
+
+			// Check the post dates - just in case, we only want posts within our window
+			$thedate = $item->get_date();
+			$thepostdate = strtotime($thedate);
+			if(!empty($ablog['startfrom']) && $ablog['startfrom'] > $thepostdate) {
+				// We aren't processing this feed yet
+				continue;
+			}
+
+			if(!empty($ablog['endon']) && $ablog['endon'] < $thepostdate) {
+				// We aren't processing this feed yet
+				continue;
+			}
+
+			// Move internal variables to correctly labelled ones
+			$post_author = $author;
+			$blog_ID = $bid;
+
+			$post_data = compact('blog_ID', 'post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_title', 'post_category', 'post_status', 'post_type', 'tax_input');
+
+			$post_data = apply_filters( 'autoblog_pre_post_insert', $post_data, $ablog, $item );
+
+			$this->testingmsgs[] = __('<strong>Found Post:</strong> I have found a post entititled : ','autoblogtext') . $post_title;
+
+			$processed_count++;
+
+		}
+
+		// switch us back to the previous blog
+		if(!empty($ablog['blog']) && function_exists('restore_current_blog')) {
+			restore_current_blog();
+		}
+
+		$this->msgs[] = __('<strong>Processed:</strong> I would have processed ', 'autoblogtext') . $processed_count . __(' of the ', 'autoblogtext') . $max . __(' posts in the feed.', 'autoblogtext');
+
+		return $processed_count;
+
+	}
+
+	function process_feed($feed_id, $ablog) {
+
+		// Load simple pie if required
+		if ( !function_exists('fetch_feed') && file_exists(ABSPATH . WPINC . '/feed.php') ) {
+			require_once (ABSPATH . WPINC . '/feed.php');
+		}
+		// Check again to make sure it is loaded
+		if ( !function_exists('fetch_feed')) {
+			$this->msgs[] = __('<strong>Error:</strong> Can not locate the feed reading file.','autoblogtext');
+		}
+
+		if(empty($ablog['url'])) {
+
+			$this->msgs[] = __('<strong>Error:</strong> There is no URL setup for this feed - ','autoblogtext') . $ablog['title'];
+
+			return false;
+		}
+
+		$feed = fetch_feed($ablog['url']);
+
+		if(!is_wp_error($feed)) {
+
+			if(isset($ablog['poststoimport']) && (int) $ablog['poststoimport'] != 0) {
+				$max = (int) $ablog['poststoimport'];
+			} else {
+				$max = $feed->get_item_quantity();
+				if($max == 0) {
+
+					// feed error
+					$this->msgs[] = __('<strong>Notice:</strong> I can not find any entries in your feed - ','autoblogtext') . $ablog['url'];
+
+				}
+			}
+		} else {
+			$max = 0;
+
+			// feed error
+			$this->msgs[] = __('<strong>Error:</strong> ','autoblogtext') . $feed->get_error_message();
+
+		}
+
+		if(!empty($ablog['startfrom']) && $ablog['startfrom'] > time()) {
+			// We aren't processing this feed yet
+			// feed error
+			$this->msgs[] = __('<strong>Notice:</strong> We are not within the date period for processing this feed yet - ','autoblogtext') . $ablog['url'];
+
+		}
+
+		if(!empty($ablog['endon']) && $ablog['endon'] < time()) {
+			// We aren't processing this feed yet
+
+			// feed error
+			$this->msgs[] = __('<strong>Notice:</strong> We are not within the date period for processing this feed anymore - ','autoblogtext') . $ablog['url'];
 
 		}
 
@@ -380,9 +646,12 @@ class autoblogcron {
 
 			if(count($results) > 0) {
 				// This post already exists so we shall stop here
-
-				// first item already exists for this feed
-				$this->msgs[] = __('Notice: No new entries in feed - ','autoblogtext') . $ablog['url'];
+				if( $processed_count == 0 ) {
+					// first item already exists for this feed
+					$this->msgs[] = __('<strong>Notice:</strong> There are no new entries in the feed - ','autoblogtext') . $ablog['url'];
+				} else {
+					$this->msgs[] = __('<strong>Notice:</strong> Reached an already imported entry so stopped processing the feed - ','autoblogtext') . $ablog['url'];
+				}
 
 				break;
 			}
@@ -572,7 +841,7 @@ class autoblogcron {
 			} else {
 
 				// error writing post
-				$this->msgs[] = __('Error: ','autoblog') . $post_ID->get_error_message();
+				$this->msgs[] = __('<strong>Error:</strong> ','autoblogtext') . $post_ID->get_error_message();
 
 			}
 		}
@@ -588,7 +857,7 @@ class autoblogcron {
 			restore_current_blog();
 		}
 
-		$this->msgs[] = __('Processed: ', 'autoblogtext') . $processed_count . __(' of the ', 'autoblogtext') . $max . __(' posts in the feed - ', 'autoblogtext') . $ablog['url'];
+		$this->msgs[] = __('<strong>Processed:</strong> I have processed ', 'autoblogtext') . $processed_count . __(' of the ', 'autoblogtext') . $max . __(' posts in the feed - ', 'autoblogtext') . $ablog['url'];
 
 		return $processed_count;
 
