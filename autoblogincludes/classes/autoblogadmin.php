@@ -145,10 +145,8 @@ class autoblogpremium {
 		// actions
 		add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_news') );
 
-		$debug = get_site_option('autoblog_debug', false);
-		if($debug) {
-			add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_debug') );
-		}
+
+		add_action( 'autoblog_dashboard_left', array(&$this, 'dashboard_report') );
 
 		add_action( 'autoblog_dashboard_right', array(&$this, 'dashboard_stats') );
 
@@ -406,7 +404,7 @@ class autoblogpremium {
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(!function_exists('is_network_admin') || !is_network_admin()) {
-				add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+				//add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
 				add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), 'manage_options', "autoblog_addons", array(&$this,'handle_addons_panel'));
 
 				do_action('autoblog_site_menu');
@@ -416,7 +414,7 @@ class autoblogpremium {
 				do_action('autoblog_network_menu');
 			}
 		} else {
-			add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
+			//add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
 			add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), 'manage_options', "autoblog_addons", array(&$this,'handle_addons_panel'));
 
 			do_action('autoblog_site_menu');
@@ -434,39 +432,28 @@ class autoblogpremium {
 		$debug = get_autoblog_option('autoblog_debug', false);
 
 		?>
-		<div class="postbox " id="dashboard_right_now">
+		<div class="postbox ">
 			<h3 class="hndle"><span><?php _e('Autoblog','autoblogtext'); ?></span></h3>
 			<div class="inside">
 				<?php
 				echo "<p>";
 				echo __('You are running Autoblog version ','autoblogtext') . "<strong>" . $plugin['Version'] . '</strong>';
 				echo "</p>";
-
-				echo "<p>";
-				echo __('Debug mode is ','autoblogtext') . "<strong>";
-				if($debug) {
-					echo __('Enabled','autoblogtext');
-				} else {
-					echo __('Disabled','autoblogtext');
-				}
-				echo '</strong>';
-				echo "</p>";
 				?>
-				<br class="clear">
 			</div>
 		</div>
 		<?php
 	}
 
-	function dashboard_debug() {
+	function dashboard_report() {
 
 		$sql = $this->db->prepare( "SELECT * FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 0, 25", $this->db->siteid, "autoblog_log_%");
 
 		$logs = $this->db->get_results( $sql );
 
 		?>
-		<div class="postbox " id="dashboard_right_now">
-			<h3 class="hndle"><span><?php _e('Debug report','autoblogtext'); ?></span></h3>
+		<div class="postbox ">
+			<h3 class="hndle"><span><?php _e('Processing Report','autoblogtext'); ?></span></h3>
 			<div class="inside">
 				<?php
 				if(!empty($logs)) {
@@ -483,12 +470,11 @@ class autoblogpremium {
 					}
 				} else {
 					echo "<p>";
-					echo __('No debug logs are available, either you have not processed a feed or everything is running smoothly.','autoblogtext');
+					echo __('No processing reports are available, either you have not processed a feed or everything is running smoothly.','autoblogtext');
 					echo "</p>";
 				}
 
 				?>
-				<br class="clear">
 			</div>
 		</div>
 		<?php
@@ -512,7 +498,7 @@ class autoblogpremium {
 		$autos = $this->get_autoblogentries();
 
 		?>
-		<div class="postbox " id="dashboard_right_now">
+		<div class="postbox ">
 			<h3 class="hndle"><span><?php _e('Statistics - posts per day','autoblogtext'); ?></span></h3>
 			<div class="inside">
 				<?php
@@ -529,7 +515,6 @@ class autoblogpremium {
 						}
 					}
 				?>
-				<br class="clear">
 			</div>
 		</div>
 		<?php
@@ -1816,7 +1801,7 @@ class autoblogpremium {
 					if(ab_process_feed($feed->feed_id, $details)) {
 						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 					} else {
-						wp_safe_redirect( add_query_arg( 'err', 4, 'admin.php?page=' . $page ) );
+						wp_safe_redirect( add_query_arg( 'err', 8, 'admin.php?page=' . $page ) );
 					}
 				}
 
@@ -1832,9 +1817,9 @@ class autoblogpremium {
 					$details = unserialize($feed->feed_meta);
 
 					if(ab_test_feed($feed->feed_id, $details)) {
-						wp_safe_redirect( add_query_arg( 'msg', 5, 'admin.php?page=' . $page ) );
+						wp_safe_redirect( add_query_arg( 'msg', 7, 'admin.php?page=' . $page ) );
 					} else {
-						wp_safe_redirect( add_query_arg( 'err', 5, 'admin.php?page=' . $page ) );
+						wp_safe_redirect( add_query_arg( 'err', 7, 'admin.php?page=' . $page ) );
 					}
 
 				}
@@ -1864,17 +1849,22 @@ class autoblogpremium {
 		$messages[2] = __('Your feed has been updated.','autoblogtext');
 		$messages[3] = __('Your feed(s) have been deleted.','autoblogtext');
 		$messages[4] = __('Your feed(s) has been processed.','autoblogtext');
-		$messages[5] = __('Your feed(s) has been tested.','autoblogtext');
+
+		$messages[7] = __('Your feed(s) has been tested.','autoblogtext');
+		$messages[8] = __('Your feed(s) has been processed.','autoblogtext');
 
 		$errors = array();
 		$errors[1] = __('Your feed could not be added.','autoblogtext');
 		$errors[2] = __('Your feed could not be updated.','autoblogtext');
 		$errors[3] = __('Your feed(s) could not be deleted.','autoblogtext');
 		$errors[4] = __('Your feed(s) could not be processed.','autoblogtext');
-		$errors[5] = __('Your feed(s) could not be tested.','autoblogtext');
 
 		$errors[5] = __('Please select a feed to delete.','autoblogtext');
 		$errors[6] = __('Please select a feed to process.','autoblogtext');
+
+		$errors[7] = __('Your feed(s) could not be tested.','autoblogtext');
+		$errors[8] = __('No new entries in your feed(s).','autoblogtext');
+
 
 		if(isset($_GET['edit']) && is_numeric(addslashes($_GET['edit']))) {
 			$this->handle_edit_page(addslashes($_GET['edit']));

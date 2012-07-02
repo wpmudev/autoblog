@@ -8,7 +8,7 @@ class autoblogcron {
 
 	var $debug = false;
 
-	var $errors = array();
+	var $msgs = array();
 
 	var $siteid = 1;
 	var $blogid = 1;
@@ -153,15 +153,15 @@ class autoblogcron {
 
 	}
 
-	function record_error() {
+	function record_msg() {
 
 		$thetime = current_time('timestamp');
 
-		$errors = array(	"timestamp" => $thetime,
-							"log" => $this->errors
+		$msgs = array(	"timestamp" => $thetime,
+							"log" => $this->msgs
 						);
 
-		update_autoblog_option('autoblog_log_' . $thetime, $errors);
+		update_autoblog_option('autoblog_log_' . $thetime, $msgs);
 
 	}
 
@@ -185,12 +185,27 @@ class autoblogcron {
 			do_action('autoblog_post_process_feeds');
 		}
 
-		if(!empty($this->errors)) {
-			$this->record_error();
+		if(!empty($this->msgs)) {
+			$this->record_msg();
 		}
 
 		return true;
 
+	}
+
+	function test_the_feed($feed_id, $ablog) {
+
+		do_action('autoblog_pre_test_feed', $feed_id, $ablog);
+		$results = $this->test_feed($feed_id, $ablog);
+		do_action('autoblog_post_test_feed', $feed_id, $ablog);
+
+		if(!empty($this->msgs)) {
+			$this->record_msg();
+		} else {
+
+		}
+
+		return $results;
 	}
 
 	function process_the_feed($feed_id, $ablog) {
@@ -199,8 +214,10 @@ class autoblogcron {
 		$results = $this->process_feed($feed_id, $ablog);
 		do_action('autoblog_post_process_feed', $feed_id, $ablog);
 
-		if(!empty($this->errors)) {
-			$this->record_error();
+		if(!empty($this->msgs)) {
+			$this->record_msg();
+		} else {
+
 		}
 
 		return $results;
@@ -304,10 +321,9 @@ class autoblogcron {
 		if ( !function_exists('fetch_feed') ) require_once (ABSPATH . WPINC . '/feed.php');
 
 		if(empty($ablog['url'])) {
-			if($this->debug) {
-				// feed error
-				$this->errors[] = __('Error: No URL found for a feed','autoblogtext');
-			}
+
+			$this->msgs[] = __('Error: No URL found for a feed','autoblogtext');
+
 			return false;
 		}
 
@@ -320,35 +336,36 @@ class autoblogcron {
 			} else {
 				$max = $feed->get_item_quantity();
 				if($max == 0) {
-					if($this->debug) {
-						// feed error
-						$this->errors[] = __('Notice: No entries retrieved for feed - ','autoblogtext') . $ablog['url'];
-					}
+
+					// feed error
+					$this->msgs[] = __('Notice: No entries retrieved for feed - ','autoblogtext') . $ablog['url'];
+
 				}
 			}
 		} else {
 			$max = 0;
-			if($this->debug) {
-				// feed error
-				$this->errors[] = __('Error: ','autoblogtext') . $feed->get_error_message();
-			}
+
+			// feed error
+			$this->msgs[] = __('Error: ','autoblogtext') . $feed->get_error_message();
+
 		}
 
 		if(!empty($ablog['startfrom']) && $ablog['startfrom'] > time()) {
 			// We aren't processing this feed yet
-			if($this->debug) {
-				// feed error
-				$this->errors[] = __('Date margin: Not processing feed yet - ','autoblogtext') . $ablog['url'];
-			}
+			// feed error
+			$this->msgs[] = __('Date margin: Not processing feed yet - ','autoblogtext') . $ablog['url'];
+
 		}
 
 		if(!empty($ablog['endon']) && $ablog['endon'] < time()) {
 			// We aren't processing this feed yet
-			if($this->debug) {
-				// feed error
-				$this->errors[] = __('Date margin: Stopped processing feed - ','autoblogtext') . $ablog['url'];
-			}
+
+			// feed error
+			$this->msgs[] = __('Date margin: Stopped processing feed - ','autoblogtext') . $ablog['url'];
+
 		}
+
+		$processed_count = 0;
 
 		for ($x = 0; $x < $max; $x++) {
 			$item = $feed->get_item($x);
@@ -363,10 +380,10 @@ class autoblogcron {
 
 			if(count($results) > 0) {
 				// This post already exists so we shall stop here
-				if($this->debug) {
-					// first item already exists for this feed
-					$this->errors[] = __('Notice: No new entries in feed - ','autoblogtext') . $ablog['url'];
-				}
+
+				// first item already exists for this feed
+				$this->msgs[] = __('Notice: No new entries in feed - ','autoblogtext') . $ablog['url'];
+
 				break;
 			}
 
@@ -514,6 +531,8 @@ class autoblogcron {
 			$post_ID = wp_insert_post($post_data);
 
 			if ( !is_wp_error( $post_ID ) ) {
+				$processed_count++;
+
 				update_post_meta( $post_ID , 'original_source', trim( $item->get_permalink() ) );
 				update_post_meta( $post_ID , 'original_feed', trim( $ablog['url'] ) );
 				update_post_meta( $post_ID , 'original_feed_title', trim( $ablog['title'] ) );
@@ -551,10 +570,10 @@ class autoblogcron {
 				do_action( 'autoblog_post_post_insert', $post_ID, $ablog, $item );
 
 			} else {
-				if($this->debug) {
-					// error writing post
-					$this->errors[] = __('Error: ','autoblog') . $post_ID->get_error_message();
-				}
+
+				// error writing post
+				$this->msgs[] = __('Error: ','autoblog') . $post_ID->get_error_message();
+
 			}
 		}
 
@@ -569,7 +588,9 @@ class autoblogcron {
 			restore_current_blog();
 		}
 
-		return true;
+		$this->msgs[] = __('Processed: ', 'autoblogtext') . $processed_count . __(' of the ', 'autoblogtext') . $max . __(' posts in the feed - ', 'autoblogtext') . $ablog['url'];
+
+		return $processed_count;
 
 	}
 
@@ -590,7 +611,7 @@ class autoblogcron {
 				if(time() > $timestart + $timelimit) {
 					if($this->debug) {
 						// time out
-						$this->errors[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
+						$this->msgs[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
 					}
 					break;
 				}
@@ -612,7 +633,7 @@ class autoblogcron {
 					if($this->debug) {
 						// no uri or not processing
 						if(empty($details['url'])) {
-							$this->errors[] = __('Error: No URL found for a feed.','autoblogtext');
+							$this->msgs[] = __('Error: No URL found for a feed.','autoblogtext');
 						}
 					}
 				}
@@ -624,8 +645,8 @@ class autoblogcron {
 			}
 		}
 
-		if(!empty($this->errors)) {
-			$this->record_error();
+		if(!empty($this->msgs)) {
+			$this->record_msg();
 		}
 
 	}
@@ -658,10 +679,9 @@ class autoblogcron {
 			foreach( (array) $autoblogs as $key => $ablog) {
 
 				if(time() > $timestart + $timelimit) {
-					if($this->debug) {
-						// time out
-						$this->errors[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
-					}
+					// time out
+					$this->msgs[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
+
 					break;
 				}
 
@@ -682,7 +702,7 @@ class autoblogcron {
 					if($this->debug) {
 						// no uri or not processing
 						if(empty($details['url'])) {
-							$this->errors[] = __('Error: No URL found for a feed.','autoblogtext');
+							$this->msgs[] = __('Error: No URL found for a feed.','autoblogtext');
 						}
 					}
 				}
@@ -694,8 +714,8 @@ class autoblogcron {
 			}
 		}
 
-		if(!empty($this->errors)) {
-			$this->record_error();
+		if(!empty($this->msgs)) {
+			$this->record_msg();
 		}
 
 	}
