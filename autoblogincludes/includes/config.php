@@ -8,7 +8,7 @@ if(!defined('AUTOBLOG_GLOBAL')) define( 'AUTOBLOG_GLOBAL', true );
 if(!defined('AUTOBLOG_PROCESSING_TIMELIMIT')) define( 'AUTOBLOG_PROCESSING_TIMELIMIT', 6);
 
 // Processing will take place every 10 minutes (options are 10 or 5).
-if(!defined('AUTOBLOG_PROCESSING_CHECKLIMIT')) define( 'AUTOBLOG_PROCESSING_CHECKLIMIT', 10);
+if(!defined('AUTOBLOG_PROCESSING_CHECKLIMIT')) define( 'AUTOBLOG_PROCESSING_CHECKLIMIT', 1);
 
 // In a multisite install will attempt to process feeds for all sites rather than just local ones
 if(!defined('AUTOBLOG_FORCE_PROCESS_ALL')) define( 'AUTOBLOG_FORCE_PROCESS_ALL', false);
@@ -22,6 +22,6 @@ if(!defined('AUTOBLOG_HANDLE_FAKE_TAGS')) define( 'AUTOBLOG_HANDLE_FAKE_TAGS', t
 // To see feeds from older versions of the plugin that have yet to be repaired.
 if(!defined('AUTOBLOG_LAZY_ID')) define( 'AUTOBLOG_LAZY_ID', true);
 
-// To switch from a CRON processing method set this to 'pageload'.
+// To switch from a CRON processing method set this to 'pageload' (default is 'cron' to use the wp-cron).
 if(!defined('AUTOBLOG_PROCESSING_METHOD')) define( 'AUTOBLOG_PROCESSING_METHOD', 'cron');
 ?>

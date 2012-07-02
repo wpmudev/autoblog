@@ -30,7 +30,7 @@ class autoblogcron {
 			$this->$table = autoblog_db_prefix($this->db, $table);
 		}
 
-		add_filter( 'wp_feed_cache_transient_lifetime', array(&$this, 'feed_cache') );
+		add_filter( 'wp_feed_cache_transient_lifetime', array(&$this, 'feed_cache'), 10, 2 );
 
 		// override with option.
 		$this->debug = get_autoblog_option('autoblog_debug', false);
@@ -66,7 +66,7 @@ class autoblogcron {
 		$this->__construct();
 	}
 
-	function feed_cache($ignore, $ignoreurl) {
+	function feed_cache($ignore = false, $ignoreurl = false) {
 		return (int) 300;
 	}
 
@@ -913,9 +913,6 @@ class autoblogcron {
 
 		global $wpdb;
 
-		// grab the feeds
-		$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
-
 		// Our starting time
 		$timestart = current_time('timestamp');
 
@@ -924,8 +921,11 @@ class autoblogcron {
 
 		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week', current_time('timestamp')));
 
-		if(!empty($autoblogs) && $lastprocessing < strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
+		if($lastprocessing < strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
 			update_autoblog_option('autoblog_processing', current_time('timestamp'));
+
+			// grab the feeds
+			$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
 
 			foreach( (array) $autoblogs as $key => $ablog) {
 
