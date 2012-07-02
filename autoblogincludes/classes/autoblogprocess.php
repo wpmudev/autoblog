@@ -85,8 +85,8 @@ class autoblogcron {
 	function set_up_schedule() {
 
 		if(defined('AUTOBLOG_PROCESSING_METHOD') && AUTOBLOG_PROCESSING_METHOD == 'cron') {
-			if ( !wp_next_scheduled( 'autoblog_process_all_feeds' ) ) {
-				wp_schedule_event(time(), $this->checkperiod, 'autoblog_process_all_feeds');
+			if ( !wp_next_scheduled( 'autoblog_process_all_feeds_for_cron' ) ) {
+				wp_schedule_event(time(), $this->checkperiod, 'autoblog_process_all_feeds_for_cron');
 			}
 		} else {
 			// Use an init method
@@ -224,7 +224,7 @@ class autoblogcron {
 		if(!empty($this->testingmsgs)) {
 			$this->record_testingmsg();
 		} else {
-
+			delete_autoblog_option('autoblog_last_test_log');
 		}
 
 		return true;

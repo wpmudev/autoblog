@@ -263,7 +263,16 @@ function autoblog_time2str($ts)
 
 		$abc->always_process_autoblog();
 	}
-	add_action( 'autoblog_process_all_feeds', 'ab_always_process_autoblog' );
+
+	function ab_process_autoblog_for_cron() {
+		global $abc;
+
+		if(defined('AUTOBLOG_PROCESSING_METHOD') && AUTOBLOG_PROCESSING_METHOD == 'cron') {
+			$abc->always_process_autoblog();
+		}
+	}
+
+	add_action( 'autoblog_process_all_feeds_for_cron', 'ab_process_autoblog_for_cron' );
 
 	function ab_test_feed($id, $details) {
 
