@@ -1896,8 +1896,6 @@ class autoblogpremium {
 			echo '<div id="testmessage" class="updated fade"><p>';
 			echo implode( '<br/>', $testlog['log'] );
 			echo '</p></div>';
-
-			//delete_autoblog_option('autoblog_last_test_log');
 		}
 
 		echo "<form action='' method='post'>";
