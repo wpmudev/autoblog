@@ -83,9 +83,17 @@ class autoblogcron {
 	}
 
 	function set_up_schedule() {
-		if ( !wp_next_scheduled( 'autoblog_process_all_feeds' ) ) {
+
+		if(defined('AUTOBLOG_PROCESSING_METHOD') && AUTOBLOG_PROCESSING_METHOD == 'cron') {
+			if ( !wp_next_scheduled( 'autoblog_process_all_feeds' ) ) {
 				wp_schedule_event(time(), $this->checkperiod, 'autoblog_process_all_feeds');
 			}
+		} else {
+			// Use an init method
+			$this->process_autoblog();
+		}
+
+
 	}
 
 	function get_autoblogentries($timestamp) {
@@ -870,20 +878,9 @@ class autoblogcron {
 		// grab the feeds
 		$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
 
-		// Our starting time
-		$timestart = current_time('timestamp');
-
 		if(!empty($autoblogs)) {
 
 			foreach( (array) $autoblogs as $key => $ablog) {
-
-				if(time() > $timestart + $timelimit) {
-					if($this->debug) {
-						// time out
-						$this->msgs[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
-					}
-					break;
-				}
 
 				$details = unserialize($ablog->feed_meta);
 				$process = false;
@@ -894,23 +891,12 @@ class autoblogcron {
 					$process = false;
 				}
 
-				if($process && !empty($details['url'])) {
+				if($process) {
 					do_action('autoblog_pre_process_feed', $ablog->feed_id, $details);
 					$this->process_feed($ablog->feed_id, $details);
 					do_action('autoblog_post_process_feed', $ablog->feed_id, $details);
-				} else {
-					if($this->debug) {
-						// no uri or not processing
-						if(empty($details['url'])) {
-							$this->msgs[] = __('Error: No URL found for a feed.','autoblogtext');
-						}
-					}
 				}
 
-			}
-		} else {
-			if($this->debug) {
-				// empty list or not processing
 			}
 		}
 
@@ -937,19 +923,15 @@ class autoblogcron {
 		$timelimit = AUTOBLOG_PROCESSING_TIMELIMIT; // max seconds for processing
 
 		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week', current_time('timestamp')));
-		if($lastprocessing == 'yes' || $lastprocessing == 'no' || $lastprocessing == 'np') {
-			$lastprocessing = strtotime('-1 hour', current_time('timestamp'));
-			update_autoblog_option('autoblog_processing', $lastprocessing);
-		}
 
-		if(!empty($autoblogs) && $lastprocessing <= strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
+		if(!empty($autoblogs) && $lastprocessing < strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
 			update_autoblog_option('autoblog_processing', current_time('timestamp'));
 
 			foreach( (array) $autoblogs as $key => $ablog) {
 
-				if(time() > $timestart + $timelimit) {
+				if(current_time('timestamp') > $timestart + $timelimit) {
 					// time out
-					$this->msgs[] = __('Notice: Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
+					$this->msgs[] = __('<strong>Notice:</strong> Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
 
 					break;
 				}
@@ -963,24 +945,15 @@ class autoblogcron {
 					$process = false;
 				}
 
-				if($process && !empty($details['url'])) {
+				if($process) {
 					do_action('autoblog_pre_process_feed', $ablog->feed_id, $details);
 					$this->process_feed($ablog->feed_id, $details);
 					do_action('autoblog_post_process_feed', $ablog->feed_id, $details);
-				} else {
-					if($this->debug) {
-						// no uri or not processing
-						if(empty($details['url'])) {
-							$this->msgs[] = __('Error: No URL found for a feed.','autoblogtext');
-						}
-					}
 				}
 
 			}
 		} else {
-			if($this->debug) {
-				// empty list or not processing
-			}
+
 		}
 
 		if(!empty($this->msgs)) {

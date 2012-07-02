@@ -21,4 +21,7 @@ if(!defined('AUTOBLOG_HANDLE_FAKE_TAGS')) define( 'AUTOBLOG_HANDLE_FAKE_TAGS', t
 
 // To see feeds from older versions of the plugin that have yet to be repaired.
 if(!defined('AUTOBLOG_LAZY_ID')) define( 'AUTOBLOG_LAZY_ID', true);
+
+// To switch from a CRON processing method set this to 'pageload'.
+if(!defined('AUTOBLOG_PROCESSING_METHOD')) define( 'AUTOBLOG_PROCESSING_METHOD', 'cron');
 ?>
