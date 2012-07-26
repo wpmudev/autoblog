@@ -2075,16 +2075,10 @@ class autoblogpremium {
 
 				if($table->nextcheck != 0) {
 
-					if($table->nextcheck <= time()) {
-						echo "<span style='color: red;'>";
-					}
 					echo "<abbr title='" . date_i18n($timezone_format, $table->nextcheck) . "'>";
 					echo autoblog_time2str($table->nextcheck );
 					echo "</abbr>";
-					//echo date_i18n($timezone_format, $table->nextcheck);
-					if($table->nextcheck <= time()) {
-						echo "</span>";
-					}
+
 
 				} else {
 					echo __('Never', 'autoblogtext');
