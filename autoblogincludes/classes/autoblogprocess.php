@@ -583,6 +583,13 @@ class autoblogcron {
 
 	}
 
+	function switch_off_verifyssl( $args, $url ) {
+
+		$args['sslverify'] = false;
+
+		return $args;
+	}
+
 	function process_feed($feed_id, $ablog) {
 
 		// Load simple pie if required
@@ -601,7 +608,14 @@ class autoblogcron {
 			return false;
 		}
 
+		if(!empty($ablog['forcessl']) && $ablog['forcessl'] == 'no') {
+			// Add a filter to remove the force sll check
+			add_filter('http_request_args', array(&$this, 'switch_off_verifyssl'), 10, 2);
+		}
+
 		$feed = fetch_feed($ablog['url']);
+
+		remove_filter('http_request_args', array(&$this, 'switch_off_verifyssl'), 10, 2);
 
 		if(!is_wp_error($feed)) {
 
