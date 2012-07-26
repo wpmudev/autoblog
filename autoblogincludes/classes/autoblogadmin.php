@@ -1019,6 +1019,25 @@ class autoblogpremium {
 		echo "</td>";
 		echo "</tr>\n";
 
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Force SSL verification','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[forcessl]' class='field'>";
+		echo "<option value='yes'";
+		selected( 'yes', $table['forcessl']);
+		echo ">" . __('Yes','autoblogtext') . "</option>";
+		echo "<option value='no'";
+		selected( 'no', $table['forcessl']);
+		echo ">" . __('No','autoblogtext') . "</option>";
+		echo "</select>&nbsp;";
+		echo $this->_tips->add_tip(  __('If you are getting SSL errors, or your feed uses a self-signed SSL certificate then set this to <strong>No</strong>.', 'autoblogtext') );
+		echo "</td>";
+		echo "</tr>\n";
+
+
+
 		do_action( 'autoblog_feed_edit_form_end', $key, $details );
 
 		echo "</table>\n";
@@ -1448,6 +1467,21 @@ class autoblogpremium {
 		echo "" . $this->_tips->add_tip( __('Set the date you want to stop processing posts from this feed.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Force SSL verification','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[forcessl]' class='field'>";
+		echo "<option value='yes'";
+		echo ">" . __('Yes','autoblogtext') . "</option>";
+		echo "<option value='no'";
+		echo ">" . __('No','autoblogtext') . "</option>";
+		echo "</select>&nbsp;";
+		echo $this->_tips->add_tip(  __('If you are getting SSL errors, or your feed uses a self-signed SSL certificate then set this to <strong>No</strong>.', 'autoblogtext') );
+		echo "</td>";
+		echo "</tr>\n";
 
 		do_action( 'autoblog_feed_edit_form_end', $key, '' );
 
