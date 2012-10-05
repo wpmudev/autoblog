@@ -173,6 +173,9 @@ class autoblogcron {
 
 		update_autoblog_option('autoblog_log_' . $thetime, $msgs);
 
+		// Remove any old entries so we only keep the most recent 25
+		clear_autoblog_logs();
+
 	}
 
 	function record_testingmsg() {

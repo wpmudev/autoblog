@@ -76,6 +76,28 @@ function delete_autoblog_option($key) {
 
 }
 
+function clear_autoblog_logs( $startat = 25, $number = 100 ) {
+
+	if(defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+		$sql = $this->db->prepare( "SELECT meta_id FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT %d, %d", $this->db->siteid, "autoblog_log_%", $startat, $number );
+		$ids = $this->db->get_col( $sql );
+
+		if(!empty($ids)) {
+			$sql2 = $this->db->prepare( "DELETE FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_id IN (" . implode(',', $ids) . ")", $this->db->siteid);
+			$this->db->query( $sql2 );
+		}
+	} else {
+		$sql = $this->db->prepare( "SELECT option_id FROM {$this->db->options} WHERE option_name LIKE %s ORDER BY option_id DESC LIMIT %d, %d", "autoblog_log_%", $startat, $number );
+		$ids = $this->db->get_col( $sql );
+
+		if(!empty($ids)) {
+			$sql2 = $this->db->prepare( "DELETE FROM {$this->db->options} WHERE option_id IN (" . implode(',', $ids) . ")" );
+			$this->db->query( $sql2 );
+		}
+	}
+
+}
+
 function autoblog_db_prefix(&$wpdb, $table) {
 
 	if( defined('AUTOBLOG_GLOBAL') && AUTOBLOG_GLOBAL == true ) {
