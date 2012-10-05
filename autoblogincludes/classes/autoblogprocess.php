@@ -67,7 +67,7 @@ class autoblogcron {
 	}
 
 	function feed_cache($ignore = false, $ignoreurl = false) {
-		return (int) 300;
+		return (int) 60;
 	}
 
 	function add_time_period( $periods ) {
