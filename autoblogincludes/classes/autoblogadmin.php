@@ -479,16 +479,6 @@ class autoblogpremium {
 		</div>
 		<?php
 
-		// Get some columns to remove - as a tidy up
-		$sql2 = $this->db->prepare( "SELECT meta_id FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 25, 100", $this->db->siteid, "autoblog_log_%");
-		$ids = $this->db->get_col( $sql2 );
-
-		if(!empty($ids)) {
-			$sql3 = $this->db->prepare( "DELETE FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_id IN (" . implode(',', $ids) . ")", $this->db->siteid);
-			$this->db->query( $sql3 );
-		}
-
-
 	}
 
 
@@ -576,7 +566,7 @@ class autoblogpremium {
 			$table['posttype'] = 'post';
 		}
 
-		echo '<div class="postbox" id="ab-' . $details->feed_id . '">';
+		echo '<div class="postbox autoblogeditbox" id="ab-' . $details->feed_id . '">';
 
 		echo '<h3 class="hndle"><span>' . __('Feed : ','autoblogtext') . esc_html(stripslashes($table['title'])) . '</span></h3>';
 		echo '<div class="inside">';
@@ -1065,9 +1055,9 @@ class autoblogpremium {
 		global $blog_id;
 
 		if(empty($key)) {
-			echo '<div class="postbox blanktable" id="blanktable" style="display: none;">';
+			echo '<div class="postbox blanktable autoblogeditbox" id="blanktable" style="display: none;">';
 		} else {
-			echo '<div class="postbox" id="ab-' . $key . '">';
+			echo '<div class="postbox autoblogeditbox" id="ab-' . $key . '">';
 		}
 
 
@@ -1640,7 +1630,7 @@ class autoblogpremium {
 
 		// Show the heading
 		echo '<div class="icon32" id="icon-edit"><br/></div>';
-		echo "<h2>" . __('Auto Blog Feeds','autoblogtext') . "</h2>";
+		echo "<h2>" . __('Auto Blog Feeds','autoblogtext') . '<a class="add-new-h2" href="admin.php?page=' . $page . '&action=add">' . __('Add New','membership') . '</a></h2>';
 
 		echo "<br/>";
 

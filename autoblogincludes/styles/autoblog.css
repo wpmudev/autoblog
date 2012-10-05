@@ -76,9 +76,13 @@ div.inside table tbody tr td span {
 }
 
 div.postbox h3.hndle {
+	cursor: auto;
+}
+
+div.autoblogeditbox h3.hndle {
 	margin: 0;
 	line-height: 1em;
-	font-size: 12px;
+	font-size: 15px;
 	padding: 7px 9px;
 	cursor: auto;
 }
