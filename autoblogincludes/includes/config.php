@@ -5,6 +5,9 @@
 if(!defined('AUTOBLOG_GLOBAL')) define( 'AUTOBLOG_GLOBAL', true );
 
 // Processing will stop after 6 seconds (default) so as not to overload your server
+if(!defined('AUTOBLOG_SIMPLEPIE_CACHE_TIMELIMIT')) define( 'AUTOBLOG_SIMPLEPIE_CACHE_TIMELIMIT', 60);
+
+// Processing will stop after 6 seconds (default) so as not to overload your server
 if(!defined('AUTOBLOG_PROCESSING_TIMELIMIT')) define( 'AUTOBLOG_PROCESSING_TIMELIMIT', 6);
 
 // Processing will take place every minute

@@ -66,8 +66,9 @@ class autoblogcron {
 		$this->__construct();
 	}
 
-	function feed_cache($ignore = false, $ignoreurl = false) {
-		return (int) 60;
+	function feed_cache($cacheperiod = false, $url = false) {
+
+		return (int) AUTOBLOG_SIMPLEPIE_CACHE_TIMELIMIT;
 	}
 
 	function add_time_period( $periods ) {
