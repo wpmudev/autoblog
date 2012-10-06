@@ -295,7 +295,7 @@ function autoblog_time2str($ts)
 	}
 
 	/**
-	 * Build SimplePie object based on RSS or Atom feed from URL.
+	 * Build Latest SimplePie object based on RSS or Atom feed from URL.
 	 *
 	 * @since 2.8
 	 *
