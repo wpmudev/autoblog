@@ -48,9 +48,9 @@ if(is_admin()) {
 	$abp = new autoblogpremium();
 }
 
+// Include the processing class
 require_once('autoblogincludes/classes/autoblogprocess.php');
 $abc = new autoblogcron();
 
 load_autoblog_addons();
 load_networkautoblog_addons();
-?>
