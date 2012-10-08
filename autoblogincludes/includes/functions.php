@@ -78,21 +78,23 @@ function delete_autoblog_option($key) {
 
 function clear_autoblog_logs( $startat = 25, $number = 100 ) {
 
+	global $wpdb;
+
 	if(defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
-		$sql = $this->db->prepare( "SELECT meta_id FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT %d, %d", $this->db->siteid, "autoblog_log_%", $startat, $number );
-		$ids = $this->db->get_col( $sql );
+		$sql = $wpdb->prepare( "SELECT meta_id FROM {$wpdb->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT %d, %d", $wpdb->siteid, "autoblog_log_%", $startat, $number );
+		$ids = $wpdb->get_col( $sql );
 
 		if(!empty($ids)) {
-			$sql2 = $this->db->prepare( "DELETE FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_id IN (" . implode(',', $ids) . ")", $this->db->siteid);
-			$this->db->query( $sql2 );
+			$sql2 = $this->db->prepare( "DELETE FROM {$wpdb->sitemeta} WHERE site_id = %d AND meta_id IN (" . implode(',', $ids) . ")", $wpdb->siteid);
+			$wpdb->query( $sql2 );
 		}
 	} else {
-		$sql = $this->db->prepare( "SELECT option_id FROM {$this->db->options} WHERE option_name LIKE %s ORDER BY option_id DESC LIMIT %d, %d", "autoblog_log_%", $startat, $number );
-		$ids = $this->db->get_col( $sql );
+		$sql = $wpdb->prepare( "SELECT option_id FROM {$wpdb->options} WHERE option_name LIKE %s ORDER BY option_id DESC LIMIT %d, %d", "autoblog_log_%", $startat, $number );
+		$ids = $wpdb->get_col( $sql );
 
 		if(!empty($ids)) {
-			$sql2 = $this->db->prepare( "DELETE FROM {$this->db->options} WHERE option_id IN (" . implode(',', $ids) . ")" );
-			$this->db->query( $sql2 );
+			$sql2 = $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_id IN (" . implode(',', $ids) . ")" );
+			$wpdb->query( $sql2 );
 		}
 	}
 

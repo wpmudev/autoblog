@@ -420,6 +420,9 @@ class autoblogpremium {
 			do_action('autoblog_site_menu');
 		}
 
+		// Add the new options menu
+		add_submenu_page('autoblog', __('Settings','autoblogtext'), __('Settings','autoblogtext'), 'manage_options', "autoblog_settings", array(&$this,'handle_settings_page'));
+
 		do_action('autoblog_global_menu');
 
 	}
