@@ -405,6 +405,11 @@ class autoblogcron {
 		for ($x = 0; $x < $max; $x++) {
 			$item = $feed->get_item($x);
 
+			if(!is_object($item)) {
+				// Smomething has gone wrong with this post item so we'll ignore it and try the next one instead
+				continue;
+			}
+
 			// Switch to the correct blog
 			if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {
 				switch_to_blog( (int) $ablog['blog'] );
@@ -661,6 +666,11 @@ class autoblogcron {
 
 		for ($x = 0; $x < $max; $x++) {
 			$item = $feed->get_item($x);
+
+			if(!is_object($item)) {
+				// Smomething has gone wrong with this post item so we'll ignore it and try the next one instead
+				continue;
+			}
 
 			// Switch to the correct blog
 			if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {

@@ -33,7 +33,7 @@ class autoblogpremium {
 
 		add_action('load-toplevel_page_autoblog', array(&$this, 'add_admin_header_autoblog'));
 		add_action('load-autoblog_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog_admin'));
-		add_action('load-autoblog_page_autoblog_options', array(&$this, 'add_admin_header_autoblog_options'));
+		add_action('load-autoblog_page_autoblog_settings', array(&$this, 'add_admin_header_autoblog_settings'));
 		add_action('load-autoblog_page_autoblog_addons', array(&$this, 'add_admin_header_autoblog_addons'));
 
 		if(function_exists('is_multisite') && is_multisite()) {
@@ -124,7 +124,20 @@ class autoblogpremium {
 
 	}
 
-	function add_update_check() {
+	function update_settings_page() {
+
+		if(isset($_POST['action']) && $_POST['action'] == 'updatesettings') {
+
+			check_admin_referer('update-autoblog-settings');
+
+			if($_POST['debugmode'] == 'yes') {
+				update_autoblog_option('autoblog_debug', true);
+			} else {
+				delete_autoblog_option('autoblog_debug');
+			}
+
+			wp_safe_redirect( add_query_arg('msg', 1, wp_get_referer()) );
+		}
 
 	}
 
@@ -166,28 +179,15 @@ class autoblogpremium {
 		$this->update_admin_page();
 	}
 
-	function add_admin_header_autoblog_options() {
+	function add_admin_header_autoblog_settings() {
 
 		global $action, $page;
 
 		wp_reset_vars( array('action', 'page') );
 
-		$this->add_update_check();
-
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 
-		if(isset($_POST['action']) && $_POST['action'] == 'updateoptions') {
-
-			check_admin_referer('update-autoblog-options');
-
-			if($_POST['debugmode'] == 'yes') {
-				update_autoblog_option('autoblog_debug', true);
-			} else {
-				delete_autoblog_option('autoblog_debug');
-			}
-
-			wp_safe_redirect( add_query_arg('msg', 1, wp_get_referer()) );
-		}
+		$this->update_settings_page();
 
 	}
 
@@ -2163,7 +2163,7 @@ class autoblogpremium {
 
 	}
 
-	function handle_options_page() {
+	function handle_settings_page() {
 
 		global $action, $page;
 
@@ -2172,8 +2172,14 @@ class autoblogpremium {
 
 		?>
 		<div class='wrap nosubsub'>
+
+			<h3 class="nav-tab-wrapper">
+															<a href="admin.php?page=branding&amp;tab=dashboard" class="nav-tab nav-tab-active">Dashboard</a>
+																	<a href="admin.php?page=branding&amp;tab=images" class="nav-tab">Images</a>
+														</h3>
+
 			<div class="icon32" id="icon-options-general"><br></div>
-			<h2><?php _e('Edit Options','autoblogtext'); ?></h2>
+			<h2><?php _e('Autoblog Settings','autoblogtext'); ?></h2>
 
 			<?php
 			if ( isset($_GET['msg']) ) {
@@ -2185,10 +2191,10 @@ class autoblogpremium {
 			<form action='?page=<?php echo $page; ?>' method='post'>
 
 				<input type='hidden' name='page' value='<?php echo $page; ?>' />
-				<input type='hidden' name='action' value='updateoptions' />
+				<input type='hidden' name='action' value='updatesettings' />
 
 				<?php
-					wp_nonce_field('update-autoblog-options');
+					wp_nonce_field('update-autoblog-settings');
 				?>
 
 				<div class="postbox">
