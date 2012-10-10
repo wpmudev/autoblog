@@ -421,7 +421,7 @@ class autoblogpremium {
 		}
 
 		// Add the new options menu
-		add_submenu_page('autoblog', __('Settings','autoblogtext'), __('Settings','autoblogtext'), 'manage_options', "autoblog_settings", array(&$this,'handle_settings_page'));
+		//add_submenu_page('autoblog', __('Settings','autoblogtext'), __('Settings','autoblogtext'), 'manage_options', "autoblog_settings", array(&$this,'handle_settings_page'));
 
 		do_action('autoblog_global_menu');
 
@@ -2173,10 +2173,13 @@ class autoblogpremium {
 		?>
 		<div class='wrap nosubsub'>
 
+			<?php /*
 			<h3 class="nav-tab-wrapper">
-															<a href="admin.php?page=branding&amp;tab=dashboard" class="nav-tab nav-tab-active">Dashboard</a>
-																	<a href="admin.php?page=branding&amp;tab=images" class="nav-tab">Images</a>
-														</h3>
+				<a href="admin.php?page=branding&amp;tab=dashboard" class="nav-tab nav-tab-active"><?php _e('General','autoblogtext'); ?></a>
+				<a href="admin.php?page=branding&amp;tab=images" class="nav-tab"><?php _e('Time Limits','autoblogtext'); ?></a>
+			</h3>
+			*/
+			?>
 
 			<div class="icon32" id="icon-options-general"><br></div>
 			<h2><?php _e('Autoblog Settings','autoblogtext'); ?></h2>
