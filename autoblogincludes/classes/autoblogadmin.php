@@ -143,8 +143,6 @@ class autoblogpremium {
 
 	function add_admin_header_autoblog() {
 
-		$this->add_update_check();
-
 		wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
 
 		add_action ('admin_head', array(&$this, 'dashboard_iehead'));
@@ -166,8 +164,6 @@ class autoblogpremium {
 	}
 
 	function add_admin_header_autoblog_admin() {
-
-		$this->add_update_check();
 
 		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 		wp_enqueue_script( 'autoblogadminjs', autoblog_url('autoblogincludes/js/autoblogadmin.js'), array('jquery'), $this->build );
@@ -196,8 +192,6 @@ class autoblogpremium {
 		global $action, $page;
 
 		wp_reset_vars( array('action', 'page') );
-
-		$this->add_update_check();
 
 		$this->handle_addons_panel_updates();
 
