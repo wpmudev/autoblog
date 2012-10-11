@@ -85,7 +85,7 @@ function clear_autoblog_logs( $startat = 25, $number = 100 ) {
 		$ids = $wpdb->get_col( $sql );
 
 		if(!empty($ids)) {
-			$sql2 = $this->db->prepare( "DELETE FROM {$wpdb->sitemeta} WHERE site_id = %d AND meta_id IN (" . implode(',', $ids) . ")", $wpdb->siteid);
+			$sql2 = $wpdb->prepare( "DELETE FROM {$wpdb->sitemeta} WHERE site_id = %d AND meta_id IN (" . implode(',', $ids) . ")", $wpdb->siteid);
 			$wpdb->query( $sql2 );
 		}
 	} else {
