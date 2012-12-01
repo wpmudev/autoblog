@@ -467,8 +467,8 @@ class autoblogcron {
 			if($ablog['author'] == '0') {
 				// Try the original author
 				$author = $item->get_author(); if($author) $author = $author->get_name();
-				if(function_exists('get_userdatabylogin') && !empty($author)) {
-					$author = get_userdatabylogin($author);
+				if(function_exists('get_user_by') && !empty($author)) {
+					$author = get_user_by( 'login', $author);
 				} else {
 					$author = false;
 				}
@@ -726,8 +726,8 @@ class autoblogcron {
 			if($ablog['author'] == '0') {
 				// Try the original author
 				$author = $item->get_author(); if($author) $author = $author->get_name();
-				if(function_exists('get_userdatabylogin') && !empty($author)) {
-					$author = get_userdatabylogin($author);
+				if(function_exists('get_user_by') && !empty($author)) {
+					$author = get_user_by( 'login',$author);
 				} else {
 					$author = false;
 				}
@@ -786,7 +786,7 @@ class autoblogcron {
 				case 'tags':		// carry on as default as well
 				default:
 									$thecats = array();
-									if($ablog['originalcategories'] == '1') {
+									if( isset($ablog['originalcategories']) && $ablog['originalcategories'] == '1') {
 										$thecats = $item->get_categories();
 										if(!empty($thecats)) {
 											foreach ($thecats as $category)

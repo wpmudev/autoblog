@@ -66,7 +66,7 @@ class A_ImageCacheAddon {
 			}
 		}
 
-		return $theimage;
+		return $image;
 	}
 
 	/**
