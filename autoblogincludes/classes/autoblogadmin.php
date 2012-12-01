@@ -318,7 +318,7 @@ class autoblogpremium {
 	function ajax__getblogauthorlist() {
 		$bid = addslashes($_GET['id']);
 		if($bid != "") {
-			$blogusers = get_users_of_blog( $bid );
+			$blogusers = get_users( 'blog_id=' . $bid ); //get_users_of_blog( $bid );
 			$bu = array();
 			foreach($blogusers as $key => $buser) {
 				$bu[] = array('user_id' => $buser->user_id, 'user_login' => $buser->user_login);
@@ -706,7 +706,7 @@ class autoblogpremium {
 
 		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>\n";
 
-		$blogusers = get_users_of_blog( $table['blog'] );
+		$blogusers = get_users( 'blog_id=' . $table['blog'] ); //get_users_of_blog( $table['blog'] );
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -1149,7 +1149,9 @@ class autoblogpremium {
 		echo "<select name='abtble[posttype]' class='field'>";
 		foreach ($post_types as $key => $post_type ) {
 			echo "<option value='" . $key . "'";
-			echo $table['posttype'] == $key ? " selected='selected'" : "";
+			if( isset($table['posttype']) && $table['posttype'] == $key ) {
+				echo " selected='selected'";
+			}
 			echo ">" . $post_type->name . "</option>";
 		}
 		echo "</select>" . $this->_tips->add_tip( __('Select the post type the imported posts will have in the blog.','autoblogtext') );
@@ -1192,7 +1194,7 @@ class autoblogpremium {
 
 		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Author details','autoblogtext') . "</span></td></tr>";
 
-		$blogusers = get_users_of_blog( $blog_id );
+		$blogusers = get_users( 'blog_id=' . $blog_id ); //get_users_of_blog( $blog_id );
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -1504,12 +1506,12 @@ class autoblogpremium {
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") ORDER BY nextcheck ASC" );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") ORDER BY nextcheck ASC", '' );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC" );
+				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC", '' );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC" );
+			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC", '' );
 		}
 
 		$results = $this->db->get_results($sql);
@@ -1913,7 +1915,7 @@ class autoblogpremium {
 
 		$testlog = get_autoblog_option('autoblog_last_test_log', false);
 
-		if(!empty($testlog) && $testlog !== false && (int) $_GET['msg'] == 7) {
+		if(!empty($testlog) && $testlog !== false && isset($_GET['msg']) && (int) $_GET['msg'] == 7) {
 			echo '<div id="testmessage" class="updated fade"><p>';
 			echo implode( '<br/>', $testlog['log'] );
 			echo '</p></div>';
