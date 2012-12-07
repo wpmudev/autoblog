@@ -1,12 +1,12 @@
 <?php
 /*
-Addon Name: Image Import
-Description: Imports any images in a post to the media library and attaches them to the imported post.
+Addon Name: Featured Image Import
+Description: Imports any images in a post to the media library and attaches them to the imported post, making the first one a featured image.
 Author: Barry (Incsub)
 Author URI: http://premium.wpmudev.org
 */
 
-class A_ImageCacheAddon {
+class A_FeatureImageCacheAddon {
 
 	var $build = 1;
 
@@ -22,7 +22,7 @@ class A_ImageCacheAddon {
 
 	}
 
-	function A_ImageCacheAddon() {
+	function A_FeatureImageCacheAddon() {
 		$this->__construct();
 	}
 
@@ -62,8 +62,9 @@ class A_ImageCacheAddon {
 			preg_match_all('|<img.*?src=[\'"](.*?)[\'"].*?>|i', $img, $newimage);
 
 			if(!empty($newimage[1][0])) {
-				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s);", $image, $newimage[1][0] ) );
+				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $image, $newimage[1][0], $post_ID ) );
 			}
+
 		}
 
 		return $image;
@@ -93,6 +94,23 @@ class A_ImageCacheAddon {
 
 			}
 
+			// Set the first image as the featured one - from a snippet at http://wpengineer.com/2460/set-wordpress-featured-image-automatically/
+			$imageargs = array(
+				'numberposts'    => 1,
+				'order'          => 'ASC', // DESC for the last image
+				'post_mime_type' => 'image',
+				'post_parent'    => $post_ID,
+				'post_status'    => NULL,
+				'post_type'      => 'attachment'
+			);
+
+			$cachedimages = get_children( $imageargs );
+			if ( !empty($cachedimages) ) {
+				foreach ( $cachedimages as $image_id => $image ) {
+					set_post_thumbnail( $post_ID, $image_id );
+				}
+			}
+
 		}
 		// Returning the $post_ID even though it's an action and we really don't need to
 
@@ -102,6 +120,6 @@ class A_ImageCacheAddon {
 
 }
 
-$aimagecacheaddon = new A_ImageCacheAddon();
+$afeatureimagecacheaddon = new A_FeatureImageCacheAddon();
 
 ?>

@@ -444,7 +444,11 @@ class autoblogpremium {
 
 	function dashboard_report() {
 
-		$sql = $this->db->prepare( "SELECT * FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 0, 25", $this->db->siteid, "autoblog_log_%");
+		if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+			$sql = $this->db->prepare( "SELECT * FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 0, 25", $this->db->siteid, "autoblog_log_%");
+		} else {
+			$sql = $this->db->prepare( "SELECT * FROM {$this->db->options} WHERE option_name LIKE %s ORDER BY option_id DESC LIMIT 0, 25", "autoblog_log_%");
+		}
 
 		$logs = $this->db->get_results( $sql );
 
@@ -455,7 +459,11 @@ class autoblogpremium {
 				<?php
 				if(!empty($logs)) {
 					foreach($logs as $log) {
-						$val = unserialize($log->meta_value);
+						if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+							$val = unserialize($log->meta_value);
+						} else {
+							$val = unserialize($log->option_value);
+						}
 						echo "<p>";
 						echo "<strong>" . date('Y-m-d \a\t H:i', (int) $val['timestamp']) . "</strong><br/>";
 						if(!empty($val['log'])) {
@@ -1207,8 +1215,8 @@ class autoblogpremium {
 
 		if($blogusers) {
 			foreach($blogusers as $bloguser) {
-				echo "<option value='" . $bloguser->user_id . "'>";
-				echo $bloguser->user_login;
+				echo "<option value='" . $bloguser->ID . "'>";
+				echo $bloguser->get('user_login');
 				echo "</option>";
 			}
 		}
@@ -1229,8 +1237,8 @@ class autoblogpremium {
 		reset($blogusers);
 		if($blogusers) {
 			foreach($blogusers as $bloguser) {
-				echo "<option value='" . $bloguser->user_id . "'>";
-				echo $bloguser->user_login;
+				echo "<option value='" . $bloguser->ID . "'>";
+				echo $bloguser->get('user_login');
 				echo "</option>";
 			}
 		}

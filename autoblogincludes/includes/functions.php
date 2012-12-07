@@ -1,4 +1,8 @@
 <?php
+// We initially need to make sure that this function exists, and if not then include the file that has it.
+if ( !function_exists( 'is_plugin_active_for_network' ) ) {
+    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+}
 
 function set_autoblog_url($base) {
 
@@ -48,7 +52,7 @@ function autoblog_dir($extended) {
 
 function get_autoblog_option($key, $default = false) {
 
-	if(defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
 		return get_site_option($key, $default);
 	} else {
 		return get_option($key, $default);
@@ -58,7 +62,7 @@ function get_autoblog_option($key, $default = false) {
 
 function update_autoblog_option($key, $value) {
 
-	if(defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
 		return update_site_option($key, $value);
 	} else {
 		return update_option($key, $value);
@@ -68,7 +72,7 @@ function update_autoblog_option($key, $value) {
 
 function delete_autoblog_option($key) {
 
-	if(defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
 		return delete_site_option($key);
 	} else {
 		return delete_option($key);
@@ -80,7 +84,7 @@ function clear_autoblog_logs( $startat = 25, $number = 100 ) {
 
 	global $wpdb;
 
-	if(defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
 		$sql = $wpdb->prepare( "SELECT meta_id FROM {$wpdb->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT %d, %d", $wpdb->siteid, "autoblog_log_%", $startat, $number );
 		$ids = $wpdb->get_col( $sql );
 
@@ -102,7 +106,7 @@ function clear_autoblog_logs( $startat = 25, $number = 100 ) {
 
 function autoblog_db_prefix(&$wpdb, $table) {
 
-	if( defined('AUTOBLOG_GLOBAL') && AUTOBLOG_GLOBAL == true ) {
+	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
 		if(!empty($wpdb->base_prefix)) {
 			return $wpdb->base_prefix . $table;
 		} else {
