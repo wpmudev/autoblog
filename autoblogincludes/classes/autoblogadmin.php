@@ -779,7 +779,7 @@ class autoblogpremium {
 			echo "<option value='categories' " . selected(esc_attr(stripslashes($table['feedcatsare'])), 'categories') . ">" . __('categories', 'autoblogtext') . "</option>";
 			echo "</select>";
 			echo "&nbsp;<input type='checkbox' name='abtble[originalcategories]' class='case field' value='1' ";
-			if($table['originalcategories'] == '1') echo " checked='checked'";
+			if(isset($table['originalcategories'])  && $table['originalcategories'] == '1') echo " checked='checked'";
 			echo "/>&nbsp;<span>" . __('Add any that do not exist.','autoblogtext') . "</span>" . $this->_tips->add_tip(  __('Create any tags or categories that are needed.', 'autoblogtext') );
 
 			echo "</td>";
@@ -882,7 +882,7 @@ class autoblogpremium {
 		echo "<input type='text' name='abtble[source]' value='" . esc_attr(stripslashes($table['source'])) . "' class='long source field' />" . $this->_tips->add_tip(  __('If you want to link back to original source, enter a phrase to use here.', 'autoblogtext') );
 		echo "<br/>";
 		echo "<input type='checkbox' name='abtble[nofollow]' value='1' ";
-		if($table['nofollow'] == '1') echo "checked='checked' ";
+		if(isset($table['nofollow']) && $table['nofollow'] == '1') echo "checked='checked' ";
 		echo "/>&nbsp;<span>" . __('Ensure this link is a nofollow one','autoblogtext') . "</span>";
 		echo "</td>";
 		echo "</tr>\n";
@@ -924,7 +924,7 @@ class autoblogpremium {
 
 		// New fields
 
-		$startfrom = $table['startfrom'];
+		$startfrom = (isset($table['startfrom'])) ? $table['startfrom'] : '';
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -965,7 +965,7 @@ class autoblogpremium {
 		echo "</td>";
 		echo "</tr>\n";
 
-		$endon = $table['endon'];
+		$endon = (isset($table['endon'])) ? $table['endon'] : '';
 
 		echo "<tr>";
 		echo "<td valign='top' class='heading'>";
@@ -1037,7 +1037,7 @@ class autoblogpremium {
 		echo "&nbsp;";
 		echo "&nbsp;";
 		echo "&nbsp;";
-		echo '<input class="button-primary delete save" type="submit" name="save" value="' . __('Update feed', 'autoblogtext') . '" />';
+		echo '<input class="button-primary delete save" type="submit" name="save" value="' . __('Update feed', 'autoblogtext') . '" style="margin-right: 10px;" />';
 		echo '</div>';
 		echo '</div>';
 
@@ -1622,6 +1622,8 @@ class autoblogpremium {
 	}
 
 	function handle_edit_page($id) {
+
+		global $action, $page;
 
 		$feed = $this->get_autoblogentry($id);
 

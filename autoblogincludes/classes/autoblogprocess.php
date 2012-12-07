@@ -510,7 +510,7 @@ class autoblogcron {
 												$post_category[] = $term_id;
 											} else {
 												// need to check and add cat if required
-												if($ablog['originalcategories'] == '1') {
+												if(isset($ablog['originalcategories']) && $ablog['originalcategories'] == '1') {
 													// yes so add
 													$term_id = wp_create_category($cat_name);
 													if(!empty($term_id)) {
@@ -527,7 +527,7 @@ class autoblogcron {
 				case 'tags':		// carry on as default as well
 				default:
 									$thecats = array();
-									if($ablog['originalcategories'] == '1') {
+									if(isset($ablog['originalcategories']) && $ablog['originalcategories'] == '1') {
 										$thecats = $item->get_categories();
 										if(!empty($thecats)) {
 											foreach ($thecats as $category)
