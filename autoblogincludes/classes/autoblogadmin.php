@@ -715,12 +715,12 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 
 		echo "<select name='abtble[author]' class='field author'>";
-		echo "<option value='0'"; echo  ($table['author'] == '0') ? " selected='selected'" : ""; echo ">" . __('Use feed author','autoblogtext') . "</option>";
+		echo "<option value='0'"; echo  (!isset($table['author']) || $table['author'] == '0') ? " selected='selected'" : ""; echo ">" . __('Use feed author','autoblogtext') . "</option>";
 
 		if($blogusers) {
 			foreach($blogusers as $bloguser) {
-				echo "<option value='" . $bloguser->user_id . "'"; echo ($table['author'] == $bloguser->user_id) ? " selected='selected'" : ""; echo ">";
-				echo $bloguser->user_login;
+				echo "<option value='" . $bloguser->ID . "'"; echo (isset($table['author']) && $table['author'] == $bloguser->ID) ? " selected='selected'" : ""; echo ">";
+				echo $bloguser->get('user_login');
 				echo "</option>";
 			}
 		}
@@ -741,8 +741,8 @@ class autoblogpremium {
 		reset($blogusers);
 		if($blogusers) {
 			foreach($blogusers as $bloguser) {
-				echo "<option value='" . $bloguser->user_id . "'"; echo ($table['altauthor'] == $bloguser->user_id) ? " selected='selected'" : ""; echo ">";
-				echo $bloguser->user_login;
+				echo "<option value='" . $bloguser->ID . "'"; echo (isset($table['author']) && $table['altauthor'] == $bloguser->ID) ? " selected='selected'" : ""; echo ">";
+				echo $bloguser->get('user_login');
 				echo "</option>";
 			}
 		}
