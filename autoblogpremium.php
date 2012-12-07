@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: AutoBlog
-Version: 3.9.4
+Version: 3.9.5
 Plugin URI: http://premium.wpmudev.org/project/autoblog
 Description: This plugin automatically posts content from RSS feeds to different blogs on your WordPress Multisite...
 Author: Barry (Incsub)
@@ -10,7 +10,7 @@ WDP ID: 97
 */
 
 /*
-Copyright 2007-2010 Incsub (http://incsub.com)
+Copyright 2007-2012 Incsub (http://incsub.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License (Version 2 - GPLv2) as published by
