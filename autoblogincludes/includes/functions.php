@@ -97,7 +97,7 @@ function clear_autoblog_logs( $startat = 25, $number = 100 ) {
 		$ids = $wpdb->get_col( $sql );
 
 		if(!empty($ids)) {
-			$sql2 = $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_id IN (" . implode(',', $ids) . ")" );
+			$sql2 = "DELETE FROM {$wpdb->options} WHERE option_id IN (" . implode(',', $ids) . ")";
 			$wpdb->query( $sql2 );
 		}
 	}
@@ -106,7 +106,7 @@ function clear_autoblog_logs( $startat = 25, $number = 100 ) {
 
 function autoblog_db_prefix(&$wpdb, $table) {
 
-	if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
+	if(defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
 		if(!empty($wpdb->base_prefix)) {
 			return $wpdb->base_prefix . $table;
 		} else {

@@ -402,18 +402,18 @@ class autoblogcron {
 
 		$processed_count = 0;
 
+		// Switch to the correct blog
+		if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {
+			switch_to_blog( (int) $ablog['blog'] );
+			$bid = (int) $ablog['blog'];
+		}
+
 		for ($x = 0; $x < $max; $x++) {
 			$item = $feed->get_item($x);
 
 			if(!is_object($item)) {
 				// Smomething has gone wrong with this post item so we'll ignore it and try the next one instead
 				continue;
-			}
-
-			// Switch to the correct blog
-			if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {
-				switch_to_blog( (int) $ablog['blog'] );
-				$bid = (int) $ablog['blog'];
 			}
 
 			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
@@ -664,6 +664,12 @@ class autoblogcron {
 
 		$processed_count = 0;
 
+		// Switch to the correct blog
+		if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {
+			switch_to_blog( (int) $ablog['blog'] );
+			$bid = (int) $ablog['blog'];
+		}
+
 		for ($x = 0; $x < $max; $x++) {
 			$item = $feed->get_item($x);
 
@@ -672,11 +678,6 @@ class autoblogcron {
 				continue;
 			}
 
-			// Switch to the correct blog
-			if(!empty($ablog['blog']) && function_exists('switch_to_blog')) {
-				switch_to_blog( (int) $ablog['blog'] );
-				$bid = (int) $ablog['blog'];
-			}
 			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
 			$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
 

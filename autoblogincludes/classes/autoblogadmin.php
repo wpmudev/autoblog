@@ -1530,12 +1530,12 @@ class autoblogpremium {
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") ORDER BY nextcheck ASC", '' );
+				$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") ORDER BY nextcheck ASC";
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC", '' );
+				$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC";
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC", '' );
+			$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC";
 		}
 
 		$results = $this->db->get_results($sql);
