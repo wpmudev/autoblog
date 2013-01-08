@@ -473,7 +473,9 @@ class autoblogcron {
 				if(function_exists('get_user_by') && !empty($author)) {
 					$author = get_user_by( 'login', $author);
 					// Make sure that we are using only the ID
-					$author = $author->ID;
+					if($author !== false && isset($author->ID)) {
+						$author = $author->ID;
+					}
 				} else {
 					$author = false;
 				}
@@ -739,7 +741,9 @@ class autoblogcron {
 				if(function_exists('get_user_by') && !empty($author)) {
 					$author = get_user_by( 'login',$author);
 					// Make sure that we are using only the ID
-					$author = $author->ID;
+					if($author !== false && isset($author->ID)) {
+						$author = $author->ID;
+					}
 				} else {
 					$author = false;
 				}
