@@ -466,9 +466,14 @@ class autoblogcron {
 			// Set up the author
 			if($ablog['author'] == '0') {
 				// Try the original author
-				$author = $item->get_author(); if($author) $author = $author->get_name();
+				$author = $item->get_author();
+				if(!empty($author)) {
+					$author = $author->get_name();
+				}
 				if(function_exists('get_user_by') && !empty($author)) {
 					$author = get_user_by( 'login', $author);
+					// Make sure that we are using only the ID
+					$author = $author->ID;
 				} else {
 					$author = false;
 				}
@@ -726,9 +731,15 @@ class autoblogcron {
 			// Set up the author
 			if($ablog['author'] == '0') {
 				// Try the original author
-				$author = $item->get_author(); if($author) $author = $author->get_name();
+				$author = $item->get_author();
+				if(!empty($author)) {
+					$author = $author->get_name();
+				}
+
 				if(function_exists('get_user_by') && !empty($author)) {
 					$author = get_user_by( 'login',$author);
+					// Make sure that we are using only the ID
+					$author = $author->ID;
 				} else {
 					$author = false;
 				}
