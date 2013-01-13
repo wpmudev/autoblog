@@ -355,6 +355,15 @@ class autoblogcron {
 			$this->testingmsgs[] = __('<strong>Error:</strong> Can not locate the feed reading file.','autoblogtext');
 		}
 
+		// We need to load the wp_create_category holding file if it doesn't exist
+		if( !function_exists('wp_create_category') ) {
+			require_once (ABSPATH . 'wp-admin/includes/taxonomy.php');
+		}
+
+		if( !function_exists('wp_create_category') ) {
+			$this->testingmsgs[] = __('<strong>Error:</strong> Can not load the taxonomy file.','autoblogtext');
+		}
+
 		if(empty($ablog['url'])) {
 
 			$this->testingmsgs[] = __('<strong>Error:</strong> There is no URL setup for this feed','autoblogtext');
@@ -615,12 +624,21 @@ class autoblogcron {
 		// Check again to make sure it is loaded
 		if ( !function_exists('fetch_feed')) {
 			$this->msgs[] = __('<strong>Error:</strong> Can not locate the feed reading file.','autoblogtext');
+			return false;
+		}
+
+		// We need to load the wp_create_category holding file if it doesn't exist
+		if( !function_exists('wp_create_category') ) {
+			require_once (ABSPATH . 'wp-admin/includes/taxonomy.php');
+		}
+
+		if( !function_exists('wp_create_category') ) {
+			$this->msgs[] = __('<strong>Error:</strong> Can not load the taxonomy file.','autoblogtext');
+			return false;
 		}
 
 		if(empty($ablog['url'])) {
-
 			$this->msgs[] = __('<strong>Error:</strong> There is no URL setup for this feed - ','autoblogtext') . $ablog['title'];
-
 			return false;
 		}
 
