@@ -430,6 +430,8 @@ class autoblogcron {
 
 			$post_title = trim( $item->get_title() );
 			$post_content = trim( $item->get_content() );
+			// Set the encoding to UTF8
+			$post_content = html_entity_decode($post_content, ENT_QUOTES, 'UTF-8');
 
 			if(count($results) > 0) {
 				// This post already exists so we shall stop here
@@ -452,7 +454,7 @@ class autoblogcron {
 			// Still here so lets process some stuff
 			if($ablog['useexcerpt'] != '1') {
 				// Create an excerpt
-				$post_content = strip_tags($item->get_content());
+				$post_content = strip_tags($post_content);
 
 				switch($ablog['excerptnumberof']) {
 					case 'words':	$find = ' ';
@@ -720,6 +722,8 @@ class autoblogcron {
 
 			$post_title = trim( $item->get_title() );
 			$post_content = trim( $item->get_content() );
+			// Set the encoding to UTF8
+			$post_content = html_entity_decode($post_content, ENT_QUOTES, 'UTF-8');
 
 			if(!$this->check_feed_item($ablog, $item)) {
 				continue;
@@ -728,7 +732,7 @@ class autoblogcron {
 			// Still here so lets process some stuff
 			if($ablog['useexcerpt'] != '1') {
 				// Create an excerpt
-				$post_content = strip_tags($item->get_content());
+				$post_content = strip_tags($post_content);
 
 				switch($ablog['excerptnumberof']) {
 					case 'words':	$find = ' ';
@@ -877,6 +881,23 @@ class autoblogcron {
 				update_post_meta( $post_ID , 'original_feed_title', trim( $ablog['title'] ) );
 				update_post_meta( $post_ID , 'original_imported_time', time() );
 				update_post_meta( $post_ID , 'original_feed_id', $feed_id );
+
+				// Add original author
+				$theauthor = $item->get_author();
+				if(!empty($theauthor)) {
+					$authorname = $theauthor->get_name();
+					$authoremail = $theauthor->get_email();
+					$authorlink = $theauthor->get_link();
+					if(!empty($authorname)) {
+						update_post_meta( $post_ID , 'original_author_name', $authorname );
+					}
+					if(!empty($authoremail)) {
+						update_post_meta( $post_ID , 'original_author_email', $authoremail );
+					}
+					if(!empty($authorlink)) {
+						update_post_meta( $post_ID , 'original_author_link', $authorlink );
+					}
+				}
 
 				if(!empty($ablog['source'])) {
 					// Add the original source to the bottom of the post
