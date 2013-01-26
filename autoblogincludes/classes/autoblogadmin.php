@@ -1601,7 +1601,7 @@ class autoblogpremium {
 			$blogs = array( $this->blogid );
 		}
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id IN (0, " . implode(',', $ids) . ")");
+		$sql = "DELETE FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id IN (0, " . implode(',', $ids) . ")";
 
 		return $this->db->query($sql);
 	}
