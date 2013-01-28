@@ -53,8 +53,14 @@ class A_FeatureImageCacheAddon {
 
 	function grab_image_from_url( $image, $post_ID ) {
 
+		// Include the file and media libraries as they have the functions we want to use
+		require_once( ABSPATH . 'wp-admin/includes/media.php' );
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+
 		// Set a big timelimt for processing as we are pulling in potentially big files.
 		set_time_limit( 600 );
+
 		// get the image
 		$img = media_sideload_image($image, $post_ID);
 
@@ -65,8 +71,6 @@ class A_FeatureImageCacheAddon {
 				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $image, $newimage[1][0], $post_ID ) );
 			}
 
-		} else {
-			error_log( $img->get_error_message() );
 		}
 
 		return $image;
@@ -82,18 +86,12 @@ class A_FeatureImageCacheAddon {
 
 		$images = $this->get_remote_images_in_content( $post->post_content );
 
-		error_log( 'Images for post ' . $post_ID . ' are ' . print_r($images, true) );
-
 		if ( !empty($images) ) {
-			// Include the file and media libraries as they have the functions we want to use
-			require_once( ABSPATH . 'wp-admin/includes/file.php' );
-			require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
 			foreach ($images as $image) {
 
 				preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
 				if(!empty($matches)) {
-					error_log( 'Grabbing image ' . $image );
 					$this->grab_image_from_url($image, $post_ID);
 				}
 
@@ -102,7 +100,7 @@ class A_FeatureImageCacheAddon {
 			// Set the first image as the featured one - from a snippet at http://wpengineer.com/2460/set-wordpress-featured-image-automatically/
 			$imageargs = array(
 				'numberposts'    => 1,
-				'order'          => 'ASC', // DESC for the last image
+				'order'          => AUTOBLOG_IMAGE_CHECK_ORDER, // DESC for the last image
 				'post_mime_type' => 'image',
 				'post_parent'    => $post_ID,
 				'post_status'    => NULL,

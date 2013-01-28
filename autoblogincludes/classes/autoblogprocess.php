@@ -426,7 +426,13 @@ class autoblogcron {
 			}
 
 			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
-			$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
+			switch( AUTOBLOG_POST_DUPLICATE_CHECK ) {
+				case 'link':	$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
+								break;
+
+				case 'guid':	$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_guid', $item->get_id()) );
+								break;
+			}
 
 			$post_title = trim( $item->get_title() );
 			$post_content = trim( $item->get_content() );
@@ -706,7 +712,14 @@ class autoblogcron {
 			}
 
 			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
-			$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
+			switch( AUTOBLOG_POST_DUPLICATE_CHECK ) {
+				case 'link':	$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
+								break;
+
+				case 'guid':	$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_guid', $item->get_id()) );
+								break;
+			}
+
 
 			if(count($results) > 0) {
 				// This post already exists so we shall stop here
@@ -881,6 +894,8 @@ class autoblogcron {
 				update_post_meta( $post_ID , 'original_feed_title', trim( $ablog['title'] ) );
 				update_post_meta( $post_ID , 'original_imported_time', time() );
 				update_post_meta( $post_ID , 'original_feed_id', $feed_id );
+
+				update_post_meta( $post_ID , 'original_guid', trim($item->get_id()) );
 
 				// Add original author
 				$theauthor = $item->get_author();

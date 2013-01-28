@@ -53,6 +53,11 @@ class A_ImageCacheAddon {
 
 	function grab_image_from_url( $image, $post_ID ) {
 
+		// Include the file and media libraries as they have the functions we want to use
+		require_once( ABSPATH . 'wp-admin/includes/media.php' );
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
+
 		// Set a big timelimt for processing as we are pulling in potentially big files.
 		set_time_limit( 600 );
 		// get the image
@@ -80,9 +85,6 @@ class A_ImageCacheAddon {
 		$images = $this->get_remote_images_in_content( $post->post_content );
 
 		if ( !empty($images) ) {
-			// Include the file and media libraries as they have the functions we want to use
-			require_once( ABSPATH . 'wp-admin/includes/file.php' );
-			require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
 			foreach ($images as $image) {
 

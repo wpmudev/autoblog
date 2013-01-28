@@ -927,6 +927,13 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<select name='abtble[processfeed]' class='field'>";
 		echo "<option value='0'"; echo ($table['processfeed'] == '0') ? " selected='selected'" : ""; echo ">" . __('Never (paused)','autoblogtext') . "</option>";
+
+		echo "<option value='5'"; echo ($table['processfeed'] == '5') ? " selected='selected'" : ""; echo ">" . __('every 5 minutes','autoblogtext') . "</option>";
+		echo "<option value='10'"; echo ($table['processfeed'] == '10') ? " selected='selected'" : ""; echo ">" . __('every 10 minutes','autoblogtext') . "</option>";
+		echo "<option value='15'"; echo ($table['processfeed'] == '15') ? " selected='selected'" : ""; echo ">" . __('every 15 minutes','autoblogtext') . "</option>";
+		echo "<option value='20'"; echo ($table['processfeed'] == '20') ? " selected='selected'" : ""; echo ">" . __('every 20 minutes','autoblogtext') . "</option>";
+		echo "<option value='25'"; echo ($table['processfeed'] == '25') ? " selected='selected'" : ""; echo ">" . __('every 25 minutes','autoblogtext') . "</option>";
+
 		echo "<option value='30'"; echo ($table['processfeed'] == '30') ? " selected='selected'" : ""; echo ">" . __('every 30 minutes','autoblogtext') . "</option>";
 		echo "<option value='60'"; echo ($table['processfeed'] == '60') ? " selected='selected'" : ""; echo ">" . __('every hour','autoblogtext') . "</option>";
 		echo "<option value='90'"; echo ($table['processfeed'] == '90') ? " selected='selected'" : ""; echo ">" . __('every 1 hour 30 minutes','autoblogtext') . "</option>";
@@ -1416,6 +1423,11 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<select name='abtble[processfeed]' class='field'>";
 		echo "<option value='0'>" . __('Never (paused)','autoblogtext') . "</option>";
+		echo "<option value='5'>" . __('every 5 minutes','autoblogtext') . "</option>";
+		echo "<option value='10'>" . __('every 10 minutes','autoblogtext') . "</option>";
+		echo "<option value='15'>" . __('every 15 minutes','autoblogtext') . "</option>";
+		echo "<option value='20'>" . __('every 20 minutes','autoblogtext') . "</option>";
+		echo "<option value='25'>" . __('every 25 minutes','autoblogtext') . "</option>";
 		echo "<option value='30'>" . __('every 30 minutes','autoblogtext') . "</option>";
 		echo "<option value='60'>" . __('every hour','autoblogtext') . "</option>";
 		echo "<option value='90'>" . __('every 1 hour 30 minutes','autoblogtext') . "</option>";
@@ -1508,7 +1520,7 @@ class autoblogpremium {
 		echo "&nbsp;";
 		echo "&nbsp;";
 		echo "&nbsp;";
-		echo '<input class="button-primary delete save" type="submit" name="savenew" value="' . __('Add feed', 'autoblogtext') . '" />';
+		echo '<input class="button-primary delete save" type="submit" name="savenew" value="' . __('Add feed', 'autoblogtext') . '" style="margin-right: 10px;" />';
 		echo '</div>';
 		echo '</div>';
 
