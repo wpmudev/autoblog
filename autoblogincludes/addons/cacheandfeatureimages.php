@@ -65,6 +65,8 @@ class A_FeatureImageCacheAddon {
 				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $image, $newimage[1][0], $post_ID ) );
 			}
 
+		} else {
+			error_log( $img->get_error_message() );
 		}
 
 		return $image;
@@ -80,6 +82,8 @@ class A_FeatureImageCacheAddon {
 
 		$images = $this->get_remote_images_in_content( $post->post_content );
 
+		error_log( 'Images for post ' . $post_ID . ' are ' . print_r($images, true) );
+
 		if ( !empty($images) ) {
 			// Include the file and media libraries as they have the functions we want to use
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -89,6 +93,7 @@ class A_FeatureImageCacheAddon {
 
 				preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
 				if(!empty($matches)) {
+					error_log( 'Grabbing image ' . $image );
 					$this->grab_image_from_url($image, $post_ID);
 				}
 
