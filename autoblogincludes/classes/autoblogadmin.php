@@ -2076,11 +2076,13 @@ class autoblogpremium {
 					echo '<a href="' . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . '">';
 				}
 
+				echo "<abbr title='" . esc_attr($details['url']) . "'>";
 				if(!empty($details)) {
 					echo esc_html(stripslashes($details['title']));
 				} else {
 					echo __('No title set', 'autoblogtext');
 				}
+				echo "</abbr>";
 				echo '</a>';
 
 				//network_admin_url
