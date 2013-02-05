@@ -39,7 +39,7 @@ class A_FeatureImageCacheAddon {
 
 			$purl = parse_url($url);
 
-			if($purl['host'] != $siteurl['host']) {
+			if(!isset($purl['host']) || $purl['host'] != $siteurl['host']) {
 				// we seem to have an external images
 				$images[] = $url;
 			} else {
@@ -56,7 +56,7 @@ class A_FeatureImageCacheAddon {
 		// Include the file and media libraries as they have the functions we want to use
 		require_once( ABSPATH . 'wp-admin/includes/media.php' );
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
 		// Set a big timelimt for processing as we are pulling in potentially big files.
 		set_time_limit( 600 );
@@ -92,6 +92,16 @@ class A_FeatureImageCacheAddon {
 
 				preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
 				if(!empty($matches)) {
+
+					$purl = parse_url( $image );
+					if (empty($purl['scheme']) && substr( $image, 0 , 2 ) == '//') {
+						$furl = parse_url( $ablog['url'] );
+						if(!empty($furl['scheme'])) {
+							// We should add in the scheme again - this should handle images starting //
+							$image = $furl['scheme'] . ':' . $image;
+						}
+					}
+
 					$this->grab_image_from_url($image, $post_ID);
 				}
 
@@ -99,7 +109,7 @@ class A_FeatureImageCacheAddon {
 
 			// Set the first image as the featured one - from a snippet at http://wpengineer.com/2460/set-wordpress-featured-image-automatically/
 			$imageargs = array(
-				'numberposts'    => 1,
+				'numberposts'    => -1,
 				'order'          => AUTOBLOG_IMAGE_CHECK_ORDER, // DESC for the last image
 				'post_mime_type' => 'image',
 				'post_parent'    => $post_ID,
@@ -110,7 +120,15 @@ class A_FeatureImageCacheAddon {
 			$cachedimages = get_children( $imageargs );
 			if ( !empty($cachedimages) ) {
 				foreach ( $cachedimages as $image_id => $image ) {
-					set_post_thumbnail( $post_ID, $image_id );
+					$meta = wp_get_attachment_metadata( $image_id );
+					if(!empty($meta)) {
+						if($meta['width'] >= AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH && $meta['height'] >= AUTOBLOG_FEATURED_IMAGE_MIN_HEIGHT ) {
+							set_post_thumbnail( $post_ID, $image_id );
+							// Exit from the loop
+							break;
+						}
+					}
+
 				}
 			}
 

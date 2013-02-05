@@ -39,7 +39,7 @@ class A_ImageCacheAddon {
 
 			$purl = parse_url($url);
 
-			if($purl['host'] != $siteurl['host']) {
+			if(!isset($purl['host']) || $purl['host'] != $siteurl['host']) {
 				// we seem to have an external images
 				$images[] = $url;
 			} else {
@@ -56,7 +56,7 @@ class A_ImageCacheAddon {
 		// Include the file and media libraries as they have the functions we want to use
 		require_once( ABSPATH . 'wp-admin/includes/media.php' );
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
 		// Set a big timelimt for processing as we are pulling in potentially big files.
 		set_time_limit( 600 );
@@ -90,7 +90,18 @@ class A_ImageCacheAddon {
 
 				preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
 				if(!empty($matches)) {
+
+					$purl = parse_url( $image );
+					if (empty($purl['scheme']) && substr( $image, 0 , 2 ) == '//') {
+						$furl = parse_url( $ablog['url'] );
+						if(!empty($furl['scheme'])) {
+							// We should add in the scheme again - this should handle images starting //
+							$image = $furl['scheme'] . ':' . $image;
+						}
+					}
+
 					$this->grab_image_from_url($image, $post_ID);
+
 				}
 
 			}
