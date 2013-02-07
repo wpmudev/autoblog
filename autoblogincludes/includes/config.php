@@ -32,7 +32,7 @@ if(!defined('AUTOBLOG_IMAGE_CHECK_ORDER')) define( 'AUTOBLOG_IMAGE_CHECK_ORDER',
 if(!defined('AUTOBLOG_POST_DUPLICATE_CHECK')) define( 'AUTOBLOG_POST_DUPLICATE_CHECK', 'link');
 
 // Only set an image as featured if it is wider than this setting
-if(!defined('AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH')) define( 'AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH', 150);
+if(!defined('AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH')) define( 'AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH', 80);
 
 // Only set an image as featured if it is taller than this setting
 if(!defined('AUTOBLOG_FEATURED_IMAGE_MIN_HEIGHT')) define( 'AUTOBLOG_FEATURED_IMAGE_MIN_HEIGHT', 80);

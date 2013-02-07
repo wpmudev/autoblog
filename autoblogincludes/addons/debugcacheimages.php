@@ -15,7 +15,7 @@ class A_DebugImageCacheAddon {
 	// Enter your email address on the line below
 	var $sendto = '';
 
-	var $msglog = '';
+	var $msglog = array();
 
 	function __construct() {
 
@@ -90,6 +90,8 @@ class A_DebugImageCacheAddon {
 		$images = $this->get_remote_images_in_content( $post->post_content );
 
 		if ( !empty($images) ) {
+
+			$this->msglog[] = "Step 1. Found the following images in post " . $post_ID . "- " . print_r($images, true);
 
 			foreach ($images as $image) {
 
