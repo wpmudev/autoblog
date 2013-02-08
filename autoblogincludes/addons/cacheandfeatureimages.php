@@ -20,10 +20,22 @@ class A_FeatureImageCacheAddon {
 
 		add_action( 'autoblog_post_post_insert', array(&$this, 'check_post_for_images'), 10, 3 );
 
+		add_action( 'autoblog_feed_edit_form_end', array(&$this, 'add_image_options'), 10, 2 );
+
+
 	}
 
 	function A_FeatureImageCacheAddon() {
 		$this->__construct();
+	}
+
+	function add_image_options( $key, $details ) {
+
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Image Importing','autoblogtext') . "</span></td></tr>";
+		?>
+
+		<?php
+
 	}
 
 

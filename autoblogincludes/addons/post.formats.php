@@ -22,7 +22,7 @@ function A_show_post_formats( $key, $details ) {
 	echo "<select name='abtble[postformat]' class='field'>";
 	foreach ($formats as $key => $format ) {
 		echo "<option value='" . $key . "'";
-		echo $table['postformat'] == $key ? " selected='selected'" : "";
+		echo (isset($table['postformat']) && $table['postformat'] == $key) ? " selected='selected'" : "";
 		echo ">" . $format . "</option>";
 	}
 	echo "</select>" . "<a href='#' class='info' title='" . __('Select the post format the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
