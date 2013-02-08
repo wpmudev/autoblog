@@ -35,10 +35,18 @@ class A_DebugImageCacheAddon {
 
 	function add_image_options( $key, $details ) {
 
-		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Debug Image Importing','autoblogtext') . "</span></td></tr>";
-		?>
+		$table = maybe_unserialize($details->feed_meta);
 
-		<?php
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Debug Image Importing','autoblogtext') . "</span></td></tr>";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Email debug log to','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<input type='text' name='abtble[debugemail]' value='" . esc_attr(stripslashes((isset($table['debugemail']) ? $table['debugemail'] : '') ) ) . "' class='long title field' />";
+		echo "</td>";
+		echo "</tr>\n";
 
 	}
 
