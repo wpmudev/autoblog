@@ -1046,8 +1046,6 @@ class autoblogpremium {
 		echo "</td>";
 		echo "</tr>\n";
 
-
-
 		do_action( 'autoblog_feed_edit_form_end', $key, $details );
 
 		echo "</table>\n";

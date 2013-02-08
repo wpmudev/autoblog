@@ -31,10 +31,45 @@ class A_FeatureImageCacheAddon {
 
 	function add_image_options( $key, $details ) {
 
-		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Image Importing','autoblogtext') . "</span></td></tr>";
-		?>
+		$table = maybe_unserialize($details->feed_meta);
 
-		<?php
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Featured Image Importing','autoblogtext') . "</span></td></tr>";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Check images from','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<select name='abtble[featuredimage]' class='field'>";
+		echo "<option value='ASC'";
+		if(apply_filters('autoblog_featuredimage_from', (isset($table['featuredimage']) ? $table['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER )) == 'ASC') {
+			echo " selected='selected'";
+		}
+		echo ">" . __('top of post','autoblogtext') . "</option>";
+		echo "<option value='DESC'";
+		if(apply_filters('autoblog_featuredimage_from', (isset($table['featuredimage']) ? $table['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER )) == 'DESC') {
+			echo " selected='selected'";
+		}
+		echo ">" . __('bottom of post','autoblogtext') . "</option>";
+		echo "</select>";
+		echo "</td>";
+		echo "</tr>\n";
+
+		echo "<tr>";
+		echo "<td valign='top' class='heading'>";
+		echo __('Minimum featured image size','autoblogtext');
+		echo "</td>";
+		echo "<td valign='top' class=''>";
+		echo "<input type='text' name='abtble[featured_min_width]' value='";
+		echo apply_filters('autoblog_featuredimage_min_width', (isset($table['featured_min_width']) ? (int) $table['featured_min_width'] : AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH ) );
+		echo "' class='narrow field' style='width: 5em;' />";
+		echo "&nbsp;" . __('pixels wide by','autoblogtext') . "&nbsp;";
+		echo "<input type='text' name='abtble[featured_min_height]' value='";
+		echo apply_filters('autoblog_featuredimage_min_height', (isset($table['featured_min_height']) ? (int) $table['featured_min_height'] : AUTOBLOG_FEATURED_IMAGE_MIN_HEIGHT ) );
+		echo "' class='narrow field' style='width: 5em;' />";
+		echo "&nbsp;" . __('pixels high','autoblogtext');
+		echo "</td>";
+		echo "</tr>\n";
 
 	}
 
@@ -122,7 +157,7 @@ class A_FeatureImageCacheAddon {
 			// Set the first image as the featured one - from a snippet at http://wpengineer.com/2460/set-wordpress-featured-image-automatically/
 			$imageargs = array(
 				'numberposts'    => -1,
-				'order'          => AUTOBLOG_IMAGE_CHECK_ORDER, // DESC for the last image
+				'order'          => apply_filters('autoblog_featuredimage_from', (isset($ablog['featuredimage']) ? $ablog['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER )), // DESC for the last image
 				'post_mime_type' => 'image',
 				'post_parent'    => $post_ID,
 				'post_status'    => NULL,
@@ -134,7 +169,7 @@ class A_FeatureImageCacheAddon {
 				foreach ( $cachedimages as $image_id => $image ) {
 					$meta = wp_get_attachment_metadata( $image_id );
 					if(!empty($meta)) {
-						if($meta['width'] >= AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH && $meta['height'] >= AUTOBLOG_FEATURED_IMAGE_MIN_HEIGHT ) {
+						if($meta['width'] >= apply_filters('autoblog_featuredimage_min_width', (isset($table['featured_min_width']) ? (int) $table['featured_min_width'] : AUTOBLOG_FEATURED_IMAGE_MIN_WIDTH ) ) && $meta['height'] >= apply_filters('autoblog_featuredimage_min_height', (isset($table['featured_min_height']) ? (int) $table['featured_min_height'] : AUTOBLOG_FEATURED_IMAGE_MIN_HEIGHT ) ) ) {
 							set_post_thumbnail( $post_ID, $image_id );
 							// Exit from the loop
 							break;
