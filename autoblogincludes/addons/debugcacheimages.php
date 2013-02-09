@@ -87,11 +87,19 @@ class A_DebugImageCacheAddon {
 		$img = media_sideload_image($image, $post_ID);
 
 		if ( !is_wp_error($img) ) {
+			$this->msglog[] = "Successfully grabbed image - " . $image;
+
 			preg_match_all('|<img.*?src=[\'"](.*?)[\'"].*?>|i', $img, $newimage);
 
 			if(!empty($newimage[1][0])) {
 				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s);", $image, $newimage[1][0] ) );
 			}
+		} else {
+			$this->msglog[] = "I came across an error grabbing image - " . $image;
+			if(method_exists( $img, 'get_error_message')) {
+				$this->msglog[] = $img->get_error_message();
+			}
+
 		}
 
 		return $image;
@@ -105,11 +113,14 @@ class A_DebugImageCacheAddon {
 		// Get the post so we can edit it.
 		$post = get_post( $post_ID );
 
+		$this->msglog[] = __('Hello, I am processing the post ', 'autoblogtext') . $post_ID; $this->msglog[] = '';
+		$this->msglog[] = $post->post_content; $this->msglog[] = '';
+
 		$images = $this->get_remote_images_in_content( $post->post_content );
 
 		if ( !empty($images) ) {
 
-			$this->msglog[] = "Step 1. Found the following images in post " . $post_ID . "- " . print_r($images, true);
+			$this->msglog[] = "I found the following images - " . print_r($images, true);
 
 			foreach ($images as $image) {
 
@@ -125,6 +136,8 @@ class A_DebugImageCacheAddon {
 						}
 					}
 
+					$this->msglog[] = "I am going to try to grab the image - " . $image;
+
 					$this->grab_image_from_url($image, $post_ID);
 
 				}
@@ -132,6 +145,14 @@ class A_DebugImageCacheAddon {
 			}
 
 		}
+
+		// Check if we have an email address and send the message
+		if(isset($ablog['debugemail']) && is_email($ablog['debugemail'])) {
+			// Send the debug email to the address
+			@wp_mail( $ablog['debugemail'], __('Autoblog debug message','autoblogtext'), implode( "\n", $this->msglog ));
+			$this->msglog = array();
+		}
+
 		// Returning the $post_ID even though it's an action and we really don't need to
 
 		return $post_ID;
