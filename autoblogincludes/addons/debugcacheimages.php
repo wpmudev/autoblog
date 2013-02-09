@@ -87,7 +87,7 @@ class A_DebugImageCacheAddon {
 		$img = media_sideload_image($image, $post_ID);
 
 		if ( !is_wp_error($img) ) {
-			$this->msglog[] = "Successfully grabbed image - " . $image;
+			$this->msglog[] = __("Successfully grabbed image - ", 'autoblogtext') . $image;
 
 			preg_match_all('|<img.*?src=[\'"](.*?)[\'"].*?>|i', $img, $newimage);
 
@@ -95,7 +95,7 @@ class A_DebugImageCacheAddon {
 				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s);", $image, $newimage[1][0] ) );
 			}
 		} else {
-			$this->msglog[] = "I came across an error grabbing image - " . $image;
+			$this->msglog[] = __("I came across an error grabbing image - ", 'autoblogtext') . $image;
 			if(method_exists( $img, 'get_error_message')) {
 				$this->msglog[] = $img->get_error_message();
 			}
@@ -120,7 +120,7 @@ class A_DebugImageCacheAddon {
 
 		if ( !empty($images) ) {
 
-			$this->msglog[] = "I found the following images - " . print_r($images, true);
+			$this->msglog[] = __("I found the following images - ", 'autoblogtext') . print_r($images, true);
 
 			foreach ($images as $image) {
 
@@ -136,7 +136,7 @@ class A_DebugImageCacheAddon {
 						}
 					}
 
-					$this->msglog[] = "I am going to try to grab the image - " . $image;
+					$this->msglog[] = __("I am going to try to grab the image - ", 'autoblogtext') . $image;
 
 					$this->grab_image_from_url($image, $post_ID);
 
