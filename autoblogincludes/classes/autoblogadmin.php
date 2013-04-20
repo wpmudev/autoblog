@@ -303,6 +303,8 @@ class autoblogpremium {
 			switch_to_blog($bid);
 			$cat = get_categories('get=all');
 			$cu = array();
+			// Add None
+			$cu[] = array('term_id' => '-1', 'name' => __('None', 'autoblogtext'));
 			foreach($cat as $key => $ct) {
 				$cu[] = array('term_id' => $ct->term_id, 'name' => $ct->name);
 			}
@@ -1277,7 +1279,7 @@ class autoblogpremium {
 		echo "</td>";
 		echo "<td valign='top' class=''>";
 
-		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => '', 'hierarchical' => true, 'show_option_none' => __('None'), 'class' => 'field cat'));
+		wp_dropdown_categories(array('hide_empty' => 0, 'name' => 'abtble[category]', 'orderby' => 'name', 'selected' => '', 'hierarchical' => true, 'show_option_none' => __('None','autoblogtext'), 'class' => 'field cat'));
 		echo "" . $this->_tips->add_tip( __('Assign this category to the imported posts.','autoblogtext') );
 		echo "</td>";
 		echo "</tr>";

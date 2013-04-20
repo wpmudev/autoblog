@@ -1065,6 +1065,10 @@ class autoblogcron {
 
 		global $post;
 
+		if(empty($post)) {
+			return $content;
+		}
+
 		$source = get_post_meta( $post->ID, 'original_source_link_html', true );
 		if(!empty($source)) {
 			$content .= "<p>" . $source . "</p>";
