@@ -79,10 +79,19 @@ class A_ImageCacheAddon {
 	 */
 	function check_post_for_images( $post_ID, $ablog, $item ) {
 
-		// Get the post so we can edit it.
-		$post = get_post( $post_ID );
+		// Reload the content as we need to work with the full content not just the excerpts
+		$post_content = trim( $item->get_content() );
+		// Set the encoding to UTF8
+		$post_content = html_entity_decode($post_content, ENT_QUOTES, 'UTF-8');
 
-		$images = $this->get_remote_images_in_content( $post->post_content );
+		// Backup in case we can't get the post content again from the item
+		if( empty($post_content) ) {
+			// Get the post so we can edit it.
+			$post = get_post( $post_ID );
+			$post_content = $post->post_content;
+		}
+
+		$images = $this->get_remote_images_in_content( $post_content );
 
 		if ( !empty($images) ) {
 
