@@ -1,7 +1,7 @@
 <?php
 class autoblogpremium {
 
-	var $build = 5;
+	var $build = 7;
 
 	var $db;
 
@@ -94,10 +94,13 @@ class autoblogpremium {
 
 				$charset_collate = '';
 
-				if ( ! empty($this->db->charset) )
-					$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
-				if ( ! empty($this->db->collate) )
-					$charset_collate .= " COLLATE $wpdb->collate";
+				if ( ! empty($this->db->charset) ) {
+					$charset_collate = "DEFAULT CHARACTER SET " . $this->db->charset;
+				}
+
+				if ( ! empty($this->db->collate) ) {
+					$charset_collate .= " COLLATE " . $this->db->collate;
+				}
 
 				$sql = "CREATE TABLE `" . $this->autoblog . "` (
 				  	  `feed_id` bigint(20) NOT NULL auto_increment,
