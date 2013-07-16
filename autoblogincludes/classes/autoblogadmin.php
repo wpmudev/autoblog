@@ -91,6 +91,14 @@ class autoblogpremium {
 	function install() {
 
 			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->autoblog . "' ") != $this->autoblog) {
+
+				$charset_collate = '';
+
+				if ( ! empty($this->db->charset) )
+					$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+				if ( ! empty($this->db->collate) )
+					$charset_collate .= " COLLATE $wpdb->collate";
+
 				$sql = "CREATE TABLE `" . $this->autoblog . "` (
 				  	  `feed_id` bigint(20) NOT NULL auto_increment,
 					  `site_id` bigint(20) default '1',
@@ -103,7 +111,7 @@ class autoblogpremium {
 					  KEY `site_id` (`site_id`),
 					  KEY `blog_id` (`blog_id`),
 					  KEY `nextcheck` (`nextcheck`)
-					)";
+					) $charset_collate;";
 
 				$this->db->query($sql);
 			}
