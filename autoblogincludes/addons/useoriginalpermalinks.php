@@ -23,6 +23,6 @@ function AB_external_permalink( $permalink, $post, $leavename ) {
 
 }
 
-add_filter( 'post_link', 'AB_external_permalink' );
+add_filter( 'post_link', 'AB_external_permalink', 10, 3 );
 
 ?>
