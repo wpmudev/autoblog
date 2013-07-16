@@ -7,42 +7,22 @@ Author URI: http://jakespurlock.com/2009/09/how-to-point-your-post-permalink-to-
 Network: False
 */
 
-function AB_external_permalink( $permalink ) {
+function AB_external_permalink( $permalink, $post, $leavename ) {
 
-	global $post;
+	if( is_object($post) && isset($post->ID) ) {
 
-	$thePostID = $post->ID;
+		$original_link = get_post_meta( $post->ID, 'original_source', true );
 
-	$internal_post = get_post( $thePostID );
-
-	$title = $internal_post->post_title;
-
-	$post_keys = array();
-	$post_val  = array();
-	$post_keys = get_post_custom_keys( $thePostID );
-
-	if (!empty($post_keys)) {
-		foreach ($post_keys as $pkey) {
-			if ($pkey == 'original_source') {
-				$post_val = get_post_custom_values( $pkey, $thePostID );
-				break;
-			}
+		if( !empty($original_link) ) {
+			return $original_link;
 		}
 
-		if(empty($post_val)) {
-			$link = $permalink;
-		} else {
-			$link = $post_val[0];
-		}
-	} else {
-		$link = $permalink;
 	}
 
-	return $link;
+	return $permalink;
 
 }
 
-add_filter('the_permalink','AB_external_permalink');
-add_filter('the_permalink_rss','AB_external_permalink');
+add_filter( 'post_link', 'AB_external_permalink' );
 
 ?>
