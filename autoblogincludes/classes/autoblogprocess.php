@@ -766,29 +766,38 @@ class autoblogcron {
 			}
 
 			// Set up the author
-			if($ablog['author'] == '0') {
+			if( !isset($ablog['author']) || $ablog['author'] == '0') {
+				$author_id = 0;
 				// Try the original author
 				$author = $item->get_author();
 				if(!empty($author)) {
-					$author = $author->get_name();
+					$author_name = $author->get_name();
+					$author_email = $author->get_email();
 				}
 
-				if(function_exists('get_user_by') && !empty($author)) {
-					$author = get_user_by( 'login',$author);
+				if(function_exists('get_user_by') && !empty($author_name)) {
+					$user = get_user_by( 'login', $author_name);
 					// Make sure that we are using only the ID
-					if($author !== false && isset($author->ID)) {
-						$author = $author->ID;
+					if($user != false && isset($user->ID)) {
+						$author_id = $user->ID;
 					}
-				} else {
-					$author = false;
 				}
 
-				if(!$author) {
-					$author = $ablog['altauthor'];
+				// We haven't found a user so we'll look at the email address as well
+				if( $author_id == 0 && function_exists('get_user_by') && !empty($author_email) ) {
+					$user = get_user_by( 'email', $author_email);
+					// Make sure that we are using only the ID
+					if($user != false && isset($user->ID)) {
+						$author_id = $user->ID;
+					}
+				}
+
+				if(!$author_id) {
+					$author_id = $ablog['altauthor'];
 				}
 			} else {
 				// Use a different author
-				$author = $ablog['author'];
+				$author_id = $ablog['author'];
 			}
 
 			// Set up the category
@@ -878,7 +887,7 @@ class autoblogcron {
 			}
 
 			// Move internal variables to correctly labelled ones
-			$post_author = $author;
+			$post_author = $author_id;
 			$blog_ID = $bid;
 
 			$post_data = compact('blog_ID', 'post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_title', 'post_category', 'post_status', 'post_type', 'tax_input');

@@ -389,7 +389,7 @@ class autoblogpremium {
 		global $menu, $admin_page_hooks;
 
 		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblog.php')) {
+			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
 				if(function_exists('is_network_admin') && is_network_admin()) {
 					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 				}
