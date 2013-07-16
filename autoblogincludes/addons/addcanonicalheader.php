@@ -29,7 +29,7 @@ class A_canonicalheader {
 			return;
 		}
 
-		if( !empty($post) ) {
+		if( is_object($post) ) {
 			// We have a post - so we can look for the information we want
 			$original_link = get_post_meta( $post->ID, 'original_source', true );
 
