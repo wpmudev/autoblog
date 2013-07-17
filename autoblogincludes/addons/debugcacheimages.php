@@ -92,7 +92,14 @@ class A_DebugImageCacheAddon {
 			preg_match_all('|<img.*?src=[\'"](.*?)[\'"].*?>|i', $img, $newimage);
 
 			if(!empty($newimage[1][0])) {
-				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s);", $image, $newimage[1][0] ) );
+
+				$theimg = $newimage[1][0];
+				$parsed_url = mb_parse_url( $theimg );
+
+				$theimg = str_replace( $parsed_url['host'] . '://' . $parsed_url['host'], get_option('siteurl'), $theimg );
+
+				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $image, $theimg, $post_ID ) );
+
 			}
 		} else {
 			$this->msglog[] = __("I came across an error grabbing image - ", 'autoblogtext') . $image;
