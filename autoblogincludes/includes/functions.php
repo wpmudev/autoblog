@@ -327,4 +327,15 @@ function autoblog_time2str($ts)
 
 		return $feed;
 	}
+
+	/*
+	* Function to handle urls in UTF-8 content from here - http://www.php.net/manual/en/function.parse-url.php#108787
+	*/
+	function mb_parse_url($url) {
+	    $encodedUrl = preg_replace('%[^:/?#&=\.]+%usDe', 'urlencode(\'$0\')', $url);
+	    $components = parse_url($encodedUrl);
+	    foreach ($components as &$component)
+	        $component = urldecode($component);
+	    return $components;
+	}
 ?>

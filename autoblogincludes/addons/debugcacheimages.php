@@ -136,9 +136,9 @@ class A_DebugImageCacheAddon {
 				preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
 				if(!empty($matches)) {
 
-					$purl = parse_url( $image );
+					$purl = mb_parse_url( $image );
 					if (empty($purl['scheme']) && substr( $image, 0 , 2 ) == '//') {
-						$furl = parse_url( $ablog['url'] );
+						$furl = mb_parse_url( $ablog['url'] );
 						if(!empty($furl['scheme'])) {
 							// We should add in the scheme again - this should handle images starting //
 							$image = $furl['scheme'] . ':' . $image;

@@ -2104,14 +2104,20 @@ class autoblogpremium {
 					$actions[] = "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a>";
 					$actions[] = "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
 
-					$actions[] = "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;test=" . $table->feed_id), 'autoblogtest') . "' class='testfeed'>" . __('Test', 'autoblogtext') . "</a>";
+					$actions[] = "<a href='" . wp_nonce_url(network_admin_url("admin.php?page=autoblog_admin&amp;test=" . $table->feed_id), 'autoblogtest') . "' class='testfeed'>" . __('Import Test', 'autoblogtext') . "</a>";
+
+					$actions[] = "<a href='http://validator.w3.org/feed/check.cgi?url=" . urlencode($details['url']) . "' class='testfeed' target=_blank>" . __('Validate Feed', 'autoblogtext') . "</a>";
+
 					$actions = apply_filters( 'autoblog_networkadmin_actions', $actions, $table->feed_id );
 				} else {
 					$actions[] = "<a href='" . admin_url("admin.php?page=autoblog_admin&amp;edit=" . $table->feed_id) . "' class='editfeed'>" . __('Edit', 'autoblogtext') . "</a>";
 					$actions[] = "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;delete=" . $table->feed_id), 'autoblogdelete') . "' class='deletefeed'>" . __('Delete', 'autoblogtext') . "</a>";
 					$actions[] = "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;process=" . $table->feed_id), 'autoblogprocess') . "' class='processfeed'>" . __('Process', 'autoblogtext') . "</a>";
 
-					$actions[] = "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;test=" . $table->feed_id), 'autoblogtest') . "' class='testfeed'>" . __('Test', 'autoblogtext') . "</a>";
+					$actions[] = "<a href='" . wp_nonce_url(admin_url("admin.php?page=autoblog_admin&amp;test=" . $table->feed_id), 'autoblogtest') . "' class='testfeed'>" . __('Import Test', 'autoblogtext') . "</a>";
+
+					$actions[] = "<a href='http://validator.w3.org/feed/check.cgi?url=" . urlencode($details['url']) . "' class='testfeed' target=_blank>" . __('Validate Feed', 'autoblogtext') . "</a>";
+
 					$actions = apply_filters( 'autoblog_networkadmin_actions', $actions, $table->feed_id );
 				}
 
