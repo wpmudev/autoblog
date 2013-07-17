@@ -589,7 +589,7 @@ class autoblogpremium {
 		echo '<h3 class="hndle"><span>' . __('Feed : ','autoblogtext') . esc_html(stripslashes($table['title'])) . '</span></h3>';
 		echo '<div class="inside">';
 
-		echo "<table width='100%'>\n";
+		echo "<table width='100%' class='feedtable'>\n";
 
 		// Title
 		echo "<tr>";
@@ -1095,7 +1095,7 @@ class autoblogpremium {
 		echo '<h3 class="hndle"><span>' . __('New Feed','autoblogtext') . '</span></h3>';
 		echo '<div class="inside">';
 
-		echo "<table width='100%'>";
+		echo "<table width='100%' class='feedtable'>";
 
 		// Title
 		echo "<tr>";

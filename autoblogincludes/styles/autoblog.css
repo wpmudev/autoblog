@@ -23,13 +23,13 @@ input.deletecheck {
 	margin-right: 10px;
 }
 
-div.inside table {
+div.inside table.feedtable {
 	margin-top: 5px;
 	width: 100%;
 	margin-bottom: 5px;
 }
 
-div.inside table tbody tr td.heading {
+div.inside table.feedtable tbody tr td.heading {
 	text-align: right;
 	width: 20%;
 }
@@ -39,7 +39,7 @@ tr.spacer, td.spacer {
 
 }
 
-div.inside table tbody tr td.spacer span {
+div.inside table.feedtable tbody tr td.spacer span {
 	text-shadow: 0 1px 0 #FFFFFF;
 	font-size: 12px;
 	color: #000;line-height: 1.4em;
@@ -48,14 +48,14 @@ div.inside table tbody tr td.spacer span {
 	font-weight: bold;
 }
 
-table tbody tr td p {
+table.feedtable tbody tr td p {
 	padding-left: 10px;
 	padding-top: 0px;
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
-div.inside table tbody tr td {
+div.inside table.feedtable tbody tr td {
 	line-height: 1.4em;
 	padding-right: 5px;
 	padding-top: 5px;
@@ -63,7 +63,7 @@ div.inside table tbody tr td {
 	vertical-align: text-top;
 }
 
-div.inside table tbody tr.top td {
+div.inside table.feedtable tbody tr.top td {
 	line-height: 1.4em;
 	padding-right: 5px;
 	padding-top: 5px;
@@ -79,7 +79,7 @@ input.short {
 	width: 50%;
 }
 
-div.inside table tbody tr td span {
+div.inside table.feedtable tbody tr td span {
 	font-size: 11px;
 	font-style: italic;
 }
