@@ -51,7 +51,7 @@ class A_ImageCacheAddon {
 		return $images;
 	}
 
-	function grab_image_from_url( $image, $post_ID ) {
+	function grab_image_from_url( $image, $post_ID, $orig_image = false ) {
 
 		// Include the file and media libraries as they have the functions we want to use
 		require_once( ABSPATH . 'wp-admin/includes/media.php' );
@@ -73,7 +73,7 @@ class A_ImageCacheAddon {
 
 				$theimg = str_replace( $parsed_url['host'] . '://' . $parsed_url['host'], get_option('siteurl'), $theimg );
 
-				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $image, $theimg, $post_ID ) );
+				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $orig_image, $theimg, $post_ID ) );
 
 			}
 		}
@@ -107,28 +107,30 @@ class A_ImageCacheAddon {
 				preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
 				if(!empty($matches)) {
 
+					$newimage = $image;
+
 					// Parse the image url
-					$purl = mb_parse_url( $image );
+					$purl = mb_parse_url( $newimage );
 					// Parse the feed url
 					$furl = mb_parse_url( $ablog['url'] );
 
 					if(empty($purl['host']) && !empty($furl['host'])) {
 						// We need to add in a host name as the images look like they are relative to the feed
-						$image = trailingslashit($furl['host']) . ltrim($image, '/');
+						$newimage = trailingslashit($furl['host']) . ltrim($newimage, '/');
 
 					}
 
 					if (empty($purl['scheme']) && !empty( $furl['scheme'] ) ) {
 
-							if( substr( $image, 0 , 2 ) == '//' ) {
-								$image = $furl['scheme'] . ':' . $image;
+							if( substr( $newimage, 0 , 2 ) == '//' ) {
+								$newimage = $furl['scheme'] . ':' . $newimage;
 							} else {
-								$image = $furl['scheme'] . '://' . $image;
+								$newimage = $furl['scheme'] . '://' . $newimage;
 							}
 
 					}
 
-					$this->grab_image_from_url($image, $post_ID);
+					$this->grab_image_from_url($newimage, $post_ID, $image);
 
 				}
 
