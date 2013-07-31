@@ -25,9 +25,11 @@ if(!defined('AUTOBLOG_LAZY_ID')) define( 'AUTOBLOG_LAZY_ID', true);
 // To switch from a CRON processing method set this to 'pageload' (default is 'cron' to use the wp-cron).
 if(!defined('AUTOBLOG_PROCESSING_METHOD')) define( 'AUTOBLOG_PROCESSING_METHOD', 'cron');
 
-
 // Information to use for duplicate checking - link or guid
 if(!defined('AUTOBLOG_POST_DUPLICATE_CHECK')) define( 'AUTOBLOG_POST_DUPLICATE_CHECK', 'link');
+
+// Information to use for duplicate checking - link or guid
+if(!defined('AUTOBLOG_EXTERNAL_PERMALINK_SKIP_FEEDS')) define( 'AUTOBLOG_EXTERNAL_PERMALINK_SKIP_FEEDS', '');
 
 
 /*

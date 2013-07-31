@@ -14,7 +14,23 @@ function AB_external_permalink( $permalink, $post, $leavename ) {
 		$original_link = get_post_meta( $post->ID, 'original_source', true );
 
 		if( !empty($original_link) ) {
-			return $original_link;
+
+			// Check for the feed id and whether it's on the skip link
+			if( defined('AUTOBLOG_EXTERNAL_PERMALINK_SKIP_FEEDS') && AUTOBLOG_EXTERNAL_PERMALINK_SKIP_FEEDS != '' ) {
+				$skipfeeds = explode( ',', AUTOBLOG_EXTERNAL_PERMALINK_SKIP_FEEDS );
+
+				if(!empty($skipfeeds)) {
+					$original_feed_id = get_post_meta( $post->ID, 'original_feed_id', true );
+					if( !in_array( $original_feed_id, $skipfeeds ) ) {
+						return $original_link;
+					}
+				} else {
+					return $original_link;
+				}
+			} else {
+				return $original_link;
+			}
+
 		}
 
 	}

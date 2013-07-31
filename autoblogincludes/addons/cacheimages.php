@@ -37,7 +37,7 @@ class A_ImageCacheAddon {
 
 		foreach ($matches[1] as $url) {
 
-			$purl = parse_url($url);
+			$purl = mb_parse_url($url);
 
 			if(!isset($purl['host']) || $purl['host'] != $siteurl['host']) {
 				// we seem to have an external images
@@ -107,13 +107,25 @@ class A_ImageCacheAddon {
 				preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
 				if(!empty($matches)) {
 
+					// Parse the image url
 					$purl = mb_parse_url( $image );
-					if (empty($purl['scheme']) && substr( $image, 0 , 2 ) == '//') {
-						$furl = mb_parse_url( $ablog['url'] );
-						if(!empty($furl['scheme'])) {
-							// We should add in the scheme again - this should handle images starting //
-							$image = $furl['scheme'] . ':' . $image;
-						}
+					// Parse the feed url
+					$furl = mb_parse_url( $ablog['url'] );
+
+					if(empty($purl['host']) && !empty($furl['host'])) {
+						// We need to add in a host name as the images look like they are relative to the feed
+						$image = trailingslashit($furl['host']) . ltrim($image, '/');
+
+					}
+
+					if (empty($purl['scheme']) && !empty( $furl['scheme'] ) ) {
+
+							if( substr( $image, 0 , 2 ) == '//' ) {
+								$image = $furl['scheme'] . ':' . $image;
+							} else {
+								$image = $furl['scheme'] . '://' . $image;
+							}
+
 					}
 
 					$this->grab_image_from_url($image, $post_ID);
