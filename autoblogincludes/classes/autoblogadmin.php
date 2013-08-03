@@ -388,18 +388,24 @@ class autoblogpremium {
 
 		global $menu, $admin_page_hooks;
 
+		if(function_exists('is_network_admin') && is_network_admin()) {
+			$capabilty = 'manage_network_options';
+		} else {
+			$capabilty = 'manage_options';
+		}
+
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
 				if(function_exists('is_network_admin') && is_network_admin()) {
-					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), 'manage_network_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 				} else {
-					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 				}
 			} else {
-				add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+				add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 			}
 		} else {
-			add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), 'manage_options',  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+			add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
 		}
 
 		// Fix WP translation hook issue
@@ -408,22 +414,22 @@ class autoblogpremium {
 		}
 
 		// Add the sub menu
-		add_submenu_page('autoblog', __('Edit feeds','autoblogtext'), __('All feeds','autoblogtext'), 'manage_options', "autoblog_admin", array(&$this,'handle_admin_page'));
+		add_submenu_page('autoblog', __('Edit feeds','autoblogtext'), __('All feeds','autoblogtext'), $capabilty, "autoblog_admin", array(&$this,'handle_admin_page'));
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(!function_exists('is_network_admin') || !is_network_admin()) {
 				//add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
-				add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), 'manage_options', "autoblog_addons", array(&$this,'handle_addons_panel'));
+				add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), $capabilty, "autoblog_addons", array(&$this,'handle_addons_panel'));
 
 				do_action('autoblog_site_menu');
 			} else {
 
-				add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), 'manage_options', "autoblog_addons", array(&$this,'handle_networkaddons_panel'));
+				add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), $capabilty, "autoblog_addons", array(&$this,'handle_networkaddons_panel'));
 				do_action('autoblog_network_menu');
 			}
 		} else {
 			//add_submenu_page('autoblog', __('Edit Options','autoblogtext'), __('Options','autoblogtext'), 'manage_options', "autoblog_options", array(&$this,'handle_options_page'));
-			add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), 'manage_options', "autoblog_addons", array(&$this,'handle_addons_panel'));
+			add_submenu_page('autoblog', __('Autoblog Add-ons','autoblogtext'), __('Add-ons','autoblogtext'), $capabilty, "autoblog_addons", array(&$this,'handle_addons_panel'));
 
 			do_action('autoblog_site_menu');
 		}
