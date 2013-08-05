@@ -35,7 +35,11 @@ class A_DebugImageCacheAddon {
 
 	function add_image_options( $key, $details ) {
 
-		$table = maybe_unserialize($details->feed_meta);
+		if(!empty($details->feed_meta)) {
+			$table = maybe_unserialize($details->feed_meta);
+		} else {
+			$table = array();
+		}
 
 		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Debug Image Importing','autoblogtext') . "</span></td></tr>";
 
