@@ -80,6 +80,7 @@ class A_DebugImageCacheAddon {
 
 	function grab_image_from_url( $image, $post_ID, $orig_image = false ) {
 
+
 		// Include the file and media libraries as they have the functions we want to use
 		require_once( ABSPATH . 'wp-admin/includes/media.php' );
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -100,7 +101,9 @@ class A_DebugImageCacheAddon {
 				$theimg = $newimage[1][0];
 				$parsed_url = mb_parse_url( $theimg );
 
-				$theimg = str_replace( $parsed_url['host'] . '://' . $parsed_url['host'], get_option('siteurl'), $theimg );
+				$theimg = str_replace( $parsed_url['host'] . '://' . $parsed_url['host'], get_blog_option( $this->db->blogid, 'siteurl'), $theimg );
+
+				$this->msglog[] = __('Replacing image url with - ', 'autoblogtext') . $theimg;
 
 				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $orig_image, $theimg, $post_ID ) );
 

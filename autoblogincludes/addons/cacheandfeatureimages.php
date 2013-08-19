@@ -123,7 +123,7 @@ class A_FeatureImageCacheAddon {
 				$theimg = $newimage[1][0];
 				$parsed_url = mb_parse_url( $theimg );
 
-				$theimg = str_replace( $parsed_url['host'] . '://' . $parsed_url['host'], get_option('siteurl'), $theimg );
+				$theimg = str_replace( $parsed_url['host'] . '://' . $parsed_url['host'], get_blog_option( $this->db->blogid, 'siteurl'), $theimg );
 
 				$this->db->query( $this->db->prepare("UPDATE {$this->db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $orig_image, $theimg, $post_ID ) );
 			}
