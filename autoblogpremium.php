@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: AutoBlog
-Version: 3.9.9.5
+Version: 3.9.9.6
 Plugin URI: http://premium.wpmudev.org/project/autoblog
 Description: This plugin automatically posts content from RSS feeds to different blogs on your WordPress Multisite...
 Author: Barry (Incsub)
@@ -32,24 +32,24 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Using SimplePie
 //define('SIMPLEPIE_USERAGENT', 'PUT AGENT HERE');
 
-require_once('autoblogincludes/includes/config.php');
-require_once('autoblogincludes/includes/functions.php');
+require_once( dirname(__FILE__) . '/autoblogincludes/includes/config.php');
+require_once( dirname(__FILE__) . '/autoblogincludes/includes/functions.php');
 // Set up my location
 set_autoblog_url(__FILE__);
 set_autoblog_dir(__FILE__);
 
 // Load them up
 if(is_admin()) {
-	include_once('autoblogincludes/external/wpmudev-dash-notification.php');
+	include_once( dirname(__FILE__) . '/autoblogincludes/external/wpmudev-dash-notification.php');
 
-	require_once('autoblogincludes/includes/class_wd_help_tooltips.php');
-	require_once('autoblogincludes/classes/autoblogadmin.php');
+	require_once( dirname(__FILE__) . '/autoblogincludes/includes/class_wd_help_tooltips.php');
+	require_once( dirname(__FILE__) . '/autoblogincludes/classes/autoblogadmin.php');
 
 	$abp = new autoblogpremium();
 }
 
 // Include the processing class
-require_once('autoblogincludes/classes/autoblogprocess.php');
+require_once( dirname(__FILE__) . '/autoblogincludes/classes/autoblogprocess.php');
 $abc = new autoblogcron();
 
 load_autoblog_addons();
