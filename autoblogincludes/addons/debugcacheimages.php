@@ -101,7 +101,9 @@ class A_DebugImageCacheAddon {
 				$theimg = $newimage[1][0];
 				$parsed_url = mb_parse_url( $theimg );
 
-				$theimg = str_replace( $parsed_url['host'] . '://' . $parsed_url['host'], get_blog_option( $this->db->blogid, 'siteurl'), $theimg );
+				if(function_exists('get_blog_option')) {
+					$theimg = str_replace( $parsed_url['scheme'] . '://' . $parsed_url['host'], get_blog_option( $this->db->blogid, 'siteurl'), $theimg );
+				}
 
 				$this->msglog[] = __('Replacing image url with - ', 'autoblogtext') . $theimg;
 
