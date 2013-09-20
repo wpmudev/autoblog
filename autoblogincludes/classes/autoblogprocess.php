@@ -1,4 +1,5 @@
 <?php
+
 class autoblogcron {
 
 	var $db;
@@ -766,37 +767,47 @@ class autoblogcron {
 			}
 
 			// Set up the author
-			if( !isset($ablog['author']) || $ablog['author'] == '0') {
-				$author_id = 0;
-				// Try the original author
+			$author_id = 0;
+			if ( empty( $ablog['author'] ) ) {
 				$author = $item->get_author();
-				if(!empty($author)) {
-					$author_name = $author->get_name();
-					$author_email = $author->get_email();
-				}
-
-				if(function_exists('get_user_by') && !empty($author_name)) {
-					$user = get_user_by( 'login', $author_name);
-					// Make sure that we are using only the ID
-					if($user != false && isset($user->ID)) {
+				if ( $author ) {
+					// we look at the email address first
+					$author_email = filter_var( $author->get_email(), FILTER_VALIDATE_EMAIL );
+					if ( $author_email && ( $user = get_user_by( 'email', $author_email ) ) ) {
 						$author_id = $user->ID;
+					} else {
+						// no email, then try to find by login or first/last name
+						$author_name = $author->get_name();
+
+						// first try to find by login
+						if ( ( $user = get_user_by( 'login', $author_name ) ) ) {
+							$author_id = $user->ID;
+						} else {
+							// can't find by login, then try to find by first/last name
+							$author_name = explode( ' ', $author_name, 2 );
+							if ( count( $author_name ) >= 2 ) {
+								$author_query = new WP_User_Query( array(
+									'number'     => 1,
+									'meta_query' => array(
+										'relation' => 'AND',
+										array( 'key' => 'first_name', 'value' => $author_name[0], 'compare' => '=' ),
+										array( 'key' => 'last_name',  'value' => $author_name[1], 'compare' => '=' ),
+									),
+								) );
+
+								if ( !empty( $author_query->results ) ) {
+									$author_id = $author_query->results[0]->ID;
+								}
+							}
+						}
 					}
 				}
 
-				// We haven't found a user so we'll look at the email address as well
-				if( $author_id == 0 && function_exists('get_user_by') && !empty($author_email) ) {
-					$user = get_user_by( 'email', $author_email);
-					// Make sure that we are using only the ID
-					if($user != false && isset($user->ID)) {
-						$author_id = $user->ID;
-					}
-				}
-
-				if(!$author_id) {
+				// an author has not been found, then set default
+				if ( !$author_id ) {
 					$author_id = $ablog['altauthor'];
 				}
 			} else {
-				// Use a different author
 				$author_id = $ablog['author'];
 			}
 
@@ -1089,6 +1100,3 @@ class autoblogcron {
 	}
 
 }
-
-
-?>
