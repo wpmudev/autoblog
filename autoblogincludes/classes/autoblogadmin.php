@@ -1,4 +1,5 @@
 <?php
+
 class autoblogpremium {
 
 	var $build = 7;
@@ -505,8 +506,6 @@ class autoblogpremium {
 		<?php
 
 	}
-
-
 
 	function dashboard_stats() {
 
@@ -2787,29 +2786,19 @@ class autoblogpremium {
 		<?php
 	}
 
-	function get_blogs_of_site($siteid = false, $all = false) {
+	function get_blogs_of_site( $siteid = false, $all = false ) {
 		global $current_site, $wpdb;
-
-		if ( !$siteid && !empty($current_site) ) {
+		if ( !$siteid && !empty( $current_site ) ) {
 			$siteid = $current_site->id;
 		}
 
-		$match = array();
 		$blogs = array();
-
-		$results = $wpdb->get_results( $wpdb->prepare("SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = %d", $siteid) );
-
-		if($results) {
-			foreach ($results as $result) {
-				$blog = get_blog_details( $result->blog_id );
-				if ( !empty($blog) && isset( $blog->domain ) ) {
-					$blogs[$result->blog_id]->id		  = $blog->blog_id;
-					$blogs[$result->blog_id]->blogname    = $blog->blogname;
-					$blogs[$result->blog_id]->domain      = $blog->domain;
-					$blogs[$result->blog_id]->path        = $blog->path;
-					$blogs[$result->blog_id]->site_id     = $blog->site_id;
-					$blogs[$result->blog_id]->siteurl     = $blog->siteurl;
-				}
+		$results = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = %d", $siteid ) );
+		foreach ( $results as $blog_id ) {
+			$blog = get_blog_details( $blog_id );
+			if ( !empty( $blog ) && isset( $blog->domain ) ) {
+				$blogs[$blog_id] = $blog;
+				$blogs[$blog_id]->id = $blog_id;
 			}
 		}
 
@@ -2817,4 +2806,3 @@ class autoblogpremium {
 	}
 
 }
-?>
