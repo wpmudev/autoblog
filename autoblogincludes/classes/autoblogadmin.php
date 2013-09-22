@@ -10,7 +10,7 @@ class autoblogpremium {
 	var $plugindir = "";
 	var $base_uri = '';
 
-	var $tables = array('autoblog');
+	var $tables = array( 'autoblog' );
 	var $autoblog;
 
 	var $siteid = 1;
@@ -28,7 +28,7 @@ class autoblogpremium {
 		// Installation functions
 		register_activation_hook(__FILE__, array(&$this, 'install'));
 
-		add_action( 'plugins_loaded', array(&$this, 'load_textdomain'));
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 
 		add_action('init', array(&$this, 'initialise_plugin'));
 
@@ -80,13 +80,7 @@ class autoblogpremium {
 	}
 
 	function load_textdomain() {
-
-		$locale = apply_filters( 'autoblog_locale', get_locale() );
-		$mofile = autoblog_dir( "autoblogincludes/languages/autoblog-$locale.mo" );
-
-		if ( file_exists( $mofile ) )
-			load_textdomain( 'autoblogtext', $mofile );
-
+		load_plugin_textdomain( 'autoblogtext', false, dirname( plugin_basename( AUTOBLOG_BASEFILE ) ) . '/autoblogincludes/languages/' );
 	}
 
 	function install() {

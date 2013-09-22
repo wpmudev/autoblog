@@ -1,0 +1,1304 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Autoblog 3.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-22 22:42+0300\n"
+"PO-Revision-Date: 2013-09-22 22:44+0300\n"
+"Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
+"Language-Team: Incsub <dev@incsub.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: esc_html__;esc_html_e;esc_attr__;__;_e;esc_attr_e;_n\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ./../../\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SearchPath-0: autoblogincludes\n"
+
+#: autoblogincludes/external/wpmudev-dash-notification.php:58
+#, php-format
+msgid ""
+"Easily get updates, support, and one-click WPMU DEV plugin/theme "
+"installations right from in your dashboard - <strong><a href='%s' "
+"title='Install Now &raquo;'>install the free WPMU DEV Dashboard plugin</a></"
+"strong>. &nbsp;&nbsp;&nbsp;<small><a href='http://premium.wpmudev.org/wpmu-"
+"dev/update-notifications-plugin-information/'>(find out more)</a></small>"
+msgstr ""
+"Easily get updates, support, and one-click WPMU DEV plugin/theme "
+"installations right from in your dashboard - <strong><a href='%s' "
+"title='Install Now &raquo;'>install the free WPMU DEV Dashboard plugin</a></"
+"strong>. &nbsp;&nbsp;&nbsp;<small><a href='http://premium.wpmudev.org/wpmu-"
+"dev/update-notifications-plugin-information/'>(find out more)</a></small>"
+
+#: autoblogincludes/external/wpmudev-dash-notification.php:63
+#, php-format
+msgid ""
+"Updates, Support, Premium Plugins, Community - <strong><a href=\"%s\" title="
+"\"Activate Now &raquo;\">activate the WPMU DEV Dashboard plugin now</a></"
+"strong>."
+msgstr ""
+"Updates, Support, Premium Plugins, Community - <strong><a href=\"%s\" title="
+"\"Activate Now &raquo;\">activate the WPMU DEV Dashboard plugin now</a></"
+"strong>."
+
+#: autoblogincludes/classes/autoblogadmin.php:160
+msgid "Posts imported"
+msgstr "Posts imported"
+
+#: autoblogincludes/classes/autoblogadmin.php:177
+msgid "Are you sure you want to delete this feed?"
+msgstr "Are you sure you want to delete this feed?"
+
+#: autoblogincludes/classes/autoblogadmin.php:178
+msgid "Are you sure you want to process this feed?"
+msgstr "Are you sure you want to process this feed?"
+
+#: autoblogincludes/classes/autoblogadmin.php:313
+#: autoblogincludes/classes/autoblogadmin.php:792
+#: autoblogincludes/classes/autoblogadmin.php:1293
+msgid "None"
+msgstr "None"
+
+#: autoblogincludes/classes/autoblogadmin.php:319
+#: autoblogincludes/classes/autoblogadmin.php:336
+#: autoblogincludes/classes/autoblogadmin.php:354
+msgid "No blog."
+msgstr "No blog."
+
+#: autoblogincludes/classes/autoblogadmin.php:395
+#: autoblogincludes/classes/autoblogadmin.php:397
+#: autoblogincludes/classes/autoblogadmin.php:400
+#: autoblogincludes/classes/autoblogadmin.php:403
+msgid "Auto Blog"
+msgstr "Auto Blog"
+
+#: autoblogincludes/classes/autoblogadmin.php:412
+msgid "Edit feeds"
+msgstr "Edit feeds"
+
+#: autoblogincludes/classes/autoblogadmin.php:412
+msgid "All feeds"
+msgstr "All feeds"
+
+#: autoblogincludes/classes/autoblogadmin.php:417
+#: autoblogincludes/classes/autoblogadmin.php:422
+#: autoblogincludes/classes/autoblogadmin.php:427
+msgid "Autoblog Add-ons"
+msgstr "Autoblog Add-ons"
+
+#: autoblogincludes/classes/autoblogadmin.php:417
+#: autoblogincludes/classes/autoblogadmin.php:422
+#: autoblogincludes/classes/autoblogadmin.php:427
+msgid "Add-ons"
+msgstr "Add-ons"
+
+#: autoblogincludes/classes/autoblogadmin.php:448
+msgid "Autoblog"
+msgstr "Autoblog"
+
+#: autoblogincludes/classes/autoblogadmin.php:452
+msgid "You are running Autoblog version "
+msgstr "You are running Autoblog version "
+
+#: autoblogincludes/classes/autoblogadmin.php:472
+msgid "Processing Report"
+msgstr "Processing Report"
+
+#: autoblogincludes/classes/autoblogadmin.php:493
+msgid ""
+"No processing reports are available, either you have not processed a feed or "
+"everything is running smoothly."
+msgstr ""
+"No processing reports are available, either you have not processed a feed or "
+"everything is running smoothly."
+
+#: autoblogincludes/classes/autoblogadmin.php:510
+msgid "Statistics - posts per day"
+msgstr "Statistics - posts per day"
+
+#: autoblogincludes/classes/autoblogadmin.php:515
+msgid "You need to set up some feeds before we can produce statistics."
+msgstr "You need to set up some feeds before we can produce statistics."
+
+#: autoblogincludes/classes/autoblogadmin.php:535
+msgid "Autoblog dashboard"
+msgstr "Autoblog dashboard"
+
+#: autoblogincludes/classes/autoblogadmin.php:589
+msgid "Feed : "
+msgstr "Feed : "
+
+#: autoblogincludes/classes/autoblogadmin.php:597
+#: autoblogincludes/classes/autoblogadmin.php:1103
+msgid "Your Title"
+msgstr "Your Title"
+
+#: autoblogincludes/classes/autoblogadmin.php:600
+#: autoblogincludes/classes/autoblogadmin.php:1106
+msgid "Enter a memorable title."
+msgstr "Enter a memorable title."
+
+#: autoblogincludes/classes/autoblogadmin.php:607
+#: autoblogincludes/classes/autoblogadmin.php:1113
+msgid "Feed URL"
+msgstr "Feed URL"
+
+#: autoblogincludes/classes/autoblogadmin.php:610
+#: autoblogincludes/classes/autoblogadmin.php:1116
+msgid "Enter the feed URL."
+msgstr "Enter the feed URL."
+
+#: autoblogincludes/classes/autoblogadmin.php:621
+#: autoblogincludes/classes/autoblogadmin.php:645
+#: autoblogincludes/classes/autoblogadmin.php:660
+#: autoblogincludes/classes/autoblogadmin.php:1128
+#: autoblogincludes/classes/autoblogadmin.php:1144
+#: autoblogincludes/classes/autoblogadmin.php:1159
+msgid "Add posts to"
+msgstr "Add posts to"
+
+#: autoblogincludes/classes/autoblogadmin.php:638
+#: autoblogincludes/classes/autoblogadmin.php:1137
+msgid "Select a blog to add the post to."
+msgstr "Select a blog to add the post to."
+
+#: autoblogincludes/classes/autoblogadmin.php:676
+#: autoblogincludes/classes/autoblogadmin.php:1176
+msgid "Post type for new posts"
+msgstr "Post type for new posts"
+
+#: autoblogincludes/classes/autoblogadmin.php:689
+#: autoblogincludes/classes/autoblogadmin.php:1191
+msgid "Select the post type the imported posts will have in the blog."
+msgstr "Select the post type the imported posts will have in the blog."
+
+#: autoblogincludes/classes/autoblogadmin.php:698
+#: autoblogincludes/classes/autoblogadmin.php:1199
+msgid "Default status for new posts"
+msgstr "Default status for new posts"
+
+#: autoblogincludes/classes/autoblogadmin.php:703
+#: autoblogincludes/classes/autoblogadmin.php:1204
+msgid "Published"
+msgstr "Published"
+
+#: autoblogincludes/classes/autoblogadmin.php:704
+#: autoblogincludes/classes/autoblogadmin.php:1205
+msgid "Pending Review"
+msgstr "Pending Review"
+
+#: autoblogincludes/classes/autoblogadmin.php:705
+#: autoblogincludes/classes/autoblogadmin.php:1206
+msgid "Draft"
+msgstr "Draft"
+
+#: autoblogincludes/classes/autoblogadmin.php:706
+#: autoblogincludes/classes/autoblogadmin.php:1207
+msgid "Select the status the imported posts will have in the blog."
+msgstr "Select the status the imported posts will have in the blog."
+
+#: autoblogincludes/classes/autoblogadmin.php:714
+#: autoblogincludes/classes/autoblogadmin.php:1215
+msgid "Set the date for new posts"
+msgstr "Set the date for new posts"
+
+#: autoblogincludes/classes/autoblogadmin.php:719
+#: autoblogincludes/classes/autoblogadmin.php:1220
+msgid "Imported date"
+msgstr "Imported date"
+
+#: autoblogincludes/classes/autoblogadmin.php:720
+#: autoblogincludes/classes/autoblogadmin.php:1221
+msgid "Original posts date"
+msgstr "Original posts date"
+
+#: autoblogincludes/classes/autoblogadmin.php:721
+#: autoblogincludes/classes/autoblogadmin.php:1222
+msgid "Select the date imported posts will have."
+msgstr "Select the date imported posts will have."
+
+#: autoblogincludes/classes/autoblogadmin.php:728
+#: autoblogincludes/classes/autoblogadmin.php:1229
+msgid "Author details"
+msgstr "Author details"
+
+#: autoblogincludes/classes/autoblogadmin.php:734
+#: autoblogincludes/classes/autoblogadmin.php:1235
+msgid "Set author for new posts"
+msgstr "Set author for new posts"
+
+#: autoblogincludes/classes/autoblogadmin.php:739
+#: autoblogincludes/classes/autoblogadmin.php:1240
+msgid "Use feed author"
+msgstr "Use feed author"
+
+#: autoblogincludes/classes/autoblogadmin.php:752
+#: autoblogincludes/classes/autoblogadmin.php:1253
+msgid ""
+"Select the author you want to use for the posts, or attempt to use the "
+"original feed author."
+msgstr ""
+"Select the author you want to use for the posts, or attempt to use the "
+"original feed author."
+
+#: autoblogincludes/classes/autoblogadmin.php:761
+#: autoblogincludes/classes/autoblogadmin.php:1262
+msgid "If author in feed does not exist locally use"
+msgstr "If author in feed does not exist locally use"
+
+#: autoblogincludes/classes/autoblogadmin.php:778
+#: autoblogincludes/classes/autoblogadmin.php:1279
+msgid "If the feed author does not exist in your blog then use this author."
+msgstr "If the feed author does not exist in your blog then use this author."
+
+#: autoblogincludes/classes/autoblogadmin.php:783
+#: autoblogincludes/classes/autoblogadmin.php:1284
+msgid "Categories and Tags"
+msgstr "Categories and Tags"
+
+#: autoblogincludes/classes/autoblogadmin.php:787
+#: autoblogincludes/classes/autoblogadmin.php:1289
+msgid "Assign posts to this category"
+msgstr "Assign posts to this category"
+
+#: autoblogincludes/classes/autoblogadmin.php:795
+#: autoblogincludes/classes/autoblogadmin.php:1294
+msgid "Assign this category to the imported posts."
+msgstr "Assign this category to the imported posts."
+
+#: autoblogincludes/classes/autoblogadmin.php:802
+#: autoblogincludes/classes/autoblogadmin.php:1300
+msgid "Treat feed categories as"
+msgstr "Treat feed categories as"
+
+#: autoblogincludes/classes/autoblogadmin.php:807
+#: autoblogincludes/classes/autoblogadmin.php:1304
+msgid "tags"
+msgstr "tags"
+
+#: autoblogincludes/classes/autoblogadmin.php:808
+#: autoblogincludes/classes/autoblogadmin.php:1305
+msgid "categories"
+msgstr "categories"
+
+#: autoblogincludes/classes/autoblogadmin.php:812
+#: autoblogincludes/classes/autoblogadmin.php:1308
+msgid "Add any that do not exist."
+msgstr "Add any that do not exist."
+
+#: autoblogincludes/classes/autoblogadmin.php:812
+#: autoblogincludes/classes/autoblogadmin.php:1308
+msgid "Create any tags or categories that are needed."
+msgstr "Create any tags or categories that are needed."
+
+#: autoblogincludes/classes/autoblogadmin.php:819
+#: autoblogincludes/classes/autoblogadmin.php:1315
+msgid "Add these tags to the posts"
+msgstr "Add these tags to the posts"
+
+#: autoblogincludes/classes/autoblogadmin.php:822
+#: autoblogincludes/classes/autoblogadmin.php:1318
+msgid "Enter a comma separated list of tags to add."
+msgstr "Enter a comma separated list of tags to add."
+
+#: autoblogincludes/classes/autoblogadmin.php:827
+#: autoblogincludes/classes/autoblogadmin.php:1323
+msgid "Post Filtering"
+msgstr "Post Filtering"
+
+#: autoblogincludes/classes/autoblogadmin.php:828
+#: autoblogincludes/classes/autoblogadmin.php:1324
+msgid "Include posts that contain (separate words with commas)"
+msgstr "Include posts that contain (separate words with commas)"
+
+#: autoblogincludes/classes/autoblogadmin.php:832
+#: autoblogincludes/classes/autoblogadmin.php:1328
+msgid "All of these words"
+msgstr "All of these words"
+
+#: autoblogincludes/classes/autoblogadmin.php:835
+#: autoblogincludes/classes/autoblogadmin.php:1331
+msgid ""
+"A post to be imported must have ALL of these words in the title or content."
+msgstr ""
+"A post to be imported must have ALL of these words in the title or content."
+
+#: autoblogincludes/classes/autoblogadmin.php:841
+#: autoblogincludes/classes/autoblogadmin.php:1337
+msgid "Any of these words"
+msgstr "Any of these words"
+
+#: autoblogincludes/classes/autoblogadmin.php:844
+#: autoblogincludes/classes/autoblogadmin.php:1340
+msgid ""
+"A post to be imported must have ANY of these words in the title or content."
+msgstr ""
+"A post to be imported must have ANY of these words in the title or content."
+
+#: autoblogincludes/classes/autoblogadmin.php:850
+#: autoblogincludes/classes/autoblogadmin.php:1346
+msgid "The exact phrase"
+msgstr "The exact phrase"
+
+#: autoblogincludes/classes/autoblogadmin.php:853
+#: autoblogincludes/classes/autoblogadmin.php:1349
+msgid ""
+"A post to be imported must have this exact phrase in the title or content."
+msgstr ""
+"A post to be imported must have this exact phrase in the title or content."
+
+#: autoblogincludes/classes/autoblogadmin.php:859
+#: autoblogincludes/classes/autoblogadmin.php:1355
+msgid "None of these words"
+msgstr "None of these words"
+
+#: autoblogincludes/classes/autoblogadmin.php:862
+#: autoblogincludes/classes/autoblogadmin.php:1358
+msgid ""
+"A post to be imported must NOT have any of these words in the title or "
+"content."
+msgstr ""
+"A post to be imported must NOT have any of these words in the title or "
+"content."
+
+#: autoblogincludes/classes/autoblogadmin.php:868
+#: autoblogincludes/classes/autoblogadmin.php:1364
+msgid "Any of these tags"
+msgstr "Any of these tags"
+
+#: autoblogincludes/classes/autoblogadmin.php:871
+#: autoblogincludes/classes/autoblogadmin.php:1367
+msgid ""
+"A post to be imported must be marked with any of these categories or tags."
+msgstr ""
+"A post to be imported must be marked with any of these categories or tags."
+
+#: autoblogincludes/classes/autoblogadmin.php:873
+#: autoblogincludes/classes/autoblogadmin.php:1369
+msgid "Tags should be comma separated"
+msgstr "Tags should be comma separated"
+
+#: autoblogincludes/classes/autoblogadmin.php:878
+#: autoblogincludes/classes/autoblogadmin.php:1373
+msgid "Post excerpts"
+msgstr "Post excerpts"
+
+#: autoblogincludes/classes/autoblogadmin.php:882
+#: autoblogincludes/classes/autoblogadmin.php:1377
+msgid "Use full post or an excerpt"
+msgstr "Use full post or an excerpt"
+
+#: autoblogincludes/classes/autoblogadmin.php:886
+#: autoblogincludes/classes/autoblogadmin.php:1381
+msgid "Use Full Post"
+msgstr "Use Full Post"
+
+#: autoblogincludes/classes/autoblogadmin.php:887
+#: autoblogincludes/classes/autoblogadmin.php:1382
+msgid "Use Excerpt"
+msgstr "Use Excerpt"
+
+#: autoblogincludes/classes/autoblogadmin.php:888
+#: autoblogincludes/classes/autoblogadmin.php:1383
+msgid "Use the full post (if available) or create an excerpt."
+msgstr "Use the full post (if available) or create an excerpt."
+
+#: autoblogincludes/classes/autoblogadmin.php:894
+#: autoblogincludes/classes/autoblogadmin.php:1389
+msgid "For excerpts use"
+msgstr "For excerpts use"
+
+#: autoblogincludes/classes/autoblogadmin.php:899
+#: autoblogincludes/classes/autoblogadmin.php:1394
+msgid "Words"
+msgstr "Words"
+
+#: autoblogincludes/classes/autoblogadmin.php:900
+#: autoblogincludes/classes/autoblogadmin.php:1395
+msgid "Sentences"
+msgstr "Sentences"
+
+#: autoblogincludes/classes/autoblogadmin.php:901
+#: autoblogincludes/classes/autoblogadmin.php:1396
+msgid "Paragraphs"
+msgstr "Paragraphs"
+
+#: autoblogincludes/classes/autoblogadmin.php:902
+#: autoblogincludes/classes/autoblogadmin.php:1397
+msgid "Specify the size of the excerpt to create (if selected)"
+msgstr "Specify the size of the excerpt to create (if selected)"
+
+#: autoblogincludes/classes/autoblogadmin.php:908
+#: autoblogincludes/classes/autoblogadmin.php:1403
+msgid "Link to original source"
+msgstr "Link to original source"
+
+#: autoblogincludes/classes/autoblogadmin.php:911
+#: autoblogincludes/classes/autoblogadmin.php:1406
+msgid ""
+"If you want to link back to original source, enter a phrase to use here."
+msgstr ""
+"If you want to link back to original source, enter a phrase to use here."
+
+#: autoblogincludes/classes/autoblogadmin.php:915
+#: autoblogincludes/classes/autoblogadmin.php:1408
+msgid "Ensure this link is a nofollow one"
+msgstr "Ensure this link is a nofollow one"
+
+#: autoblogincludes/classes/autoblogadmin.php:920
+#: autoblogincludes/classes/autoblogadmin.php:1414
+msgid "Feed Processing"
+msgstr "Feed Processing"
+
+#: autoblogincludes/classes/autoblogadmin.php:924
+#: autoblogincludes/classes/autoblogadmin.php:1418
+msgid "Import the most recent"
+msgstr "Import the most recent"
+
+#: autoblogincludes/classes/autoblogadmin.php:928
+#: autoblogincludes/classes/autoblogadmin.php:1422
+msgid "posts."
+msgstr "posts."
+
+#: autoblogincludes/classes/autoblogadmin.php:930
+#: autoblogincludes/classes/autoblogadmin.php:1424
+msgid "added posts."
+msgstr "added posts."
+
+#: autoblogincludes/classes/autoblogadmin.php:932
+#: autoblogincludes/classes/autoblogadmin.php:1426
+msgid ""
+"You can set this to only import a specific number of new posts rather than "
+"as many as the plugin can manage."
+msgstr ""
+"You can set this to only import a specific number of new posts rather than "
+"as many as the plugin can manage."
+
+#: autoblogincludes/classes/autoblogadmin.php:938
+#: autoblogincludes/classes/autoblogadmin.php:1432
+msgid "Process this feed"
+msgstr "Process this feed"
+
+#: autoblogincludes/classes/autoblogadmin.php:942
+#: autoblogincludes/classes/autoblogadmin.php:1436
+msgid "Never (paused)"
+msgstr "Never (paused)"
+
+#: autoblogincludes/classes/autoblogadmin.php:944
+#: autoblogincludes/classes/autoblogadmin.php:1437
+msgid "every 5 minutes"
+msgstr "every 5 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:945
+#: autoblogincludes/classes/autoblogadmin.php:1438
+msgid "every 10 minutes"
+msgstr "every 10 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:946
+#: autoblogincludes/classes/autoblogadmin.php:1439
+msgid "every 15 minutes"
+msgstr "every 15 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:947
+#: autoblogincludes/classes/autoblogadmin.php:1440
+msgid "every 20 minutes"
+msgstr "every 20 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:948
+#: autoblogincludes/classes/autoblogadmin.php:1441
+msgid "every 25 minutes"
+msgstr "every 25 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:950
+#: autoblogincludes/classes/autoblogadmin.php:1442
+msgid "every 30 minutes"
+msgstr "every 30 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:951
+#: autoblogincludes/classes/autoblogadmin.php:1443
+msgid "every hour"
+msgstr "every hour"
+
+#: autoblogincludes/classes/autoblogadmin.php:952
+#: autoblogincludes/classes/autoblogadmin.php:1444
+msgid "every 1 hour 30 minutes"
+msgstr "every 1 hour 30 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:953
+#: autoblogincludes/classes/autoblogadmin.php:1445
+msgid "every 2 hours"
+msgstr "every 2 hours"
+
+#: autoblogincludes/classes/autoblogadmin.php:954
+#: autoblogincludes/classes/autoblogadmin.php:1446
+msgid "every 2 hours 30 minutes"
+msgstr "every 2 hours 30 minutes"
+
+#: autoblogincludes/classes/autoblogadmin.php:955
+#: autoblogincludes/classes/autoblogadmin.php:1447
+msgid "every 5 hours"
+msgstr "every 5 hours"
+
+#: autoblogincludes/classes/autoblogadmin.php:956
+#: autoblogincludes/classes/autoblogadmin.php:1448
+msgid "every day"
+msgstr "every day"
+
+#: autoblogincludes/classes/autoblogadmin.php:957
+#: autoblogincludes/classes/autoblogadmin.php:1449
+msgid ""
+"Set the time delay for processing this feed, irregularly updated feeds do "
+"not need to be checked very often."
+msgstr ""
+"Set the time delay for processing this feed, irregularly updated feeds do "
+"not need to be checked very often."
+
+#: autoblogincludes/classes/autoblogadmin.php:967
+#: autoblogincludes/classes/autoblogadmin.php:1455
+msgid "Starting from"
+msgstr "Starting from"
+
+#: autoblogincludes/classes/autoblogadmin.php:1000
+#: autoblogincludes/classes/autoblogadmin.php:1476
+msgid "Set the date you want to start processing posts from."
+msgstr "Set the date you want to start processing posts from."
+
+#: autoblogincludes/classes/autoblogadmin.php:1008
+#: autoblogincludes/classes/autoblogadmin.php:1482
+msgid "Ending on"
+msgstr "Ending on"
+
+#: autoblogincludes/classes/autoblogadmin.php:1041
+#: autoblogincludes/classes/autoblogadmin.php:1503
+msgid "Set the date you want to stop processing posts from this feed."
+msgstr "Set the date you want to stop processing posts from this feed."
+
+#: autoblogincludes/classes/autoblogadmin.php:1047
+#: autoblogincludes/classes/autoblogadmin.php:1509
+msgid "Force SSL verification"
+msgstr "Force SSL verification"
+
+#: autoblogincludes/classes/autoblogadmin.php:1053
+#: autoblogincludes/classes/autoblogadmin.php:1514
+msgid "Yes"
+msgstr "Yes"
+
+#: autoblogincludes/classes/autoblogadmin.php:1056
+#: autoblogincludes/classes/autoblogadmin.php:1516
+msgid "No"
+msgstr "No"
+
+#: autoblogincludes/classes/autoblogadmin.php:1058
+#: autoblogincludes/classes/autoblogadmin.php:1518
+msgid ""
+"If you are getting SSL errors, or your feed uses a self-signed SSL "
+"certificate then set this to <strong>No</strong>."
+msgstr ""
+"If you are getting SSL errors, or your feed uses a self-signed SSL "
+"certificate then set this to <strong>No</strong>."
+
+#: autoblogincludes/classes/autoblogadmin.php:1069
+#: autoblogincludes/classes/autoblogadmin.php:1529
+msgid "Cancel"
+msgstr "Cancel"
+
+#: autoblogincludes/classes/autoblogadmin.php:1074
+msgid "Update feed"
+msgstr "Update feed"
+
+#: autoblogincludes/classes/autoblogadmin.php:1095
+msgid "New Feed"
+msgstr "New Feed"
+
+#: autoblogincludes/classes/autoblogadmin.php:1534
+msgid "Add feed"
+msgstr "Add feed"
+
+#: autoblogincludes/classes/autoblogadmin.php:1653
+#: autoblogincludes/classes/autoblogadmin.php:1681
+#: autoblogincludes/classes/autoblogadmin.php:1951
+msgid "Auto Blog Feeds"
+msgstr "Auto Blog Feeds"
+
+#: autoblogincludes/classes/autoblogadmin.php:1681
+#: autoblogincludes/classes/autoblogadmin.php:1951
+#: autoblogincludes/addons/twitter.addon.php:28
+msgid "Add New"
+msgstr "Add New"
+
+#: autoblogincludes/classes/autoblogadmin.php:1920
+msgid "Your feed has been added."
+msgstr "Your feed has been added."
+
+#: autoblogincludes/classes/autoblogadmin.php:1921
+msgid "Your feed has been updated."
+msgstr "Your feed has been updated."
+
+#: autoblogincludes/classes/autoblogadmin.php:1922
+msgid "Your feed(s) have been deleted."
+msgstr "Your feed(s) have been deleted."
+
+#: autoblogincludes/classes/autoblogadmin.php:1923
+#: autoblogincludes/classes/autoblogadmin.php:1926
+msgid "Your feed(s) has been processed."
+msgstr "Your feed(s) has been processed."
+
+#: autoblogincludes/classes/autoblogadmin.php:1925
+msgid "Your feed has been tested."
+msgstr "Your feed has been tested."
+
+#: autoblogincludes/classes/autoblogadmin.php:1929
+msgid "Your feed could not be added."
+msgstr "Your feed could not be added."
+
+#: autoblogincludes/classes/autoblogadmin.php:1930
+msgid "Your feed could not be updated."
+msgstr "Your feed could not be updated."
+
+#: autoblogincludes/classes/autoblogadmin.php:1931
+msgid "Your feed(s) could not be deleted."
+msgstr "Your feed(s) could not be deleted."
+
+#: autoblogincludes/classes/autoblogadmin.php:1932
+msgid "Your feed(s) could not be processed."
+msgstr "Your feed(s) could not be processed."
+
+#: autoblogincludes/classes/autoblogadmin.php:1934
+msgid "Please select a feed to delete."
+msgstr "Please select a feed to delete."
+
+#: autoblogincludes/classes/autoblogadmin.php:1935
+msgid "Please select a feed to process."
+msgstr "Please select a feed to process."
+
+#: autoblogincludes/classes/autoblogadmin.php:1937
+msgid "Your feed could not be tested."
+msgstr "Your feed could not be tested."
+
+#: autoblogincludes/classes/autoblogadmin.php:1938
+msgid "No new entries in your feed(s)."
+msgstr "No new entries in your feed(s)."
+
+#: autoblogincludes/classes/autoblogadmin.php:1982
+#: autoblogincludes/classes/autoblogadmin.php:2195
+#: autoblogincludes/classes/autoblogadmin.php:2455
+#: autoblogincludes/classes/autoblogadmin.php:2590
+#: autoblogincludes/classes/autoblogadmin.php:2643
+#: autoblogincludes/classes/autoblogadmin.php:2768
+msgid "Bulk Actions"
+msgstr "Bulk Actions"
+
+#: autoblogincludes/classes/autoblogadmin.php:1983
+#: autoblogincludes/classes/autoblogadmin.php:2105
+#: autoblogincludes/classes/autoblogadmin.php:2115
+#: autoblogincludes/classes/autoblogadmin.php:2196
+msgid "Process"
+msgstr "Process"
+
+#: autoblogincludes/classes/autoblogadmin.php:1984
+#: autoblogincludes/classes/autoblogadmin.php:2104
+#: autoblogincludes/classes/autoblogadmin.php:2114
+#: autoblogincludes/classes/autoblogadmin.php:2197
+msgid "Delete"
+msgstr "Delete"
+
+#: autoblogincludes/classes/autoblogadmin.php:1986
+#: autoblogincludes/classes/autoblogadmin.php:2199
+#: autoblogincludes/classes/autoblogadmin.php:2458
+#: autoblogincludes/classes/autoblogadmin.php:2646
+msgid "Apply"
+msgstr "Apply"
+
+#: autoblogincludes/classes/autoblogadmin.php:2003
+#: autoblogincludes/classes/autoblogadmin.php:2039
+msgid "Feed title"
+msgstr "Feed title"
+
+#: autoblogincludes/classes/autoblogadmin.php:2007
+#: autoblogincludes/classes/autoblogadmin.php:2043
+msgid "Feed post type"
+msgstr "Feed post type"
+
+#: autoblogincludes/classes/autoblogadmin.php:2012
+#: autoblogincludes/classes/autoblogadmin.php:2048
+msgid "Feed target"
+msgstr "Feed target"
+
+#: autoblogincludes/classes/autoblogadmin.php:2015
+#: autoblogincludes/classes/autoblogadmin.php:2051
+msgid "Last processed *"
+msgstr "Last processed *"
+
+#: autoblogincludes/classes/autoblogadmin.php:2018
+#: autoblogincludes/classes/autoblogadmin.php:2054
+msgid "Next check *"
+msgstr "Next check *"
+
+#: autoblogincludes/classes/autoblogadmin.php:2022
+#: autoblogincludes/classes/autoblogadmin.php:2058
+msgid "Last processed"
+msgstr "Last processed"
+
+#: autoblogincludes/classes/autoblogadmin.php:2025
+#: autoblogincludes/classes/autoblogadmin.php:2061
+msgid "Next check"
+msgstr "Next check"
+
+#: autoblogincludes/classes/autoblogadmin.php:2094
+msgid "No title set"
+msgstr "No title set"
+
+#: autoblogincludes/classes/autoblogadmin.php:2103
+#: autoblogincludes/classes/autoblogadmin.php:2113
+#: autoblogincludes/addons/twitter.addon.php:30
+msgid "Edit"
+msgstr "Edit"
+
+#: autoblogincludes/classes/autoblogadmin.php:2107
+#: autoblogincludes/classes/autoblogadmin.php:2117
+msgid "Import Test"
+msgstr "Import Test"
+
+#: autoblogincludes/classes/autoblogadmin.php:2109
+#: autoblogincludes/classes/autoblogadmin.php:2119
+msgid "Validate Feed"
+msgstr "Validate Feed"
+
+#: autoblogincludes/classes/autoblogadmin.php:2150
+#: autoblogincludes/classes/autoblogadmin.php:2164
+msgid "Never"
+msgstr "Never"
+
+#: autoblogincludes/classes/autoblogadmin.php:2181
+msgid "You do not have any feeds setup - please click Add New to get started"
+msgstr "You do not have any feeds setup - please click Add New to get started"
+
+#: autoblogincludes/classes/autoblogadmin.php:2211
+msgid "* Times and dates are local to each site."
+msgstr "* Times and dates are local to each site."
+
+#: autoblogincludes/classes/autoblogadmin.php:2224
+msgid "Your options have been updated."
+msgstr "Your options have been updated."
+
+#: autoblogincludes/classes/autoblogadmin.php:2238
+msgid "Autoblog Settings"
+msgstr "Autoblog Settings"
+
+#: autoblogincludes/classes/autoblogadmin.php:2257
+msgid "Debug mode"
+msgstr "Debug mode"
+
+#: autoblogincludes/classes/autoblogadmin.php:2259
+msgid "Switch on debug mode and reporting."
+msgstr "Switch on debug mode and reporting."
+
+#: autoblogincludes/classes/autoblogadmin.php:2264
+msgid "Debug mode is"
+msgstr "Debug mode is"
+
+#: autoblogincludes/classes/autoblogadmin.php:2270
+msgid "Disabled"
+msgstr "Disabled"
+
+#: autoblogincludes/classes/autoblogadmin.php:2271
+msgid "Enabled"
+msgstr "Enabled"
+
+#: autoblogincludes/classes/autoblogadmin.php:2281
+msgid "Save Changes"
+msgstr "Save Changes"
+
+#: autoblogincludes/classes/autoblogadmin.php:2423
+#: autoblogincludes/classes/autoblogadmin.php:2611
+msgid "Add-on updated."
+msgstr "Add-on updated."
+
+#: autoblogincludes/classes/autoblogadmin.php:2424
+#: autoblogincludes/classes/autoblogadmin.php:2612
+msgid "Add-on not updated."
+msgstr "Add-on not updated."
+
+#: autoblogincludes/classes/autoblogadmin.php:2426
+#: autoblogincludes/classes/autoblogadmin.php:2614
+msgid "Add-on activated."
+msgstr "Add-on activated."
+
+#: autoblogincludes/classes/autoblogadmin.php:2427
+#: autoblogincludes/classes/autoblogadmin.php:2615
+msgid "Add-on not activated."
+msgstr "Add-on not activated."
+
+#: autoblogincludes/classes/autoblogadmin.php:2429
+#: autoblogincludes/classes/autoblogadmin.php:2617
+msgid "Add-on deactivated."
+msgstr "Add-on deactivated."
+
+#: autoblogincludes/classes/autoblogadmin.php:2430
+#: autoblogincludes/classes/autoblogadmin.php:2618
+msgid "Add-on not deactivated."
+msgstr "Add-on not deactivated."
+
+#: autoblogincludes/classes/autoblogadmin.php:2432
+#: autoblogincludes/classes/autoblogadmin.php:2620
+msgid "Add-on activation toggled."
+msgstr "Add-on activation toggled."
+
+#: autoblogincludes/classes/autoblogadmin.php:2437
+#: autoblogincludes/classes/autoblogadmin.php:2625
+msgid "Edit Add-ons"
+msgstr "Edit Add-ons"
+
+#: autoblogincludes/classes/autoblogadmin.php:2456
+#: autoblogincludes/classes/autoblogadmin.php:2591
+#: autoblogincludes/classes/autoblogadmin.php:2644
+#: autoblogincludes/classes/autoblogadmin.php:2769
+msgid "Toggle activation"
+msgstr "Toggle activation"
+
+#: autoblogincludes/classes/autoblogadmin.php:2472
+#: autoblogincludes/classes/autoblogadmin.php:2660
+msgid "Add-on Name"
+msgstr "Add-on Name"
+
+#: autoblogincludes/classes/autoblogadmin.php:2473
+#: autoblogincludes/classes/autoblogadmin.php:2563
+#: autoblogincludes/classes/autoblogadmin.php:2661
+#: autoblogincludes/classes/autoblogadmin.php:2741
+msgid "Active"
+msgstr "Active"
+
+#: autoblogincludes/classes/autoblogadmin.php:2552
+msgid "Deactivate"
+msgstr "Deactivate"
+
+#: autoblogincludes/classes/autoblogadmin.php:2554
+msgid "Activate"
+msgstr "Activate"
+
+#: autoblogincludes/classes/autoblogadmin.php:2565
+#: autoblogincludes/classes/autoblogadmin.php:2743
+msgid "Inactive"
+msgstr "Inactive"
+
+#: autoblogincludes/classes/autoblogadmin.php:2576
+#: autoblogincludes/classes/autoblogadmin.php:2754
+msgid "No Add-ons where found for this install."
+msgstr "No Add-ons where found for this install."
+
+#: autoblogincludes/classes/autoblogadmin.php:2730
+msgid "Network Deactivate"
+msgstr "Network Deactivate"
+
+#: autoblogincludes/classes/autoblogadmin.php:2732
+msgid "Network Activate"
+msgstr "Network Activate"
+
+#: autoblogincludes/classes/autoblogprocess.php:81
+msgid "Every 10 Mins"
+msgstr "Every 10 Mins"
+
+#: autoblogincludes/classes/autoblogprocess.php:82
+msgid "Every 5 Mins"
+msgstr "Every 5 Mins"
+
+#: autoblogincludes/classes/autoblogprocess.php:347
+msgid "<strong>Feed Testing Results</strong>"
+msgstr "<strong>Feed Testing Results</strong>"
+
+#: autoblogincludes/classes/autoblogprocess.php:356
+#: autoblogincludes/classes/autoblogprocess.php:635
+msgid "<strong>Error:</strong> Can not locate the feed reading file."
+msgstr "<strong>Error:</strong> Can not locate the feed reading file."
+
+#: autoblogincludes/classes/autoblogprocess.php:365
+#: autoblogincludes/classes/autoblogprocess.php:645
+msgid "<strong>Error:</strong> Can not load the taxonomy file."
+msgstr "<strong>Error:</strong> Can not load the taxonomy file."
+
+#: autoblogincludes/classes/autoblogprocess.php:370
+msgid "<strong>Error:</strong> There is no URL setup for this feed"
+msgstr "<strong>Error:</strong> There is no URL setup for this feed"
+
+#: autoblogincludes/classes/autoblogprocess.php:386
+msgid "<strong>Notice:</strong> I can not find any entries in your feed."
+msgstr "<strong>Notice:</strong> I can not find any entries in your feed."
+
+#: autoblogincludes/classes/autoblogprocess.php:394
+#: autoblogincludes/classes/autoblogprocess.php:680
+#: autoblogincludes/classes/autoblogprocess.php:970
+msgid "<strong>Error:</strong> "
+msgstr "<strong>Error:</strong> "
+
+#: autoblogincludes/classes/autoblogprocess.php:401
+msgid ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed yet."
+msgstr ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed yet."
+
+#: autoblogincludes/classes/autoblogprocess.php:409
+msgid ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed anymore."
+msgstr ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed anymore."
+
+#: autoblogincludes/classes/autoblogprocess.php:447
+msgid ""
+"<strong>Notice:</strong> I have already imported the first post in the feed "
+"\""
+msgstr ""
+"<strong>Notice:</strong> I have already imported the first post in the feed "
+"\""
+
+#: autoblogincludes/classes/autoblogprocess.php:447
+#: autoblogincludes/classes/autoblogprocess.php:450
+msgid "\" so I would have stopped processing."
+msgstr "\" so I would have stopped processing."
+
+#: autoblogincludes/classes/autoblogprocess.php:450
+msgid ""
+"<strong>Notice:</strong> Reached an already imported the post in the feed \""
+msgstr ""
+"<strong>Notice:</strong> Reached an already imported the post in the feed \""
+
+#: autoblogincludes/classes/autoblogprocess.php:603
+msgid "<strong>Found Post:</strong> I have found a post entititled : "
+msgstr "<strong>Found Post:</strong> I have found a post entititled : "
+
+#: autoblogincludes/classes/autoblogprocess.php:614
+msgid "<strong>Processed:</strong> I would have processed "
+msgstr "<strong>Processed:</strong> I would have processed "
+
+#: autoblogincludes/classes/autoblogprocess.php:614
+#: autoblogincludes/classes/autoblogprocess.php:986
+msgid " of the "
+msgstr " of the "
+
+#: autoblogincludes/classes/autoblogprocess.php:614
+msgid " posts in the feed."
+msgstr " posts in the feed."
+
+#: autoblogincludes/classes/autoblogprocess.php:650
+msgid "<strong>Error:</strong> There is no URL setup for this feed - "
+msgstr "<strong>Error:</strong> There is no URL setup for this feed - "
+
+#: autoblogincludes/classes/autoblogprocess.php:672
+msgid "<strong>Notice:</strong> I can not find any entries in your feed - "
+msgstr "<strong>Notice:</strong> I can not find any entries in your feed - "
+
+#: autoblogincludes/classes/autoblogprocess.php:687
+msgid ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed yet - "
+msgstr ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed yet - "
+
+#: autoblogincludes/classes/autoblogprocess.php:695
+msgid ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed anymore - "
+msgstr ""
+"<strong>Notice:</strong> We are not within the date period for processing "
+"this feed anymore - "
+
+#: autoblogincludes/classes/autoblogprocess.php:729
+msgid "<strong>Notice:</strong> There are no new entries in the feed - "
+msgstr "<strong>Notice:</strong> There are no new entries in the feed - "
+
+#: autoblogincludes/classes/autoblogprocess.php:731
+msgid ""
+"<strong>Notice:</strong> Reached an already imported entry so stopped "
+"processing the feed - "
+msgstr ""
+"<strong>Notice:</strong> Reached an already imported entry so stopped "
+"processing the feed - "
+
+#: autoblogincludes/classes/autoblogprocess.php:986
+msgid "<strong>Processed:</strong> I have processed "
+msgstr "<strong>Processed:</strong> I have processed "
+
+#: autoblogincludes/classes/autoblogprocess.php:986
+msgid " posts in the feed - "
+msgstr " posts in the feed - "
+
+#: autoblogincludes/classes/autoblogprocess.php:1052
+msgid "<strong>Notice:</strong> Processing stopped due to "
+msgstr "<strong>Notice:</strong> Processing stopped due to "
+
+#: autoblogincludes/addons/twitter.addon.php:26
+msgid "Tweets"
+msgstr "Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:27
+msgid "Tweet"
+msgstr "Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:29
+msgid "Add New Tweet"
+msgstr "Add New Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:31
+msgid "Edit Tweet"
+msgstr "Edit Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:32
+msgid "New Tweet"
+msgstr "New Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:33
+#: autoblogincludes/addons/twitter.addon.php:34
+msgid "View Tweet"
+msgstr "View Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:35
+msgid "Search Tweets"
+msgstr "Search Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:36
+msgid "No Tweets found"
+msgstr "No Tweets found"
+
+#: autoblogincludes/addons/twitter.addon.php:37
+msgid "No Tweets found in Trash"
+msgstr "No Tweets found in Trash"
+
+#: autoblogincludes/addons/twitter.addon.php:38
+msgid "Parent Tweet"
+msgstr "Parent Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:46
+msgid "tweet"
+msgstr "tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:93
+msgid "The most recent tweets on your site"
+msgstr "The most recent tweets on your site"
+
+#: autoblogincludes/addons/twitter.addon.php:94
+msgid "Recent Tweets"
+msgstr "Recent Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:116
+msgid "Recent Posts"
+msgstr "Recent Posts"
+
+#: autoblogincludes/addons/twitter.addon.php:128
+msgid " at "
+msgstr " at "
+
+#: autoblogincludes/addons/twitter.addon.php:164
+msgid "Title:"
+msgstr "Title:"
+
+#: autoblogincludes/addons/twitter.addon.php:167
+msgid "Number of tweets to show:"
+msgstr "Number of tweets to show:"
+
+#: autoblogincludes/addons/check.feedentries.php:13
+msgid "Feed Check"
+msgstr "Feed Check"
+
+#: autoblogincludes/addons/check.feedentries.php:27
+msgid "Ok"
+msgstr "Ok"
+
+#: autoblogincludes/addons/check.feedentries.php:29
+msgid "Problem"
+msgstr "Problem"
+
+#: autoblogincludes/addons/debugcacheimages.php:44
+msgid "Debug Image Importing"
+msgstr "Debug Image Importing"
+
+#: autoblogincludes/addons/debugcacheimages.php:48
+msgid "Email debug log to"
+msgstr "Email debug log to"
+
+#: autoblogincludes/addons/debugcacheimages.php:95
+msgid "Successfully grabbed image - "
+msgstr "Successfully grabbed image - "
+
+#: autoblogincludes/addons/debugcacheimages.php:108
+msgid "Replacing image url with - "
+msgstr "Replacing image url with - "
+
+#: autoblogincludes/addons/debugcacheimages.php:114
+msgid "I came across an error grabbing image - "
+msgstr "I came across an error grabbing image - "
+
+#: autoblogincludes/addons/debugcacheimages.php:141
+msgid "Hello, I am processing the post "
+msgstr "Hello, I am processing the post "
+
+#: autoblogincludes/addons/debugcacheimages.php:148
+msgid "I found the following images - "
+msgstr "I found the following images - "
+
+#: autoblogincludes/addons/debugcacheimages.php:179
+msgid "I am going to try to grab the image - "
+msgstr "I am going to try to grab the image - "
+
+#: autoblogincludes/addons/debugcacheimages.php:192
+msgid "Autoblog debug message"
+msgstr "Autoblog debug message"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:56
+msgid "Don't import featured image"
+msgstr "Don't import featured image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:57
+msgid "Use media:thumbnail tag of a feed item"
+msgstr "Use media:thumbnail tag of a feed item"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:58
+msgid "Find the first image withing content of a feed item"
+msgstr "Find the first image withing content of a feed item"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:59
+msgid "Find the last image withing content of a feed item"
+msgstr "Find the last image withing content of a feed item"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:64
+msgid "Featured Image Importing"
+msgstr "Featured Image Importing"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:68
+msgid "Select a way to import featured image"
+msgstr "Select a way to import featured image"
+
+#: autoblogincludes/addons/post.formats.php:16
+msgid "Post format for new posts"
+msgstr "Post format for new posts"
+
+#: autoblogincludes/addons/post.formats.php:28
+msgid "Select the post format the imported posts will have in the blog."
+msgstr "Select the post format the imported posts will have in the blog."
+
+#: autoblogincludes/addons/appendtexttopost.php:56
+msgid "Append text to post content"
+msgstr "Append text to post content"
+
+#: autoblogincludes/addons/appendtexttopost.php:60
+msgid "Post footer text"
+msgstr "Post footer text"
+
+#: autoblogincludes/addons/appendtexttopost.php:64
+msgid "You can use the following placeholders in your footer:"
+msgstr "You can use the following placeholders in your footer:"
+
+#: autoblogincludes/includes/pointer-tutorials.php:134
+msgid "Tutorial"
+msgstr "Tutorial"
+
+#: autoblogincludes/includes/pointer-tutorials.php:421
+msgid "Next &raquo;"
+msgstr "Next &raquo;"
+
+#: autoblogincludes/includes/pointer-tutorials.php:436
+#: autoblogincludes/includes/pointer-tutorials.php:458
+msgid "Dismiss"
+msgstr "Dismiss"
+
+#: autoblogincludes/includes/pointer-tutorials.php:437
+#: autoblogincludes/includes/pointer-tutorials.php:459
+#, php-format
+msgid "Dismiss %s"
+msgstr "Dismiss %s"
+
+#: autoblogincludes/includes/pointer-tutorials.php:443
+msgid "&laquo; Previous"
+msgstr "&laquo; Previous"
+
+#: autoblogincludes/includes/pointer-tutorials.php:498
+#, php-format
+msgid "%s: Step %d of %d"
+msgstr "%s: Step %d of %d"
+
+#: autoblogincludes/includes/class_wd_help_tooltips.php:297
+msgid "Help"
+msgstr "Help"
+
+#: autoblogincludes/includes/functions.php:219
+msgid "now"
+msgstr "now"
+
+#: autoblogincludes/includes/functions.php:225
+msgid "just now"
+msgstr "just now"
+
+#: autoblogincludes/includes/functions.php:226
+msgid "1 minute ago"
+msgstr "1 minute ago"
+
+#: autoblogincludes/includes/functions.php:227
+msgid " minutes ago"
+msgstr " minutes ago"
+
+#: autoblogincludes/includes/functions.php:228
+msgid "1 hour ago"
+msgstr "1 hour ago"
+
+#: autoblogincludes/includes/functions.php:229
+msgid " hours ago"
+msgstr " hours ago"
+
+#: autoblogincludes/includes/functions.php:231
+msgid "Yesterday"
+msgstr "Yesterday"
+
+#: autoblogincludes/includes/functions.php:232
+msgid " days ago"
+msgstr " days ago"
+
+#: autoblogincludes/includes/functions.php:233
+msgid " weeks ago"
+msgstr " weeks ago"
+
+#: autoblogincludes/includes/functions.php:234
+msgid "last month"
+msgstr "last month"
+
+#: autoblogincludes/includes/functions.php:243
+msgid "in a minute"
+msgstr "in a minute"
+
+#: autoblogincludes/includes/functions.php:244
+#: autoblogincludes/includes/functions.php:246
+#: autoblogincludes/includes/functions.php:251
+msgid "in "
+msgstr "in "
+
+#: autoblogincludes/includes/functions.php:244
+msgid " minutes"
+msgstr " minutes"
+
+#: autoblogincludes/includes/functions.php:245
+msgid "in an hour"
+msgstr "in an hour"
+
+#: autoblogincludes/includes/functions.php:246
+msgid " hours"
+msgstr " hours"
+
+#: autoblogincludes/includes/functions.php:248
+msgid "Tomorrow"
+msgstr "Tomorrow"
+
+#: autoblogincludes/includes/functions.php:250
+msgid "next week"
+msgstr "next week"
+
+#: autoblogincludes/includes/functions.php:251
+msgid " weeks"
+msgstr " weeks"
+
+#: autoblogincludes/includes/functions.php:252
+msgid "next month"
+msgstr "next month"

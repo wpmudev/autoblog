@@ -32,6 +32,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Using SimplePie
 //define('SIMPLEPIE_USERAGENT', 'PUT AGENT HERE');
 
+define( 'AUTOBLOG_BASEFILE', __FILE__ );
+
 require_once( dirname(__FILE__) . '/autoblogincludes/includes/config.php');
 require_once( dirname(__FILE__) . '/autoblogincludes/includes/functions.php');
 // Set up my location
