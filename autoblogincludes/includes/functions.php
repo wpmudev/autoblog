@@ -208,134 +208,85 @@ function load_all_autoblog_addons() {
 	}
 }
 
-// Reltaive time function from http://stackoverflow.com/questions/2690504/php-producing-relative-date-time-from-timestamps
-function autoblog_time2str($ts)
-	{
-		if(!ctype_digit($ts))
-			$ts = strtotime($ts);
+function ab_process_feed($id, $details) {
 
-		$diff = current_time( 'timestamp' ) - $ts;
-		if($diff == 0)
-			return __('now', 'autoblogtext');
-		elseif($diff > 0)
-		{
-			$day_diff = floor($diff / 86400);
-			if($day_diff == 0)
-			{
-				if($diff < 60) return __('just now', 'autoblogtext');
-				if($diff < 120) return __('1 minute ago', 'autoblogtext');
-				if($diff < 3600) return floor($diff / 60) . __(' minutes ago', 'autoblogtext');
-				if($diff < 7200) return __('1 hour ago', 'autoblogtext');
-				if($diff < 86400) return floor($diff / 3600) . __(' hours ago', 'autoblogtext');
-			}
-			if($day_diff == 1) return __('Yesterday', 'autoblogtext');
-			if($day_diff < 7) return $day_diff . __(' days ago', 'autoblogtext');
-			if($day_diff < 31) return ceil($day_diff / 7) . __(' weeks ago', 'autoblogtext');
-			if($day_diff < 60) return __('last month', 'autoblogtext');
-			return date('F Y', $ts);
-		}
-		else
-		{
-			$diff = abs($diff);
-			$day_diff = floor($diff / 86400);
-			if($day_diff == 0)
-			{
-				if($diff < 120) return __('in a minute', 'autoblogtext');
-				if($diff < 3600) return __('in ', 'autoblogtext') . floor($diff / 60) . __(' minutes', 'autoblogtext');
-				if($diff < 7200) return __('in an hour', 'autoblogtext');
-				if($diff < 86400) return __('in ', 'autoblogtext') . floor($diff / 3600) . __(' hours', 'autoblogtext');
-			}
-			if($day_diff == 1) return __('Tomorrow', 'autoblogtext');
-			if($day_diff < 4) return date('l', $ts);
-			if($day_diff < 7 + (7 - date('w'))) return __('next week', 'autoblogtext');
-			if(ceil($day_diff / 7) < 4) return __('in ', 'autoblogtext') . ceil($day_diff / 7) . __(' weeks', 'autoblogtext');
-			if(date('n', $ts) == date('n') + 1) return __('next month', 'autoblogtext');
-			return date('F Y', $ts);
-		}
-	}
+	global $abc;
 
-	function ab_process_feed($id, $details) {
+	return $abc->process_the_feed($id, $details);
 
-		global $abc;
+}
 
-		return $abc->process_the_feed($id, $details);
+function ab_process_feeds($ids) {
 
-	}
+	global $abc;
 
-	function ab_process_feeds($ids) {
+	return $abc->process_feeds($ids);
 
-		global $abc;
+}
 
-		return $abc->process_feeds($ids);
+function ab_process_autoblog() {
+	global $abc;
 
-	}
+	$abc->process_autoblog();
+}
 
-	function ab_process_autoblog() {
-		global $abc;
+function ab_always_process_autoblog() {
+	global $abc;
 
-		$abc->process_autoblog();
-	}
+	$abc->always_process_autoblog();
+}
 
-	function ab_always_process_autoblog() {
-		global $abc;
-
+add_action( 'autoblog_process_all_feeds_for_cron', 'ab_process_autoblog_for_cron' );
+function ab_process_autoblog_for_cron() {
+	global $abc;
+	if ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
 		$abc->always_process_autoblog();
 	}
+}
 
-	function ab_process_autoblog_for_cron() {
-		global $abc;
+function ab_test_feed($id, $details) {
 
-		if(defined('AUTOBLOG_PROCESSING_METHOD') && AUTOBLOG_PROCESSING_METHOD == 'cron') {
-			$abc->always_process_autoblog();
-		}
-	}
+	global $abc;
 
-	add_action( 'autoblog_process_all_feeds_for_cron', 'ab_process_autoblog_for_cron' );
+	return $abc->test_the_feed($id, $details);
 
-	function ab_test_feed($id, $details) {
+}
 
-		global $abc;
+/**
+ * Build Latest SimplePie object based on RSS or Atom feed from URL.
+ *
+ * @since 2.8
+ *
+ * @param string $url URL to retrieve feed
+ * @return WP_Error|SimplePie WP_Error object on failure or SimplePie object on success
+ */
+function fetch_autoblog_feed($url) {
 
-		return $abc->test_the_feed($id, $details);
+	// Include the latest simplepie class
+	require_once( autoblog_dir('autoblogincludes/external/autoloader.php') );
 
-	}
+	$feed = new SimplePie();
+	$feed->set_feed_url($url);
+	//$feed->set_cache_class('WP_Feed_Cache');
+	//$feed->set_file_class('WP_SimplePie_File');
+	//$feed->set_cache_duration(apply_filters('wp_feed_cache_transient_lifetime', 43200, $url));
+	do_action_ref_array( 'wp_feed_options', array( &$feed, $url ) );
+	$feed->init();
+	$feed->handle_content_type();
 
-	/**
-	 * Build Latest SimplePie object based on RSS or Atom feed from URL.
-	 *
-	 * @since 2.8
-	 *
-	 * @param string $url URL to retrieve feed
-	 * @return WP_Error|SimplePie WP_Error object on failure or SimplePie object on success
-	 */
-	function fetch_autoblog_feed($url) {
+	if ( $feed->error() )
+		return new WP_Error('simplepie-error', $feed->error());
 
-		// Include the latest simplepie class
-		require_once( autoblog_dir('autoblogincludes/external/autoloader.php') );
+	return $feed;
+}
 
-		$feed = new SimplePie();
-		$feed->set_feed_url($url);
-		//$feed->set_cache_class('WP_Feed_Cache');
-		//$feed->set_file_class('WP_SimplePie_File');
-		//$feed->set_cache_duration(apply_filters('wp_feed_cache_transient_lifetime', 43200, $url));
-		do_action_ref_array( 'wp_feed_options', array( &$feed, $url ) );
-		$feed->init();
-		$feed->handle_content_type();
-
-		if ( $feed->error() )
-			return new WP_Error('simplepie-error', $feed->error());
-
-		return $feed;
-	}
-
-	/*
-	* Function to handle urls in UTF-8 content from here - http://www.php.net/manual/en/function.parse-url.php#108787
-	*/
-	function mb_parse_url($url) {
-	    $encodedUrl = preg_replace('%[^:/?#&=\.]+%usDe', 'urlencode(\'$0\')', $url);
-	    $components = parse_url($encodedUrl);
-	    foreach ($components as &$component)
-	        $component = urldecode($component);
-	    return $components;
-	}
-?>
+/*
+* Function to handle urls in UTF-8 content from here - http://www.php.net/manual/en/function.parse-url.php#108787
+*/
+function mb_parse_url($url) {
+	$encodedUrl = preg_replace('%[^:/?#&=\.]+%usDe', 'urlencode(\'$0\')', $url);
+	$components = parse_url($encodedUrl);
+	foreach ($components as &$component)
+		$component = urldecode($component);
+	return $components;
+}

@@ -1553,12 +1553,12 @@ class autoblogpremium {
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && is_network_admin()) {
-				$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") ORDER BY nextcheck ASC";
+				$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") ORDER BY feed_id DESC";
 			} else {
-				$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC";
+				$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY feed_id DESC";
 			}
 		} else {
-			$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY nextcheck ASC";
+			$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY feed_id DESC";
 		}
 
 		$results = $this->db->get_results($sql);
@@ -2137,55 +2137,38 @@ class autoblogpremium {
 					echo "</td>";
 				}
 
-
-				echo '<td style="text-align: right;">';
-
-				if($table->lastupdated != 0) {
-					echo "<abbr title='" . date_i18n($timezone_format, $table->lastupdated) . "'>";
-					echo autoblog_time2str( $table->lastupdated );
-					echo "</abbr>";
-					//echo date_i18n($timezone_format, $table->lastupdated);
-					//echo date("j M Y : H:i", $table->lastupdated);
-				} else {
-					echo __('Never', 'autoblogtext');
-				}
-
+				echo '<td style="text-align:right">';
+					if ( $table->lastupdated != 0 ) {
+						echo "<code title='" . date_i18n( $timezone_format, $table->lastupdated ) . "'>";
+							echo human_time_diff( $table->lastupdated ), ' ', __( 'ago', 'autoblogtext' );
+						echo "</code>";
+					} else {
+						echo '<code>', __( 'Never', 'autoblogtext' ), '</code>';
+					}
 				echo '</td>';
-				echo '<td style="text-align: right;">';
 
-				if($table->nextcheck != 0) {
-
-					echo "<abbr title='" . date_i18n($timezone_format, $table->nextcheck) . "'>";
-					echo autoblog_time2str($table->nextcheck );
-					echo "</abbr>";
-
-
+				echo '<td style="text-align:right">';
+				if ( $table->nextcheck != 0 ) {
+					echo "<code title='" . date_i18n( $timezone_format, $table->nextcheck ) . "'>";
+					echo __( 'in', 'autoblogtext' ), ' ', human_time_diff( time(), $table->nextcheck );
+					echo "</code>";
 				} else {
-					echo __('Never', 'autoblogtext');
+					echo '<code>', __( 'Never', 'autoblogtext' ), '</code>';
 				}
-
 				echo '</td>';
 
 				do_action('autoblog_admin_columns_data', $table);
-
 				echo '</tr>';
-
 			}
-
 		} else {
-
 			echo '<tr>';
-			echo '<td>';
-			echo '</td>';
+			echo '<td></td>';
 			echo '<td colspan="5">';
 			echo __('You do not have any feeds setup - please click Add New to get started','autoblogtext');
 			echo '</td>';
 			echo '</tr>';
-
 		}
-
 		echo '</tbody>';
-
 		echo '</table>';
 
 		echo '<div class="tablenav">';
