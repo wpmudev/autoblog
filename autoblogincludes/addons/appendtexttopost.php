@@ -1,144 +1,109 @@
 <?php
 /*
-Addon Name: Append text to post
-Description: Allows some text to be appended to each post with variable placeholders
-Author: Barry (Incsub)
-Author URI: http://premium.wpmudev.org
-*/
+  Addon Name: Append text to post
+  Description: Allows some text to be appended to each post with variable placeholders
+  Author: Barry (Incsub)
+  Author URI: http://premium.wpmudev.org
+ */
 
 class A_appendtexttopost {
 
 	var $build = 1;
-
 	var $db;
-
-	var $tables = array('autoblog');
+	var $tables = array( 'autoblog' );
 	var $autoblog;
 
-	function __construct() {
-
+	public function __construct() {
 		global $wpdb;
 
-		$this->db =& $wpdb;
-
-		foreach($this->tables as $table) {
-			$this->$table = autoblog_db_prefix($this->db, $table);
+		$this->db = $wpdb;
+		foreach ( $this->tables as $table ) {
+			$this->$table = autoblog_db_prefix( $this->db, $table );
 		}
 
-		add_action( 'autoblog_feed_edit_form_end', array(&$this, 'add_footer_options'), 10, 2 );
-
-		add_filter( 'the_content', array(&$this, 'append_footer_content'), 11, 1 );
-
+		add_action( 'autoblog_feed_edit_form_end', array( $this, 'add_footer_options' ), 10, 2 );
+		add_filter( 'the_content', array( $this, 'append_footer_content' ), 11, 1 );
 	}
 
-	function A_appendtexttopost() {
-		$this->__construct();
+	public function get_feed_details( $id ) {
+		return $this->db->get_row( $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE feed_id = %d", $id ) );
 	}
 
-	function get_feed_details( $id ) {
+	public function add_footer_options( $key, $details ) {
+		$table = !empty( $details ) ? maybe_unserialize( $details->feed_meta ) : array();
 
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE feed_id = %d", $id );
-
-		$results = $this->db->get_row($sql);
-
-		return $results;
-
-	}
-
-	function add_footer_options( $key, $details ) {
-
-		if(!empty($details)) {
-			$table = maybe_unserialize($details->feed_meta);
-		} else {
-			$table = array();
-		}
-
-		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Append text to post content','autoblogtext') . "</span></td></tr>";
-
+		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __( 'Append text to post content', 'autoblogtext' ) . "</span></td></tr>";
 		echo "<tr>";
-		echo "<td valign='top' class='heading'>";
-		echo __('Post footer text','autoblogtext');
-		echo "<br/><br/>";
-		echo "<em>";
+			echo "<td valign='top' class='heading'>";
+				echo __( 'Post footer text', 'autoblogtext' );
+				echo "<br><br>";
 
-		echo __('You can use the following placeholders in your footer:','autoblogtext');
-		echo "<br/><br/>";
+				echo __( 'You can use the following placeholders in your footer:', 'autoblogtext' );
+				echo "<br><br>";
 
-		echo "%ORIGINALPOSTURL%<br/>";
-		echo "%FEEDURL%<br/>";
-		echo "%FEEDTITLE%<br/>";
-		echo "%POSTIMPORTEDTIME%<br/>";
-		echo "%FEEDID%<br/>";
-		echo "%ORIGINALPOSTGUID%<br/>";
-		echo "%ORIGINALAUTHORNAME%<br/>";
-		echo "%ORIGINALAUTHORLINK%<br/>";
-		echo "%ORIGINALAUTHOREMAIL%<br/>";
-
-		echo "</em>";
-		echo "</td>";
-		echo "<td valign='top' class=''>";
-		if(isset($table['footertext'])) {
-			$footertext = $table['footertext'];
-		} else {
-			$footertext = '';
-		}
-		$args = array("textarea_name" => "abtble[footertext]", "textarea_rows" => 10);
-		wp_editor( stripslashes($footertext), "abtble[footertext]", $args );
-
-		echo "</td>";
-		echo "</tr>\n";
-
+				echo "<em>";
+					echo "%ORIGINALPOSTURL%<br/>";
+					echo "%FEEDURL%<br/>";
+					echo "%FEEDTITLE%<br/>";
+					echo "%POSTIMPORTEDTIME%<br/>";
+					echo "%FEEDID%<br/>";
+					echo "%ORIGINALPOSTGUID%<br/>";
+					echo "%ORIGINALAUTHORNAME%<br/>";
+					echo "%ORIGINALAUTHORLINK%<br/>";
+					echo "%ORIGINALAUTHOREMAIL%<br/>";
+				echo "</em>";
+			echo "</td>";
+			echo "<td valign='top' class=''>";
+				wp_editor( isset( $table['footertext'] ) ? stripcslashes( $table['footertext'] ) : '', "abtble[footertext]", array(
+					"textarea_name" => "abtble[footertext]",
+					"textarea_rows" => 10,
+				) );
+			echo "</td>";
+		echo "</tr>";
 	}
 
-	function append_footer_content( $content ) {
-
+	public function append_footer_content( $content ) {
 		global $post;
+		if ( !is_object( $post ) || empty( $post->ID ) ) {
+			return $content;
+		}
 
-		if( is_object($post) && !empty($post->ID) ) {
+		// Get the feed id so we can get hold of the footer content
+		$feed_id = get_post_meta( $post->ID, 'original_feed_id', true );
+		if ( !empty( $feed_id ) ) {
+			// We have a feed id so the post was imported, so grab the footer content
+			$feed = $this->get_feed_details( $feed_id );
+			$table = !empty( $feed ) ? maybe_unserialize( $feed->feed_meta ) : array();
 
-			// Get the feed id so we can get hold of the footer content
-			$feed_id = get_post_meta( $post->ID, 'original_feed_id', true );
+			// If the footer isn't empty then we will use it
+			if ( !empty( $table['footertext'] ) ) {
+				$footertext = stripcslashes( $table['footertext'] );
+				$keywords = array(
+					'%ORIGINALPOSTURL%'     => 'original_source',
+					'%FEEDURL%'             => 'original_feed',
+					'%FEEDTITLE%'           => 'original_feed_title',
+					'%POSTIMPORTEDTIME%'    => 'original_imported_time',
+					'%FEEDID%'              => 'original_feed_id',
+					'%ORIGINALPOSTGUID%'    => 'original_guid',
+					'%ORIGINALAUTHORNAME%'  => 'original_author_name',
+					'%ORIGINALAUTHOREMAIL%' => 'original_author_email',
+					'%ORIGINALAUTHORLINK%'  => 'original_author_link',
+				);
 
-			if( !empty($feed_id) ) {
-				// We have a feed id so the post was imported, so grab the footer content
-				$feed = $this->get_feed_details( $feed_id );
-
-				// Unserialise the feed_meta details
-				if(!empty($feed)) {
-					$table = maybe_unserialize($feed->feed_meta);
-				} else {
-					$table = array();
+				// Do the search and replace of variables
+				foreach ( $keywords as $key => $meta_name ) {
+					if ( mb_stripos( $footertext, $key ) !== false ) {
+						$footertext = str_replace( $key, get_post_meta( $post->ID, $meta_name, true ), $footertext );
+					}
 				}
 
-				// If the footer isn't empty then we will use it
-				if(!empty($table['footertext'])) {
-					$footertext = $table['footertext'];
-
-					// Do the search and replace of variables
-					$footertext = str_replace( '%ORIGINALPOSTURL%', get_post_meta( $post->ID, 'original_source', true ), $footertext );
-					$footertext = str_replace( '%FEEDURL%', get_post_meta( $post->ID, 'original_feed', true ), $footertext );
-					$footertext = str_replace( '%FEEDTITLE%', get_post_meta( $post->ID, 'original_feed_title', true ), $footertext );
-					$footertext = str_replace( '%POSTIMPORTEDTIME%', get_post_meta( $post->ID, 'original_imported_time', true ), $footertext );
-					$footertext = str_replace( '%FEEDID%', get_post_meta( $post->ID, 'original_feed_id', true ), $footertext );
-					$footertext = str_replace( '%ORIGINALPOSTGUID%', get_post_meta( $post->ID, 'original_guid', true ), $footertext );
-					$footertext = str_replace( '%ORIGINALAUTHORNAME%', get_post_meta( $post->ID, 'original_author_name', true ), $footertext );
-					$footertext = str_replace( '%ORIGINALAUTHOREMAIL%', get_post_meta( $post->ID, 'original_author_email', true ), $footertext );
-					$footertext = str_replace( '%ORIGINALAUTHORLINK%', get_post_meta( $post->ID, 'original_author_link', true ), $footertext );
-
-					// Add the footer to the bottom of the content
-					$content .= $footertext;
-
-				}
-
+				// Add the footer to the bottom of the content
+				$content .= $footertext;
 			}
-
-
 		}
 
 		return $content;
 	}
-
-
 
 }
 
