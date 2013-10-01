@@ -882,6 +882,9 @@ class autoblogcron {
 					if ( !empty( $ablog['nofollow'] ) && addslashes( $ablog['nofollow'] ) == '1' ) {
 						$sourcecontent .= " rel='nofollow'";
 					}
+					if ( !empty( $ablog['newwindow'] ) && addslashes( $ablog['newwindow'] ) == '1' ) {
+						$sourcecontent .= " target='_blank'";
+					}
 					$thesource = stripslashes( $ablog['source'] );
 					$thesource = str_replace( '%POSTURL%', trim( $item->get_permalink() ), $thesource );
 					$thesource = str_replace( '%FEEDURL%', trim( $ablog['url'] ), $thesource );

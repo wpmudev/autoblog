@@ -409,7 +409,7 @@ class autoblogpremium {
 		}
 
 		// Add the sub menu
-		add_submenu_page('autoblog', __('Edit feeds','autoblogtext'), __('All feeds','autoblogtext'), $capabilty, "autoblog_admin", array(&$this,'handle_admin_page'));
+		add_submenu_page('autoblog', __('All feeds','autoblogtext'), __('All feeds','autoblogtext'), $capabilty, "autoblog_admin", array(&$this,'handle_admin_page'));
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(!function_exists('is_network_admin') || !is_network_admin()) {
@@ -904,17 +904,24 @@ class autoblogpremium {
 		echo "</tr>\n";
 
 		echo "<tr>";
-		echo "<td valign='top' class='heading'>";
-		echo __('Link to original source','autoblogtext');
-		echo "</td>";
-		echo "<td valign='top' class=''>";
-		echo "<input type='text' name='abtble[source]' value='" . esc_attr(stripslashes($table['source'])) . "' class='long source field' />" . $this->_tips->add_tip(  __('If you want to link back to original source, enter a phrase to use here.', 'autoblogtext') );
-		echo "<br/>";
-		echo "<input type='checkbox' name='abtble[nofollow]' value='1' ";
-		if(isset($table['nofollow']) && $table['nofollow'] == '1') echo "checked='checked' ";
-		echo "/>&nbsp;<span>" . __('Ensure this link is a nofollow one','autoblogtext') . "</span>";
-		echo "</td>";
-		echo "</tr>\n";
+			echo "<td valign='top' class='heading'>";
+				echo __('Link to original source','autoblogtext');
+			echo "</td>";
+			echo "<td valign='top' class=''>";
+				echo "<input type='text' name='abtble[source]' value='", esc_attr( stripslashes( $table['source'] ) ), "' class='long source field' />";
+				echo $this->_tips->add_tip( __('If you want to link back to original source, enter a phrase to use here.', 'autoblogtext') );
+				echo "<br>";
+				echo '<label>';
+					echo "<input type='checkbox' name='abtble[nofollow]' value='1' ", checked( isset( $table['nofollow'] ) && $table['nofollow'] == '1', true, false ), "> ";
+					echo __( 'Ensure this link is a nofollow one', 'autoblogtext' );
+				echo '</label>';
+				echo '<br>';
+				echo '<label>';
+					echo "<input type='checkbox' name='abtble[newwindow]' value='1' ", checked( isset( $table['newwindow'] ) && $table['newwindow'] == '1', true, false ), "> ";
+					echo __( 'Open this link in a new window', 'autoblogtext' );
+				echo '</label>';
+			echo "</td>";
+		echo "</tr>";
 
 
 		echo "<tr class='spacer'><td colspan='2' class='spacer'><span>" . __('Feed Processing','autoblogtext') . "</span></td></tr>\n";
