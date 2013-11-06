@@ -1412,7 +1412,15 @@ class autoblogpremium {
 		echo "<td valign='top' class=''>";
 		echo "<input type='text' name='abtble[source]' value='' class='long source field' />" . $this->_tips->add_tip( __('If you want to link back to original source, enter a phrase to use here.','autoblogtext') );
 		echo "<br/>";
-		echo "<input type='checkbox' name='abtble[nofollow]' value='1' />&nbsp;<span>" . __('Ensure this link is a nofollow one','autoblogtext') . "</span>";
+		echo '<label>';
+			echo "<input type='checkbox' name='abtble[nofollow]' value='1'> ";
+			echo __( 'Ensure this link is a nofollow one', 'autoblogtext' );
+		echo '</label>';
+		echo '<br>';
+		echo '<label>';
+			echo "<input type='checkbox' name='abtble[newwindow]' value='1'> ";
+			echo __( 'Open this link in a new window', 'autoblogtext' );
+		echo '</label>';
 
 		echo "</td>";
 		echo "</tr>";
