@@ -1,0 +1,3 @@
+== 3.9.9.9 ==
+
+* Fixed Append Text To Post addon issue with multibyte string position detection

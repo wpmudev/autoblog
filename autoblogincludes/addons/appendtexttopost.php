@@ -91,8 +91,10 @@ class A_appendtexttopost {
 				);
 
 				// Do the search and replace of variables
+				$stripos_funct = function_exists( 'mb_stripos' ) ? 'mb_stripos' : 'stripos';
 				foreach ( $keywords as $key => $meta_name ) {
-					if ( mb_stripos( $footertext, $key ) !== false ) {
+					$position = $stripos_funct( $footertext, $key );
+					if ( $position !== false ) {
 						$footertext = str_replace( $key, get_post_meta( $post->ID, $meta_name, true ), $footertext );
 					}
 				}

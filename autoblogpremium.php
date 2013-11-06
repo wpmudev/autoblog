@@ -5,7 +5,7 @@ Version: 3.9.9.8
 Plugin URI: http://premium.wpmudev.org/project/autoblog
 Description: This plugin automatically posts content from RSS feeds to different blogs on your WordPress Multisite...
 Author: Incsub
-Author URI: http://incsub.com
+Author URI: http://premium.wpmudev.org/
 WDP ID: 97
 */
 
