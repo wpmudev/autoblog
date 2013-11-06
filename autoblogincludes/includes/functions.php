@@ -280,13 +280,13 @@ function fetch_autoblog_feed($url) {
 	return $feed;
 }
 
+function mb_parse_url_urlencode( $matches ) {
+	return urlencode( $matches[0] );
+}
+
 /*
-* Function to handle urls in UTF-8 content from here - http://www.php.net/manual/en/function.parse-url.php#108787
-*/
-function mb_parse_url($url) {
-	$encodedUrl = preg_replace('%[^:/?#&=\.]+%usDe', 'urlencode(\'$0\')', $url);
-	$components = parse_url($encodedUrl);
-	foreach ($components as &$component)
-		$component = urldecode($component);
-	return $components;
+ * Function to handle urls in UTF-8 content from here - http://www.php.net/manual/en/function.parse-url.php#108787
+ */
+function mb_parse_url( $url ) {
+	return array_map( 'urldecode', parse_url( preg_replace_callback( '%[^:/?#&=\.]+%usD', 'mb_parse_url_urlencode', $url ) ) );
 }
