@@ -3,3 +3,4 @@
 * Fixed Append Text To Post addon issue with multibyte string position detection
 * Fixed issue with not shown "Open this link in a new window" check box for new feeds
 * Implemented ability to use shortcodes inside appended text
+* Implemented addon which strips all images from a post
