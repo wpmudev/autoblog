@@ -100,7 +100,7 @@ class A_appendtexttopost {
 				}
 
 				// Add the footer to the bottom of the content
-				$content .= $footertext;
+				$content .= do_shortcode( $footertext );
 			}
 		}
 
