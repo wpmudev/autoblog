@@ -148,7 +148,7 @@ class A_FeatureImageCacheAddon {
 		if ( preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', wp_get_attachment_url( $id ), $newimage ) ) {
 			if ( !empty( $newimage[1][0] ) ) {
 				$theimg = $newimage[1][0];
-				$parsed_url = mb_parse_url( $theimg );
+				$parsed_url = autoblog_parse_mb_url( $theimg );
 				if ( function_exists( 'get_blog_option' ) ) {
 					$theimg = str_replace( "{$parsed_url['scheme']}://{$parsed_url['host']}", get_blog_option( $this->_db->blogid, 'siteurl' ), $theimg );
 				}
@@ -217,7 +217,7 @@ class A_FeatureImageCacheAddon {
 		}
 
 		$newimage = $image;
-		$image_url = mb_parse_url( $newimage );
+		$image_url = autoblog_parse_mb_url( $newimage );
 		$blog_url = parse_url( $ablog['url'] );
 
 		if ( empty( $image_url['host'] ) && !empty( $blog_url['host'] ) ) {

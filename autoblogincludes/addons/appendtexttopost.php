@@ -8,25 +8,14 @@
 
 class A_appendtexttopost {
 
-	var $build = 1;
-	var $db;
-	var $tables = array( 'autoblog' );
-	var $autoblog;
-
 	public function __construct() {
-		global $wpdb;
-
-		$this->db = $wpdb;
-		foreach ( $this->tables as $table ) {
-			$this->$table = autoblog_db_prefix( $this->db, $table );
-		}
-
 		add_action( 'autoblog_feed_edit_form_end', array( $this, 'add_footer_options' ), 10, 2 );
 		add_filter( 'the_content', array( $this, 'append_footer_content' ), 11, 1 );
 	}
 
 	public function get_feed_details( $id ) {
-		return $this->db->get_row( $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE feed_id = %d", $id ) );
+		global $wpdb;
+		return $wpdb->get_row( sprintf( "SELECT * FROM %s WHERE feed_id = %d", AUTOBLOG_TABLE_FEEDS, $id ) );
 	}
 
 	public function add_footer_options( $key, $details ) {

@@ -37,7 +37,7 @@ class A_ImageCacheAddon {
 
 		foreach ($matches[1] as $url) {
 
-			$purl = mb_parse_url($url);
+			$purl = autoblog_parse_mb_url($url);
 
 			if(!isset($purl['host']) || $purl['host'] != $siteurl['host']) {
 				// we seem to have an external images
@@ -69,7 +69,7 @@ class A_ImageCacheAddon {
 			if(!empty($newimage[1][0])) {
 
 				$theimg = $newimage[1][0];
-				$parsed_url = mb_parse_url( $theimg );
+				$parsed_url = autoblog_parse_mb_url( $theimg );
 
 				if(function_exists('get_blog_option')) {
 					$theimg = str_replace( $parsed_url['scheme'] . '://' . $parsed_url['host'], get_blog_option( $this->db->blogid, 'siteurl'), $theimg );
@@ -112,9 +112,9 @@ class A_ImageCacheAddon {
 					$newimage = $image;
 
 					// Parse the image url
-					$purl = mb_parse_url( $newimage );
+					$purl = autoblog_parse_mb_url( $newimage );
 					// Parse the feed url
-					$furl = mb_parse_url( $ablog['url'] );
+					$furl = autoblog_parse_mb_url( $ablog['url'] );
 
 					if(empty($purl['host']) && !empty($furl['host'])) {
 						// We need to add in a host name as the images look like they are relative to the feed

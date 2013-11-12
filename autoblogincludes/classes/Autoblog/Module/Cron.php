@@ -1,13 +1,37 @@
 <?php
 
-class autoblogcron {
+// +----------------------------------------------------------------------+
+// | Copyright Incsub (http://incsub.com/)                                |
+// +----------------------------------------------------------------------+
+// | This program is free software; you can redistribute it and/or modify |
+// | it under the terms of the GNU General Public License, version 2, as  |
+// | published by the Free Software Foundation.                           |
+// |                                                                      |
+// | This program is distributed in the hope that it will be useful,      |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+// | GNU General Public License for more details.                         |
+// |                                                                      |
+// | You should have received a copy of the GNU General Public License    |
+// | along with this program; if not, write to the Free Software          |
+// | Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,               |
+// | MA 02110-1301 USA                                                    |
+// +----------------------------------------------------------------------+
 
-	var $db;
+/**
+ * Cron module.
+ *
+ * @since 4.0.0
+ *
+ * @category Autoblog
+ * @package Module
+ */
+class Autoblog_Module_Cron extends Autoblog_Module {
 
-	var $tables = array('autoblog');
+	const NAME = __CLASS__;
+	const SCHEDULED_ACTION = 'autoblog_process_all_feeds_for_cron';
+
 	var $autoblog;
-
-	var $debug = false;
 
 	var $msgs = array();
 
@@ -18,20 +42,16 @@ class autoblogcron {
 
 	var $checkperiod = '10mins';
 
-	public function __construct() {
-		global $wpdb;
+	public function __construct( Autoblog_Plugin $plugin ) {
+		parent::__construct( $plugin );
 
-		$this->db = $wpdb;
-		foreach ( $this->tables as $table ) {
-			$this->$table = autoblog_db_prefix( $this->db, $table );
-		}
+		$this->autoblog = AUTOBLOG_TABLE_FEEDS;
 
 		add_filter( 'wp_feed_cache_transient_lifetime', array( $this, 'feed_cache' ), 10, 2 );
 
 		// override with option.
-		$this->debug = get_autoblog_option( 'autoblog_debug', false );
-		$this->siteid = empty( $this->db->siteid ) || $this->db->siteid == 0 ? 1 : $this->db->siteid;
-		$this->blogid = empty( $this->db->blogid ) || $this->db->blogid == 0 ? 1 : $this->db->blogid;
+		$this->siteid = empty( $this->_wpdb->siteid ) || $this->_wpdb->siteid == 0 ? 1 : $this->_wpdb->siteid;
+		$this->blogid = empty( $this->_wpdb->blogid ) || $this->_wpdb->blogid == 0 ? 1 : $this->_wpdb->blogid;
 		// Action to be called by the cron job
 		$this->checkperiod = defined( 'AUTOBLOG_PROCESSING_CHECKLIMIT' ) && AUTOBLOG_PROCESSING_CHECKLIMIT == 10 ? '10mins' : '5mins';
 
@@ -40,10 +60,10 @@ class autoblogcron {
 		add_filter( 'cron_schedules', array( $this, 'add_time_period' ) );
 		// Add in filter for the_post to add in the source content at the bottom
 		add_filter( 'the_content', array( $this, 'append_original_source' ), 999, 1 );
-	}
 
-	function autoblogcron() {
-		$this->__construct();
+		add_action( self::SCHEDULED_ACTION, array( $this, 'process_autoblog_for_cron' ) );
+
+		register_deactivation_hook( AUTOBLOG_BASEFILE, array( $this, 'remove_schedule' ) );
 	}
 
 	function feed_cache($cacheperiod = false, $url = false) {
@@ -62,10 +82,17 @@ class autoblogcron {
 		return $periods;
 	}
 
+	function remove_schedule() {
+		$next = wp_next_scheduled( self::SCHEDULED_ACTION );
+		if ( $next ) {
+			wp_unschedule_event( $next, self::SCHEDULED_ACTION );
+		}
+	}
+
 	function set_up_schedule() {
 		if ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
-			if ( !wp_next_scheduled( 'autoblog_process_all_feeds_for_cron' ) ) {
-				wp_schedule_event( time(), $this->checkperiod, 'autoblog_process_all_feeds_for_cron' );
+			if ( !wp_next_scheduled( self::SCHEDULED_ACTION ) ) {
+				wp_schedule_event( time(), $this->checkperiod, self::SCHEDULED_ACTION );
 			}
 		} else {
 			// Use an init method
@@ -85,20 +112,20 @@ class autoblogcron {
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
+				$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
+				$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
+			$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
 		}
 
 		if(defined('AUTOBLOG_FORCE_PROCESS_ALL') && AUTOBLOG_FORCE_PROCESS_ALL === true) {
 			// Override and force to grab all feeds from the site
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
+			$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND nextcheck < %d AND nextcheck > 0 ORDER BY nextcheck ASC", $timestamp );
 		}
 
-		$results = $this->db->get_results($sql);
+		$results = $this->_wpdb->get_results($sql);
 
 		return $results;
 
@@ -114,9 +141,9 @@ class autoblogcron {
 			$blogs = array( $this->blogid );
 		}
 
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id IN (0, " . implode(',', $ids) . ") ORDER BY nextcheck ASC", $timestamp );
+		$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id IN (0, " . implode(',', $ids) . ") ORDER BY nextcheck ASC", $timestamp );
 
-		$results = $this->db->get_results($sql);
+		$results = $this->_wpdb->get_results($sql);
 
 		return $results;
 
@@ -132,39 +159,60 @@ class autoblogcron {
 			$blogs = array( $this->blogid );
 		}
 
-		$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d ORDER BY feed_id ASC", $id );
+		$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d ORDER BY feed_id ASC", $id );
 
-		$results = $this->db->get_row($sql);
+		$results = $this->_wpdb->get_row($sql);
 
 		return $results;
 
 	}
 
 	function record_msg() {
+		$thetime = current_time( 'timestamp' );
+		$msgs = array(
+			"timestamp" => $thetime,
+			"log"       => $this->msgs
+		);
 
-		$thetime = current_time('timestamp');
-
-		$msgs = array(	"timestamp" => $thetime,
-							"log" => $this->msgs
-						);
-
-		update_autoblog_option('autoblog_log_' . $thetime, $msgs);
+		if ( Autoblog_Plugin::is_network_wide() ) {
+			update_site_option( 'autoblog_log_' . $thetime, $msgs );
+		} else {
+			update_option( 'autoblog_log_' . $thetime, $msgs );
+		}
 
 		// Remove any old entries so we only keep the most recent 25
-		clear_autoblog_logs();
-
+		if ( Autoblog_Plugin::is_network_wide() ) {
+			$ids = $this->_wpdb->get_col( "SELECT meta_id FROM {$this->_wpdb->sitemeta} WHERE site_id = {$this->_wpdb->siteid} AND meta_key LIKE 'autoblog_log_%' ORDER BY meta_id DESC LIMIT 25, 100" );
+			if ( !empty( $ids ) ) {
+				$this->_wpdb->query( sprintf(
+					"DELETE FROM %s WHERE site_id = %d AND meta_id IN (%s)",
+					$this->_wpdb->sitemeta,
+					$this->_wpdb->siteid,
+					implode( ',', $ids )
+				) );
+			}
+		} else {
+			$ids = $this->_wpdb->get_col( "SELECT option_id FROM {$this->_wpdb->options} WHERE option_name LIKE 'autoblog_log_%' ORDER BY option_id DESC LIMIT 25, 100" );
+			if ( !empty( $ids ) ) {
+				$this->_wpdb->query( sprintf( "DELETE FROM %s WHERE option_id IN (%s)", $this->_wpdb->options, implode( ',', $ids ) ) );
+			}
+		}
 	}
 
 	function record_testingmsg() {
 
 		$thetime = current_time('timestamp');
 
-		$msgs = array(	"timestamp" => $thetime,
-							"log" => $this->testingmsgs
-						);
+		$msgs = array(
+			"timestamp" => $thetime,
+			"log" => $this->testingmsgs
+		);
 
-		update_autoblog_option('autoblog_last_test_log', $msgs);
-
+		if ( Autoblog_Plugin::is_network_wide() ) {
+			set_site_transient( 'autoblog_last_test_log', $msgs );
+		} else {
+			set_transient( 'autoblog_last_test_log', $msgs );
+		}
 	}
 
 	function process_feeds($ids) {
@@ -204,22 +252,24 @@ class autoblogcron {
 		if(!empty($this->testingmsgs)) {
 			$this->record_testingmsg();
 		} else {
-			delete_autoblog_option('autoblog_last_test_log');
+			if ( Autoblog_Plugin::is_network_wide() ) {
+				delete_site_transient( 'autoblog_last_test_log' );
+			} else {
+				delete_transient( 'autoblog_last_test_log' );
+			}
 		}
 
 		return true;
 	}
 
-	function process_the_feed($feed_id, $ablog) {
+	function process_the_feed( $feed_id, $ablog ) {
 
-		do_action('autoblog_pre_process_feed', $feed_id, $ablog);
-		$results = $this->process_feed($feed_id, $ablog);
-		do_action('autoblog_post_process_feed', $feed_id, $ablog);
+		do_action( 'autoblog_pre_process_feed', $feed_id, $ablog );
+		$results = $this->process_feed( $feed_id, $ablog );
+		do_action( 'autoblog_post_process_feed', $feed_id, $ablog );
 
-		if(!empty($this->msgs)) {
+		if ( !empty( $this->msgs ) ) {
 			$this->record_msg();
-		} else {
-
 		}
 
 		return $results;
@@ -403,10 +453,10 @@ class autoblogcron {
 
 			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
 			switch( AUTOBLOG_POST_DUPLICATE_CHECK ) {
-				case 'link':	$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
+				case 'link':	$results = $this->_wpdb->get_row( $this->_wpdb->prepare("SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink()) );
 								break;
 
-				case 'guid':	$results = $this->db->get_row( $this->db->prepare("SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_guid', $item->get_id()) );
+				case 'guid':	$results = $this->_wpdb->get_row( $this->_wpdb->prepare("SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_guid', $item->get_id()) );
 								break;
 			}
 
@@ -678,10 +728,10 @@ class autoblogcron {
 			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
 			switch ( AUTOBLOG_POST_DUPLICATE_CHECK ) {
 				case 'link':
-					$results = $this->db->get_row( $this->db->prepare( "SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink() ) );
+					$results = $this->_wpdb->get_row( $this->_wpdb->prepare( "SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink() ) );
 					break;
 				case 'guid':
-					$results = $this->db->get_row( $this->db->prepare( "SELECT post_id FROM {$this->db->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_guid', $item->get_id() ) );
+					$results = $this->_wpdb->get_row( $this->_wpdb->prepare( "SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_guid', $item->get_id() ) );
 					break;
 			}
 
@@ -917,7 +967,7 @@ class autoblogcron {
 		$update['lastupdated'] = current_time( 'timestamp' );
 		$update['nextcheck'] = current_time( 'timestamp' ) + (intval( $ablog['processfeed'] ) * 60);
 
-		$this->db->update( $this->autoblog, $update, array( "feed_id" => $feed_id ) );
+		$this->_wpdb->update( $this->autoblog, $update, array( "feed_id" => $feed_id ) );
 		// switch us back to the previous blog
 		if ( !empty( $ablog['blog'] ) && function_exists( 'restore_current_blog' ) ) {
 			restore_current_blog();
@@ -961,10 +1011,18 @@ class autoblogcron {
 		//Or processing limit
 		$timelimit = AUTOBLOG_PROCESSING_TIMELIMIT; // max seconds for processing
 
-		$lastprocessing = get_autoblog_option('autoblog_processing', strtotime('-1 week', current_time('timestamp')));
+		$default_lastprocessing = strtotime( '-1 week', current_time( 'timestamp' ) );
+		$lastprocessing = Autoblog_Plugin::is_network_wide()
+			? get_site_option( 'autoblog_processing', $default_lastprocessing )
+			: get_option( 'autoblog_processing', $default_lastprocessing );
 
 		if($lastprocessing < strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
-			update_autoblog_option('autoblog_processing', current_time('timestamp'));
+			if ( Autoblog_Plugin::is_network_wide() ) {
+				update_site_option( 'autoblog_processing', current_time( 'timestamp' ) );
+			} else {
+				update_option( 'autoblog_processing', current_time( 'timestamp' ) );
+			}
+
 
 			// grab the feeds
 			$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
@@ -1021,6 +1079,12 @@ class autoblogcron {
 
 		return $content;
 
+	}
+
+	function process_autoblog_for_cron() {
+		if ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
+			$this->always_process_autoblog();
+		}
 	}
 
 }

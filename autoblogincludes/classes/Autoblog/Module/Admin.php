@@ -1,16 +1,41 @@
 <?php
 
-class autoblogpremium {
+// +----------------------------------------------------------------------+
+// | Copyright Incsub (http://incsub.com/)                                |
+// +----------------------------------------------------------------------+
+// | This program is free software; you can redistribute it and/or modify |
+// | it under the terms of the GNU General Public License, version 2, as  |
+// | published by the Free Software Foundation.                           |
+// |                                                                      |
+// | This program is distributed in the hope that it will be useful,      |
+// | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+// | GNU General Public License for more details.                         |
+// |                                                                      |
+// | You should have received a copy of the GNU General Public License    |
+// | along with this program; if not, write to the Free Software          |
+// | Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,               |
+// | MA 02110-1301 USA                                                    |
+// +----------------------------------------------------------------------+
+
+/**
+ * Admin module.
+ *
+ * @since 4.0
+ *
+ * @category Autoblog
+ * @package Module
+ */
+class Autoblog_Module_Admin extends Autoblog_Module {
+
+	const NAME = __CLASS__;
 
 	var $build = 7;
-
-	var $db;
 
 	var $mylocation = "";
 	var $plugindir = "";
 	var $base_uri = '';
 
-	var $tables = array( 'autoblog' );
 	var $autoblog;
 
 	var $siteid = 1;
@@ -19,82 +44,61 @@ class autoblogpremium {
 	// Class variable to hold a link to the tooltips class
 	var $_tips;
 
-	function __construct() {
+	public function __construct( Autoblog_Plugin $plugin ) {
+		parent::__construct( $plugin );
 
-		global $wpdb;
-
-		$this->db =& $wpdb;
+		$this->autoblog = AUTOBLOG_TABLE_FEEDS;
 
 		// Installation functions
-		register_activation_hook(__FILE__, array(&$this, 'install'));
+		register_activation_hook( __FILE__, array( $this, 'install' ) );
 
-		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+		add_action( 'init', array( &$this, 'initialise_plugin' ) );
 
-		add_action('init', array(&$this, 'initialise_plugin'));
+		add_action( 'load-toplevel_page_autoblog', array( $this, 'add_admin_header_autoblog' ) );
+		add_action( 'load-autoblog_page_autoblog_admin', array( $this, 'add_admin_header_autoblog_admin' ) );
+		add_action( 'load-autoblog_page_autoblog_settings', array( $this, 'add_admin_header_autoblog_settings' ) );
+		add_action( 'load-autoblog_page_autoblog_addons', array( $this, 'add_admin_header_autoblog_addons' ) );
 
-		add_action('load-toplevel_page_autoblog', array(&$this, 'add_admin_header_autoblog'));
-		add_action('load-autoblog_page_autoblog_admin', array(&$this, 'add_admin_header_autoblog_admin'));
-		add_action('load-autoblog_page_autoblog_settings', array(&$this, 'add_admin_header_autoblog_settings'));
-		add_action('load-autoblog_page_autoblog_addons', array(&$this, 'add_admin_header_autoblog_addons'));
-
-		if(function_exists('is_multisite') && is_multisite()) {
-			if(function_exists('is_network_admin') && is_network_admin()) {
-				add_action('network_admin_menu', array(&$this,'add_adminmenu'));
+		if ( is_multisite() ) {
+			if ( is_network_admin() ) {
+				add_action( 'network_admin_menu', array( $this, 'add_adminmenu' ) );
 			} else {
-				add_action('admin_menu', array(&$this,'add_adminmenu'));
+				add_action( 'admin_menu', array( $this, 'add_adminmenu' ) );
 			}
 		} else {
-			add_action('admin_menu', array(&$this,'add_adminmenu'));
-		}
-
-		foreach($this->tables as $table) {
-			$this->$table = autoblog_db_prefix($this->db, $table);
+			add_action( 'admin_menu', array( $this, 'add_adminmenu' ) );
 		}
 
 		// check for installation
-		if(get_autoblog_option('autoblog_installed', 0) < $this->build) {
+		$installed = Autoblog_Plugin::is_network_wide()
+			? get_site_option( 'autoblog_installed', 0 )
+			: get_option( 'autoblog_installed', 0 );
+
+		if ( $installed < $this->build ) {
 			// create the database table
 			$this->install();
 		}
 
-		if(empty($this->db->siteid) || $this->db->siteid == 0) {
-			$this->siteid = 1;
-		} else {
-			$this->siteid = $this->db->siteid;
-		}
-
-		if(empty($this->db->blogid) || $this->db->blogid == 0) {
-			$this->blogid = 1;
-		} else {
-			$this->blogid = $this->db->blogid;
-		}
+		$this->siteid = empty( $this->_wpdb->siteid ) || $this->_wpdb->siteid == 0 ? 1 : $this->_wpdb->siteid;
+		$this->blogid = get_current_blog_id();
 
 		// Instantiate the tooltips class and set the icon
-		$this->_tips = new WpmuDev_HelpTooltips();
-		$this->_tips->set_icon_url(autoblog_url('autoblogincludes/images/information.png'));
-
-	}
-
-	function autoblogpremium() {
-		$this->__construct();
-	}
-
-	function load_textdomain() {
-		load_plugin_textdomain( 'autoblogtext', false, dirname( plugin_basename( AUTOBLOG_BASEFILE ) ) . '/autoblogincludes/languages/' );
+		$this->_tips = new WPMUDEV_Help_Tooltips();
+		$this->_tips->set_icon_url( AUTOBLOG_ABSURL . 'autoblogincludes/images/information.png' );
 	}
 
 	function install() {
 
-			if($this->db->get_var( "SHOW TABLES LIKE '" . $this->autoblog . "' ") != $this->autoblog) {
+			if($this->_wpdb->get_var( "SHOW TABLES LIKE '" . $this->autoblog . "' ") != $this->autoblog) {
 
 				$charset_collate = '';
 
-				if ( ! empty($this->db->charset) ) {
-					$charset_collate = "DEFAULT CHARACTER SET " . $this->db->charset;
+				if ( ! empty($this->_wpdb->charset) ) {
+					$charset_collate = "DEFAULT CHARACTER SET " . $this->_wpdb->charset;
 				}
 
-				if ( ! empty($this->db->collate) ) {
-					$charset_collate .= " COLLATE " . $this->db->collate;
+				if ( ! empty($this->_wpdb->collate) ) {
+					$charset_collate .= " COLLATE " . $this->_wpdb->collate;
 				}
 
 				$sql = "CREATE TABLE `" . $this->autoblog . "` (
@@ -111,11 +115,14 @@ class autoblogpremium {
 					  KEY `nextcheck` (`nextcheck`)
 					) $charset_collate;";
 
-				$this->db->query($sql);
+				$this->_wpdb->query($sql);
 			}
 
-			update_autoblog_option('autoblog_installed', $this->build);
-
+			if ( Autoblog_Plugin::is_network_wide() ) {
+				update_site_option('autoblog_installed', $this->build);
+			} else {
+				update_option('autoblog_installed', $this->build);
+			}
 	}
 
 	function initialise_plugin() {
@@ -130,32 +137,15 @@ class autoblogpremium {
 
 	}
 
-	function update_settings_page() {
-
-		if(isset($_POST['action']) && $_POST['action'] == 'updatesettings') {
-
-			check_admin_referer('update-autoblog-settings');
-
-			if($_POST['debugmode'] == 'yes') {
-				update_autoblog_option('autoblog_debug', true);
-			} else {
-				delete_autoblog_option('autoblog_debug');
-			}
-
-			wp_safe_redirect( add_query_arg('msg', 1, wp_get_referer()) );
-		}
-
-	}
-
 	function add_admin_header_autoblog() {
 
-		wp_enqueue_script('flot_js', autoblog_url('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
+		wp_enqueue_script('flot_js', AUTOBLOG_ABSURL . ('autoblogincludes/js/jquery.flot.min.js'), array('jquery'));
 
 		add_action ('admin_head', array(&$this, 'dashboard_iehead'));
 		add_action ('admin_head', array(&$this, 'dashboard_chartdata'));
 
-		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
-		wp_enqueue_script( 'autoblogdashjs', autoblog_url('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
+		wp_enqueue_style( 'autoblogadmincss', AUTOBLOG_ABSURL . ('autoblogincludes/styles/autoblog.css'), array(), $this->build );
+		wp_enqueue_script( 'autoblogdashjs', AUTOBLOG_ABSURL . ('autoblogincludes/js/autoblogdash.js'), array('jquery'), $this->build );
 
 		wp_localize_script( 'autoblogdashjs', 'autoblog', array( 'imports' => __('Posts imported','autoblogtext') ) );
 
@@ -171,8 +161,8 @@ class autoblogpremium {
 
 	function add_admin_header_autoblog_admin() {
 
-		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
-		wp_enqueue_script( 'autoblogadminjs', autoblog_url('autoblogincludes/js/autoblogadmin.js'), array('jquery'), $this->build );
+		wp_enqueue_style( 'autoblogadmincss', AUTOBLOG_ABSURL . ('autoblogincludes/styles/autoblog.css'), array(), $this->build );
+		wp_enqueue_script( 'autoblogadminjs', AUTOBLOG_ABSURL . ('autoblogincludes/js/autoblogadmin.js'), array('jquery'), $this->build );
 
 		wp_localize_script( 'autoblogadminjs', 'autoblog', array( 	'deletefeed' => __('Are you sure you want to delete this feed?','autoblogtext'),
 																	'processfeed' => __('Are you sure you want to process this feed?','autoblogtext')
@@ -187,7 +177,7 @@ class autoblogpremium {
 
 		wp_reset_vars( array('action', 'page') );
 
-		wp_enqueue_style( 'autoblogadmincss', autoblog_url('autoblogincludes/styles/autoblog.css'), array(), $this->build );
+		wp_enqueue_style( 'autoblogadmincss', AUTOBLOG_ABSURL . ('autoblogincludes/styles/autoblog.css'), array(), $this->build );
 
 		$this->update_settings_page();
 
@@ -204,7 +194,7 @@ class autoblogpremium {
 	}
 
 	function dashboard_iehead() {
-		echo '<!--[if lt IE 8]><script language="javascript" type="text/javascript" src="' . autoblog_url('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
+		echo '<!--[if lt IE 8]><script language="javascript" type="text/javascript" src="' . AUTOBLOG_ABSURL . ('autoblogincludes/js/excanvas.min.js') . '"></script><![endif]-->';
 	}
 
 	function get_data($results, $str = false) {
@@ -234,13 +224,13 @@ class autoblogpremium {
 		foreach($autos as $key => $auto) {
 			$feed = unserialize($auto->feed_meta);
 
-			if($feed['blog'] != $this->db->blogid && function_exists('switch_to_blog')) {
+			if($feed['blog'] != $this->_wpdb->blogid && function_exists('switch_to_blog')) {
 				switch_to_blog( $feed['blog'] );
 
 			}
 
-			$sql = $this->db->prepare( "SELECT DATE(p.post_date) AS thedate, count(*) AS thecount FROM {$this->db->posts} AS p, {$this->db->postmeta} AS pm WHERE p.ID = pm.post_id AND pm.meta_key = %s AND pm.meta_value = %s AND p.post_date >= %s GROUP BY DATE(p.post_date) ORDER BY p.post_date DESC", 'original_feed', $feed['url'], date("Y-m-d", strtotime('-20 days')) );
-			$results[$auto->feed_id] = $this->db->get_results( $sql );
+			$sql = $this->_wpdb->prepare( "SELECT DATE(p.post_date) AS thedate, count(*) AS thecount FROM {$this->_wpdb->posts} AS p, {$this->_wpdb->postmeta} AS pm WHERE p.ID = pm.post_id AND pm.meta_key = %s AND pm.meta_value = %s AND p.post_date >= %s GROUP BY DATE(p.post_date) ORDER BY p.post_date DESC", 'original_feed', $feed['url'], date("Y-m-d", strtotime('-20 days')) );
+			$results[$auto->feed_id] = $this->_wpdb->get_results( $sql );
 
 			if(function_exists('restore_current_blog')) {
 				restore_current_blog();
@@ -392,15 +382,15 @@ class autoblogpremium {
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php')) {
 				if(function_exists('is_network_admin') && is_network_admin()) {
-					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), AUTOBLOG_ABSURL . ('autoblogincludes/images/menu.png'));
 				} else {
-					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+					add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), AUTOBLOG_ABSURL . ('autoblogincludes/images/menu.png'));
 				}
 			} else {
-				add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+				add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), AUTOBLOG_ABSURL . ('autoblogincludes/images/menu.png'));
 			}
 		} else {
-			add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), autoblog_url('autoblogincludes/images/menu.png'));
+			add_menu_page(__('Auto Blog','autoblogtext'), __('Auto Blog','autoblogtext'), $capabilty,  'autoblog', array(&$this,'handle_dash_page'), AUTOBLOG_ABSURL . ('autoblogincludes/images/menu.png'));
 		}
 
 		// Fix WP translation hook issue
@@ -429,19 +419,12 @@ class autoblogpremium {
 			do_action('autoblog_site_menu');
 		}
 
-		// Add the new options menu
-		//add_submenu_page('autoblog', __('Settings','autoblogtext'), __('Settings','autoblogtext'), 'manage_options', "autoblog_settings", array(&$this,'handle_settings_page'));
-
 		do_action('autoblog_global_menu');
 
 	}
 
 	function dashboard_news() {
-		global $page, $action;
-
-		$plugin = get_plugin_data(autoblog_dir('autoblogpremium.php'));
-
-		$debug = get_autoblog_option('autoblog_debug', false);
+		$plugin = get_plugin_data(AUTOBLOG_ABSPATH . ('autoblogpremium.php'));
 
 		?>
 		<div class="postbox ">
@@ -460,12 +443,12 @@ class autoblogpremium {
 	function dashboard_report() {
 
 		if(is_multisite() && function_exists('is_plugin_active_for_network') && is_plugin_active_for_network('autoblog/autoblogpremium.php') && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true) {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->db->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 0, 25", $this->db->siteid, "autoblog_log_%");
+			$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->_wpdb->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 0, 25", $this->_wpdb->siteid, "autoblog_log_%");
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->db->options} WHERE option_name LIKE %s ORDER BY option_id DESC LIMIT 0, 25", "autoblog_log_%");
+			$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->_wpdb->options} WHERE option_name LIKE %s ORDER BY option_id DESC LIMIT 0, 25", "autoblog_log_%");
 		}
 
-		$logs = $this->db->get_results( $sql );
+		$logs = $this->_wpdb->get_results( $sql );
 
 		?>
 		<div class="postbox ">
@@ -1576,7 +1559,7 @@ class autoblogpremium {
 			$sql = "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND blog_id IN (" . implode(',', $blogs) . ") ORDER BY feed_id DESC";
 		}
 
-		$results = $this->db->get_results($sql);
+		$results = $this->_wpdb->get_results($sql);
 
 		return $results;
 
@@ -1594,15 +1577,15 @@ class autoblogpremium {
 
 		if(function_exists('is_multisite') && is_multisite()) {
 			if(function_exists('is_network_admin') && is_network_admin()) {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d ORDER BY feed_id ASC", $id );
+				$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d ORDER BY feed_id ASC", $id );
 			} else {
-				$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d AND blog_id  IN (" . implode(',', $blogs) . ") ORDER BY feed_id ASC", $id );
+				$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d AND blog_id  IN (" . implode(',', $blogs) . ") ORDER BY feed_id ASC", $id );
 			}
 		} else {
-			$sql = $this->db->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d AND blog_id  IN (" . implode(',', $blogs) . ") ORDER BY feed_id ASC", $id );
+			$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d AND blog_id  IN (" . implode(',', $blogs) . ") ORDER BY feed_id ASC", $id );
 		}
 
-		$results = $this->db->get_row($sql);
+		$results = $this->_wpdb->get_row($sql);
 
 		return $results;
 
@@ -1618,9 +1601,9 @@ class autoblogpremium {
 			$blogs = array( $this->blogid );
 		}
 
-		$sql = $this->db->prepare( "DELETE FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d", $id);
+		$sql = $this->_wpdb->prepare( "DELETE FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id = %d", $id);
 
-		return $this->db->query($sql);
+		return $this->_wpdb->query($sql);
 
 	}
 
@@ -1641,7 +1624,7 @@ class autoblogpremium {
 
 		$sql = "DELETE FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id IN (0, " . implode(',', $ids) . ")";
 
-		return $this->db->query($sql);
+		return $this->_wpdb->query($sql);
 	}
 
 	function processfeeds($ids) {
@@ -1715,6 +1698,8 @@ class autoblogpremium {
 
 		global $action, $page;
 
+		$abc = $this->_plugin->get_module( Autoblog_Module_Cron::NAME );
+
 		wp_reset_vars( array('action', 'page'));
 
 		if(!empty($action) && $action == 'autoblog') {
@@ -1748,7 +1733,7 @@ class autoblogpremium {
 				}
 				$feed['feed_meta'] = serialize($_POST['abtble']);
 
-				$id = $this->db->insert($this->autoblog, $feed);
+				$id = $this->_wpdb->insert($this->autoblog, $feed);
 				if(!is_wp_error($id)) {
 					wp_safe_redirect( add_query_arg( 'msg', 1, 'admin.php?page=' . $page ) );
 				} else {
@@ -1778,7 +1763,7 @@ class autoblogpremium {
 				}
 				$feed['feed_meta'] = serialize($_POST['abtble']);
 
-				$id = $this->db->update($this->autoblog, $feed, array( "feed_id" => mysql_real_escape_string($_POST['feed_id'])) );
+				$id = $this->_wpdb->update($this->autoblog, $feed, array( "feed_id" => mysql_real_escape_string($_POST['feed_id'])) );
 				if( !is_wp_error($id) ) {
 					wp_safe_redirect( add_query_arg( 'msg', 2, 'admin.php?page=' . $page ) );
 				} else {
@@ -1796,7 +1781,7 @@ class autoblogpremium {
 											$toprocess[] = mysql_real_escape_string($value);
 										}
 
-										if(ab_process_feeds($toprocess)) {
+										if($abc->process_feeds($toprocess)) {
 											wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 										} else {
 											wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
@@ -1835,7 +1820,7 @@ class autoblogpremium {
 											$toprocess[] = mysql_real_escape_string($value);
 										}
 
-										if(ab_process_feeds($toprocess)) {
+										if($abc->process_feeds($toprocess)) {
 											wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 										} else {
 											wp_safe_redirect( add_query_arg( 'err', 3, 'admin.php?page=' . $page ) );
@@ -1883,15 +1868,14 @@ class autoblogpremium {
 
 				$feed = $this->get_autoblogentry(addslashes($_GET['process']));
 
-				if(!empty($feed->feed_meta)) {
-					$details = unserialize($feed->feed_meta);
-					if(ab_process_feed($feed->feed_id, $details)) {
+				if ( !empty( $feed->feed_meta ) ) {
+					$details = unserialize( $feed->feed_meta );
+					if ( $abc->process_the_feed( $feed->feed_id, $details ) ) {
 						wp_safe_redirect( add_query_arg( 'msg', 4, 'admin.php?page=' . $page ) );
 					} else {
 						wp_safe_redirect( add_query_arg( 'err', 8, 'admin.php?page=' . $page ) );
 					}
 				}
-
 			}
 
 			// Test feeds
@@ -1903,7 +1887,7 @@ class autoblogpremium {
 				if(!empty($feed->feed_meta)) {
 					$details = unserialize($feed->feed_meta);
 
-					if(ab_test_feed($feed->feed_id, $details)) {
+					if($abc->test_the_feed($feed->feed_id, $details)) {
 						wp_safe_redirect( add_query_arg( 'msg', 7, 'admin.php?page=' . $page ) );
 					} else {
 						wp_safe_redirect( add_query_arg( 'err', 7, 'admin.php?page=' . $page ) );
@@ -1977,7 +1961,9 @@ class autoblogpremium {
 			$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
 		}
 
-		$testlog = get_autoblog_option('autoblog_last_test_log', false);
+		$testlog = Autoblog_Plugin::is_network_wide()
+			? get_site_option( 'autoblog_last_test_log', false )
+			: get_option( 'autoblog_last_test_log', false );
 
 		if(!empty($testlog) && $testlog !== false && isset($_GET['msg']) && (int) $_GET['msg'] == 7) {
 			echo '<div id="testmessage" class="updated fade"><p>';
@@ -2214,77 +2200,6 @@ class autoblogpremium {
 
 	}
 
-	function handle_settings_page() {
-
-		global $action, $page;
-
-		$messages = array();
-		$messages[1] = __('Your options have been updated.','autoblogtext');
-
-		?>
-		<div class='wrap nosubsub'>
-
-			<?php /*
-			<h3 class="nav-tab-wrapper">
-				<a href="admin.php?page=branding&amp;tab=dashboard" class="nav-tab nav-tab-active"><?php _e('General','autoblogtext'); ?></a>
-				<a href="admin.php?page=branding&amp;tab=images" class="nav-tab"><?php _e('Time Limits','autoblogtext'); ?></a>
-			</h3>
-			*/
-			?>
-
-			<div class="icon32" id="icon-options-general"><br></div>
-			<h2><?php _e('Autoblog Settings','autoblogtext'); ?></h2>
-
-			<?php
-			if ( isset($_GET['msg']) ) {
-				echo '<div id="message" class="updated fade"><p>' . $messages[(int) $_GET['msg']] . '</p></div>';
-				$_SERVER['REQUEST_URI'] = remove_query_arg(array('message'), $_SERVER['REQUEST_URI']);
-			}
-			?>
-			<div id="poststuff" class="metabox-holder m-settings">
-			<form action='?page=<?php echo $page; ?>' method='post'>
-
-				<input type='hidden' name='page' value='<?php echo $page; ?>' />
-				<input type='hidden' name='action' value='updatesettings' />
-
-				<?php
-					wp_nonce_field('update-autoblog-settings');
-				?>
-
-				<div class="postbox">
-					<h3 class="hndle" style='cursor:auto;'><span><?php _e('Debug mode','autoblog'); ?></span></h3>
-					<div class="inside">
-						<p><?php _e('Switch on debug mode and reporting.','autoblogtext'); ?></p>
-
-						<table class="form-table">
-						<tbody>
-							<tr valign="top">
-								<th scope="row"><?php _e('Debug mode is','autoblogtext'); ?></th>
-								<td>
-									<?php
-										$debug = get_site_option('autoblog_debug', false);
-									?>
-									<select name='debugmode' id='debugmode'>
-										<option value="no" <?php if($debug == false) echo "selected='selected'"; ?>><?php _e('Disabled','autoblogtext'); ?></option>
-										<option value="yes" <?php if($debug == true) echo "selected='selected'"; ?>><?php _e('Enabled','autoblogtext'); ?></option>
-									</select>
-								</td>
-							</tr>
-						</tbody>
-						</table>
-					</div>
-				</div>
-
-				<p class="submit">
-					<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'autoblogtext') ?>" />
-				</p>
-
-			</form>
-			</div>
-		</div> <!-- wrap -->
-		<?php
-	}
-
 	function handle_addons_panel_updates() {
 		global $action, $page;
 
@@ -2473,7 +2388,7 @@ class autoblogpremium {
 
 				$columns = apply_filters('autoblog_addoncolumns', $columns);
 
-				$plugins = get_autoblog_addons();
+				$plugins = $this->get_autoblog_addons();
 
 				$active = get_option('autoblog_activated_addons', array());
 				if(function_exists('get_blog_option')) {
@@ -2525,7 +2440,7 @@ class autoblogpremium {
 												'Network'	=>	'Network'
 								        );
 
-							$plugin_data = get_file_data( autoblog_dir('autoblogincludes/addons/' . $plugin), $default_headers, 'plugin' );
+							$plugin_data = get_file_data( AUTOBLOG_ABSPATH . ('autoblogincludes/addons/' . $plugin), $default_headers, 'plugin' );
 
 							if(empty($plugin_data['Name']) || (!empty($plugin_data['Name']) && $plugin_data['Network'] == 'True')) {
 								continue;
@@ -2661,7 +2576,7 @@ class autoblogpremium {
 
 				$columns = apply_filters('autoblog_addoncolumns', $columns);
 
-				$plugins = get_autoblog_addons();
+				$plugins = $this->get_autoblog_addons();
 
 				$active = get_option('autoblog_networkactivated_addons', array());
 
@@ -2707,7 +2622,7 @@ class autoblogpremium {
 												'Network'	=>	'Network'
 								        );
 
-							$plugin_data = get_file_data( autoblog_dir('autoblogincludes/addons/' . $plugin), $default_headers, 'plugin' );
+							$plugin_data = get_file_data( AUTOBLOG_ABSPATH . ('autoblogincludes/addons/' . $plugin), $default_headers, 'plugin' );
 
 							if(empty($plugin_data['Name'])) {
 								continue;
@@ -2795,6 +2710,23 @@ class autoblogpremium {
 		}
 
 		return $blogs;
+	}
+
+	function get_autoblog_addons() {
+		if ( is_dir( AUTOBLOG_ABSPATH . ('autoblogincludes/addons') ) ) {
+			if ( $dh = opendir( AUTOBLOG_ABSPATH . ('autoblogincludes/addons') ) ) {
+				$auto_plugins = array();
+				while ( ( $plugin = readdir( $dh ) ) !== false )
+					if ( substr( $plugin, -4 ) == '.php' )
+						$auto_plugins[] = $plugin;
+				closedir( $dh );
+				sort( $auto_plugins );
+
+				return apply_filters( 'autoblog_available_addons', $auto_plugins );
+			}
+		}
+
+		return false;
 	}
 
 }
