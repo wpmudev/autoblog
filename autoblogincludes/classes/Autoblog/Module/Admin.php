@@ -2141,7 +2141,7 @@ class Autoblog_Module_Admin extends Autoblog_Module {
 				echo '<td style="text-align:right">';
 					if ( $table->lastupdated != 0 ) {
 						echo "<code title='" . date_i18n( $timezone_format, $table->lastupdated ) . "'>";
-							echo human_time_diff( $table->lastupdated ), ' ', __( 'ago', 'autoblogtext' );
+							echo $this->_convert_time_to_str( $table->lastupdated );
 						echo "</code>";
 					} else {
 						echo '<code>', __( 'Never', 'autoblogtext' ), '</code>';
@@ -2149,9 +2149,14 @@ class Autoblog_Module_Admin extends Autoblog_Module {
 				echo '</td>';
 
 				echo '<td style="text-align:right">';
-				if ( $table->nextcheck != 0 ) {
-					echo "<code title='" . date_i18n( $timezone_format, $table->nextcheck ) . "'>";
-					echo __( 'in', 'autoblogtext' ), ' ', human_time_diff( time(), $table->nextcheck );
+
+				$next_check = $table->nextcheck;
+				if ( $next_check != 0 ) {
+					if ( $next_check < time() ) {
+						$next_check = wp_next_scheduled( Autoblog_Module_Cron::SCHEDULED_ACTION );
+					}
+					echo "<code title='" . date_i18n( $timezone_format, $next_check ) . "'>";
+					echo $this->_convert_time_to_str( $next_check );
 					echo "</code>";
 				} else {
 					echo '<code>', __( 'Never', 'autoblogtext' ), '</code>';
@@ -2198,6 +2203,64 @@ class Autoblog_Module_Admin extends Autoblog_Module {
 
 		echo "</div>";	// wrap
 
+	}
+
+	function _convert_time_to_str( $ts ) {
+		if ( !ctype_digit( $ts ) )
+			$ts = strtotime( $ts );
+
+		$diff = current_time( 'timestamp' ) - $ts;
+		if ( $diff == 0 )
+			return __( 'now', 'autoblogtext' );
+		elseif ( $diff > 0 ) {
+			$day_diff = floor( $diff / 86400 );
+			if ( $day_diff == 0 ) {
+				if ( $diff < 60 )
+					return __( 'just now', 'autoblogtext' );
+				if ( $diff < 120 )
+					return __( '1 minute ago', 'autoblogtext' );
+				if ( $diff < 3600 )
+					return floor( $diff / 60 ) . __( ' minutes ago', 'autoblogtext' );
+				if ( $diff < 7200 )
+					return __( '1 hour ago', 'autoblogtext' );
+				if ( $diff < 86400 )
+					return floor( $diff / 3600 ) . __( ' hours ago', 'autoblogtext' );
+			}
+			if ( $day_diff == 1 )
+				return __( 'Yesterday', 'autoblogtext' );
+			if ( $day_diff < 7 )
+				return $day_diff . __( ' days ago', 'autoblogtext' );
+			if ( $day_diff < 31 )
+				return ceil( $day_diff / 7 ) . __( ' weeks ago', 'autoblogtext' );
+			if ( $day_diff < 60 )
+				return __( 'last month', 'autoblogtext' );
+			return date( 'F Y', $ts );
+		}
+		else {
+			$diff = abs( $diff );
+			$day_diff = floor( $diff / 86400 );
+			if ( $day_diff == 0 ) {
+				if ( $diff < 120 )
+					return __( 'in a minute', 'autoblogtext' );
+				if ( $diff < 3600 )
+					return __( 'in ', 'autoblogtext' ) . floor( $diff / 60 ) . __( ' minutes', 'autoblogtext' );
+				if ( $diff < 7200 )
+					return __( 'in an hour', 'autoblogtext' );
+				if ( $diff < 86400 )
+					return __( 'in ', 'autoblogtext' ) . floor( $diff / 3600 ) . __( ' hours', 'autoblogtext' );
+			}
+			if ( $day_diff == 1 )
+				return __( 'Tomorrow', 'autoblogtext' );
+			if ( $day_diff < 4 )
+				return date( 'l', $ts );
+			if ( $day_diff < 7 + (7 - date( 'w' )) )
+				return __( 'next week', 'autoblogtext' );
+			if ( ceil( $day_diff / 7 ) < 4 )
+				return __( 'in ', 'autoblogtext' ) . ceil( $day_diff / 7 ) . __( ' weeks', 'autoblogtext' );
+			if ( date( 'n', $ts ) == date( 'n' ) + 1 )
+				return __( 'next month', 'autoblogtext' );
+			return date( 'F Y', $ts );
+		}
 	}
 
 	function handle_addons_panel_updates() {
