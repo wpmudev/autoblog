@@ -130,18 +130,22 @@ function autoblog_setup_constants() {
 function autoblog_setup_db_constants() {
 	global $wpdb;
 
-	if ( defined( 'AUTOBLOG_TABLE_MAP' ) ) {
+	if ( defined( 'AUTOBLOG_TABLE_FEEDS' ) ) {
 		return;
 	}
 
-	$prefix = isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
-	$table = 'autoblog';
+	$feeds_table = 'autoblog';
+	$logs_table = 'autoblog_log';
 
-	define( 'AUTOBLOG_TABLE_FEEDS', $prefix . $table );
+	$prefix = isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
+
+	define( 'AUTOBLOG_TABLE_FEEDS', $prefix . $feeds_table );
+	define( 'AUTOBLOG_TABLE_LOGS', $prefix . $logs_table );
 
 	// MultiDB compatibility, register global tables
 	if ( defined( 'MULTI_DB_VERSION' ) && function_exists( 'add_global_table' ) ) {
-		add_global_table( $table );
+		add_global_table( $feeds_table );
+		add_global_table( $logs_table );
 	}
 }
 

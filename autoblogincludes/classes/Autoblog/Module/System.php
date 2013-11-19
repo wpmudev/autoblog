@@ -110,22 +110,44 @@ class Autoblog_Module_System extends Autoblog_Module {
 			$charset_collate .= ' COLLATE ' . $this->_wpdb->collate;
 		}
 
-		dbDelta( sprintf(
-			'CREATE TABLE %s (
-			  feed_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-			  site_id BIGINT UNSIGNED NOT NULL DEFAULT 1,
-			  blog_id BIGINT UNSIGNED NOT NULL DEFAULT 1,
-			  feed_meta TEXT,
-			  active INT DEFAULT NULL,
-			  nextcheck BIGINT UNSIGNED DEFAULT NULL,
-			  lastupdated BIGINT UNSIGNED DEFAULT NULL,
-			  PRIMARY KEY  (feed_id),
-			  KEY site_id (site_id),
-			  KEY blog_id (blog_id),
-			  KEY nextcheck (nextcheck)
-			) %s;',
-			AUTOBLOG_TABLE_FEEDS,
-			$charset_collate
+		dbDelta( array(
+			// feeds
+			sprintf(
+				'CREATE TABLE %s (
+				  feed_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+				  site_id BIGINT UNSIGNED NOT NULL DEFAULT 1,
+				  blog_id BIGINT UNSIGNED NOT NULL DEFAULT 1,
+				  feed_meta TEXT,
+				  active INT DEFAULT NULL,
+				  nextcheck BIGINT UNSIGNED DEFAULT NULL,
+				  lastupdated BIGINT UNSIGNED DEFAULT NULL,
+				  PRIMARY KEY  (feed_id),
+				  KEY site_id (site_id),
+				  KEY blog_id (blog_id),
+				  KEY nextcheck (nextcheck)
+				) %s;',
+				AUTOBLOG_TABLE_FEEDS,
+				$charset_collate
+			),
+
+			// logs
+			sprintf(
+				'CREATE TABLE %s (
+				  log_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+				  feed_id BIGINT UNSIGNED NOT NULL,
+				  cron_id BIGINT UNSIGNED NOT NULL,
+				  log_at BIGINT UNSIGNED NOT NULL,
+				  log_type TINYINT UNSIGNED NOT NULL,
+				  entry_post_id BIGINT NOT NULL,
+				  entry_titlte VARCHAR(512) NOT NULL,
+				  entry_link VARCHAR(255) NOT NULL,
+				  PRIMARY KEY  (log_id),
+				  KEY feed_id (feed_id),
+				  KEY cron_id (cron_id)
+				) %s;',
+				AUTOBLOG_TABLE_LOGS,
+				$charset_collate
+			),
 		) );
 
 		return $current_version;
