@@ -171,11 +171,13 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 
 				$testlog = array();
 				if ( filter_input( INPUT_GET, 'tested', FILTER_VALIDATE_BOOLEAN ) ) {
-					$testlog = Autoblog_Plugin::is_network_wide()
-						? get_site_transient( 'autoblog_last_test_log' )
-						: get_transient( 'autoblog_last_test_log' );
-
-					$testlog = !empty( $testlog['log'] ) ? $testlog['log'] : array();
+					$testlog = get_transient( 'autoblog_last_test_log' );
+					if ( $testlog !== false && !empty( $testlog['log'] ) ) {
+						$testlog = $testlog['log'];
+						delete_transient( 'autoblog_last_test_log' );
+					} else {
+						$testlog = array();
+					}
 				}
 
 				$template = new Autoblog_Render_Feeds_Table();

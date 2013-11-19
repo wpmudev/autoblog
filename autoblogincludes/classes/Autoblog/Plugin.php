@@ -123,17 +123,4 @@ class Autoblog_Plugin {
 		$this->_modules[$class] = new $class( $this );
 	}
 
-	/**
-	 * Determines whether the plugin is network activated or not.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @static
-	 * @access public
-	 * @return boolean TRUE if the plugin is network activated, otherwise FALSE.
-	 */
-	public static function is_network_wide() {
-		return ( is_multisite() && function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( plugin_basename( AUTOBLOG_BASEFILE ) ) ) || filter_var( AUTOBLOG_GLOBAL, FILTER_VALIDATE_BOOLEAN );
-	}
-
 }

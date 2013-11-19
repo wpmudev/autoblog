@@ -31,26 +31,6 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 	const NAME = __CLASS__;
 
 	/**
-	 * Determines whether the multi site network is used or not.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @var boolean
-	 */
-	private $_is_multi_site = false;
-
-	/**
-	 * Determines whether the plugin is network wide activated or not.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @var boolean
-	 */
-	private $_is_network_active = false;
-
-	/**
 	 * Array of admin pages hooks.
 	 *
 	 * @since 4.0.0
@@ -74,18 +54,9 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 		// setup WPMUDEV Dashboard notices
 		$notice = new WPMUDEV_Dashboard_Notice();
 
-		$this->_is_multi_site = is_multisite();
-		if ( $this->_is_multi_site ) {
-			$sitewide_plugins = get_site_option( 'active_sitewide_plugins' );
-			$this->_is_network_active = isset( $sitewide_plugins[plugin_basename( AUTOBLOG_BASEFILE )] );
-		}
-
 		// setup menu
-		$admin_menu_action = $this->_is_multi_site && $this->_is_network_active
-			? 'network_admin_menu'
-			: 'admin_menu';
-
-		$this->_add_action( $admin_menu_action, 'register_admin_menu' );
+		$this->_add_action( 'network_admin_menu', 'register_admin_menu' );
+		$this->_add_action( 'admin_menu', 'register_admin_menu' );
 
 		// setup scripts
 		$this->_add_action( 'admin_enqueue_scripts', 'enqueue_scripts' );
@@ -148,7 +119,7 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 		// addons page
 		$page_title = __( 'Autoblog Add-ons', 'autoblogtext' );
 		$menu_title = __( 'Add-ons', 'autoblogtext' );
-		if ( $this->_is_multi_site && $is_network_admin ) {
+		if ( $is_network_admin ) {
 			$this->_admin_pages['addons'] = add_submenu_page( 'autoblog', $page_title, $menu_title, $capability, 'autoblog_addons', array( $this, 'handle_network_addons_page' ) );
 			do_action( 'autoblog_network_menu' );
 		} else {

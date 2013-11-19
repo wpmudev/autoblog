@@ -69,11 +69,6 @@ function autoblog_setup_constants() {
 	define( 'AUTOBLOG_ABSURL',   plugins_url( '/', __FILE__ ) );
 	define( 'AUTOBLOG_ABSPATH',  dirname( __FILE__ ) . DIRECTORY_SEPARATOR );
 
-	// Uses a global table so that all entries can be managed by the network admin as well
-	if ( !defined( 'AUTOBLOG_GLOBAL' ) ) {
-		define( 'AUTOBLOG_GLOBAL', true );
-	}
-
 	// Processing will stop after 6 seconds (default) so as not to overload your server
 	if ( !defined( 'AUTOBLOG_SIMPLEPIE_CACHE_TIMELIMIT' ) ) {
 		define( 'AUTOBLOG_SIMPLEPIE_CACHE_TIMELIMIT', 60 );
@@ -139,15 +134,14 @@ function autoblog_setup_db_constants() {
 		return;
 	}
 
-	$global = is_multisite() && function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( plugin_basename( __FILE__ ) );
-	$global |= defined( 'AUTOBLOG_GLOBAL' ) && filter_var( AUTOBLOG_GLOBAL, FILTER_VALIDATE_BOOLEAN );
+	$prefix = isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
+	$table = 'autoblog';
 
-	$prefix = $global && isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
-	define( 'AUTOBLOG_TABLE_FEEDS', "{$prefix}autoblog" );
+	define( 'AUTOBLOG_TABLE_FEEDS', $prefix . $table );
 
 	// MultiDB compatibility, register global tables
-	if ( $global && defined( 'MULTI_DB_VERSION' ) && function_exists( 'add_global_table' ) ) {
-		add_global_table( 'autoblog' );
+	if ( defined( 'MULTI_DB_VERSION' ) && function_exists( 'add_global_table' ) ) {
+		add_global_table( $table );
 	}
 }
 

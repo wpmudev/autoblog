@@ -166,51 +166,35 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	}
 
 	function record_msg() {
+		// log is temporary disabled
+		// TODO: rework cron log
+		return;
+		
 		$thetime = current_time( 'timestamp' );
 		$msgs = array(
 			"timestamp" => $thetime,
 			"log"       => $this->msgs
 		);
 
-		if ( Autoblog_Plugin::is_network_wide() ) {
-			update_site_option( 'autoblog_log_' . $thetime, $msgs );
-		} else {
-			update_option( 'autoblog_log_' . $thetime, $msgs );
-		}
+		 update_option( 'autoblog_log_' . $thetime, $msgs );
 
 		// Remove any old entries so we only keep the most recent 25
-		if ( Autoblog_Plugin::is_network_wide() ) {
-			$ids = $this->_wpdb->get_col( "SELECT meta_id FROM {$this->_wpdb->sitemeta} WHERE site_id = {$this->_wpdb->siteid} AND meta_key LIKE 'autoblog_log_%' ORDER BY meta_id DESC LIMIT 25, 100" );
-			if ( !empty( $ids ) ) {
-				$this->_wpdb->query( sprintf(
-					"DELETE FROM %s WHERE site_id = %d AND meta_id IN (%s)",
-					$this->_wpdb->sitemeta,
-					$this->_wpdb->siteid,
-					implode( ',', $ids )
-				) );
-			}
-		} else {
-			$ids = $this->_wpdb->get_col( "SELECT option_id FROM {$this->_wpdb->options} WHERE option_name LIKE 'autoblog_log_%' ORDER BY option_id DESC LIMIT 25, 100" );
-			if ( !empty( $ids ) ) {
-				$this->_wpdb->query( sprintf( "DELETE FROM %s WHERE option_id IN (%s)", $this->_wpdb->options, implode( ',', $ids ) ) );
-			}
+		$ids = $this->_wpdb->get_col( "SELECT meta_id FROM {$this->_wpdb->sitemeta} WHERE site_id = {$this->_wpdb->siteid} AND meta_key LIKE 'autoblog_log_%' ORDER BY meta_id DESC LIMIT 25, 100" );
+		if ( !empty( $ids ) ) {
+			$this->_wpdb->query( sprintf(
+				"DELETE FROM %s WHERE site_id = %d AND meta_id IN (%s)",
+				$this->_wpdb->sitemeta,
+				$this->_wpdb->siteid,
+				implode( ',', $ids )
+			) );
 		}
 	}
 
 	function record_testingmsg() {
-
-		$thetime = current_time('timestamp');
-
-		$msgs = array(
-			"timestamp" => $thetime,
-			"log" => $this->testingmsgs
-		);
-
-		if ( Autoblog_Plugin::is_network_wide() ) {
-			set_site_transient( 'autoblog_last_test_log', $msgs, MINUTE_IN_SECONDS );
-		} else {
-			set_transient( 'autoblog_last_test_log', $msgs, MINUTE_IN_SECONDS );
-		}
+		set_transient( 'autoblog_last_test_log', array(
+			"timestamp" => current_time('timestamp'),
+			"log"       => $this->testingmsgs
+		), MINUTE_IN_SECONDS );
 	}
 
 	function process_feeds($ids) {
@@ -241,20 +225,15 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 	}
 
-	function test_the_feed($feed_id, $ablog) {
+	function test_the_feed( $feed_id, $ablog ) {
+		do_action( 'autoblog_pre_test_feed', $feed_id, $ablog );
+		$this->test_feed( $feed_id, $ablog );
+		do_action( 'autoblog_post_test_feed', $feed_id, $ablog );
 
-		do_action('autoblog_pre_test_feed', $feed_id, $ablog);
-		$results = $this->test_feed($feed_id, $ablog);
-		do_action('autoblog_post_test_feed', $feed_id, $ablog);
-
-		if(!empty($this->testingmsgs)) {
+		if ( !empty( $this->testingmsgs ) ) {
 			$this->record_testingmsg();
 		} else {
-			if ( Autoblog_Plugin::is_network_wide() ) {
-				delete_site_transient( 'autoblog_last_test_log' );
-			} else {
-				delete_transient( 'autoblog_last_test_log' );
-			}
+			delete_transient( 'autoblog_last_test_log' );
 		}
 
 		return true;
@@ -1002,64 +981,48 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	* This process_autoblog function should not be used now as the system is switched over to using a cron job
 	*/
 	function process_autoblog() {
-
-		global $wpdb;
-
 		// Our starting time
-		$timestart = current_time('timestamp');
+		$timestart = current_time( 'timestamp' );
 
 		//Or processing limit
 		$timelimit = AUTOBLOG_PROCESSING_TIMELIMIT; // max seconds for processing
 
-		$default_lastprocessing = strtotime( '-1 week', current_time( 'timestamp' ) );
-		$lastprocessing = Autoblog_Plugin::is_network_wide()
-			? get_site_option( 'autoblog_processing', $default_lastprocessing )
-			: get_option( 'autoblog_processing', $default_lastprocessing );
-
-		if($lastprocessing < strtotime('-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time('timestamp'))) {
-			if ( Autoblog_Plugin::is_network_wide() ) {
-				update_site_option( 'autoblog_processing', current_time( 'timestamp' ) );
-			} else {
-				update_option( 'autoblog_processing', current_time( 'timestamp' ) );
-			}
-
+		if ( get_option( 'autoblog_processing', strtotime( '-1 week', current_time( 'timestamp' ) ) ) < strtotime( '-' . AUTOBLOG_PROCESSING_CHECKLIMIT . ' minutes', current_time( 'timestamp' ) ) ) {
+			update_option( 'autoblog_processing', current_time( 'timestamp' ) );
 
 			// grab the feeds
-			$autoblogs = $this->get_autoblogentries(current_time('timestamp'));
+			$autoblogs = $this->get_autoblogentries( current_time( 'timestamp' ) );
 
-			foreach( (array) $autoblogs as $key => $ablog) {
+			foreach ( (array) $autoblogs as $key => $ablog ) {
 
-				if(current_time('timestamp') > $timestart + $timelimit) {
+				if ( current_time( 'timestamp' ) > $timestart + $timelimit ) {
 					// time out
-					$this->msgs[] = __('<strong>Notice:</strong> Processing stopped due to ' . $timelimit . ' second timeout.','autoblogtext');
-
+					$this->msgs[] = __( '<strong>Notice:</strong> Processing stopped due to ' . $timelimit . ' second timeout.', 'autoblogtext' );
 					break;
 				}
 
-				$details = unserialize($ablog->feed_meta);
+				$details = unserialize( $ablog->feed_meta );
 				$process = false;
 
-				if(isset($details['processfeed']) && $details['processfeed'] > 0) {
+				if ( isset( $details['processfeed'] ) && $details['processfeed'] > 0 ) {
 					$process = true;
 				} else {
 					$process = false;
 				}
 
-				if($process) {
-					do_action('autoblog_pre_process_feed', $ablog->feed_id, $details);
-					$this->process_feed($ablog->feed_id, $details);
-					do_action('autoblog_post_process_feed', $ablog->feed_id, $details);
+				if ( $process ) {
+					do_action( 'autoblog_pre_process_feed', $ablog->feed_id, $details );
+					$this->process_feed( $ablog->feed_id, $details );
+					do_action( 'autoblog_post_process_feed', $ablog->feed_id, $details );
 				}
-
 			}
 		} else {
 
 		}
 
-		if(!empty($this->msgs)) {
+		if ( !empty( $this->msgs ) ) {
 			$this->record_msg();
 		}
-
 	}
 
 	// This function appends the source to the bottom of the content if it exists.

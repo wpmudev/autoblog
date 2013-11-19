@@ -58,7 +58,7 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 		$table = new Autoblog_Table_Addons( array(
 			'nonce'           => wp_create_nonce( 'autoblog_addons' ),
 			'active'          => get_option( 'autoblog_activated_addons', array() ),
-			'oposite'         => get_blog_option( 1, 'autoblog_networkactivated_addons', array() ),
+			'oposite'         => function_exists( 'get_blog_option' ) ? get_blog_option( 1, 'autoblog_networkactivated_addons', array() ) : array(),
 			'actions'         => array(
 				'activate'   => __( 'Activate', 'autoblogtext' ),
 				'deactivate' => __( 'Deactivate', 'autoblogtext' ),

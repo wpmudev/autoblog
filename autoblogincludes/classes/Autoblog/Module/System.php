@@ -77,6 +77,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 
 		// add upgrade functions
 		$this->_add_filter( $filter, 'setup_database', 1 );
+		$this->_add_filter( $filter, 'upgrade_to_4_0_0', 10 );
 
 		// upgrade database version to current plugin version
 		$db_version = apply_filters( $filter, $db_version );
@@ -97,11 +98,6 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * @return string Unchanged version.
 	 */
 	public function setup_database( $current_version ) {
-		$this_version = '4.0.0';
-		if ( version_compare( $current_version, $this_version, '>=' ) ) {
-			return $current_version;
-		}
-
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$charset_collate = '';
@@ -133,6 +129,32 @@ class Autoblog_Module_System extends Autoblog_Module {
 		) );
 
 		return $current_version;
+	}
+
+	/**
+	 * Upgrades the plugin to the version 4.0.0
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @param string $current_version The current plugin version.
+	 * @return string Unchanged version.
+	 */
+	public function upgrade_to_4_0_0( $current_version ) {
+		$this_version = '4.0.0';
+		if ( version_compare( $current_version, $this_version, '>=' ) ) {
+			return $current_version;
+		}
+
+		// remove deprecated options
+		delete_site_option( 'autoblog_installed' );
+		delete_option( 'autoblog_installed' );
+
+		// remove deprecated logs
+		$this->_wpdb->query( "DELETE FROM {$this->_wpdb->options} WHERE option_name LIKE 'autoblog_log_%'" );
+		$this->_wpdb->query( "DELETE FROM {$this->_wpdb->sitemeta} WHERE site_id = {$this->_wpdb->siteid} AND meta_key LIKE 'autoblog_log_%'" );
+
+		return $this_version;
 	}
 
 	/**

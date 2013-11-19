@@ -55,13 +55,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 	 */
 	public function handle_dashboard_page() {
 		// logs
-		if ( is_multisite() && function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( 'autoblog/autoblogpremium.php' ) && defined( 'AUTOBLOG_GLOBAL' ) && AUTOBLOG_GLOBAL == true ) {
-			$sql = $this->_wpdb->prepare( "SELECT meta_value FROM {$this->_wpdb->sitemeta} WHERE site_id = %d AND meta_key LIKE %s ORDER BY meta_id DESC LIMIT 0, 25", $this->_wpdb->siteid, "autoblog_log_%" );
-		} else {
-			$sql = $this->_wpdb->prepare( "SELECT option_value FROM {$this->_wpdb->options} WHERE option_name LIKE %s ORDER BY option_id DESC LIMIT 0, 25", "autoblog_log_%" );
-		}
-
-		$logs = array_map( 'unserialize', $this->_wpdb->get_col( $sql ) );
+		$logs = array();
 
 		// feeds
 		$sites = array( empty( $this->_wpdb->siteid ) || $this->_wpdb->siteid == 0 ? 1 : $this->_wpdb->siteid );
@@ -71,7 +65,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 			$blogs[] = 0;
 		}
 
-		if ( function_exists( 'is_multisite' ) && is_multisite() && function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( 'autoblog/autoblogpremium.php' ) && is_network_admin() ) {
+		if ( is_network_admin() ) {
 			$sql = "SELECT * FROM " . AUTOBLOG_TABLE_FEEDS . " WHERE site_id IN (" . implode( ',', $sites ) . ") ORDER BY feed_id DESC";
 		} else {
 			$sql = "SELECT * FROM " . AUTOBLOG_TABLE_FEEDS . " WHERE site_id IN (" . implode( ',', $sites ) . ") AND blog_id IN (" . implode( ',', $blogs ) . ") ORDER BY feed_id DESC";
