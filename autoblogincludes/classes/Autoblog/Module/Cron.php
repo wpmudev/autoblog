@@ -132,21 +132,19 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	}
 
 	function get_autoblogentriesforids($ids) {
-
-		if(defined('AUTOBLOG_LAZY_ID') && AUTOBLOG_LAZY_ID == true) {
-			$sites = array( $this->siteid, 0 );
-			$blogs = array( $this->blogid, 0 );
-		} else {
-			$sites = array( $this->siteid );
-			$blogs = array( $this->blogid );
+		$sites = array( $this->siteid );
+		$blogs = array( $this->blogid );
+		if ( defined( 'AUTOBLOG_LAZY_ID' ) && AUTOBLOG_LAZY_ID == true ) {
+			$sites[] = 0;
+			$blogs[] = 0;
 		}
 
-		$sql = $this->_wpdb->prepare( "SELECT * FROM {$this->autoblog} WHERE site_id IN (" . implode(',', $sites) . ") AND feed_id IN (0, " . implode(',', $ids) . ") ORDER BY nextcheck ASC", $timestamp );
-
-		$results = $this->_wpdb->get_results($sql);
-
-		return $results;
-
+		return $this->_wpdb->get_results( sprintf(
+			'SELECT * FROM %s WHERE site_id IN (%s) AND feed_id IN (0, %s) ORDER BY nextcheck ASC',
+			AUTOBLOG_TABLE_FEEDS,
+			implode( ', ', $sites ),
+			implode( ', ', $ids )
+		) );
 	}
 
 	function get_autoblogentry($id) {
@@ -209,9 +207,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		);
 
 		if ( Autoblog_Plugin::is_network_wide() ) {
-			set_site_transient( 'autoblog_last_test_log', $msgs );
+			set_site_transient( 'autoblog_last_test_log', $msgs, MINUTE_IN_SECONDS );
 		} else {
-			set_transient( 'autoblog_last_test_log', $msgs );
+			set_transient( 'autoblog_last_test_log', $msgs, MINUTE_IN_SECONDS );
 		}
 	}
 
@@ -712,7 +710,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		$processed_count = 0;
 
 		// Switch to the correct blog
-		if ( !empty( $ablog['blog'] ) && function_exists( 'switch_to_blog' ) ) {
+		$bid = get_current_blog_id();
+		if ( !empty( $ablog['blog'] ) ) {
 			switch_to_blog( (int) $ablog['blog'] );
 			$bid = (int) $ablog['blog'];
 		}
@@ -721,17 +720,18 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			$item = $feed->get_item( $x );
 
 			if ( !is_object( $item ) ) {
-				// Smomething has gone wrong with this post item so we'll ignore it and try the next one instead
+				// Something has gone wrong with this post item so we'll ignore it and try the next one instead
 				continue;
 			}
 
 			// We are going to store the permalink for imported posts in a meta field so we don't import duplicates
 			switch ( AUTOBLOG_POST_DUPLICATE_CHECK ) {
-				case 'link':
-					$results = $this->_wpdb->get_row( $this->_wpdb->prepare( "SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink() ) );
-					break;
 				case 'guid':
 					$results = $this->_wpdb->get_row( $this->_wpdb->prepare( "SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_guid', $item->get_id() ) );
+					break;
+				case 'link':
+				default:
+					$results = $this->_wpdb->get_row( $this->_wpdb->prepare( "SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s", 'original_source', $item->get_permalink() ) );
 					break;
 			}
 

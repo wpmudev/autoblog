@@ -139,7 +139,9 @@ function autoblog_setup_db_constants() {
 		return;
 	}
 
-	$global = ( is_multisite() && is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) || ( defined( 'AUTOBLOG_GLOBAL' ) && filter_var( AUTOBLOG_GLOBAL, FILTER_VALIDATE_BOOLEAN ) );
+	$global = is_multisite() && function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( plugin_basename( __FILE__ ) );
+	$global |= defined( 'AUTOBLOG_GLOBAL' ) && filter_var( AUTOBLOG_GLOBAL, FILTER_VALIDATE_BOOLEAN );
+
 	$prefix = $global && isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
 	define( 'AUTOBLOG_TABLE_FEEDS', "{$prefix}autoblog" );
 
@@ -196,7 +198,10 @@ function autoblog_launch() {
 	if ( is_admin() ) {
 		// set admin modules
 		$plugin->set_module( Autoblog_Module_Backend::NAME );
-		$plugin->set_module( Autoblog_Module_Admin::NAME );
+
+		$plugin->set_module( Autoblog_Module_Page_Feeds::NAME );
+		$plugin->set_module( Autoblog_Module_Page_Addons::NAME );
+		$plugin->set_module( Autoblog_Module_Page_Dashboard::NAME );
 	}
 }
 

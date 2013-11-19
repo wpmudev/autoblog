@@ -3,7 +3,7 @@
 Addon Name: Post formats addon
 Description: Allows a post format to be selected for a feed.
 Author: Barry (Incsub)
-Author URI: http://caffeinatedb.com
+Author URI: http://premium.wpmudev.org
 */
 //get_post_format_strings
 

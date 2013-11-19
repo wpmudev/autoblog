@@ -41,10 +41,98 @@ class Autoblog_Module_System extends Autoblog_Module {
 	public function __construct( Autoblog_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
+		// upgrade the plugin
+		$this->_upgrade();
+
+		// load text domain
 		$this->_add_action( 'plugins_loaded', 'load_textdomain' );
 
+		// load network wide and blog wide addons
 		$this->_add_action( 'plugins_loaded', 'load_addons' );
 		$this->_add_action( 'plugins_loaded', 'load_network_addons' );
+	}
+
+	/**
+	 * Performs upgrade plugin evnironment to up to date version.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 */
+	private function _upgrade() {
+		$filter = 'autoblog_database_upgrade';
+		$option = 'autoblog_database_version';
+
+		// fetch current database version
+		$db_version = get_site_option( $option );
+		if ( $db_version === false ) {
+			$db_version = '0.0.0';
+			update_site_option( $option, $db_version );
+		}
+
+		// check if current version is equal to database version, then there is nothing to upgrade
+		if ( version_compare( $db_version, Autoblog_Plugin::VERSION, '=' ) ) {
+			return;
+		}
+
+		// add upgrade functions
+		$this->_add_filter( $filter, 'setup_database', 1 );
+
+		// upgrade database version to current plugin version
+		$db_version = apply_filters( $filter, $db_version );
+		$db_version = version_compare( $db_version, Autoblog_Plugin::VERSION, '>=' )
+			? $db_version
+			: Autoblog_Plugin::VERSION;
+
+		update_site_option( $option, $db_version );
+	}
+
+	/**
+	 * Setups database table.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @param string $current_version The current plugin version.
+	 * @return string Unchanged version.
+	 */
+	public function setup_database( $current_version ) {
+		$this_version = '4.0.0';
+		if ( version_compare( $current_version, $this_version, '>=' ) ) {
+			return $current_version;
+		}
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		$charset_collate = '';
+
+		if ( !empty( $this->_wpdb->charset ) ) {
+			$charset_collate = 'DEFAULT CHARACTER SET ' . $this->_wpdb->charset;
+		}
+
+		if ( !empty( $this->_wpdb->collate ) ) {
+			$charset_collate .= ' COLLATE ' . $this->_wpdb->collate;
+		}
+
+		dbDelta( sprintf(
+			'CREATE TABLE %s (
+			  feed_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			  site_id BIGINT UNSIGNED NOT NULL DEFAULT 1,
+			  blog_id BIGINT UNSIGNED NOT NULL DEFAULT 1,
+			  feed_meta TEXT,
+			  active INT DEFAULT NULL,
+			  nextcheck BIGINT UNSIGNED DEFAULT NULL,
+			  lastupdated BIGINT UNSIGNED DEFAULT NULL,
+			  PRIMARY KEY  (feed_id),
+			  KEY site_id (site_id),
+			  KEY blog_id (blog_id),
+			  KEY nextcheck (nextcheck)
+			) %s;',
+			AUTOBLOG_TABLE_FEEDS,
+			$charset_collate
+		) );
+
+		return $current_version;
 	}
 
 	/**

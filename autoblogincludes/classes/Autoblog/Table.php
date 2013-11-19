@@ -44,6 +44,7 @@ class Autoblog_Table extends WP_List_Table {
 			'single'           => 'item',
 			'plural'           => 'items',
 			'ajax'             => false,
+			'autoescape'       => true,
 		), $args ) );
 	}
 
@@ -132,7 +133,7 @@ class Autoblog_Table extends WP_List_Table {
 	 * @access public
 	 */
 	public function display() {
-		if ( is_array( $this->items ) ) {
+		if ( is_array( $this->items ) && $this->_args['autoescape'] ) {
 			foreach ( $this->items as &$item ) {
 				foreach ( $item as &$value ) {
 					$value = esc_html( $value );

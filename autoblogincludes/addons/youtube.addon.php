@@ -3,7 +3,7 @@
 Addon Name: Youtube Add-on
 Description: Experimental YouTube rss feeds importer - changes content to embedded video.
 Author: Barry (Incsub)
-Author URI: http://caffeinatedb.com
+Author URI: http://premium.wpmudev.org
 */
 
 class A_youtube_addon {
