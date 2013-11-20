@@ -125,6 +125,26 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 	}
 
 	/**
+	 * Returns cleaned up URL to return to after action process.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @static
+	 * @access private
+	 * @return string Cleaned up URL to return to after action process.
+	 */
+	private static function _get_back_ref() {
+		return add_query_arg( array(
+			'action'      => false,
+			'noheader'    => false,
+			'_wpnonce'    => false,
+			'plugins'     => false,
+			'deactivated' => false,
+			'activated'   => false,
+		) );
+	}
+
+	/**
 	 * Activates addons.
 	 *
 	 * @sicne 4.0.0
@@ -135,16 +155,18 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 	private function _activate_addons( $option ) {
 		check_admin_referer( 'autoblog_addons' );
 
+		$backref = self::_get_back_ref();
+
 		$addons = isset( $_REQUEST['plugins'] ) ? (array)$_REQUEST['plugins'] : array();
 		$addons = array_filter( array_map( 'trim', $addons ) );
 		if ( empty( $addons ) ) {
-			wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] );
+			wp_safe_redirect( $backref );
 			exit;
 		}
 
 		update_option( $option, array_unique( array_merge( get_option( $option, array() ), $addons ) ) );
 
-		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&activated=true' );
+		wp_safe_redirect( add_query_arg( 'activated', 'true', $backref ) );
 		exit;
 	}
 
@@ -159,16 +181,18 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 	private function _deactivate_addons( $option ) {
 		check_admin_referer( 'autoblog_addons' );
 
+		$backref = self::_get_back_ref();
+
 		$addons = isset( $_REQUEST['plugins'] ) ? (array)$_REQUEST['plugins'] : array();
 		$addons = array_filter( array_map( 'trim', $addons ) );
 		if ( empty( $addons ) ) {
-			wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] );
+			wp_safe_redirect( $backref );
 			exit;
 		}
 
 		update_option( $option, array_unique( array_diff( get_option( $option, array() ), $addons ) ) );
 
-		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&deactivated=true' );
+		wp_safe_redirect( add_query_arg( 'deactivated', 'true', $backref ) );
 		exit;
 	}
 

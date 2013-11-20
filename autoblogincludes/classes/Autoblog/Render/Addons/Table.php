@@ -73,7 +73,7 @@ class Autoblog_Render_Addons_Table extends Autoblog_Render {
 
 		if ( isset( $_GET['deactivated'] ) ) {
 			if ( filter_input( INPUT_GET, 'deactivated', FILTER_VALIDATE_BOOLEAN ) ) {
-				echo '<div class="updated fade"><p>', esc_html__( 'The addons(s) has been deactivated successfully.', 'autoblogtext' ), '</p></div>';
+				echo '<div class="updated fade"><p>', esc_html__( 'The addon(s) has been deactivated successfully.', 'autoblogtext' ), '</p></div>';
 			} else {
 				echo '<div class="error fade"><p>', esc_html__( 'The addon(s) has not been deactivated.', 'autoblogtext' ), '</p></div>';
 			}
