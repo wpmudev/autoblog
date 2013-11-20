@@ -157,6 +157,51 @@ class Autoblog_Table_Addons extends Autoblog_Table {
 	}
 
 	/**
+	 * Returns the associative array with the list of views available on this table.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access protected
+	 * @global wpdb $wpdb The database connection.
+	 * @return array The array of views.
+	 */
+	public function get_views() {
+		$active = $inactive = 0;
+		for ( $i = 0, $len = count( $this->_args['all'] ); $i < $len; $i++ ) {
+			if ( in_array( $this->_args['all'][$i], $this->_args['active'] ) || in_array( $this->_args['all'][$i], $this->_args['oposite'] ) ) {
+				$active++;
+			} else {
+				$inactive++;
+			}
+		}
+
+		$type = filter_input( INPUT_GET, 'type' );
+		return array(
+			'all' => sprintf(
+				'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
+				add_query_arg( array( 'type' => false, 'paged' => false ) ),
+				!$type ? ' class="current"' : '',
+				__( 'All', 'autoblogtext' ),
+				$len
+			),
+			'active' => sprintf(
+				'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
+				add_query_arg( array( 'type' => 'active', 'paged' => false ) ),
+				$type == 'active' ? ' class="current"' : '',
+				__( 'Active', 'autoblogtext' ),
+				$active
+			),
+			'inactive' => sprintf(
+				'<a href="%s"%s>%s <span class="count">(%d)</span></a>',
+				add_query_arg( array( 'type' => 'inactive', 'paged' => false ) ),
+				$type == 'inactive' ? ' class="current"' : '',
+				__( 'Inactive', 'autoblogtext' ),
+				$inactive
+			),
+		);
+	}
+
+	/**
 	 * Fetches records from database.
 	 *
 	 * @since 4.0.0
@@ -167,7 +212,7 @@ class Autoblog_Table_Addons extends Autoblog_Table {
 	public function prepare_items() {
 		parent::prepare_items();
 
-		$per_page = 20;
+		$per_page = 10;
 		$offset = ( $this->get_pagenum() - 1 ) * $per_page;
 
 		$items = array();
@@ -184,6 +229,22 @@ class Autoblog_Table_Addons extends Autoblog_Table {
 
 				$items = apply_filters( 'autoblog_available_addons', $items );
 			}
+		}
+
+		$this->_args['all'] = $items;
+
+		$type = filter_input( INPUT_GET, 'type' );
+		if ( $type == 'active' || $type == 'inactive' ) {
+			$filtered = array();
+			for ( $i = 0, $len = count( $items ); $i < $len; $i++ ) {
+				if ( $type == 'active' && ( in_array( $items[$i], $this->_args['active'] ) || in_array( $items[$i], $this->_args['oposite'] ) ) ) {
+					$filtered[] = $items[$i];
+				} elseif ( $type == 'inactive' && !( in_array( $items[$i], $this->_args['active'] ) || in_array( $items[$i], $this->_args['oposite'] ) ) ) {
+					$filtered[] = $items[$i];
+				}
+			}
+
+			$items = $filtered;
 		}
 
 		$this->items = array_slice( $items, $offset, $per_page );
