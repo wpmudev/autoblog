@@ -50,6 +50,30 @@ class Autoblog_Module_System extends Autoblog_Module {
 		// load network wide and blog wide addons
 		$this->_add_action( 'plugins_loaded', 'load_addons' );
 		$this->_add_action( 'plugins_loaded', 'load_network_addons' );
+
+		// setup cron stuff
+		$this->_add_action( 'shutdown', 'setup_schedules' );
+	}
+
+	/**
+	 * Sets scheduled events.
+	 *
+	 * @since 4.0.0
+	 * @action shutdown
+	 *
+	 * @access public
+	 */
+	public function setup_schedules() {
+		if ( ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD != 'cron' ) || wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS ) ) {
+			return;
+		}
+
+		$minutes = defined( 'AUTOBLOG_PROCESSING_CHECKLIMIT' ) ? absint( AUTOBLOG_PROCESSING_CHECKLIMIT ) : 5;
+		if ( !$minutes ) {
+			$minutes = 5;
+		}
+
+		wp_schedule_single_event( time() + $minutes * MINUTE_IN_SECONDS, Autoblog_Plugin::SCHEDULE_PROCESS  );
 	}
 
 	/**
@@ -175,6 +199,12 @@ class Autoblog_Module_System extends Autoblog_Module {
 		// remove deprecated logs
 		$this->_wpdb->query( "DELETE FROM {$this->_wpdb->options} WHERE option_name LIKE 'autoblog_log_%'" );
 		$this->_wpdb->query( "DELETE FROM {$this->_wpdb->sitemeta} WHERE site_id = {$this->_wpdb->siteid} AND meta_key LIKE 'autoblog_log_%'" );
+
+		// remove deprecated scheduled event
+		$next_schedule = wp_next_scheduled( 'autoblog_process_all_feeds_for_cron' );
+		if ( $next_schedule ) {
+			wp_unschedule_event( $next_schedule, 'autoblog_process_all_feeds_for_cron' );
+		}
 
 		return $this_version;
 	}

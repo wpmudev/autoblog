@@ -29,7 +29,6 @@
 class Autoblog_Module_Cron extends Autoblog_Module {
 
 	const NAME = __CLASS__;
-	const SCHEDULED_ACTION = 'autoblog_process_all_feeds_for_cron';
 
 	var $autoblog;
 
@@ -39,8 +38,6 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 	var $siteid = 1;
 	var $blogid = 1;
-
-	var $checkperiod = '10mins';
 
 	public function __construct( Autoblog_Plugin $plugin ) {
 		parent::__construct( $plugin );
@@ -52,52 +49,16 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		// override with option.
 		$this->siteid = empty( $this->_wpdb->siteid ) || $this->_wpdb->siteid == 0 ? 1 : $this->_wpdb->siteid;
 		$this->blogid = empty( $this->_wpdb->blogid ) || $this->_wpdb->blogid == 0 ? 1 : $this->_wpdb->blogid;
-		// Action to be called by the cron job
-		$this->checkperiod = defined( 'AUTOBLOG_PROCESSING_CHECKLIMIT' ) && AUTOBLOG_PROCESSING_CHECKLIMIT == 10 ? '10mins' : '5mins';
 
-		add_action( 'init', array( $this, 'set_up_schedule' ) );
-		//add_action( 'autoblog_process_feeds', array(&$this, 'always_process_autoblog') );
-		add_filter( 'cron_schedules', array( $this, 'add_time_period' ) );
 		// Add in filter for the_post to add in the source content at the bottom
 		add_filter( 'the_content', array( $this, 'append_original_source' ), 999, 1 );
 
-		add_action( self::SCHEDULED_ACTION, array( $this, 'process_autoblog_for_cron' ) );
-
-		register_deactivation_hook( AUTOBLOG_BASEFILE, array( $this, 'remove_schedule' ) );
+		add_action( 'autoblog_process_all_feeds_for_cron', array( $this, 'process_autoblog_for_cron' ) );
 	}
 
 	function feed_cache($cacheperiod = false, $url = false) {
 
 		return (int) AUTOBLOG_SIMPLEPIE_CACHE_TIMELIMIT;
-	}
-
-	function add_time_period( $periods ) {
-		if ( !is_array( $periods ) ) {
-			$periods = array( );
-		}
-
-		$periods['10mins'] = array( 'interval' => 10 * MINUTE_IN_SECONDS, 'display' => __( 'Every 10 Mins', 'autoblogtext' ) );
-		$periods['5mins']  = array( 'interval' =>  5 * MINUTE_IN_SECONDS, 'display' => __( 'Every 5 Mins', 'autoblogtext' ) );
-
-		return $periods;
-	}
-
-	function remove_schedule() {
-		$next = wp_next_scheduled( self::SCHEDULED_ACTION );
-		if ( $next ) {
-			wp_unschedule_event( $next, self::SCHEDULED_ACTION );
-		}
-	}
-
-	function set_up_schedule() {
-		if ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
-			if ( !wp_next_scheduled( self::SCHEDULED_ACTION ) ) {
-				wp_schedule_event( time(), $this->checkperiod, self::SCHEDULED_ACTION );
-			}
-		} else {
-			// Use an init method
-			$this->process_autoblog();
-		}
 	}
 
 	function get_autoblogentries($timestamp) {
@@ -169,7 +130,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		// log is temporary disabled
 		// TODO: rework cron log
 		return;
-		
+
 		$thetime = current_time( 'timestamp' );
 		$msgs = array(
 			"timestamp" => $thetime,

@@ -30,6 +30,8 @@ class Autoblog_Plugin {
 	const NAME    = 'autoblog';
 	const VERSION = '4.0.0';
 
+	const SCHEDULE_PROCESS = 'autoblog-process-feeds';
+
 	/**
 	 * Singletone instance of the plugin.
 	 *
