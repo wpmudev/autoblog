@@ -39,7 +39,7 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	public function __construct( $args = array() ) {
 		parent::__construct( array_merge( array(
 			'autoescape'       => false,
-			'next_schedule'    => wp_next_scheduled( Autoblog_Module_Cron::SCHEDULED_ACTION ),
+			'next_schedule'    => wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS ),
 			'date_i18n_format' => get_option( 'date_format' ) . ' ' . get_option( 'time_format' ),
 		), $args ) );
 	}

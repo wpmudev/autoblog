@@ -38,10 +38,8 @@ class Autoblog_Table_Addons extends Autoblog_Table {
 	 */
 	public function __construct( $args = array() ) {
 		parent::__construct( array_merge( array(
-			'plural'           => 'plugins',
-			'autoescape'       => false,
-			'next_schedule'    => wp_next_scheduled( Autoblog_Module_Cron::SCHEDULED_ACTION ),
-			'date_i18n_format' => get_option( 'date_format' ) . ' ' . get_option( 'time_format' ),
+			'plural'     => 'plugins',
+			'autoescape' => false,
 		), $args ) );
 	}
 
