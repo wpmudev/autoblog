@@ -35,6 +35,8 @@ if ( class_exists( 'Autoblog_Plugin', false ) ) {
 	return;
 }
 
+require_once dirname( __FILE__ ) . '/autoblogincludes/extra/wpmudev-dash-notification.php';
+
 /**
  * Encodes URL component.
  *
@@ -194,8 +196,6 @@ function autoblog_launch() {
 
 	// conditional modules
 	if ( is_admin() ) {
-		require_once dirname( __FILE__ ) . '/autoblogincludes/extra/wpmudev-dash-notification.php';
-
 		// set admin modules
 		$plugin->set_module( Autoblog_Module_Backend::NAME );
 
