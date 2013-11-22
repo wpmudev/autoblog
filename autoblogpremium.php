@@ -194,6 +194,8 @@ function autoblog_launch() {
 
 	// conditional modules
 	if ( is_admin() ) {
+		require_once dirname( __FILE__ ) . '/autoblogincludes/extra/wpmudev-dash-notification.php';
+
 		// set admin modules
 		$plugin->set_module( Autoblog_Module_Backend::NAME );
 

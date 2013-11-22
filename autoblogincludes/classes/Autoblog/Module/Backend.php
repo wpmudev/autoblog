@@ -51,9 +51,6 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 	public function __construct( Autoblog_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		// setup WPMUDEV Dashboard notices
-		$notice = new WPMUDEV_Dashboard_Notice();
-
 		// setup menu
 		$this->_add_action( 'network_admin_menu', 'register_admin_menu' );
 		$this->_add_action( 'admin_menu', 'register_admin_menu' );
@@ -99,6 +96,8 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 	 * @access public
 	 */
 	public function register_admin_menu() {
+		global $wpmudev_notices;
+
 		$is_network_admin = is_network_admin();
 		$capability = $is_network_admin ? 'manage_network_options' : 'manage_options';
 
@@ -128,6 +127,17 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 		}
 
 		do_action( 'autoblog_global_menu' );
+
+		$pages = array();
+		foreach ( $this->_admin_pages as $page ) {
+			$pages[] = $is_network_admin ? "{$page}-network" : $page;
+		}
+
+		$wpmudev_notices[] = array(
+			'id'      => 97,
+			'name'    => 'AutoBlog',
+			'screens' => $pages,
+		);
 	}
 
 	/**
