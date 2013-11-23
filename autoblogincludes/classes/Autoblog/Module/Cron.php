@@ -203,9 +203,11 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 				$simplepie = $this->_fetch_feed( $details );
 				if ( is_a( $simplepie, 'SimplePie' ) ) {
 					$amount = $this->_process_feed( $simplepie, $details );
-					$this->_log_message( Autoblog_Plugin::LOG_FEED_PROCESSED, array(
-						'amount' => $amount,
-					) );
+					if ( $amount ) {
+						$this->_log_message( Autoblog_Plugin::LOG_FEED_PROCESSED, array( 'amount' => $amount ) );
+					} else {
+						$this->_log_message( Autoblog_Plugin::LOG_FEED_PROCESSED_NO_RESULTS );
+					}
 				}
 
 				do_action( 'autoblog_post_process_feed', $feed_id, $details );
@@ -528,6 +530,19 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @param string|array $info The log information.
 	 */
 	private function _log_message( $type, $info = '' ) {
+		$inerts = array(
+			Autoblog_Plugin::LOG_DUPLICATE_POST,
+			Autoblog_Plugin::LOG_POST_DOESNT_MATCH,
+			Autoblog_Plugin::LOG_POST_INSERT_FAILED,
+			Autoblog_Plugin::LOG_POST_INSERT_SUCCESS,
+		);
+
+		// if verbose processing is disabled then do not log inert messages
+		if ( !AUTOBLOG_VERBOSE_PROCESSING && in_array( $type, $inerts ) ) {
+			return;
+		}
+
+		// insert log message
 		$this->_wpdb->insert( AUTOBLOG_TABLE_LOGS, array(
 			'feed_id'  => $this->_feed_id,
 			'cron_id'  => $this->_cron_timestamp,
