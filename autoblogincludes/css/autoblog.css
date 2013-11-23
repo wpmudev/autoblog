@@ -134,11 +134,3 @@ div.postbox div.inside p {
 #the-list tr td.check-column input {
 	margin-left: 8px;
 }
-
-.autoblog-table .column-addon {
-	width: 200px;
-}
-
-.autoblog-table .disabled {
-	color: #ccc;
-}

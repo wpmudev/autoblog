@@ -1,0 +1,13 @@
+.autoblog-table .column-post_type,
+.autoblog-table .column-addon {
+	width: 200px;
+}
+
+.autoblog-table .disabled {
+	color: #ccc;
+}
+
+.autoblog-table .column-lastupdated,
+.autoblog-table .column-nextcheck {
+	width: 150px;
+}

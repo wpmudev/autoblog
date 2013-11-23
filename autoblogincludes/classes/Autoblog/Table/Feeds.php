@@ -120,9 +120,16 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	 * @return string Post type.
 	 */
 	public function column_post_type( $item ) {
-		return !empty( $item['feed_meta']['posttype'] )
-			? $item['feed_meta']['posttype']
-			: esc_html__( 'unknown', 'autoblogtext' );
+		if ( empty( $item['feed_meta']['posttype'] ) ) {
+			return esc_html__( 'unknown', 'autoblogtext' );
+		}
+
+		$post_type = get_post_type_object( $item['feed_meta']['posttype'] );
+		if ( is_null( $post_type ) ) {
+			return $item['feed_meta']['posttype'];
+		}
+
+		return get_post_type_labels( $post_type )->name;
 	}
 
 	/**
@@ -213,19 +220,17 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	 */
 	public function get_columns() {
 		$columns = array(
-			'cb'        => '<input type="checkbox" class="cb_all">',
-			'title'     => __( 'Feed', 'autoblogtext' ),
-			'post_type' => __( 'Post Type', 'autoblogtext' ),
+			'cb'    => '<input type="checkbox" class="cb_all">',
+			'title' => __( 'Feed', 'autoblogtext' ),
 		);
 
 		if ( $this->_args['is_network_wide'] ) {
 			$columns['blogname']    = __( 'Target Blog', 'autoblogtext' );
-			$columns['lastupdated'] = __( 'Last Processed *', 'autoblogtext' );
-			$columns['nextcheck']   = __( 'Next Check *', 'autoblogtext' );
-		} else {
-			$columns['lastupdated'] = __( 'Last Processed', 'autoblogtext' );
-			$columns['nextcheck']   = __( 'Next Check', 'autoblogtext' );
 		}
+
+		$columns['post_type'] = __( 'Post Type', 'autoblogtext' );
+		$columns['lastupdated'] = __( 'Last Processed', 'autoblogtext' );
+		$columns['nextcheck']   = __( 'Next Check', 'autoblogtext' );
 
 		return $columns;
 	}

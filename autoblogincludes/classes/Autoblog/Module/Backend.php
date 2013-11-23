@@ -75,9 +75,10 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 
 		// load styles
 		wp_enqueue_style( 'autoblogadmincss', AUTOBLOG_ABSURL . 'autoblogincludes/css/autoblog.css', array(), Autoblog_Plugin::VERSION );
+		wp_enqueue_style( 'autoblog-admin', AUTOBLOG_ABSURL . 'autoblogincludes/css/admin.css', array(), Autoblog_Plugin::VERSION );
 
 		// dashboard page scripts
-		if ( $page_hook == $this->_admin_pages['dashboard'] || $page_hook == $this->_admin_pages['general'] ) {
+		if ( $page_hook == $this->_admin_pages['dashboard'] ) {
 		}
 
 		// feeds page scripts
@@ -104,7 +105,7 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 		// autoblog menu
 		$page_title = __( 'Auto Blog', 'autoblogtext' );
 		$icon = AUTOBLOG_ABSURL . 'autoblogincludes/images/menu.png';
-		$this->_admin_pages['general'] = add_menu_page( $page_title, $page_title, $capability, 'autoblog', array( $this, 'handle_dashboard_page' ), $icon );
+		add_menu_page( $page_title, $page_title, $capability, 'autoblog', array( $this, 'handle_dashboard_page' ), $icon );
 
 		// adding dashboad submenu page
 		$page_title = __( 'Auto Blog Dashboard', 'autoblogtext' );
