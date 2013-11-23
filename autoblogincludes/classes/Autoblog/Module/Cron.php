@@ -242,29 +242,6 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	}
 
 	/**
-	 * Returns array of feeds which waiting for next check.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @param array $ids The array of feed IDs to select.
-	 * @return array The array of feeds to check.
-	 */
-	private function _get_feeds( $ids = array() ) {
-		$ids = array_filter( array_map( 'intval', $ids ) );
-		if ( !empty( $ids ) ) {
-			return $this->_wpdb->get_results( sprintf( 'SELECT feed_id, feed_meta FROM %s WHERE feed_id IN (%s)', AUTOBLOG_TABLE_FEEDS, $ids ) );
-		}
-
-		return $this->_wpdb->get_results( sprintf(
-			'SELECT feed_id, feed_meta FROM %s WHERE site_id = %d AND nextcheck BETWEEN 0 AND %d ORDER BY nextcheck',
-			AUTOBLOG_TABLE_FEEDS,
-			!empty( $this->_wpdb->siteid ) ? $this->_wpdb->siteid : 1,
-			current_time( 'timestamp' )
-		) );
-	}
-
-	/**
 	 * Fetches feed content.
 	 *
 	 * @since 4.0.0
