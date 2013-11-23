@@ -76,12 +76,17 @@ function autoblog_setup_constants() {
 		define( 'AUTOBLOG_SIMPLEPIE_CACHE_TIMELIMIT', 60 );
 	}
 
+	// Feed fetching will stop after 10 seconds (default) so as not to overload your server
+	if ( !defined( 'AUTOBLOG_FEED_FETCHING_TIMEOUT' ) ) {
+		define( 'AUTOBLOG_FEED_FETCHING_TIMEOUT', 10 );
+	}
+
 	// Processing will stop after 6 seconds (default) so as not to overload your server
 	if ( !defined( 'AUTOBLOG_PROCESSING_TIMELIMIT' ) ) {
 		define( 'AUTOBLOG_PROCESSING_TIMELIMIT', 6 );
 	}
 
-	// Processing will take place every minute
+	// Processing will take place every five minute
 	if ( !defined( 'AUTOBLOG_PROCESSING_CHECKLIMIT' ) ) {
 		define( 'AUTOBLOG_PROCESSING_CHECKLIMIT', 5 );
 	}
@@ -89,11 +94,6 @@ function autoblog_setup_constants() {
 	// In a multisite install will attempt to process feeds for all sites rather than just local ones
 	if ( !defined( 'AUTOBLOG_FORCE_PROCESS_ALL' ) ) {
 		define( 'AUTOBLOG_FORCE_PROCESS_ALL', false );
-	}
-
-	// Uses a different, more processing intensive, method of adding tags to a post for sites that have tag based issues
-	if ( !defined( 'AUTOBLOG_HANDLE_FAKE_TAGS' ) ) {
-		define( 'AUTOBLOG_HANDLE_FAKE_TAGS', true );
 	}
 
 	// To see feeds from older versions of the plugin that have yet to be repaired.

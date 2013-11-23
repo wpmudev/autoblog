@@ -313,10 +313,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			exit;
 		}
 
-		$cron = $this->_plugin->get_module( Autoblog_Module_Cron::NAME );
-		if ( $cron ) {
-			$cron->process_feeds( $feeds );
-		}
+		wp_schedule_single_event( time(), Autoblog_Plugin::SCHEDULE_PROCESS, array( $feeds ) );
 
 		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&processed=true' );
 		exit;
@@ -332,14 +329,14 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 	private function _test_feed() {
 		check_admin_referer( 'autoblog_feeds' );
 
-		$feed = filter_input( INPUT_GET, 'item', FILTER_VALIDATE_INT );
-		$cron = $this->_plugin->get_module( Autoblog_Module_Cron::NAME );
-		if ( $feed && $cron ) {
-			$feed = $cron->get_autoblogentry( $feed );
-			if ( $feed ) {
-				$cron->test_the_feed( $feed->feed_id, unserialize( $feed->feed_meta ) );
-			}
-		}
+//		$feed = filter_input( INPUT_GET, 'item', FILTER_VALIDATE_INT );
+//		$cron = $this->_plugin->get_module( Autoblog_Module_Cron::NAME );
+//		if ( $feed && $cron ) {
+//			$feed = $cron->get_autoblogentry( $feed );
+//			if ( $feed ) {
+//				$cron->test_the_feed( $feed->feed_id, unserialize( $feed->feed_meta ) );
+//			}
+//		}
 
 		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&tested=true' );
 		exit;

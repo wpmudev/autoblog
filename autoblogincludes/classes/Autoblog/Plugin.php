@@ -30,7 +30,15 @@ class Autoblog_Plugin {
 	const NAME    = 'autoblog';
 	const VERSION = '4.0.0';
 
-	const SCHEDULE_PROCESS = 'autoblog-process-feeds';
+	const SCHEDULE_PROCESS = 'autoblog_process_feeds';
+
+	const LOG_INVALID_FEED_URL    = 1;
+	const LOG_FETCHING_ERRORS     = 2;
+	const LOG_DUPLICATE_POST      = 3;
+	const LOG_POST_DOESNT_MATCH   = 4;
+	const LOG_POST_INSERT_FAILED  = 5;
+	const LOG_POST_INSERT_SUCCESS = 6;
+	const LOG_FEED_PROCESSED      = 7;
 
 	/**
 	 * Singletone instance of the plugin.

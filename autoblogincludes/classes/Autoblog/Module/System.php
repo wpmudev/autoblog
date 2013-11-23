@@ -31,6 +31,16 @@ class Autoblog_Module_System extends Autoblog_Module {
 	const NAME = __CLASS__;
 
 	/**
+	 * Determines whether schedules were deregistered or not.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @var boolean
+	 */
+	private $_deregistered_schedules = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 4.0.0
@@ -52,28 +62,47 @@ class Autoblog_Module_System extends Autoblog_Module {
 		$this->_add_action( 'plugins_loaded', 'load_network_addons' );
 
 		// setup cron stuff
-		$this->_add_action( 'shutdown', 'setup_schedules' );
+		$this->_add_action( 'shutdown', 'register_schedules' );
+		register_deactivation_hook( AUTOBLOG_BASEFILE, array( $this, 'deregister_schedules' ) );
 	}
 
 	/**
-	 * Sets scheduled events.
+	 * Registers scheduled events.
 	 *
 	 * @since 4.0.0
 	 * @action shutdown
 	 *
 	 * @access public
 	 */
-	public function setup_schedules() {
-		if ( ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD != 'cron' ) || wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS ) ) {
+	public function register_schedules() {
+		if ( $this->_deregistered_schedules || ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD != 'cron' ) ) {
 			return;
 		}
 
 		$minutes = defined( 'AUTOBLOG_PROCESSING_CHECKLIMIT' ) ? absint( AUTOBLOG_PROCESSING_CHECKLIMIT ) : 5;
-		if ( !$minutes ) {
-			$minutes = 5;
-		}
+		$interval = $minutes ? $minutes * MINUTE_IN_SECONDS : 300;
 
-		wp_schedule_single_event( time() + $minutes * MINUTE_IN_SECONDS, Autoblog_Plugin::SCHEDULE_PROCESS  );
+		// process feeds job
+		if ( !wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS ) ) {
+			wp_schedule_single_event( time() + $interval, Autoblog_Plugin::SCHEDULE_PROCESS  );
+		}
+	}
+
+	/**
+	 * Deregisters scheduled events on plugin deactivation.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 */
+	public function deregister_schedules() {
+		$this->_deregistered_schedules = true;
+
+		// process feeds job
+		$next_job = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS );
+		if ( $next_job ) {
+			wp_unschedule_event( $next_job, Autoblog_Plugin::SCHEDULE_PROCESS  );
+		}
 	}
 
 	/**
@@ -162,12 +191,11 @@ class Autoblog_Module_System extends Autoblog_Module {
 				  cron_id BIGINT UNSIGNED NOT NULL,
 				  log_at BIGINT UNSIGNED NOT NULL,
 				  log_type TINYINT UNSIGNED NOT NULL,
-				  entry_post_id BIGINT NOT NULL,
-				  entry_titlte VARCHAR(512) NOT NULL,
-				  entry_link VARCHAR(255) NOT NULL,
+				  log_info TEXT,
 				  PRIMARY KEY  (log_id),
 				  KEY feed_id (feed_id),
-				  KEY cron_id (cron_id)
+				  KEY cron_id (cron_id),
+				  KEY feed_log_type (feed_id, log_type)
 				) %s;',
 				AUTOBLOG_TABLE_LOGS,
 				$charset_collate
