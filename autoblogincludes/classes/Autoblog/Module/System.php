@@ -226,7 +226,13 @@ class Autoblog_Module_System extends Autoblog_Module {
 
 		// remove deprecated logs
 		$this->_wpdb->query( "DELETE FROM {$this->_wpdb->options} WHERE option_name LIKE 'autoblog_log_%'" );
-		$this->_wpdb->query( "DELETE FROM {$this->_wpdb->sitemeta} WHERE site_id = {$this->_wpdb->siteid} AND meta_key LIKE 'autoblog_log_%'" );
+		if ( is_multisite() ) {
+			$this->_wpdb->query( "DELETE FROM {$this->_wpdb->sitemeta} WHERE site_id = {$this->_wpdb->siteid} AND meta_key LIKE 'autoblog_log_%'" );
+		}
+
+		// update feeds table
+		$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, array( 'site_id' => 1 ), array( 'site_id' => 0 ), array( '%d' ), array( '%d' ) );
+		$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, array( 'blog_id' => 1 ), array( 'blog_id' => 0 ), array( '%d' ), array( '%d' ) );
 
 		// remove deprecated scheduled event
 		$next_schedule = wp_next_scheduled( 'autoblog_process_all_feeds_for_cron' );

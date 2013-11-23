@@ -96,11 +96,6 @@ function autoblog_setup_constants() {
 		define( 'AUTOBLOG_FORCE_PROCESS_ALL', false );
 	}
 
-	// To see feeds from older versions of the plugin that have yet to be repaired.
-	if ( !defined( 'AUTOBLOG_LAZY_ID' ) ) {
-		define( 'AUTOBLOG_LAZY_ID', true );
-	}
-
 	// To switch from a CRON processing method set this to 'pageload' (default is 'cron' to use the wp-cron).
 	if ( !defined( 'AUTOBLOG_PROCESSING_METHOD' ) ) {
 		define( 'AUTOBLOG_PROCESSING_METHOD', 'cron' );

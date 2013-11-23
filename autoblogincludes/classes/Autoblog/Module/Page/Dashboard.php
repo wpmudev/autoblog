@@ -60,10 +60,6 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		// feeds
 		$sites = array( empty( $this->_wpdb->siteid ) || $this->_wpdb->siteid == 0 ? 1 : $this->_wpdb->siteid );
 		$blogs = array( get_current_blog_id() );
-		if ( defined( 'AUTOBLOG_LAZY_ID' ) && AUTOBLOG_LAZY_ID == true ) {
-			$sites[] = 0;
-			$blogs[] = 0;
-		}
 
 		if ( is_network_admin() ) {
 			$sql = "SELECT * FROM " . AUTOBLOG_TABLE_FEEDS . " WHERE site_id IN (" . implode( ',', $sites ) . ") ORDER BY feed_id DESC";

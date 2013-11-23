@@ -352,10 +352,6 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 
 		$sites = array( empty( $wpdb->siteid ) || $wpdb->siteid == 0 ? 1 : $wpdb->siteid );
 		$blogs = array( get_current_blog_id() );
-		if ( defined( 'AUTOBLOG_LAZY_ID' ) && filter_var( AUTOBLOG_LAZY_ID, FILTER_VALIDATE_BOOLEAN ) ) {
-			$sites[] = 0;
-			$blogs[] = 0;
-		}
 
 		$this->items = $wpdb->get_results( sprintf( "
 			SELECT SQL_CALC_FOUND_ROWS *
