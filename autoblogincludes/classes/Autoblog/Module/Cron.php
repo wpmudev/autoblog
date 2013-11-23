@@ -113,7 +113,6 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		}
 	}
 
-
 	/**
 	 * Restore previously switched current blog.
 	 *
@@ -138,12 +137,23 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @action autoblog_process_feeds
 	 *
 	 * @access public
-	 * @param array $ids The array of feed IDs to process.
+	 * @param array $feed_ids The array of feed IDs to process.
 	 */
-	public function process_feeds( $ids = array() ) {
-		// get feeds
-		$feeds = $this->_get_feeds( $ids );
-		if ( empty( $feeds ) ) {
+	public function process_feeds( $feed_ids = array() ) {
+		// prepare ids
+		$feed_ids = array_filter( array_map( 'intval', $feed_ids ) );
+		$force = !empty( $feed_ids );
+		if ( empty( $feed_ids ) ) {
+			$feed_ids = $this->_wpdb->get_col( sprintf(
+				'SELECT feed_id FROM %s WHERE site_id = %d AND nextcheck BETWEEN 0 AND %d ORDER BY nextcheck',
+				AUTOBLOG_TABLE_FEEDS,
+				!empty( $this->_wpdb->siteid ) ? $this->_wpdb->siteid : 1,
+				current_time( 'timestamp' )
+			) );
+		}
+
+		// return if nothing to process
+		if ( empty( $feed_ids ) ) {
 			return;
 		}
 
@@ -161,19 +171,34 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		do_action( 'autoblog_pre_process_feeds' );
 
 		// process feeds
-		foreach ( $feeds as $feed ) {
-			$this->_feed_id = $feed->feed_id;
+		foreach ( $feed_ids as $feed_id ) {
+			$feed = $this->_wpdb->get_row( sprintf( 'SELECT feed_meta, nextcheck FROM %s WHERE feed_id = %d', AUTOBLOG_TABLE_FEEDS, $feed_id ) );
+
+			// skip already processed feeds
+			if ( !$force && current_time( 'timestamp' ) < $feed->nextcheck ) {
+				continue;
+			}
+
+			$this->_feed_id = $feed_id;
 			$time = current_time( 'timestamp' );
 			$details = unserialize( $feed->feed_meta );
 
 			// do not process the feed if we are not in the requested period to process
-			if ( ( !empty( $details['startfrom'] ) && $time < $details['startfrom'] ) || ( !empty( $details['endon'] ) && $details['endon'] < $time ) ) {
-				continue;
+			if ( !$force ) {
+				if ( !empty( $details['startfrom'] ) && $time < $details['startfrom'] ) {
+					$this->_log_message( Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_EARLY, $details['startfrom'] );
+					continue;
+				}
+
+				if ( !empty( $details['endon'] ) && $details['endon'] < $time ) {
+					$this->_log_message( Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_LATE, $details['endon'] );
+					continue;
+				}
 			}
 
 			// process the feed
 			if ( isset( $details['processfeed'] ) && $details['processfeed'] > 0 ) {
-				do_action( 'autoblog_pre_process_feed', $feed->feed_id, $details );
+				do_action( 'autoblog_pre_process_feed', $feed_id, $details );
 
 				$simplepie = $this->_fetch_feed( $details );
 				if ( is_a( $simplepie, 'SimplePie' ) ) {
@@ -183,7 +208,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 					) );
 				}
 
-				do_action( 'autoblog_post_process_feed', $feed->feed_id, $details );
+				do_action( 'autoblog_post_process_feed', $feed_id, $details );
 			}
 		}
 
