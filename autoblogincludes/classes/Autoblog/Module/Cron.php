@@ -204,7 +204,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 				if ( is_a( $simplepie, 'SimplePie' ) ) {
 					$amount = $this->_process_feed( $simplepie, $details );
 					if ( $amount ) {
-						$this->_log_message( Autoblog_Plugin::LOG_FEED_PROCESSED, array( 'amount' => $amount ) );
+						$this->_log_message( Autoblog_Plugin::LOG_FEED_PROCESSED, $amount );
 					} else {
 						$this->_log_message( Autoblog_Plugin::LOG_FEED_PROCESSED_NO_RESULTS );
 					}
