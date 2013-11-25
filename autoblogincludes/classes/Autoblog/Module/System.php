@@ -80,11 +80,13 @@ class Autoblog_Module_System extends Autoblog_Module {
 			get_current_blog_id()
 		) );
 
+		$current_time = current_time( 'timestamp' );
 		foreach ( $feeds as $feed ) {
 			$args = array( $feed->feed_id );
 			$next_job = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, $args );
 			if ( !$next_job ) {
-				wp_schedule_single_event( $feed->nextcheck, Autoblog_Plugin::SCHEDULE_PROCESS, $args );
+				$nextrun = $feed->nextcheck < $current_time ? $current_time : $feed->nextcheck;
+				wp_schedule_single_event( $nextrun, Autoblog_Plugin::SCHEDULE_PROCESS, $args );
 			}
 		}
 
