@@ -52,24 +52,37 @@ class Autoblog_Module_System extends Autoblog_Module {
 		$this->_add_action( 'autoblog_pre_process_feeds', 'load_network_addons' );
 
 		// setup cron stuff
-		$this->_add_action( 'plugins_loaded', 'register_schedules' );
+		$this->_add_action( 'plugins_loaded', 'check_schedules' );
+		register_activation_hook( AUTOBLOG_BASEFILE, array( $this, 'register_schedules' ) );
+	}
+
+	/**
+	 * Checks whether we need to recheck scheduled events or not.
+	 *
+	 * @since 4.0.0
+	 * @action plugins_loaded
+	 *
+	 * @access public
+	 */
+	public function check_schedules() {
+		if ( !defined( 'AUTOBLOG_PROCESSING_METHOD' ) || AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
+			$transient = 'autoblog-feeds-launching';
+			if ( get_transient( $transient ) === false ) {
+				$this->register_schedules();
+				set_transient( $transient, 1, HOUR_IN_SECONDS );
+			}
+		}
 	}
 
 	/**
 	 * Registers scheduled events.
 	 *
 	 * @since 4.0.0
-	 * @action shutdown
 	 *
 	 * @access public
 	 */
 	public function register_schedules() {
 		if ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD != 'cron' ) {
-			return;
-		}
-
-		$transient = 'autoblog-feeds-launching';
-		if ( get_transient( $transient ) ) {
 			return;
 		}
 
@@ -89,8 +102,6 @@ class Autoblog_Module_System extends Autoblog_Module {
 				wp_schedule_single_event( $nextrun, Autoblog_Plugin::SCHEDULE_PROCESS, $args );
 			}
 		}
-
-		set_transient( $transient, 1, HOUR_IN_SECONDS );
 	}
 
 	/**
