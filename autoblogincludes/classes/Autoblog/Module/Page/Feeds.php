@@ -192,6 +192,79 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 	}
 
 	/**
+	 * Reschedules feed.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @param array $feed The feed data.
+	 */
+	private function _reschedule_feed( $feed ) {
+		// switch blog if need be
+		$switched = false;
+		if ( $feed['blog_id'] != get_current_blog_id() ) {
+			$switched = true;
+			switch_to_blog( $feed['blog_id'] );
+		}
+
+		// unschedule previous event
+		$next_job = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, array( $feed['feed_id'] ) );
+		if ( $next_job ) {
+			wp_unschedule_event( $next_job, Autoblog_Plugin::SCHEDULE_PROCESS, array( $feed['feed_id'] ) );
+		}
+
+		// schedule new event
+		if ( $feed['nextcheck'] > 0 ) {
+			wp_schedule_single_event( $feed['nextcheck'], Autoblog_Plugin::SCHEDULE_PROCESS, array( $feed['feed_id'] ) );
+		}
+
+		// restore blug if need be
+		if ( $switched ) {
+			restore_current_blog();
+		}
+	}
+
+	/**
+	 * Saves the feed data.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @param array $feed The array of old feed data.
+	 */
+	private function _save_feed( $feed ) {
+		check_admin_referer( 'autoblog_feeds' );
+
+		$post = $_POST['abtble'];
+		if ( !empty( $post['startfromday'] ) && !empty( $post['startfrommonth'] ) && !empty( $post['startfromyear'] ) ) {
+			$post['startfrom'] = strtotime( "{$post['startfromyear']}-{$post['startfrommonth']}-{$post['startfromday']}" );
+		}
+
+		if ( !empty( $post['endonday'] ) && !empty( $post['endonmonth'] ) && !empty( $post['endonyear'] ) ) {
+			$post['endon'] = strtotime( "{$post['endonyear']}-{$post['endonmonth']}-{$post['endonday']}" );
+		}
+
+		$feed['feed_meta'] = serialize( $post );
+		$feed['blog_id'] = absint( $post['blog'] );
+		$feed['nextcheck'] = isset( $post['processfeed'] ) && intval( $post['processfeed'] ) > 0
+			? current_time( 'timestamp' ) + absint( $post['processfeed'] ) * MINUTE_IN_SECONDS
+			: 0;
+
+		$action = 'created';
+		$result = 'false';
+		if ( isset( $feed['feed_id'] ) ) {
+			$action = 'updated';
+			$result = $this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $feed, array( 'feed_id' => $feed['feed_id'] ) ) ? 'true' : 'false';
+			$this->_reschedule_feed( $feed );
+		} else {
+			$result = $this->_wpdb->insert( AUTOBLOG_TABLE_FEEDS, $feed ) ? 'true' : 'false';
+		}
+
+		wp_safe_redirect( add_query_arg( $action, $result, 'admin.php?page=' . filter_input( INPUT_GET, 'page' ) ) );
+		exit;
+	}
+
+	/**
 	 * Handles feed create/edit form.
 	 *
 	 * @since 4.0.0
@@ -218,32 +291,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		}
 
 		if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
-			check_admin_referer( 'autoblog_feeds' );
-
-			$post = $_POST['abtble'];
-			if ( !empty( $post['startfromday'] ) && !empty( $post['startfrommonth'] ) && !empty( $post['startfromyear'] ) ) {
-				$post['startfrom'] = strtotime( "{$post['startfromyear']}-{$post['startfrommonth']}-{$post['startfromday']}" );
-			}
-
-			if ( !empty( $post['endonday'] ) && !empty( $post['endonmonth'] ) && !empty( $post['endonyear'] ) ) {
-				$post['endon'] = strtotime( "{$post['endonyear']}-{$post['endonmonth']}-{$post['endonday']}" );
-			}
-
-			$feed['feed_meta'] = serialize( $post );
-			$feed['blog_id'] = (int)$post['blog'];
-			$feed['nextcheck'] = isset( $post['processfeed'] ) && intval( $post['processfeed'] ) > 0 ? current_time( 'timestamp' ) + absint( $post['processfeed'] ) * 60 : 0;
-
-			$action = 'created';
-			$result = 'false';
-			if ( isset( $feed['feed_id'] ) ) {
-				$action = 'updated';
-				$result = $this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $feed, array( 'feed_id' => $feed['feed_id'] ) ) ? 'true' : 'false';
-			} else {
-				$result = $this->_wpdb->insert( AUTOBLOG_TABLE_FEEDS, $feed ) ? 'true' : 'false';
-			}
-
-			wp_safe_redirect( add_query_arg( $action, $result, 'admin.php?page=' . filter_input( INPUT_GET, 'page' ) ) );
-			exit;
+			$this->_save_feed( $feed );
 		}
 
 		if ( !empty( $feed ) ) {
@@ -313,7 +361,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			exit;
 		}
 
-		wp_schedule_single_event( time(), Autoblog_Plugin::SCHEDULE_PROCESS, array( $feeds ) );
+		wp_schedule_single_event( time(), Autoblog_Plugin::SCHEDULE_PROCESS, array( $feeds, true ) );
 
 		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&processed=true' );
 		exit;

@@ -86,11 +86,6 @@ function autoblog_setup_constants() {
 		define( 'AUTOBLOG_PROCESSING_TIMELIMIT', 6 );
 	}
 
-	// Processing will take place every five minute
-	if ( !defined( 'AUTOBLOG_PROCESSING_CHECKLIMIT' ) ) {
-		define( 'AUTOBLOG_PROCESSING_CHECKLIMIT', 5 );
-	}
-
 	// In a multisite install will attempt to process feeds for all sites rather than just local ones
 	if ( !defined( 'AUTOBLOG_FORCE_PROCESS_ALL' ) ) {
 		define( 'AUTOBLOG_FORCE_PROCESS_ALL', false );

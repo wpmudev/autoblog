@@ -51,6 +51,16 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	private $_feed_id = 0;
 
 	/**
+	 * Determines whether cron job was forced or not.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @var boolean
+	 */
+	private $_is_forced = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 4.0.0
@@ -73,6 +83,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		$this->_add_action( 'autoblog_post_post_insert', 'add_post_meta', 1, 3 );
 		$this->_add_action( 'autoblog_post_post_insert', 'add_post_taxonomies', 1, 3 );
 
+		$this->_add_action( 'autoblog_post_process_feed', 'reschedule_feed', 5 );
 		$this->_add_action( 'autoblog_post_process_feed', 'restore_switch_blog', 10, 2 );
 	}
 
@@ -87,13 +98,31 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @param array $details The feed details.
 	 */
 	public function update_feed_check_timestamps( $feed_id, array $details ) {
-		$time = current_time( 'timestamp' );
-		$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, array(
-			'lastupdated' => $time,
-			'nextcheck'   => $time + absint( $details['processfeed'] ) * MINUTE_IN_SECONDS,
-		), array(
-			'feed_id' => $feed_id,
-		), array( '%d', '%d' ), array( '%d' ) );
+		if ( !$this->_is_forced ) {
+			$time = current_time( 'timestamp' );
+			$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, array(
+				'lastupdated' => $time,
+				'nextcheck'   => $time + absint( $details['processfeed'] ) * MINUTE_IN_SECONDS,
+			), array(
+				'feed_id' => $feed_id,
+			), array( '%d', '%d' ), array( '%d' ) );
+		}
+	}
+
+	/**
+	 * Reschedules feed.
+	 *
+	 * @sine 4.0.0
+	 * @action autoblog_post_process_feed 5
+	 *
+	 * @access public
+	 * @param int $feed_id The id of the feed.
+	 */
+	public function reschedule_feed( $feed_id ) {
+		if ( !$this->_is_forced ) {
+			$nextcheck = $this->_wpdb->get_var( sprintf( 'SELECT nextcheck FROM %s WHERE feed_id = %d', AUTOBLOG_TABLE_FEEDS, $feed_id ) );
+			wp_schedule_single_event( $nextcheck, Autoblog_Plugin::SCHEDULE_PROCESS, array( $feed_id ) );
+		}
 	}
 
 	/**
@@ -138,25 +167,16 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 * @param array $feed_ids The array of feed IDs to process.
+	 * @param boolean $force Determines whether we need to force feed processing or not.
 	 */
-	public function process_feeds( $feed_ids = array() ) {
-		// prepare ids
-		$feed_ids = array_filter( array_map( 'intval', $feed_ids ) );
-		$force = !empty( $feed_ids );
-		if ( empty( $feed_ids ) ) {
-			$feed_ids = $this->_wpdb->get_col( sprintf(
-				'SELECT feed_id FROM %s WHERE site_id = %d AND nextcheck BETWEEN 0 AND %d ORDER BY nextcheck',
-				AUTOBLOG_TABLE_FEEDS,
-				!empty( $this->_wpdb->siteid ) ? $this->_wpdb->siteid : 1,
-				current_time( 'timestamp' )
-			) );
-		}
-
+	public function process_feeds( $feed_ids = array(), $force = false ) {
 		// return if nothing to process
+		$feed_ids = array_filter( array_map( 'intval', (array)$feed_ids ) );
 		if ( empty( $feed_ids ) ) {
 			return;
 		}
 
+		$this->_is_forced = $force;
 		$this->_cron_timestamp = current_time( 'timestamp' );
 
 		ignore_user_abort( true );
@@ -172,16 +192,13 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 		// process feeds
 		foreach ( $feed_ids as $feed_id ) {
-			$feed = $this->_wpdb->get_row( sprintf( 'SELECT feed_meta, nextcheck FROM %s WHERE feed_id = %d', AUTOBLOG_TABLE_FEEDS, $feed_id ) );
-
-			// skip already processed feeds
-			if ( !$force && current_time( 'timestamp' ) < $feed->nextcheck ) {
-				continue;
-			}
-
 			$this->_feed_id = $feed_id;
 			$time = current_time( 'timestamp' );
-			$details = unserialize( $feed->feed_meta );
+			$details = @unserialize( $this->_wpdb->get_var( sprintf(
+				'SELECT feed_meta FROM %s WHERE feed_id = %d',
+				AUTOBLOG_TABLE_FEEDS,
+				$feed_id
+			) ) );
 
 			// do not process the feed if we are not in the requested period to process
 			if ( !$force ) {
@@ -759,7 +776,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		} else {
 			$thecats = array();
 			if ( isset( $details['originalcategories'] ) && $details['originalcategories'] == '1' ) {
-				$thecats = $item->get_categories();
+				$thecats = (array)$item->get_categories();
 				foreach ( $thecats as $category ) {
 					$tags[] = trim( $category->get_label() );
 				}

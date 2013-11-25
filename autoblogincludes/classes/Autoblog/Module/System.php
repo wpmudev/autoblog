@@ -31,16 +31,6 @@ class Autoblog_Module_System extends Autoblog_Module {
 	const NAME = __CLASS__;
 
 	/**
-	 * Determines whether schedules were deregistered or not.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @var boolean
-	 */
-	private $_deregistered_schedules = false;
-
-	/**
 	 * Constructor.
 	 *
 	 * @since 4.0.0
@@ -58,12 +48,11 @@ class Autoblog_Module_System extends Autoblog_Module {
 		$this->_add_action( 'plugins_loaded', 'load_textdomain' );
 
 		// load network wide and blog wide addons
-		$this->_add_action( 'plugins_loaded', 'load_addons' );
-		$this->_add_action( 'plugins_loaded', 'load_network_addons' );
+		$this->_add_action( 'autoblog_pre_process_feeds', 'load_addons' );
+		$this->_add_action( 'autoblog_pre_process_feeds', 'load_network_addons' );
 
 		// setup cron stuff
-		$this->_add_action( 'shutdown', 'register_schedules' );
-		register_deactivation_hook( AUTOBLOG_BASEFILE, array( $this, 'deregister_schedules' ) );
+		$this->_add_action( 'plugins_loaded', 'register_schedules' );
 	}
 
 	/**
@@ -75,34 +64,31 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * @access public
 	 */
 	public function register_schedules() {
-		if ( $this->_deregistered_schedules || ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD != 'cron' ) ) {
+		if ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD != 'cron' ) {
 			return;
 		}
 
-		$minutes = defined( 'AUTOBLOG_PROCESSING_CHECKLIMIT' ) ? absint( AUTOBLOG_PROCESSING_CHECKLIMIT ) : 5;
-		$interval = $minutes ? $minutes * MINUTE_IN_SECONDS : 300;
-
-		// process feeds job
-		if ( !wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS ) ) {
-			wp_schedule_single_event( time() + $interval, Autoblog_Plugin::SCHEDULE_PROCESS  );
+		$transient = 'autoblog-feeds-launching';
+		if ( get_transient( $transient ) ) {
+			return;
 		}
-	}
 
-	/**
-	 * Deregisters scheduled events on plugin deactivation.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access public
-	 */
-	public function deregister_schedules() {
-		$this->_deregistered_schedules = true;
+		$feeds = (array)$this->_wpdb->get_results( sprintf(
+			'SELECT feed_id, nextcheck FROM %s WHERE site_id = %d AND blog_id = %d AND nextcheck > 0 ORDER BY nextcheck',
+			AUTOBLOG_TABLE_FEEDS,
+			!empty( $this->_wpdb->siteid ) ? $this->_wpdb->siteid : 1,
+			get_current_blog_id()
+		) );
 
-		// process feeds job
-		$next_job = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS );
-		if ( $next_job ) {
-			wp_unschedule_event( $next_job, Autoblog_Plugin::SCHEDULE_PROCESS  );
+		foreach ( $feeds as $feed ) {
+			$args = array( $feed->feed_id );
+			$next_job = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, $args );
+			if ( !$next_job ) {
+				wp_schedule_single_event( $feed->nextcheck, Autoblog_Plugin::SCHEDULE_PROCESS, $args );
+			}
 		}
+
+		set_transient( $transient, 1, HOUR_IN_SECONDS );
 	}
 
 	/**
