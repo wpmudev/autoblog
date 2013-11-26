@@ -95,7 +95,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 
 		$current_time = current_time( 'timestamp' );
 		foreach ( $feeds as $feed ) {
-			$args = array( $feed->feed_id );
+			$args = array( absint( $feed->feed_id ) );
 			$next_job = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, $args );
 			if ( !$next_job ) {
 				$nextrun = $feed->nextcheck < $current_time ? $current_time : $feed->nextcheck;

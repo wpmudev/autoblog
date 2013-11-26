@@ -121,7 +121,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	public function reschedule_feed( $feed_id ) {
 		if ( !$this->_is_forced ) {
 			$nextcheck = $this->_wpdb->get_var( sprintf( 'SELECT nextcheck FROM %s WHERE feed_id = %d', AUTOBLOG_TABLE_FEEDS, $feed_id ) );
-			wp_schedule_single_event( $nextcheck, Autoblog_Plugin::SCHEDULE_PROCESS, array( $feed_id ) );
+			wp_schedule_single_event( $nextcheck, Autoblog_Plugin::SCHEDULE_PROCESS, array( absint( $feed_id ) ) );
 		}
 	}
 
