@@ -54,26 +54,93 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 	 * @access public
 	 */
 	public function handle_dashboard_page() {
-		// logs
-		$logs = array();
-
-		// feeds
-		$sites = array( empty( $this->_wpdb->siteid ) || $this->_wpdb->siteid == 0 ? 1 : $this->_wpdb->siteid );
-		$blogs = array( get_current_blog_id() );
-
-		if ( is_network_admin() ) {
-			$sql = "SELECT * FROM " . AUTOBLOG_TABLE_FEEDS . " WHERE site_id IN (" . implode( ',', $sites ) . ") ORDER BY feed_id DESC";
-		} else {
-			$sql = "SELECT * FROM " . AUTOBLOG_TABLE_FEEDS . " WHERE site_id IN (" . implode( ',', $sites ) . ") AND blog_id IN (" . implode( ',', $blogs ) . ") ORDER BY feed_id DESC";
-		}
-
-		$feeds = $this->_wpdb->get_results( $sql );
-
 		// template
 		$template = new Autoblog_Render_Dashboard_Page();
-		$template->logs = $logs;
-		$template->feeds = $feeds;
+		$template->log_records = $this->_get_log_records();
 		$template->render();
+	}
+
+	/**
+	 * Returns prepared array of feeds to use in log fetching.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @return array Array of feeds.
+	 */
+	private function _get_log_feeds() {
+		$resutls = (array)$this->_wpdb->get_results( sprintf(
+			is_network_admin()
+				? 'SELECT * FROM %s WHERE site_id = %d'
+				: 'SELECT * FROM %s WHERE site_id = %d AND blog_id = %d',
+			AUTOBLOG_TABLE_FEEDS,
+			!empty( $this->_wpdb->siteid ) ? $this->_wpdb->siteid : 1,
+			get_current_blog_id()
+		), ARRAY_A );
+
+		$feeds = array();
+		foreach ( $resutls as $result ) {
+			$details = unserialize( $result['feed_meta'] );
+			$feeds[$result['feed_id']] = array(
+				'title' => $details['title'],
+				'url'   => $details['url'],
+			);
+		}
+
+		return $feeds;
+	}
+
+	/**
+	 * Returns logs for last week.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @return array The array of log records for the last week.
+	 */
+	private function _get_log_records() {
+		$feeds = $this->_get_log_feeds();
+		if ( empty( $feeds ) ) {
+			return array();
+		}
+
+		$records = $this->_wpdb->get_results( sprintf(
+			'SELECT * FROM %s WHERE feed_id IN (%s) AND cron_id >= %d ORDER BY log_at DESC',
+			AUTOBLOG_TABLE_LOGS,
+			implode( ', ', array_keys( $feeds ) ),
+			strtotime( '-7 days' )
+		), ARRAY_A );
+
+		if ( empty( $records ) ) {
+			return array();
+		}
+
+		$log_records = $date_items = array();
+		$date_pattern = get_option( 'date_format' );
+		$time_pattern = get_option( 'time_format' );
+
+		$record = current( $records );
+		while( $record != false ) {
+			if ( !isset( $date_items[$record['feed_id']] ) ) {
+				if ( isset( $feeds[$record['feed_id']] ) ) {
+					$date_items[$record['feed_id']] = $feeds[$record['feed_id']];
+					$date_items[$record['feed_id']]['logs'] = array();
+				}
+			}
+
+			$record['log_at'] = date( $time_pattern, $record['log_at'] );
+			$date_items[$record['feed_id']]['logs'][] = $record;
+			$last_cron_date = date( $date_pattern, $record['cron_id'] );
+
+			$record = next( $records );
+			if ( $record == false || $last_cron_date != date( $date_pattern, $record['cron_id'] ) ) {
+				ksort( $date_items );
+				$log_records[$last_cron_date] = $date_items;
+				$date_items = array();
+			}
+		}
+
+		return $log_records;
 	}
 
 }

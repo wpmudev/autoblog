@@ -39,93 +39,215 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 	protected function _to_html() {
 		?><div class="wrap">
 			<div class="icon32" id="icon-edit"><br></div>
-			<h2>
-				<?php esc_html_e( 'Auto Blog Dashboard', 'autoblogtext' ) ?>
-			</h2>
+			<h2><?php esc_html_e( 'Auto Blog Dashboard', 'autoblogtext' ) ?></h2>
 
-			<div id="dashboard-widgets-wrap">
-
-				<div class="metabox-holder" id="dashboard-widgets">
-					<div style="width: 49%;" class="postbox-container">
-						<div class="meta-box-sortables ui-sortable" id="normal-sortables">
-							<?php $this->_news() ?>
-							<?php $this->_report() ?>
-						</div>
-					</div>
-
-					<div style="width: 49%;" class="postbox-container">
-						<div class="meta-box-sortables ui-sortable" id="side-sortables">
-							<?php $this->_stats() ?>
-						</div>
-					</div>
-
-					<div style="display: none; width: 49%;" class="postbox-container">
-						<div class="meta-box-sortables ui-sortable" id="column3-sortables" style="">
-						</div>
-					</div>
-
-					<div style="display: none; width: 49%;" class="postbox-container">
-						<div class="meta-box-sortables ui-sortable" id="column4-sortables" style="">
-						</div>
-					</div>
-				</div>
-
-				<div class="clear"></div>
-			</div>
+			<div class="autoblog-logs"><?php $this->_render_log_table() ?></div>
 		</div><?php
 	}
 
-	private function _news() {
-		$plugin = get_plugin_data( AUTOBLOG_ABSPATH . ('autoblogpremium.php') );
+	/**
+	 * Renders log table.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 */
+	private function _render_log_table() {
+		if ( empty( $this->log_records ) ) {
+			return;
+		}
 
-		?><div class="postbox ">
-			<h3 class="hndle"><span><?php _e( 'Autoblog', 'autoblogtext' ); ?></span></h3>
-			<div class="inside">
-				<p>
-					<?php _e( 'You are running Autoblog version ', 'autoblogtext' ) ?> <strong><?php echo esc_html( $plugin['Version'] ) ?></strong>
-				</p>
-			</div>
+		// dates
+		foreach ( $this->log_records as $date => $feeds ) :
+			?><div class="autoblog-log-date">
+				<div class="autoblog-log-row"><?php echo $date ?></div><?php
+
+				// feeds
+				foreach ( $feeds as $feed_id => $feed ) :
+					?><div class="autoblog-log-feed">
+						<div class="autoblog-log-row">
+							<?php $this->_render_feed_errros_info( $feed ) ?>
+							<?php $this->_render_feed_iterations_info( $feed ) ?>
+							<?php $this->_render_feed_imports_info( $feed ) ?>
+
+							<span class="autoblog-log-feed-collapse autoblog-log-feed-collapse-down">&plusb;</span>
+							<span class="autoblog-log-feed-collapse autoblog-log-feed-collapse-up">&minusb;</span>
+							<a class="autoblog-log-feed-url" href="admin.php?page=autoblog_admin&action=edit&item=<?php echo $feed_id ?>" title="<?php esc_attr_e( 'Edit feed', 'autoblogtext' ) ?>">
+								<?php echo esc_html( $feed['title'] ) ?>
+							</a>
+						</div><?php
+
+						// logs
+						foreach ( $feed['logs'] as $log ) :
+							?><div class="autoblog-log-record"><?php $this->_render_log_row( $log ) ?></div><?php
+						endforeach;
+
+					?></div><?php
+				endforeach;
+
+			?></div><?php
+		endforeach;
+	}
+
+	/**
+	 * Renders feed imports amount information.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @param array $feed The feed information.
+	 */
+	private function _render_feed_errros_info( $feed ) {
+		$count = 0;
+		foreach ( $feed['logs'] as $log ) {
+			switch ( $log['log_type'] ) {
+				case Autoblog_Plugin::LOG_POST_INSERT_FAILED:
+				case Autoblog_Plugin::LOG_FETCHING_ERRORS:
+				case Autoblog_Plugin::LOG_INVALID_FEED_URL:
+					$count++;
+					break;
+			}
+		}
+
+		$class = !empty( $count ) ? ' autoblog-log-feed-info-active' : '';
+
+		?><div class="autoblog-log-feed-info autoblog-log-feed-errors<?php echo $class ?>" title="<?php esc_attr_e( 'The amount of errors', 'autoblogtext' ) ?>">
+			<span class="glyphicon glyphicon-warning-sign"></span> <?php echo number_format( $count ) ?>
 		</div><?php
 	}
 
-	private function _report() {
-		?><div class="postbox ">
-			<h3 class="hndle"><span><?php _e( 'Processing Report', 'autoblogtext' ); ?></span></h3>
-			<div class="inside">
-			<?php if ( !empty( $this->logs ) ) : ?>
-				<?php foreach ( $this->logs as $log ) : ?>
-					<p>
-						<strong><?php echo date( 'Y-m-d \a\t H:i', (int)$log['timestamp'] ) ?></strong><br>
-						<?php if ( !empty( $log['log'] ) ) : ?>
-							<?php foreach ( $log['log'] as $key => $l ) : ?>
-								&#8226; <?php echo  $l ?><br>
-							<?php endforeach; ?>
-						<?php endif; ?>
-					</p>
-				<?php endforeach; ?>
-			<?php else : ?>
-				<p>
-					<?php _e( 'No processing reports are available, either you have not processed a feed or everything is running smoothly.', 'autoblogtext' ) ?>
-				</p>
+	/**
+	 * Renders count of feed iterations.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @param array $feed The feed information.
+	 */
+	private function _render_feed_iterations_info( $feed ) {
+		$count = 0;
+		foreach ( $feed['logs'] as $log ) {
+			switch ( $log['log_type'] ) {
+				case Autoblog_Plugin::LOG_FEED_PROCESSED:
+				case Autoblog_Plugin::LOG_FEED_PROCESSED_NO_RESULTS:
+				case Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_EARLY:
+				case Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_LATE:
+				case Autoblog_Plugin::LOG_FETCHING_ERRORS:
+				case Autoblog_Plugin::LOG_INVALID_FEED_URL:
+					$count++;
+					break;
+			}
+		}
+
+		$class = !empty( $count ) ? ' autoblog-log-feed-info-active' : '';
+
+		?><div class="autoblog-log-feed-info autoblog-log-feed-iterations<?php echo $class ?>" title="<?php esc_attr_e( 'The amount of times the feed has been procesed', 'autoblogtext' ) ?>">
+			<span class="glyphicon glyphicon-dashboard"></span> <?php echo number_format( $count ) ?>
+		</div><?php
+	}
+
+	/**
+	 * Renders feed imports amount information.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @param array $feed The feed information.
+	 */
+	private function _render_feed_imports_info( $feed ) {
+		$count = array_sum(
+			wp_list_pluck(
+				wp_list_filter( $feed['logs'], array( 'log_type' => Autoblog_Plugin::LOG_FEED_PROCESSED ) ),
+				'log_info'
+			)
+		);
+
+		$class = !empty( $count ) ? ' autoblog-log-feed-info-active' : '';
+
+		?><div class="autoblog-log-feed-info autoblog-log-feed-imports<?php echo $class ?>" title="<?php esc_attr_e( 'The amount of imported items during the day.', 'autoblogtext' ) ?>">
+			<span class="glyphicon glyphicon-cloud-download"></span> <?php echo number_format( $count ) ?>
+		</div><?php
+	}
+
+	/**
+	 * Renders log record row.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 * @param array $log Log record information.
+	 */
+	private function _render_log_row( $log ) {
+		$glyph = $message = '';
+		switch ( $log['log_type'] ) {
+			case Autoblog_Plugin::LOG_INVALID_FEED_URL:
+				$glyph = 'warning-sign';
+				$message = esc_html__( 'Feed URL is invalid and cannot be processed.', 'autoblogtext' );
+				break;
+
+			case Autoblog_Plugin::LOG_FETCHING_ERRORS:
+				$glyph = 'warning-sign';
+				$message = implode( '<br>', unserialize( $log['log_info'] ) );
+				break;
+
+			case Autoblog_Plugin::LOG_DUPLICATE_POST:
+				$glyph = 'info-sign';
+				$info = unsertialize( $log['log_info'] );
+				$message = sprintf( esc_html__( 'has been already imported.', 'autoblogtext' ), esc_html( $info['title'] ) );
+				break;
+
+			case Autoblog_Plugin::LOG_POST_DOESNT_MATCH:
+				$glyph = 'info-sign';
+				$message = esc_html__( 'Feed item does not contain requested words or tags.', 'autoblogtext' );
+				break;
+
+			case Autoblog_Plugin::LOG_POST_INSERT_FAILED:
+				$glyph = 'warning-sign';
+				$message = esc_html__( 'Feed item importing failed.', 'autoblogtext' );
+				break;
+
+			case Autoblog_Plugin::LOG_POST_INSERT_SUCCESS:
+				$glyph = 'ok-sign';
+				$message = esc_html__( 'Feed item has been imported successfully.', 'autoblogtext' );
+				break;
+
+			case Autoblog_Plugin::LOG_FEED_PROCESSED:
+				$glyph = 'ok-sign';
+				$imported = absint( $log['log_info'] );
+				$message = sprintf(
+					_n( '%s feed item was imported.', '%s feed items were imported.', $imported, 'autoblogtext' ),
+					'<b>' . number_format( $imported ) . '</b>'
+				);
+				break;
+
+			case Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_EARLY:
+				$glyph = 'info-sign';
+				$message = esc_html__( 'Feed has been skipped because it is too early to process it.', 'autoblogtext' );
+				break;
+
+			case Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_LATE:
+				$glyph = 'info-sign';
+				$message = esc_html__( 'Feed has been skipped because it is too late to process it.', 'autoblogtext' );
+				break;
+
+			case Autoblog_Plugin::LOG_FEED_PROCESSED_NO_RESULTS:
+				$glyph = 'info-sign';
+				$message = esc_html__( 'No new items were found.', 'autoblogtext' );
+				break;
+		}
+
+		if ( empty( $message ) ) {
+			return;
+		}
+
+		?><div class="autoblog-log-row">
+			<span class="autoblog-log-record-time"><?php echo esc_html( $log['log_at'] ) ?></span>
+
+			<?php if ( $glyph ) : ?>
+				<span class="glyphicon glyphicon-<?php echo $glyph ?>"></span>
 			<?php endif; ?>
-			</div>
-		</div><?php
-	}
 
-	private function _stats() {
-		?><div class="postbox ">
-			<h3 class="hndle"><span><?php _e( 'Statistics - posts per day', 'autoblogtext' ) ?></span></h3>
-			<div class="inside">
-				<?php if ( empty( $this->feeds ) ) : ?>
-					<p><?php _e( 'You need to set up some feeds before we can produce statistics.', 'autoblogtext' ) ?></p>
-				<?php else : ?>
-					<?php foreach ( $this->feeds as $a ) : ?>
-						<?php $feed = unserialize( $a->feed_meta ) ?>
-						<p><strong><?php echo esc_html( $feed['title'] ) ?> - <?php echo substr( $feed['url'], 0, 30 ) ?></strong></p>
-						<div id='feedchart-<?php echo $a->feed_id ?>' class='dashchart'></div>
-					<?php endforeach; ?>
-				<?php endif; ?>
-			</div>
+			<?php echo $message ?>
 		</div><?php
 	}
 

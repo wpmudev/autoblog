@@ -11,3 +11,126 @@
 .autoblog-table .column-nextcheck {
 	width: 150px;
 }
+
+.autoblog-log-row {
+	padding: 10px;
+	display: block;
+}
+
+.autoblog-log-date {
+	border: 3px solid #00487f;
+	border-bottom-width: 0;
+	border-top-width: 0;
+	background-color: white;
+}
+
+.autoblog-log-date:first-child {
+	margin-top: 30px;
+}
+
+.autoblog-log-date:last-child {
+	border-bottom-width: 3px;
+}
+
+.autoblog-log-date > .autoblog-log-row {
+	border-bottom: 1px solid #00487f;
+	background-color: #00487f;
+	color: white;
+	font-weight: bold;
+	font-size: 110%;
+	line-height: 1.5em;
+	padding: 5px 10px;
+}
+
+.autoblog-log-feed > .autoblog-log-row {
+	padding-left: 10px;
+	border-bottom: 1px dotted #ddd;
+	cursor: pointer;
+}
+
+.autoblog-log-feed > .autoblog-log-row .autoblog-log-feed-url {
+	font-weight: bold;
+	text-decoration: none;
+	margin-left: 10px;
+}
+
+.autoblog-log-feed > .autoblog-log-row:hover {
+	background-color: whitesmoke;
+}
+
+.autoblog-log-feed > .autoblog-log-row > b {
+	margin-left: 10px;
+}
+
+.autoblog-log-feed:last-child > .autoblog-log-row {
+	border-bottom: none;
+}
+
+.autoblog-log-feed-collapse-up {
+	display: none;
+}
+
+.autoblog-log-feed-info {
+	float: right;
+	margin-left: 10px;
+	width: 60px;
+}
+
+.autoblog-log-feed-info span {
+	margin-right: 5px;
+}
+
+.autoblog-log-feed-iterations,
+.autoblog-log-feed-errors,
+.autoblog-log-feed-imports {
+	opacity: 0.2;
+}
+
+.autoblog-log-feed-info-active {
+	opacity: 1;
+}
+
+.autoblog-log-feed-iterations span {
+	color: green;
+}
+
+.autoblog-log-feed-errors span {
+	color: red;
+}
+
+.autoblog-log-feed-imports span {
+	color: #01b1f3;
+}
+
+.autoblog-log-record {
+	clear: both;
+	display: none;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.autoblog-log-record .autoblog-log-row {
+	padding-left: 20px;
+}
+
+.autoblog-log-record-time {
+	color: #999;
+	width: 80px;
+	float: left;
+	display: block;
+}
+
+.autoblog-log-record .autoblog-log-row .glyphicon {
+	margin-right: 10px;
+}
+
+.autoblog-log-record .autoblog-log-row .glyphicon-warning-sign {
+	color: red;
+}
+
+.autoblog-log-record .autoblog-log-row .glyphicon-info-sign {
+	color: lightskyblue;
+}
+
+.autoblog-log-record .autoblog-log-row .glyphicon-ok-sign {
+	color: green;
+}
