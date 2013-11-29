@@ -64,7 +64,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		}
 
 		// clean up log records older than a week
-		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE cron_id < %d', AUTOBLOG_TABLE_FEEDS, strtotime( '-1 week' ) ) );
+		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE cron_id < %d', AUTOBLOG_TABLE_LOGS, strtotime( '-1 week' ) ) );
 
 		// html is not cached, so we need to build it and cache it
 		$template->log_records = $this->_get_log_records();
