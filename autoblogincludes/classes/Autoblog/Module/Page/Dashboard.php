@@ -54,9 +54,23 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 	 * @access public
 	 */
 	public function handle_dashboard_page() {
-		// template
 		$template = new Autoblog_Render_Dashboard_Page();
+
+		// try to fetch html from cache first
+		$html = $template->get_html_from_cahce();
+		if ( $html !== false ) {
+			echo $html;
+			return;
+		}
+
+		// html is not cached, so we need to build it and cache it
 		$template->log_records = $this->_get_log_records();
+
+		// enable output caching
+		$template->cache_output( true );
+		$template->set_cache_ttl( 5 * MINUTE_IN_SECONDS );
+
+		// render template
 		$template->render();
 	}
 

@@ -30,6 +30,19 @@
 class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 	/**
+	 * Constructor.
+	 *
+	 * @sicne 4.0.0
+	 *
+	 * @access public
+	 * @param array $data The array of data associated with current template.
+	 */
+	public function __construct( $data = array() ) {
+		parent::__construct( $data );
+		$this->_use_network_cache = is_network_admin();
+	}
+
+	/**
 	 * Renders table template.
 	 *
 	 * @since 4.0.0
