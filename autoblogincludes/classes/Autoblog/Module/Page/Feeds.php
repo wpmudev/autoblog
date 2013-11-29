@@ -233,13 +233,15 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		if ( isset( $feed['feed_id'] ) ) {
 			$action = 'updated';
 			$feed['feed_id'] = absint( $feed['feed_id'] );
-			$result = $this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $feed, array( 'feed_id' => $feed['feed_id'] ) ) ? 'true' : 'false';
+			if ( $this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $feed, array( 'feed_id' => $feed['feed_id'] ) ) ) {
+				$result = 'true';
+				do_action( 'autoblog_feed_updated', $feed );
+			}
 		} else {
 			if ( $this->_wpdb->insert( AUTOBLOG_TABLE_FEEDS, $feed ) ) {
 				$result = 'true';
 				$feed['feed_id'] = $this->_wpdb->insert_id;
-			} else {
-				$result = 'false';
+				do_action( 'autoblog_feed_created', $feed );
 			}
 		}
 
@@ -327,7 +329,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE feed_id IN (%s)', AUTOBLOG_TABLE_LOGS, $feed_ids ) );
 
 		foreach ( $feeds as $feed_id ) {
-			do_action( 'autoblog_delete_feed', $feed_id );
+			do_action( 'autoblog_feed_deleted', $feed_id );
 		}
 
 		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&deleted=true' );
