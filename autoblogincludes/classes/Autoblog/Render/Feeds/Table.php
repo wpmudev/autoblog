@@ -59,10 +59,6 @@ class Autoblog_Render_Feeds_Table extends Autoblog_Render {
 				<?php $this->table->views() ?>
 				<?php $this->table->display() ?>
 			</form>
-
-			<?php if ( $this->is_network_wide ) : ?>
-				<p class="description"><?php esc_html_e( '* Times and dates are local to each site.', 'autoblogtext' ) ?></p>
-			<?php endif; ?>
 		</div><?php
 	}
 

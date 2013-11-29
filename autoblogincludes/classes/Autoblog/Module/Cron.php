@@ -99,7 +99,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 */
 	public function update_feed_check_timestamps( $feed_id, array $details ) {
 		if ( !$this->_is_forced ) {
-			$time = current_time( 'timestamp' );
+			$time = current_time( 'timestamp', 1 );
 			$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, array(
 				'lastupdated' => $time,
 				'nextcheck'   => $time + absint( $details['processfeed'] ) * MINUTE_IN_SECONDS,

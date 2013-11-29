@@ -32,16 +32,6 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 	const NAME = __CLASS__;
 
 	/**
-	 * Determines whether the plugin is network wide activated or not.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @var boolean
-	 */
-	private $_is_network_wide = false;
-
-	/**
 	 * Constructor.
 	 *
 	 * @since 4.0.0
@@ -51,13 +41,6 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 	 */
 	public function __construct( Autoblog_Plugin $plugin ) {
 		parent::__construct( $plugin );
-
-		$this->_is_network_wide = is_multisite();
-		if ( $this->_is_network_wide ) {
-			$sitewide_plugins = get_site_option( 'active_sitewide_plugins' );
-			$this->_is_network_wide &= isset( $sitewide_plugins[plugin_basename( AUTOBLOG_BASEFILE )] );
-			$this->_is_network_wide &= is_network_admin();
-		}
 
 		$this->_add_action( 'autoblog_handle_feeds_page', 'handle' );
 
@@ -140,7 +123,6 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 	public function handle() {
 		$table = new Autoblog_Table_Feeds( array(
 			'nonce'           => wp_create_nonce( 'autoblog_feeds' ),
-			'is_network_wide' => $this->_is_network_wide,
 			'actions'         => array(
 				'process' => __( 'Process', 'autoblogtext' ),
 				'delete'  => __( 'Delete', 'autoblogtext' ),
@@ -181,7 +163,6 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 
 				$template->table = $table;
 				$template->testlog = $testlog;
-				$template->is_network_wide = $this->_is_network_wide;
 
 				$template->render();
 				break;
@@ -199,7 +180,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 	private function _reschedule_feed( $feed ) {
 		// switch blog if need be
 		$switched = false;
-		if ( $feed['blog_id'] != get_current_blog_id() ) {
+		if ( $feed['blog_id'] != get_current_blog_id() && function_exists( 'switch_to_blog' ) ) {
 			$switched = true;
 			switch_to_blog( $feed['blog_id'] );
 		}
@@ -216,7 +197,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		}
 
 		// restore blug if need be
-		if ( $switched ) {
+		if ( $switched && function_exists( 'restore_current_blog' ) ) {
 			restore_current_blog();
 		}
 	}
@@ -244,17 +225,26 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		$feed['feed_meta'] = serialize( $post );
 		$feed['blog_id'] = absint( $post['blog'] );
 		$feed['nextcheck'] = isset( $post['processfeed'] ) && intval( $post['processfeed'] ) > 0
-			? current_time( 'timestamp' ) + absint( $post['processfeed'] ) * MINUTE_IN_SECONDS
+			? current_time( 'timestamp', 1 ) + absint( $post['processfeed'] ) * MINUTE_IN_SECONDS
 			: 0;
 
 		$action = 'created';
 		$result = 'false';
 		if ( isset( $feed['feed_id'] ) ) {
 			$action = 'updated';
+			$feed['feed_id'] = absint( $feed['feed_id'] );
 			$result = $this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $feed, array( 'feed_id' => $feed['feed_id'] ) ) ? 'true' : 'false';
-			$this->_reschedule_feed( $feed );
 		} else {
-			$result = $this->_wpdb->insert( AUTOBLOG_TABLE_FEEDS, $feed ) ? 'true' : 'false';
+			if ( $this->_wpdb->insert( AUTOBLOG_TABLE_FEEDS, $feed ) ) {
+				$result = 'true';
+				$feed['feed_id'] = $this->_wpdb->insert_id;
+			} else {
+				$result = 'false';
+			}
+		}
+
+		if ( $result == 'true' ) {
+			$this->_reschedule_feed( $feed );
 		}
 
 		wp_safe_redirect( add_query_arg( $action, $result, 'admin.php?page=' . filter_input( INPUT_GET, 'page' ) ) );
@@ -274,7 +264,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		$feed = $feed_data = array();
 		if ( $feed_id ) {
 			$feed = $this->_wpdb->get_row( sprintf(
-				$this->_is_network_wide
+				is_network_admin()
 					? 'SELECT * FROM %s WHERE feed_id = %d LIMIT 1'
 					: 'SELECT * FROM %s WHERE feed_id = %d AND blog_id = %d LIMIT 1',
 				AUTOBLOG_TABLE_FEEDS,
@@ -329,7 +319,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		}
 
 		$this->_wpdb->query( sprintf(
-			$this->_is_network_wide
+			is_network_admin()
 				? 'DELETE FROM %s WHERE feed_id IN (%s)'
 				: 'DELETE FROM %s WHERE feed_id IN (%s) AND blog_id = %d',
 			AUTOBLOG_TABLE_FEEDS,

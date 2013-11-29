@@ -158,8 +158,10 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	 * @param object $item The current item
 	 */
 	public function single_row( $item ) {
+		$need_switch = !empty( $item['blog_id'] ) && $item['blog_id'] != get_current_blog_id();
+
 		// switch to feed blog
-		if ( !empty( $item['blog_id'] ) && function_exists( 'switch_to_blog' ) ) {
+		if ( $need_switch && function_exists( 'switch_to_blog' ) ) {
 			switch_to_blog( $item['blog_id'] );
 			$this->_args['date_i18n_format'] = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 		}
@@ -168,7 +170,7 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 		parent::single_row( $item );
 
 		// restore current blog
-		if ( !empty( $item['blog_id'] ) && function_exists( 'restore_current_blog' ) ) {
+		if ( $need_switch && function_exists( 'restore_current_blog' ) ) {
 			restore_current_blog();
 			$this->_args['date_i18n_format'] = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 		}
@@ -191,7 +193,7 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 		return sprintf(
 			'<code title="%s">%s</code>',
 			date_i18n( $this->_args['date_i18n_format'], $item['lastupdated'] ),
-			$this->_convert_time_to_str( $item['lastupdated'] )
+			$this->_convert_time_to_str( $item['lastupdated'] + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS )
 		);
 	}
 
@@ -205,9 +207,15 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	 * @return string Next check time.
 	 */
 	public function column_nextcheck( $item ) {
-		$next_check = $item['nextcheck'];
-		if ( $next_check == 0 ) {
-			return '<code>' . __( 'Never', 'autoblogtext' ) . '</code>';
+		$next_check = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, array( absint( $item['feed_id'] ) ) );
+		if ( !$next_check ) {
+			return '';
+		}
+
+		$next_check += get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+		$current_time = current_time( 'timestamp' );
+		if ( $next_check < $current_time ) {
+			$next_check = $current_time;
 		}
 
 		return sprintf(
@@ -231,7 +239,7 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 			'title' => __( 'Feed', 'autoblogtext' ),
 		);
 
-		if ( $this->_args['is_network_wide'] ) {
+		if ( is_network_admin() ) {
 			$columns['blogname']    = __( 'Target Blog', 'autoblogtext' );
 		}
 
@@ -375,7 +383,7 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 			",
 			AUTOBLOG_TABLE_FEEDS,
 			implode( ', ', $sites ),
-			!$this->_args['is_network_wide'] ? ' AND blog_id IN (' . implode( ', ', $blogs ) . ')' : '',
+			!is_network_admin() ? ' AND blog_id IN (' . implode( ', ', $blogs ) . ')' : '',
 			$per_page,
 			$offset
 		), ARRAY_A );
