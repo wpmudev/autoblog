@@ -57,6 +57,9 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 			return;
 		}
 
+		$switch_to_blog = function_exists( 'switch_to_blog' );
+		$restore_blog = function_exists( 'restore_current_blog' );
+
 		// dates
 		foreach ( $this->log_records as $date => $feeds ) :
 			?><div class="autoblog-log-date">
@@ -64,6 +67,10 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 				// feeds
 				foreach ( $feeds as $feed_id => $feed ) :
+					if ( !empty( $feed['blog_id'] ) && $switch_to_blog ) :
+						switch_to_blog( $feed['blog_id'] );
+					endif;
+
 					?><div class="autoblog-log-feed">
 						<div class="autoblog-log-row">
 							<?php $this->_render_feed_errros_info( $feed ) ?>
@@ -75,14 +82,29 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 							<a class="autoblog-log-feed-url" href="admin.php?page=autoblog_admin&action=edit&item=<?php echo $feed_id ?>" title="<?php esc_attr_e( 'Edit feed', 'autoblogtext' ) ?>">
 								<?php echo esc_html( $feed['title'] ) ?>
 							</a>
-						</div><?php
+						</div>
+						<div class="autoblog-log-feed-records"><?php
 
 						// logs
+						$tick = true; $cron_id = false;
 						foreach ( $feed['logs'] as $log ) :
-							?><div class="autoblog-log-record"><?php $this->_render_log_row( $log ) ?></div><?php
+							if ( $cron_id != false && $cron_id != $log['cron_id'] ) :
+								$tick = !$tick;
+							endif;
+
+							?><div class="autoblog-log-record<?php echo $tick ? ' autoblog-log-record-alt' : '' ?>">
+								<?php $this->_render_log_row( $log ) ?>
+							</div><?php
+
+							$cron_id = $log['cron_id'];
 						endforeach;
 
-					?></div><?php
+						?></div>
+					</div><?php
+
+					if ( !empty( $feed['blog_id'] ) && $restore_blog ) :
+						restore_current_blog();
+					endif;
 				endforeach;
 
 			?></div><?php
@@ -191,9 +213,12 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 				break;
 
 			case Autoblog_Plugin::LOG_DUPLICATE_POST:
-				$glyph = 'info-sign';
-				$info = unsertialize( $log['log_info'] );
-				$message = sprintf( esc_html__( 'has been already imported.', 'autoblogtext' ), esc_html( $info['title'] ) );
+				$glyph = 'thumbs-up';
+				$info = unserialize( $log['log_info'] );
+				$message = sprintf(
+					esc_html__( '%s has been already imported.', 'autoblogtext' ),
+					sprintf( '<a href="%s" target="_blank"><b>%s</b></a>', esc_url( $info[$info['checked']] ), esc_html( $info['title'] ) )
+				);
 				break;
 
 			case Autoblog_Plugin::LOG_POST_DOESNT_MATCH:
@@ -208,7 +233,16 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 			case Autoblog_Plugin::LOG_POST_INSERT_SUCCESS:
 				$glyph = 'ok-sign';
-				$message = esc_html__( 'Feed item has been imported successfully.', 'autoblogtext' );
+				$info = unserialize( $log['log_info'] );
+				$message = sprintf(
+					esc_html__( '%s has been imported successfully.', 'autoblogtext' ),
+					sprintf( '<a href="%s" target="_blank"><b>%s</b></a>', esc_url( $info['link'] ), esc_html( $info['title'] ) )
+				);
+
+				$permalink = get_permalink( $info['post_id'] );
+				if ( $permalink ) {
+					$message .= sprintf( ' <a href="%s" target="_blank"><small>(%s)</small></a>', $permalink, esc_html__( 'view post', 'autoblogtext' ) );
+				}
 				break;
 
 			case Autoblog_Plugin::LOG_FEED_PROCESSED:
@@ -232,7 +266,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 			case Autoblog_Plugin::LOG_FEED_PROCESSED_NO_RESULTS:
 				$glyph = 'info-sign';
-				$message = esc_html__( 'No new items were found.', 'autoblogtext' );
+				$message = esc_html__( 'Feed processing was finished. No new items were imported.', 'autoblogtext' );
 				break;
 		}
 

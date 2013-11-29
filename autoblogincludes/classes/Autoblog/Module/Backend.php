@@ -80,7 +80,9 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 		// dashboard page scripts
 		if ( $page_hook == $this->_admin_pages['dashboard'] ) {
 			wp_enqueue_style( 'autoblog-bootstrap-glyphs', AUTOBLOG_ABSURL . 'autoblogincludes/css/bootstrap-glyphs.min.css', array(), '3.0.2' );
-			wp_enqueue_script( 'autoblog-dashboard', AUTOBLOG_ABSURL . 'autoblogincludes/js/dashboard.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
+
+			wp_enqueue_script( 'autoblog-slimscroll', AUTOBLOG_ABSURL . 'autoblogincludes/js/jquery.slimscroll.min.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
+			wp_enqueue_script( 'autoblog-dashboard', AUTOBLOG_ABSURL . 'autoblogincludes/js/dashboard.js', array( 'jquery', 'autoblog-slimscroll' ), Autoblog_Plugin::VERSION, true );
 		}
 
 		// feeds page scripts

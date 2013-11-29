@@ -82,8 +82,9 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		foreach ( $resutls as $result ) {
 			$details = unserialize( $result['feed_meta'] );
 			$feeds[$result['feed_id']] = array(
-				'title' => $details['title'],
-				'url'   => $details['url'],
+				'title'   => $details['title'],
+				'url'     => $details['url'],
+				'blog_id' => absint( $result['blog_id'] ),
 			);
 		}
 
@@ -105,7 +106,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		}
 
 		$records = $this->_wpdb->get_results( sprintf(
-			'SELECT * FROM %s WHERE feed_id IN (%s) AND cron_id >= %d ORDER BY log_at DESC',
+			'SELECT * FROM %s WHERE feed_id IN (%s) AND cron_id >= %d ORDER BY log_at DESC, log_type DESC',
 			AUTOBLOG_TABLE_LOGS,
 			implode( ', ', array_keys( $feeds ) ),
 			strtotime( '-7 days' )

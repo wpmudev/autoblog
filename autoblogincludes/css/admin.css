@@ -102,14 +102,26 @@
 	color: #01b1f3;
 }
 
-.autoblog-log-record {
+.autoblog-log-feed .slimScrollDiv {
 	clear: both;
 	display: none;
+}
+
+.autoblog-log-feed-records {
+	display: none;
+	box-shadow: inset 0 0 10px #aaa;
+}
+
+.autoblog-log-record {
 	border-bottom: 1px solid #e0e0e0;
 }
 
 .autoblog-log-record .autoblog-log-row {
 	padding-left: 20px;
+}
+
+.autoblog-log-record a {
+	text-decoration: none;
 }
 
 .autoblog-log-record-time {

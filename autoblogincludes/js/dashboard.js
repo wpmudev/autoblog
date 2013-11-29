@@ -9,9 +9,11 @@
 			var parent = $(this).parent();
 
 			parent.find('.autoblog-log-feed-collapse').toggle();
-			parent.find('.autoblog-log-record').toggle();
+			parent.find('.slimScrollDiv').toggle();
 
 			return false;
 		});
+
+		$('.autoblog-log-feed-records').slimScroll().show();
 	});
 })(jQuery);
