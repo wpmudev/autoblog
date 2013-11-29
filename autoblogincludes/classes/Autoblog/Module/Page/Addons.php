@@ -58,7 +58,7 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 		$table = new Autoblog_Table_Addons( array(
 			'nonce'           => wp_create_nonce( 'autoblog_addons' ),
 			'active'          => get_option( 'autoblog_activated_addons', array() ),
-			'oposite'         => function_exists( 'get_blog_option' ) ? get_blog_option( 1, 'autoblog_networkactivated_addons', array() ) : array(),
+			'oposite'         => get_site_option( 'autoblog_networkactivated_addons', array() ),
 			'actions'         => array(
 				'activate'   => __( 'Activate', 'autoblogtext' ),
 				'deactivate' => __( 'Deactivate', 'autoblogtext' ),
@@ -96,7 +96,7 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 	public function handle_network_addons_page() {
 		$table = new Autoblog_Table_Addons( array(
 			'nonce'           => wp_create_nonce( 'autoblog_addons' ),
-			'active'          => get_option( 'autoblog_networkactivated_addons', array() ),
+			'active'          => get_site_option( 'autoblog_networkactivated_addons', array() ),
 			'oposite'         => array(),
 			'actions'         => array(
 				'activate'   => __( 'Activate', 'autoblogtext' ),
@@ -106,10 +106,10 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 
 		switch ( $table->current_action() ) {
 			case 'activate':
-				$this->_activate_addons( 'autoblog_networkactivated_addons' );
+				$this->_activate_addons( 'autoblog_networkactivated_addons', true );
 				break;
 			case 'deactivate':
-				$this->_deactivate_addons( 'autoblog_networkactivated_addons' );
+				$this->_deactivate_addons( 'autoblog_networkactivated_addons', true );
 				break;
 			default:
 				if ( filter_input( INPUT_GET, 'noheader', FILTER_VALIDATE_BOOLEAN ) ) {
@@ -152,7 +152,7 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 	 * @access private
 	 * @param string $option The option key to update.
 	 */
-	private function _activate_addons( $option ) {
+	private function _activate_addons( $option, $site = false ) {
 		check_admin_referer( 'autoblog_addons' );
 
 		$backref = self::_get_back_ref();
@@ -164,7 +164,11 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 			exit;
 		}
 
-		update_option( $option, array_unique( array_merge( get_option( $option, array() ), $addons ) ) );
+		if ( $site ) {
+			update_site_option( $option, array_unique( array_merge( get_site_option( $option, array() ), $addons ) ) );
+		} else {
+			update_option( $option, array_unique( array_merge( get_option( $option, array() ), $addons ) ) );
+		}
 
 		wp_safe_redirect( add_query_arg( 'activated', 'true', $backref ) );
 		exit;
@@ -178,7 +182,7 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 	 * @access private
 	 * @param string $option The option key to update.
 	 */
-	private function _deactivate_addons( $option ) {
+	private function _deactivate_addons( $option, $site = false ) {
 		check_admin_referer( 'autoblog_addons' );
 
 		$backref = self::_get_back_ref();
@@ -190,7 +194,11 @@ class Autoblog_Module_Page_Addons extends Autoblog_Module {
 			exit;
 		}
 
-		update_option( $option, array_unique( array_diff( get_option( $option, array() ), $addons ) ) );
+		if ( $site ) {
+			update_site_option( $option, array_unique( array_diff( get_site_option( $option, array() ), $addons ) ) );
+		} else {
+			update_option( $option, array_unique( array_diff( get_option( $option, array() ), $addons ) ) );
+		}
 
 		wp_safe_redirect( add_query_arg( 'deactivated', 'true', $backref ) );
 		exit;

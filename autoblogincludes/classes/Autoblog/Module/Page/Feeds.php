@@ -297,6 +297,8 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			$feed_data['posttype'] = 'post';
 		}
 
+		do_action( 'autoblog_feed_edit', $feed );
+
 		$template = new Autoblog_Render_Feeds_Form( $feed_data );
 		$template->render();
 

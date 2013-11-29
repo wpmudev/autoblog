@@ -48,7 +48,10 @@ class Autoblog_Module_System extends Autoblog_Module {
 		$this->_add_action( 'plugins_loaded', 'load_textdomain' );
 
 		// load network wide and blog wide addons
+		$this->_add_action( 'autoblog_feed_edit', 'load_addons' );
 		$this->_add_action( 'autoblog_pre_process_feeds', 'load_addons' );
+
+		$this->_add_action( 'autoblog_feed_edit', 'load_network_addons' );
 		$this->_add_action( 'autoblog_pre_process_feeds', 'load_network_addons' );
 
 		// setup cron stuff
@@ -223,6 +226,12 @@ class Autoblog_Module_System extends Autoblog_Module {
 		delete_site_option( 'autoblog_installed' );
 		delete_option( 'autoblog_installed' );
 
+		// update options
+		if ( is_multisite() && function_exists( 'get_blog_option' ) ) {
+			update_site_options( 'autoblog_networkactivated_addons', get_blog_option( 1, 'autoblog_networkactivated_addons' ) );
+			delete_blog_option( 1, 'autoblog_networkactivated_addons' );
+		}
+
 		// remove deprecated logs
 		$this->_wpdb->query( "DELETE FROM {$this->_wpdb->options} WHERE option_name LIKE 'autoblog_log_%'" );
 		if ( is_multisite() ) {
@@ -258,11 +267,13 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * Loads autoblog addons.
 	 *
 	 * @since 4.0.0
-	 * @action plugins_loaded
+	 * @action autoblog_feed_edit
+	 * @action autoblog_pre_process_feeds
 	 *
 	 * @access public
+	 * @param array $feed The feed data.
 	 */
-	public function load_addons() {
+	public function load_addons( $feed = array() ) {
 		$directory = AUTOBLOG_ABSPATH . 'autoblogincludes/addons/';
 		if ( !is_dir( $directory ) ) {
 			return;
@@ -278,6 +289,12 @@ class Autoblog_Module_System extends Autoblog_Module {
 			closedir( $dh );
 			sort( $auto_plugins );
 
+			$switched = false;
+			if ( !empty( $feed['blog_id'] ) && $feed['blog_id'] != get_current_blog_id() && function_exists( 'switch_to_blog' ) ) {
+				$switched = true;
+				switch_to_blog( $feed['blog_id'] );
+			}
+
 			$plugins = (array)get_option( 'autoblog_activated_addons', array() );
 			$auto_plugins = apply_filters( 'autoblog_available_addons', $auto_plugins );
 
@@ -286,6 +303,10 @@ class Autoblog_Module_System extends Autoblog_Module {
 					include_once $directory . $auto_plugin;
 				}
 			}
+
+			if ( $switched && function_exists( 'restore_current_blog' ) ) {
+				restore_current_blog();
+			}
 		}
 	}
 
@@ -293,7 +314,8 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * Loads network wide autoblog addons.
 	 *
 	 * @since 4.0.0
-	 * @action plugins_loaded
+	 * @action autoblog_feed_edit
+	 * @action autoblog_pre_process_feeds
 	 *
 	 * @access public
 	 */
@@ -314,8 +336,8 @@ class Autoblog_Module_System extends Autoblog_Module {
 			closedir( $dh );
 			sort( $auto_plugins );
 
+			$plugins = (array)get_site_option( 'autoblog_networkactivated_addons', array() );
 			$auto_plugins = apply_filters( 'autoblog_available_addons', $auto_plugins );
-			$plugins = (array)get_blog_option( 1, 'autoblog_networkactivated_addons', array() );
 
 			foreach ( $auto_plugins as $auto_plugin ) {
 				if ( in_array( $auto_plugin, $plugins ) ) {
