@@ -118,7 +118,6 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 
 		$log_records = $date_items = array();
 		$date_pattern = get_option( 'date_format' );
-		$time_pattern = get_option( 'time_format' );
 
 		$record = current( $records );
 		while( $record != false ) {
@@ -129,7 +128,6 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 				}
 			}
 
-			$record['log_at'] = date( $time_pattern, $record['log_at'] );
 			$date_items[$record['feed_id']]['logs'][] = $record;
 			$last_cron_date = date( $date_pattern, $record['cron_id'] );
 

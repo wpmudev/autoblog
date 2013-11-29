@@ -57,6 +57,8 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 			return;
 		}
 
+		$this->time_pattern = get_option( 'time_format' );
+
 		$switch_to_blog = function_exists( 'switch_to_blog' );
 		$restore_blog = function_exists( 'restore_current_blog' );
 
@@ -69,6 +71,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 				foreach ( $feeds as $feed_id => $feed ) :
 					if ( !empty( $feed['blog_id'] ) && $switch_to_blog ) :
 						switch_to_blog( $feed['blog_id'] );
+						$this->time_pattern = get_option( 'time_format' );
 					endif;
 
 					?><div class="autoblog-log-feed">
@@ -104,6 +107,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 					if ( !empty( $feed['blog_id'] ) && $restore_blog ) :
 						restore_current_blog();
+						$this->time_pattern = get_option( 'time_format' );
 					endif;
 				endforeach;
 
@@ -275,7 +279,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 		}
 
 		?><div class="autoblog-log-row">
-			<span class="autoblog-log-record-time"><?php echo esc_html( $log['log_at'] ) ?></span>
+			<span class="autoblog-log-record-time"><?php echo esc_html( date( $this->time_pattern, $log['log_at'] ) ) ?></span>
 
 			<?php if ( $glyph ) : ?>
 				<span class="glyphicon glyphicon-<?php echo $glyph ?>"></span>
