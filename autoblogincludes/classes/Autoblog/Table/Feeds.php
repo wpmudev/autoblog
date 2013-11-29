@@ -39,7 +39,6 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	public function __construct( $args = array() ) {
 		parent::__construct( array_merge( array(
 			'autoescape'       => false,
-			'next_schedule'    => wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS ),
 			'date_i18n_format' => get_option( 'date_format' ) . ' ' . get_option( 'time_format' ),
 		), $args ) );
 	}
@@ -76,17 +75,6 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 					$this->_args['plural'] => $item['feed_id'],
 				) ),
 				__( 'Process', 'autoblogtext' )
-			),
-
-			'test' => sprintf(
-				'<a href="%s">%s</a>',
-				add_query_arg( array(
-					'action'               => 'test',
-					'_wpnonce'             => $this->_args['nonce'],
-					'noheader'             => 'true',
-					$this->_args['single'] => $item['feed_id'],
-				) ),
-				__( 'Test Improt', 'autoblogtext' )
 			),
 
 			'validate' => sprintf(
@@ -151,16 +139,39 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 		$key = $item['blog_id'] . $post_type;
 
 		if ( !isset( $blogs[$key] ) ) {
-			switch_to_blog( $item['blog_id'] );
 			$blogs[$key] = sprintf(
 				'<a href="%s">%s</a>',
 				add_query_arg( 'post_type', $post_type, admin_url( 'edit.php' ) ),
 				get_option( 'blogname' )
 			);
-			restore_current_blog();
 		}
 
 		return $blogs[$key];
+	}
+
+	/**
+	 * Generates content for a single row of the table
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @param object $item The current item
+	 */
+	public function single_row( $item ) {
+		// switch to feed blog
+		if ( !empty( $item['blog_id'] ) && function_exists( 'switch_to_blog' ) ) {
+			switch_to_blog( $item['blog_id'] );
+			$this->_args['date_i18n_format'] = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+		}
+
+		// render single row
+		parent::single_row( $item );
+
+		// restore current blog
+		if ( !empty( $item['blog_id'] ) && function_exists( 'restore_current_blog' ) ) {
+			restore_current_blog();
+			$this->_args['date_i18n_format'] = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+		}
 	}
 
 	/**
@@ -197,10 +208,6 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 		$next_check = $item['nextcheck'];
 		if ( $next_check == 0 ) {
 			return '<code>' . __( 'Never', 'autoblogtext' ) . '</code>';
-		}
-
-		if ( $this->_args['next_schedule'] && $this->_args['next_schedule'] > $next_check ) {
-			$next_check = $this->_args['next_schedule'];
 		}
 
 		return sprintf(

@@ -160,9 +160,6 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			case 'delete':
 				$this->_delete_feeds();
 				break;
-			case 'test':
-				$this->_test_feed();
-				break;
 			default:
 				if ( filter_input( INPUT_GET, 'noheader', FILTER_VALIDATE_BOOLEAN ) ) {
 					wp_redirect( add_query_arg( 'noheader', false ) );
@@ -364,29 +361,6 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		wp_schedule_single_event( time(), Autoblog_Plugin::SCHEDULE_PROCESS, array( $feeds, true ) );
 
 		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&processed=true' );
-		exit;
-	}
-
-	/**
-	 * Test feed.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
-	private function _test_feed() {
-		check_admin_referer( 'autoblog_feeds' );
-
-//		$feed = filter_input( INPUT_GET, 'item', FILTER_VALIDATE_INT );
-//		$cron = $this->_plugin->get_module( Autoblog_Module_Cron::NAME );
-//		if ( $feed && $cron ) {
-//			$feed = $cron->get_autoblogentry( $feed );
-//			if ( $feed ) {
-//				$cron->test_the_feed( $feed->feed_id, unserialize( $feed->feed_meta ) );
-//			}
-//		}
-
-		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&tested=true' );
 		exit;
 	}
 
