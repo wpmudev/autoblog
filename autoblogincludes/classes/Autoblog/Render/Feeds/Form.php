@@ -61,7 +61,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	 */
 	private function _render_form() {
 		$tips = new WPMUDEV_Help_Tooltips();
-		$tips->set_icon_url( AUTOBLOG_ABSURL . 'autoblogincludes/images/information.png' );
+		$tips->set_icon_url( AUTOBLOG_ABSURL . 'images/information.png' );
 
 		$blogusers = get_users( 'blog_id=' . $this->blog );
 

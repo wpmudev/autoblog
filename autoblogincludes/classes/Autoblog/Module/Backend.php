@@ -74,20 +74,20 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 		}
 
 		// load styles
-		wp_enqueue_style( 'autoblogadmincss', AUTOBLOG_ABSURL . 'autoblogincludes/css/autoblog.css', array(), Autoblog_Plugin::VERSION );
-		wp_enqueue_style( 'autoblog-admin', AUTOBLOG_ABSURL . 'autoblogincludes/css/admin.css', array(), Autoblog_Plugin::VERSION );
+		wp_enqueue_style( 'autoblogadmincss', AUTOBLOG_ABSURL . 'css/autoblog.css', array(), Autoblog_Plugin::VERSION );
+		wp_enqueue_style( 'autoblog-admin', AUTOBLOG_ABSURL . 'css/admin.css', array(), Autoblog_Plugin::VERSION );
 
 		// dashboard page scripts
 		if ( $page_hook == $this->_admin_pages['dashboard'] ) {
-			wp_enqueue_style( 'autoblog-bootstrap-glyphs', AUTOBLOG_ABSURL . 'autoblogincludes/css/bootstrap-glyphs.min.css', array(), '3.0.2' );
+			wp_enqueue_style( 'autoblog-bootstrap-glyphs', AUTOBLOG_ABSURL . 'css/bootstrap-glyphs.min.css', array(), '3.0.2' );
 
-			wp_enqueue_script( 'autoblog-slimscroll', AUTOBLOG_ABSURL . 'autoblogincludes/js/jquery.slimscroll.min.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
-			wp_enqueue_script( 'autoblog-dashboard', AUTOBLOG_ABSURL . 'autoblogincludes/js/dashboard.js', array( 'jquery', 'autoblog-slimscroll' ), Autoblog_Plugin::VERSION, true );
+			wp_enqueue_script( 'autoblog-slimscroll', AUTOBLOG_ABSURL . 'js/jquery.slimscroll.min.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
+			wp_enqueue_script( 'autoblog-dashboard', AUTOBLOG_ABSURL . 'js/dashboard.js', array( 'jquery', 'autoblog-slimscroll' ), Autoblog_Plugin::VERSION, true );
 		}
 
 		// feeds page scripts
 		if ( $page_hook == $this->_admin_pages['feeds'] ) {
-			wp_enqueue_script( 'autoblog-feeds', AUTOBLOG_ABSURL . 'autoblogincludes/js/feeds.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
+			wp_enqueue_script( 'autoblog-feeds', AUTOBLOG_ABSURL . 'js/feeds.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
 		}
 	}
 
@@ -108,7 +108,7 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 
 		// autoblog menu
 		$page_title = __( 'Auto Blog', 'autoblogtext' );
-		$icon = AUTOBLOG_ABSURL . 'autoblogincludes/images/menu.png';
+		$icon = AUTOBLOG_ABSURL . 'images/menu.png';
 		add_menu_page( $page_title, $page_title, $capability, 'autoblog', array( $this, 'handle_dashboard_page' ), $icon );
 
 		// adding dashboad submenu page

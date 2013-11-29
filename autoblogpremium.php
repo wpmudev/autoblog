@@ -68,7 +68,7 @@ function autoblog_setup_constants() {
 	}
 
 	define( 'AUTOBLOG_BASEFILE', __FILE__ );
-	define( 'AUTOBLOG_ABSURL',   plugins_url( '/', __FILE__ ) );
+	define( 'AUTOBLOG_ABSURL',   plugins_url( '/autoblogincludes/', __FILE__ ) );
 	define( 'AUTOBLOG_ABSPATH',  dirname( __FILE__ ) . DIRECTORY_SEPARATOR );
 
 	// Processing will stop after 6 seconds (default) so as not to overload your server
