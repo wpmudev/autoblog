@@ -318,14 +318,17 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			exit;
 		}
 
-		$this->_wpdb->query( sprintf(
-			is_network_admin()
-				? 'DELETE FROM %s WHERE feed_id IN (%s)'
-				: 'DELETE FROM %s WHERE feed_id IN (%s) AND blog_id = %d',
-			AUTOBLOG_TABLE_FEEDS,
-			implode( ', ', $feeds ),
-			get_current_blog_id()
-		) );
+		$feed_ids = implode( ', ', $feeds );
+		$query = is_network_admin()
+			? 'DELETE FROM %s WHERE feed_id IN (%s)'
+			: 'DELETE FROM %s WHERE feed_id IN (%s) AND blog_id = %d';
+
+		$this->_wpdb->query( sprintf( $query, AUTOBLOG_TABLE_FEEDS, $feed_ids, get_current_blog_id() ) );
+		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE feed_id IN (%s)', AUTOBLOG_TABLE_LOGS, $feed_ids ) );
+
+		foreach ( $feeds as $feed_id ) {
+			do_action( 'autoblog_delete_feed', $feed_id );
+		}
 
 		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&deleted=true' );
 		exit;
