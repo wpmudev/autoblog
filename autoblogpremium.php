@@ -197,6 +197,9 @@ function autoblog_launch() {
 		$plugin->set_module( Autoblog_Module_Page_Feeds::NAME );
 		$plugin->set_module( Autoblog_Module_Page_Addons::NAME );
 		$plugin->set_module( Autoblog_Module_Page_Dashboard::NAME );
+	} else {
+		// set front end
+		$plugin->set_module( Autoblog_Module_Frontend::NAME );
 	}
 }
 
