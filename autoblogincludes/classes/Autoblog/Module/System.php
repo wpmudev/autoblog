@@ -50,9 +50,11 @@ class Autoblog_Module_System extends Autoblog_Module {
 		// load network wide and blog wide addons
 		$this->_add_action( 'autoblog_feed_edit', 'load_addons' );
 		$this->_add_action( 'autoblog_pre_process_feeds', 'load_addons' );
+		$this->_add_action( 'wp', 'load_addons' );
 
 		$this->_add_action( 'autoblog_feed_edit', 'load_network_addons' );
 		$this->_add_action( 'autoblog_pre_process_feeds', 'load_network_addons' );
+		$this->_add_action( 'wp', 'load_network_addons' );
 
 		// setup cron stuff
 		$this->_add_action( 'plugins_loaded', 'check_schedules' );
@@ -269,6 +271,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * @since 4.0.0
 	 * @action autoblog_feed_edit
 	 * @action autoblog_pre_process_feeds
+	 * @action wp
 	 *
 	 * @access public
 	 * @param array $feed The feed data.
@@ -290,7 +293,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 			sort( $auto_plugins );
 
 			$switched = false;
-			if ( !empty( $feed['blog_id'] ) && $feed['blog_id'] != get_current_blog_id() && function_exists( 'switch_to_blog' ) ) {
+			if ( is_array( $feed ) && !empty( $feed['blog_id'] ) && $feed['blog_id'] != get_current_blog_id() && function_exists( 'switch_to_blog' ) ) {
 				$switched = true;
 				switch_to_blog( $feed['blog_id'] );
 			}
@@ -316,6 +319,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * @since 4.0.0
 	 * @action autoblog_feed_edit
 	 * @action autoblog_pre_process_feeds
+	 * @action wp
 	 *
 	 * @access public
 	 */
