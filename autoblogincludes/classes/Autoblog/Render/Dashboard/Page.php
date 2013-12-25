@@ -302,4 +302,27 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 		</div><?php
 	}
 
+	/**
+	 * Returns HTML from cache.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @return string|boolean HTML on success, otherwise FALSE.
+	 */
+	public function get_html_from_cahce() {
+		$cache = parent::get_html_from_cahce();
+		if ( $cache !== false ) {
+			$expire = get_option( '_transient_timeout_' . $this->_get_cache_key() );
+
+			$cache .= '<div class="autoblog-cache-info">';
+			$cache .= $expire !== false
+				? sprintf( _x( '* This page has been taken from cache and will be regenerated at %s.', '... and will be regenerated at {Wednesday, 25-Dec-13 14:01:54}.', 'autoblogtext' ), date( 'l, d-M-y H:i:s', $expire + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) )
+				: __( '* This page has been taken from cache.', 'autoblogtext' );
+			$cache .= '</div>';
+		}
+
+		return $cache;
+	}
+
 }

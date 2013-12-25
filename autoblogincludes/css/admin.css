@@ -19,9 +19,9 @@
 
 .autoblog-log-date {
 	border: 3px solid #00487f;
-	border-bottom-width: 0;
 	border-top-width: 0;
 	background-color: white;
+	margin-bottom: 10px;
 }
 
 .autoblog-log-date:first-child {
@@ -145,4 +145,10 @@
 
 .autoblog-log-record .autoblog-log-row .glyphicon-ok-sign {
 	color: green;
+}
+
+.autoblog-cache-info {
+	margin-right: 20px;
+	padding: 3px 5px;
+	font-size: 0.85em;
 }

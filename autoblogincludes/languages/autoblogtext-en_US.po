@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-25 15:38+0300\n"
-"PO-Revision-Date: 2013-12-25 15:39+0300\n"
+"POT-Creation-Date: 2013-12-25 16:01+0300\n"
+"PO-Revision-Date: 2013-12-25 16:01+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -93,6 +93,16 @@ msgstr "Feed has been skipped because it is too late to process it."
 #: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:286
 msgid "Feed processing was finished. No new items were imported."
 msgstr "Feed processing was finished. No new items were imported."
+
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:320
+#, php-format
+msgctxt "... and will be regenerated at {Wednesday, 25-Dec-13 14:01:54}."
+msgid "* This page has been taken from cache and will be regenerated at %s."
+msgstr "* This page has been taken from cache and will be regenerated at %s."
+
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:321
+msgid "* This page has been taken from cache."
+msgstr "* This page has been taken from cache."
 
 #: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:45
 msgid "Auto Blog Addons"
