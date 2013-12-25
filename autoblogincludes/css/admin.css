@@ -138,7 +138,8 @@
 }
 
 .autoblog-log-record-time {
-	color: #999;
+	color: black;
+	font-weight: bold;
 	width: 80px;
 	float: left;
 	display: block;
