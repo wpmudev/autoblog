@@ -108,7 +108,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 								$tick = !$tick;
 							endif;
 
-							?><div class="autoblog-log-record<?php echo $tick ? ' autoblog-log-record-alt' : '' ?>">
+							?><div class="autoblog-log-record autoblog-log-record-<?php echo $log['log_type'], $tick ? ' autoblog-log-record-alt' : '' ?>">
 								<?php $this->_render_log_row( $log ) ?>
 							</div><?php
 
@@ -291,8 +291,23 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 			return;
 		}
 
+		$special_types = array(
+			Autoblog_Plugin::LOG_INVALID_FEED_URL,
+			Autoblog_Plugin::LOG_FETCHING_ERRORS,
+			Autoblog_Plugin::LOG_FEED_PROCESSED,
+			Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_EARLY,
+			Autoblog_Plugin::LOG_FEED_SKIPPED_TOO_LATE,
+			Autoblog_Plugin::LOG_FEED_PROCESSED_NO_RESULTS,
+		);
+
 		?><div class="autoblog-log-row">
-			<span class="autoblog-log-record-time"><?php echo esc_html( date( $this->time_pattern, $log['log_at'] ) ) ?></span>
+			<span class="autoblog-log-record-time">
+				<?php if ( in_array( $log['log_type'], $special_types ) ) : ?>
+					<?php echo esc_html( date( $this->time_pattern, $log['log_at'] ) ) ?>
+				<?php else : ?>
+					&nbsp;
+				<?php endif; ?>
+			</span>
 
 			<?php if ( $glyph ) : ?>
 				<span class="glyphicon glyphicon-<?php echo $glyph ?>"></span>

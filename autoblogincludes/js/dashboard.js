@@ -14,6 +14,6 @@
 			return false;
 		});
 
-		$('.autoblog-log-feed-records').slimScroll().show();
+		$('.autoblog-log-feed-records').slimScroll({height: '400px'}).show();
 	});
 })(jQuery);

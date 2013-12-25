@@ -116,6 +116,19 @@
 	border-bottom: 1px solid #e0e0e0;
 }
 
+.autoblog-log-record-1,
+.autoblog-log-record-2,
+.autoblog-log-record-7,
+.autoblog-log-record-8,
+.autoblog-log-record-9,
+.autoblog-log-record-10 {
+	border-top: 1px solid #e0e0e0;
+}
+
+.autoblog-log-feed-records > .autoblog-log-record:first-child {
+	border-top-width: 0;
+}
+
 .autoblog-log-record .autoblog-log-row {
 	padding-left: 20px;
 }
