@@ -37,8 +37,6 @@ class Autoblog_Render_Feeds_Table extends Autoblog_Render {
 	 * @access protected
 	 */
 	protected function _to_html() {
-		$this->table->prepare_items();
-
 		$add_link = add_query_arg( array(
 			'action'   => 'add',
 			'paged'    => false,
@@ -54,11 +52,14 @@ class Autoblog_Render_Feeds_Table extends Autoblog_Render {
 
 			<?php $this->_render_messages() ?>
 
+			<?php do_action( 'autoblog_before_feeds_table' ) ?>
 			<form class="autoblog-table" action="<?php echo add_query_arg( 'noheader', 'true' ) ?>" method="post">
 				<?php wp_nonce_field( 'autoblog_feeds' ) ?>
+				<?php $this->table->prepare_items() ?>
 				<?php $this->table->views() ?>
 				<?php $this->table->display() ?>
 			</form>
+			<?php do_action( 'autoblog_after_feeds_table' ) ?>
 		</div><?php
 	}
 
