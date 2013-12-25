@@ -171,6 +171,20 @@ abstract class Autoblog_Render {
 	}
 
 	/**
+	 * Deletes cache associated with this render.
+	 *
+	 * @since 4.0.0
+	 * 
+	 * @access public
+	 * @return boolean TRUE on success, otherwise FALSE.
+	 */
+	public function delete_cache() {
+		return $this->_use_network_cache
+			? delete_site_transient( $this->_get_cache_key() )
+			: delete_transient( $this->_get_cache_key() );
+	}
+
+	/**
 	 * Renders template.
 	 *
 	 * @since 4.0.0
