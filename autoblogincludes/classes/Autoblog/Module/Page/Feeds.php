@@ -148,22 +148,8 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 					exit;
 				}
 
-				$testlog = array();
-				if ( filter_input( INPUT_GET, 'tested', FILTER_VALIDATE_BOOLEAN ) ) {
-					$testlog = get_transient( 'autoblog_last_test_log' );
-					if ( $testlog !== false && !empty( $testlog['log'] ) ) {
-						$testlog = $testlog['log'];
-						delete_transient( 'autoblog_last_test_log' );
-					} else {
-						$testlog = array();
-					}
-				}
-
 				$template = new Autoblog_Render_Feeds_Table();
-
 				$template->table = $table;
-				$template->testlog = $testlog;
-
 				$template->render();
 				break;
 		}

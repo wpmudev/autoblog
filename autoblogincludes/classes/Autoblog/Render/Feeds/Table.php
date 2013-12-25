@@ -97,10 +97,6 @@ class Autoblog_Render_Feeds_Table extends Autoblog_Render {
 				echo '<div class="updated fade"><p>', esc_html__( 'The feed(s) has been processed successfully.', 'autoblogtext' ), '</p></div>';
 			}
 		}
-
-		if ( !empty( $this->testlog ) ) {
-			echo '<div id="testmessage" class="updated fade"><p>', implode( '<br>', $this->testlog ), '</p></div>';
-		}
 	}
 
 }
