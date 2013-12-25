@@ -30,6 +30,7 @@
 class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 
 	const NAME = __CLASS__;
+	const ACTION_REGENERATE_PAGE = 'regenerate';
 
 	/**
 	 * Constructor.
@@ -55,6 +56,25 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 	 */
 	public function handle_dashboard_page() {
 		$template = new Autoblog_Render_Dashboard_Page();
+
+		// check page regeneration
+		$nonce_action = 'regenerate-dashboard-' . get_current_user_id();
+		if ( filter_input( INPUT_GET, 'action' ) == self::ACTION_REGENERATE_PAGE && check_admin_referer( $nonce_action ) ) {
+			$template->delete_cache();
+			
+			wp_safe_redirect( add_query_arg( array(
+				'action'   => false,
+				'_wpnonce' => false,
+				'noheader' => false,
+			), wp_get_referer() ) );
+			exit;
+		}
+
+		// set regenerate page url
+		$template->regenerate_url = wp_nonce_url( add_query_arg( array(
+			'action'   => self::ACTION_REGENERATE_PAGE,
+			'noheader' => 'true',
+		) ), $nonce_action );
 
 		// try to fetch html from cache first
 		$html = $template->get_html_from_cahce();

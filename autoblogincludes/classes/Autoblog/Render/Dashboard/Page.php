@@ -301,12 +301,8 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 		);
 
 		?><div class="autoblog-log-row">
-			<span class="autoblog-log-record-time">
-				<?php if ( in_array( $log['log_type'], $special_types ) ) : ?>
-					<?php echo esc_html( date( $this->time_pattern, $log['log_at'] ) ) ?>
-				<?php else : ?>
-					&nbsp;
-				<?php endif; ?>
+			<span class="autoblog-log-record-time<?php echo !in_array( $log['log_type'], $special_types ) ? ' autoblog-log-record-time-alt' : '' ?>">
+				<?php echo esc_html( date( $this->time_pattern, $log['log_at'] ) ) ?>
 			</span>
 
 			<?php if ( $glyph ) : ?>
@@ -332,8 +328,12 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 			$cache .= '<div class="autoblog-cache-info">';
 			$cache .= $expire !== false
-				? sprintf( _x( '* This page has been taken from cache and will be regenerated at %s.', '... and will be regenerated at {Wednesday, 25-Dec-13 14:01:54}.', 'autoblogtext' ), date( 'l, d-M-y H:i:s', $expire + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) )
+				? sprintf(
+					_x( '* This page has been taken from cache and will be regenerated at %s.', '... and will be regenerated at {Wednesday, 25-Dec-13 14:01:54}.', 'autoblogtext' ),
+					date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $expire + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS )
+				)
 				: __( '* This page has been taken from cache.', 'autoblogtext' );
+			$cache .= sprintf( ' <a href="%s">%s</a>', esc_url( $this->regenerate_url ), __( 'Regenerate the page.', 'autoblogtext' ) );
 			$cache .= '</div>';
 		}
 

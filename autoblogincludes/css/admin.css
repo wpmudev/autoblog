@@ -145,6 +145,11 @@
 	display: block;
 }
 
+.autoblog-log-record-time-alt {
+	color: #e0e0e0;
+	font-weight: normal;
+}
+
 .autoblog-log-record .autoblog-log-row .glyphicon {
 	margin-right: 10px;
 }
