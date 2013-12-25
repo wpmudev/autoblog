@@ -7,31 +7,23 @@ Author URI: http://premium.wpmudev.org
 Network: True
 */
 
-function AB_add_check_column() {
-	if(function_exists('is_network_admin') && is_network_admin()) {
-		echo '<th scope="col" style="text-align: right;">';
-		echo __('Feed Check','autoblogtext');
-		echo '</th>';
+add_filter( 'autoblog_feed_table_columns', 'autoblog_add_check_column' );
+function autoblog_add_check_column( $columns ) {
+	if ( is_network_admin() ) {
+		$columns['feed_check'] = __( 'Feed Check', 'autoblogtext' );
 	}
+
+	return $columns;
 }
-add_action('autoblog_admin_columns', 'AB_add_check_column', 1);
 
-function AB_process_check_column( $table ) {
-	if(function_exists('is_network_admin') && is_network_admin()) {
-		echo '<td style="text-align: right;">';
-
-		$details = maybe_unserialize($table->feed_meta);
-
-		$blog_id = $table->blog_id;
-		if((int) $details['blog'] == (int) $blog_id) {
-			echo "<span style='color:green;'>" . __('Ok', 'autoblogtext') . "</span>";
-		} else {
-			echo "<span style='color:red;'>" . __('Problem', 'autoblogtext') . "</span>";
-		}
-
-		echo '</td>';
+add_filter( 'autoblog_feed_table_column_feed_check_value', 'autoblog_process_check_column', 10, 2 );
+function autoblog_process_check_column( $value, $feed ) {
+	if ( is_network_admin() ) {
+		$details = maybe_unserialize( $feed['feed_meta'] );
+		$value = (int)$details['blog'] == (int)$feed['blog_id']
+			? "<span style='color:green;'>" . __( 'Ok', 'autoblogtext' ) . "</span>"
+			: "<span style='color:red;'>" . __( 'Problem', 'autoblogtext' ) . "</span>";
 	}
-}
-add_action('autoblog_admin_columns_data', 'AB_process_check_column', 1);
 
-?>
+	return $value;
+}

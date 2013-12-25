@@ -226,6 +226,27 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	}
 
 	/**
+	 * Returns column value.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @param array $item The table row to display.
+	 * @param string $column_name The column id to render.
+	 * @return string The value to display.
+	 */
+	public function column_default( $item, $column_name ) {
+		$default = rand( 0, 9999999 );
+
+		$value = apply_filters( 'autoblog_feed_table_column_' . $column_name . '_value', $default, $item );
+		$value = apply_filters( 'autoblog_feed_table_column_value', $value, $item, $column_name );
+
+		return $value == $default
+			? parent::column_default( $item, $column_name )
+			: $value;
+	}
+
+	/**
 	 * Returns tabel columns.
 	 *
 	 * @since 4.0.0
@@ -247,7 +268,7 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 		$columns['lastupdated'] = __( 'Last Processed', 'autoblogtext' );
 		$columns['nextcheck']   = __( 'Next Check', 'autoblogtext' );
 
-		return $columns;
+		return apply_filters( 'autoblog_feed_table_columns', $columns );
 	}
 
 	/**
