@@ -52,7 +52,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 		$this->load_addons();
 
 		// setup cron stuff
-		$this->_add_action( 'plugins_loaded', 'check_schedules' );
+		$this->_add_action( 'wp_loaded', 'check_schedules' );
 		register_activation_hook( AUTOBLOG_BASEFILE, array( $this, 'register_schedules' ) );
 	}
 
@@ -60,16 +60,42 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * Checks whether we need to recheck scheduled events or not.
 	 *
 	 * @since 4.0.0
-	 * @action plugins_loaded
+	 * @action wp_loaded
 	 *
 	 * @access public
 	 */
 	public function check_schedules() {
-		if ( !defined( 'AUTOBLOG_PROCESSING_METHOD' ) || AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
+		if ( AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
 			$transient = 'autoblog-feeds-launching';
 			if ( get_transient( $transient ) === false ) {
 				$this->register_schedules();
 				set_transient( $transient, 1, HOUR_IN_SECONDS );
+			}
+		} else {
+			$this->_launch_pageload_schedules();
+		}
+	}
+
+	/**
+	 * Launched schedules on page load.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 */
+	private function _launch_pageload_schedules() {
+		$feeds = (array)$this->_wpdb->get_results( sprintf(
+			'SELECT feed_id, nextcheck FROM %s WHERE site_id = %d AND blog_id = %d AND nextcheck > 0 ORDER BY nextcheck LIMIT 1',
+			AUTOBLOG_TABLE_FEEDS,
+			!empty( $this->_wpdb->siteid ) ? $this->_wpdb->siteid : 1,
+			get_current_blog_id()
+		) );
+
+		$current_time = current_time( 'timestamp', 1 );
+		foreach ( $feeds as $feed ) {
+			if ( $feed->nextcheck < $current_time ) {
+				$args = array( absint( $feed->feed_id ) );
+				do_action( Autoblog_Plugin::SCHEDULE_PROCESS, $args );
 			}
 		}
 	}
@@ -82,7 +108,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * @access public
 	 */
 	public function register_schedules() {
-		if ( defined( 'AUTOBLOG_PROCESSING_METHOD' ) && AUTOBLOG_PROCESSING_METHOD != 'cron' ) {
+		if ( AUTOBLOG_PROCESSING_METHOD != 'cron' ) {
 			return;
 		}
 

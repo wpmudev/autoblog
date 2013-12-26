@@ -207,22 +207,21 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	 * @return string Next check time.
 	 */
 	public function column_nextcheck( $item ) {
-		$next_check = wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, array( absint( $item['feed_id'] ) ) );
-		if ( !$next_check ) {
-			return '';
+		$next_check = AUTOBLOG_PROCESSING_METHOD == 'cron'
+			? wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, array( absint( $item['feed_id'] ) ) )
+			: absint( $item['nextcheck'] );
+
+		if ( $next_check ) {
+			$next_check += get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+			$current_time = current_time( 'timestamp' );
+			if ( $next_check < $current_time ) {
+				$next_check = $current_time;
+			}
 		}
 
-		$next_check += get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
-		$current_time = current_time( 'timestamp' );
-		if ( $next_check < $current_time ) {
-			$next_check = $current_time;
-		}
-
-		return sprintf(
-			'<code title="%s">%s</code>',
-			date_i18n( $this->_args['date_i18n_format'], $next_check ),
-			$this->_convert_time_to_str( $next_check )
-		);
+		return $next_check
+			? sprintf( '<code title="%s">%s</code>', date_i18n( $this->_args['date_i18n_format'], $next_check ), $this->_convert_time_to_str( $next_check ) )
+			: __( 'Never', 'autoblogtext' );
 	}
 
 	/**
