@@ -71,7 +71,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	public function __construct( Autoblog_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->_add_action( Autoblog_Plugin::SCHEDULE_PROCESS, 'process_feeds' );
+		$this->_add_action( Autoblog_Plugin::SCHEDULE_PROCESS, 'process_feeds', 10, 2 );
 
 		$this->_add_action( 'autoblog_pre_process_feed', 'update_feed_check_timestamps', 10, 2 );
 		$this->_add_action( 'autoblog_pre_process_feed', 'switch_to_feed_blog', 10, 2 );
@@ -163,7 +163,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * Processes feeds by cron job.
 	 *
 	 * @since 4.0.0
-	 * @action autoblog_process_feeds
+	 * @action autoblog_process_feeds 10 2
 	 *
 	 * @access public
 	 * @param array $feed_ids The array of feed IDs to process.
@@ -214,7 +214,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			}
 
 			// process the feed
-			if ( isset( $details['processfeed'] ) && $details['processfeed'] > 0 ) {
+			if ( $this->_is_forced || ( isset( $details['processfeed'] ) && $details['processfeed'] > 0 ) ) {
 				do_action( 'autoblog_pre_process_feed', $feed_id, $details );
 
 				$simplepie = $this->_fetch_feed( $details );
