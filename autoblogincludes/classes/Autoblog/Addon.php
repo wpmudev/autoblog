@@ -95,11 +95,19 @@ class Autoblog_Addon {
 	 * @access protected
 	 * @param string $label The label.
 	 * @param string $element The element.
+	 * @param string $help The optional help text.
 	 */
-	protected function _render_block_element( $label, $element ) {
+	protected function _render_block_element( $label, $element, $help = false ) {
 		echo '<tr>';
 			echo '<td valign="top" class="heading">', $label, "</td>";
-			echo '<td valign="top">', $element, '</td>';
+			echo '<td valign="top">';
+				echo $element;
+				if ( $help ) {
+					$tips = new WPMUDEV_Help_Tooltips();
+					$tips->set_icon_url( AUTOBLOG_ABSURL . 'images/information.png' );
+					echo ' ', $tips->add_tip( $help );
+				}
+				echo '</td>';
 		echo '</tr>';
 	}
 

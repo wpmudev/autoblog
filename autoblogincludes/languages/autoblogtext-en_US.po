@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-26 14:54+0300\n"
-"PO-Revision-Date: 2013-12-26 14:54+0300\n"
+"POT-Creation-Date: 2013-12-26 17:20+0300\n"
+"PO-Revision-Date: 2013-12-26 17:20+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -920,6 +920,22 @@ msgstr "Force Feed"
 #: autoblogincludes/addons/forcefeed.php:81
 msgid "Enable Force Feed"
 msgstr "Enable Force Feed"
+
+#: autoblogincludes/addons/disablesainitization.php:74
+msgid "Disable Feed Sanitization"
+msgstr "Disable Feed Sanitization"
+
+#: autoblogincludes/addons/disablesainitization.php:77
+msgid "Disable Sanitization"
+msgstr "Disable Sanitization"
+
+#: autoblogincludes/addons/disablesainitization.php:79
+msgid ""
+"Disable feed content sanitization only if you know what you are doing or you "
+"confident in the feed content."
+msgstr ""
+"Disable feed content sanitization only if you know what you are doing or you "
+"confident in the feed content."
 
 #: autoblogincludes/addons/stripimages.php:62
 msgid "Strip Images"

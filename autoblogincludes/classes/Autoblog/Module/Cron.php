@@ -311,6 +311,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @return int The amount of importent feed items.
 	 */
 	private function _process_feed( SimplePie $feed, $details ) {
+		do_action( 'autoblog_feed_pre_process_setup', $feed, $details );
+
 		$max = isset( $details['poststoimport'] ) && (int)$details['poststoimport'] != 0
 			? (int) $details['poststoimport']
 			: $feed->get_item_quantity();
