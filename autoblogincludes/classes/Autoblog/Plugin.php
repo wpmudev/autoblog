@@ -32,16 +32,18 @@ class Autoblog_Plugin {
 
 	const SCHEDULE_PROCESS = 'autoblog_process_feeds';
 
-	const LOG_INVALID_FEED_URL          = 1;
-	const LOG_FETCHING_ERRORS           = 2;
-	const LOG_DUPLICATE_POST            = 3;
-	const LOG_POST_DOESNT_MATCH         = 4;
-	const LOG_POST_INSERT_FAILED        = 5;
-	const LOG_POST_INSERT_SUCCESS       = 6;
-	const LOG_FEED_PROCESSED            = 7;
-	const LOG_FEED_SKIPPED_TOO_EARLY    = 8;
-	const LOG_FEED_SKIPPED_TOO_LATE     = 9;
-	const LOG_FEED_PROCESSED_NO_RESULTS = 10;
+	const LOG_DUPLICATE_POST            = 100;
+	const LOG_POST_DOESNT_MATCH         = 110;
+	const LOG_POST_INSERT_FAILED        = 120;
+	const LOG_POST_INSERT_SUCCESS       = 130;
+	const LOG_POST_UPDATE_SUCCESS       = 140;
+
+	const LOG_INVALID_FEED_URL          = 200;
+	const LOG_FETCHING_ERRORS           = 210;
+	const LOG_FEED_PROCESSED            = 220;
+	const LOG_FEED_SKIPPED_TOO_EARLY    = 230;
+	const LOG_FEED_SKIPPED_TOO_LATE     = 240;
+	const LOG_FEED_PROCESSED_NO_RESULTS = 250;
 
 	/**
 	 * Singletone instance of the plugin.

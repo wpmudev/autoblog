@@ -162,6 +162,7 @@
 	color: lightskyblue;
 }
 
+.autoblog-log-record .autoblog-log-row .glyphicon-refresh,
 .autoblog-log-record .autoblog-log-row .glyphicon-ok-sign {
 	color: green;
 }

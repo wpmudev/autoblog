@@ -233,9 +233,14 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 				$glyph = 'thumbs-up';
 				$info = unserialize( $log['log_info'] );
 				$message = sprintf(
-					esc_html__( '%s has been already imported.', 'autoblogtext' ),
+					esc_html_x( '%s has been already imported.', '{Post title} has been already imported.', 'autoblogtext' ),
 					sprintf( '<a href="%s" target="_blank"><b>%s</b></a>', esc_url( $info[$info['checked']] ), esc_html( $info['title'] ) )
 				);
+
+				$permalink = get_permalink( $info['post_id'] );
+				if ( $permalink ) {
+					$message .= sprintf( ' <a href="%s" target="_blank"><small>(%s)</small></a>', $permalink, esc_html__( 'view post', 'autoblogtext' ) );
+				}
 				break;
 
 			case Autoblog_Plugin::LOG_POST_DOESNT_MATCH:
@@ -252,7 +257,21 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 				$glyph = 'ok-sign';
 				$info = unserialize( $log['log_info'] );
 				$message = sprintf(
-					esc_html__( '%s has been imported successfully.', 'autoblogtext' ),
+					esc_html_x( '%s has been imported successfully.', '{Post title} has been imported successfully.', 'autoblogtext' ),
+					sprintf( '<a href="%s" target="_blank"><b>%s</b></a>', esc_url( $info['link'] ), esc_html( $info['title'] ) )
+				);
+
+				$permalink = get_permalink( $info['post_id'] );
+				if ( $permalink ) {
+					$message .= sprintf( ' <a href="%s" target="_blank"><small>(%s)</small></a>', $permalink, esc_html__( 'view post', 'autoblogtext' ) );
+				}
+				break;
+
+			case Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS:
+				$glyph = 'refresh';
+				$info = unserialize( $log['log_info'] );
+				$message = sprintf(
+					esc_html_x( '%s has been updated successfully.', '{Post title} has been updated successfully.', 'autoblogtext' ),
 					sprintf( '<a href="%s" target="_blank"><b>%s</b></a>', esc_url( $info['link'] ), esc_html( $info['title'] ) )
 				);
 

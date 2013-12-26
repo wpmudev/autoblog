@@ -73,8 +73,12 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 		$this->_add_action( Autoblog_Plugin::SCHEDULE_PROCESS, 'process_feeds', 10, 2 );
 
+		$this->_add_filter( 'autoblog_update_duplicates', 'allow_update_duplicates', 10, 2 );
+
 		$this->_add_action( 'autoblog_pre_process_feed', 'update_feed_check_timestamps', 10, 2 );
 		$this->_add_action( 'autoblog_pre_process_feed', 'switch_to_feed_blog', 10, 2 );
+
+		$this->_add_filter( 'autoblog_pre_post_update', 'get_post_content_and_statuses', 10, 3 );
 
 		$this->_add_filter( 'autoblog_pre_post_insert', 'get_post_content_and_statuses', 10, 3 );
 		$this->_add_filter( 'autoblog_pre_post_insert', 'get_post_author_id', 10, 3 );
@@ -321,9 +325,13 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		for ( $x = 0; $x < $max; $x++ ) {
 			$item = $feed->get_item( $x );
 			if ( is_a( $item, 'SimplePie_Item' ) ) {
-				if ( $this->_check_item_duplicate( $item ) && $this->_check_item_content( $item, $details ) ) {
-					if ( $this->_process_item( $item, $details ) ) {
-						$processed_count++;
+				if ( $this->_check_item_content( $item, $details ) ) {
+					$update_duplicates = apply_filters( 'autoblog_update_duplicates', false, $details );
+					$post_id = $this->_find_item_duplicate( $item, $update_duplicates );
+					if ( !$post_id || $update_duplicates ) {
+						if ( $this->_process_item( $item, $details, $post_id ) == Autoblog_Plugin::LOG_POST_INSERT_SUCCESS ) {
+							$processed_count++;
+						}
 					}
 				}
 			}
@@ -339,31 +347,31 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access private
 	 * @param SimplePie_Item $item The feed item object.
-	 * @return boolean TRUE if duplicate was not found, otherwise FALSE.
+	 * @param boolean $update_duplicates Determines whether or not we need to update duplicates.
+	 * @return int The post id if the feed item has already been imported, otherwise 0.
 	 */
-	private function _check_item_duplicate( SimplePie_Item $item ) {
+	private function _find_item_duplicate( SimplePie_Item $item, $update_duplicates ) {
 		// try to find whether we already imported this item or not
 		$meta_key = 'original_source';
 		$meta_value = $item->get_permalink();
 
-		$check = defined( 'AUTOBLOG_POST_DUPLICATE_CHECK' ) && AUTOBLOG_POST_DUPLICATE_CHECK == 'guid' ? 'guid' : 'link';
+		$check = AUTOBLOG_POST_DUPLICATE_CHECK == 'guid' ? 'guid' : 'link';
 		if ( $check == 'guid' ) {
 			$meta_key = 'original_guid';
 			$meta_value = $item->get_id();
 		}
 
 		$post_id = $this->_wpdb->get_var( $this->_wpdb->prepare( "SELECT post_id FROM {$this->_wpdb->postmeta} WHERE meta_key = '{$meta_key}' AND meta_value = %s LIMIT 1", $meta_value ) );
-		if ( $post_id ) {
+		if ( $post_id && !$update_duplicates ) {
 			$this->_log_message( Autoblog_Plugin::LOG_DUPLICATE_POST, array(
 				'post_id' => $post_id,
 				'title'   => trim( $item->get_title() ),
 				'checked' => $check,
 				$check    => $meta_value,
 			) );
-			return false;
 		}
 
-		return true;
+		return absint( $post_id );
 	}
 
 	/**
@@ -462,24 +470,46 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @access private
 	 * @param SimplePie_Item $item The feed item object.
 	 * @param array $details The array of feed details.
-	 * @return boolean TRUE on success, otherwise FALSE.
+	 * @param int $post_id The id of already imported feed item.
+	 * @return int|boolean Operation log code on success, otherwise FALSE.
 	 */
-	private function _process_item( SimplePie_Item $item, $details ) {
-		$post_id = wp_insert_post( apply_filters( 'autoblog_pre_post_insert', array(), $details, $item ) );
-		if ( is_wp_error( $post_id ) ) {
-			$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_FAILED, $post_id->get_error_messages() );
-			return false;
+	private function _process_item( SimplePie_Item $item, $details, $post_id ) {
+		$updated = false;
+		if ( $post_id ) {
+			// looks like the item has already been imported, then try to update a post
+			$post = get_post( $post_id );
+			if ( $post ) {
+				$post_id = wp_update_post( apply_filters( 'autoblog_pre_post_update', $post->to_array(), $details, $item ) );
+				$updated = $post_id && !is_wp_error( $post_id );
+			}
 		}
 
-		do_action( 'autoblog_post_post_insert', $post_id, $details, $item );
+		if ( !$updated ) {
+			// if post has not been updated, then insert new one
+			$post_id = wp_insert_post( apply_filters( 'autoblog_pre_post_insert', array(), $details, $item ) );
+			if ( is_wp_error( $post_id ) ) {
+				$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_FAILED, $post_id->get_error_messages() );
+				return false;
+			}
 
-		$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_SUCCESS, array(
+			do_action( 'autoblog_post_post_insert', $post_id, $details, $item );
+
+			$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_SUCCESS, array(
+				'post_id' => $post_id,
+				'title'   => trim( $item->get_title() ),
+				'link'    => $item->get_permalink(),
+			) );
+
+			return Autoblog_Plugin::LOG_POST_INSERT_SUCCESS;
+		}
+
+		$this->_log_message( Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS, array(
 			'post_id' => $post_id,
 			'title'   => trim( $item->get_title() ),
 			'link'    => $item->get_permalink(),
 		) );
 
-		return true;
+		return Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS;
 	}
 
 	/**
@@ -586,10 +616,26 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	}
 
 	/**
+	 * Determines whether or not to allow duplicates update.
+	 *
+	 * @since 4.0.0
+	 * @filter autoblog_update_duplicates 10 2
+	 *
+	 * @access public
+	 * @param boolean $allow Initial allow value.
+	 * @param array $details The array of feed details.
+	 * @return boolean Filtered allow value.
+	 */
+	public function allow_update_duplicates( $allow, $details ) {
+		return $allow || ( isset( $details['overridedups'] ) && filter_var( $details['overridedups'], FILTER_VALIDATE_BOOLEAN ) );
+	}
+
+	/**
 	 * Finds post content and statuses.
 	 *
 	 * @since 4.0.0
 	 * @filter autoblog_pre_post_insert 10 3
+	 * @filter autoblog_pre_post_update 10 3
 	 *
 	 * @access public
 	 * @param array $data The post data.
@@ -599,32 +645,27 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 */
 	public function get_post_content_and_statuses( array $data, array $details, SimplePie_Item $item ) {
 		// post title
-		if ( empty( $data['post_title'] ) ) {
-			$data['post_title'] = trim( $item->get_title() );
-		}
+		$data['post_title'] = trim( $item->get_title() );
 
 		// post content
-		if ( empty( $data['post_content'] ) ) {
-			$content = trim( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
-
-			$length = absint( $details['excerptnumber'] );
-			if ( $details['useexcerpt'] != '1' && $length > 0 ) {
-				$delimiter = ' ';
-				switch ( $details['excerptnumberof'] ) {
-					case 'sentences':
-						$delimiter = '.';
-						break;
-					case 'paragraphs':
-						$delimiter = "\n\n";
-						break;
-				}
-
-				$content = explode( $delimiter, strip_tags( $content ), $length + 1 );
-				$content = implode( $delimiter, array_splice( $content, 0, $length ) );
+		$content = trim( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
+		$length = absint( $details['excerptnumber'] );
+		if ( $details['useexcerpt'] != '1' && $length > 0 ) {
+			$delimiter = ' ';
+			switch ( $details['excerptnumberof'] ) {
+				case 'sentences':
+					$delimiter = '.';
+					break;
+				case 'paragraphs':
+					$delimiter = "\n\n";
+					break;
 			}
 
-			$data['post_content'] = $content;
+			$content = explode( $delimiter, strip_tags( $content ), $length + 1 );
+			$content = implode( $delimiter, array_splice( $content, 0, $length ) );
 		}
+
+		$data['post_content'] = $content;
 
 		// post status
 		if ( empty( $data['post_status'] ) ) {
