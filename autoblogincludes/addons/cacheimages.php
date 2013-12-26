@@ -17,7 +17,9 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->_add_action( 'autoblog_post_post_insert', 'check_post_for_images', 10, 3 );
+
+		$this->_add_action( 'autoblog_post_post_insert', 'import_post_images', 10, 2 );
+		$this->_add_action( 'autoblog_post_post_update', 'import_post_images', 10, 2 );
 	}
 
 	/**
@@ -30,15 +32,16 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 	 * @return array The array of remote images.
 	 */
 	private function _get_remote_images_in_content( $content ) {
-		$images = array();
+		$images = $matches = array();
 		$siteurl = parse_url( get_option( 'siteurl' ) );
 
-		preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', $content, $matches );
-		foreach ( $matches[1] as $url ) {
-			$purl = autoblog_parse_mb_url( $url );
-			if ( !isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] ) {
-				// we seem to have an external images
-				$images[] = $url;
+		if ( preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|is', $content, $matches ) ) {
+			foreach ( $matches[1] as $url ) {
+				$purl = autoblog_parse_mb_url( $url );
+				if ( !isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] ) {
+					// we seem to have an external images
+					$images[] = $url;
+				}
 			}
 		}
 
@@ -53,9 +56,67 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 	 * @access private
 	 * @param string $image The image URL.
 	 * @param int $post_id The post id to attach the image to.
-	 * @param string $orig_image The original image URL.
+	 * @return string|boolean Local image URL on success, otherwise FALSE.
 	 */
-	private function _grab_image_from_url( $image, $post_ID, $orig_image = false ) {
+	private function _download_image( $image, $post_id ) {
+		$query = new WP_Query( array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'meta_query'  => array(
+				array(
+					'key'     => 'autoblog_orig_image',
+					'value'   => $image,
+					'compare' => '='
+				)
+			)
+		) );
+
+		if ( $query->have_posts() ) {
+			$image_id = $query->next_post()->ID;
+		} else {
+			// Download file to temp location
+			$tmp = download_url( $image );
+			if ( is_wp_error( $tmp ) ) {
+				return false;
+			}
+
+			// Set variables for storage, fix file filename for query strings
+			$matches = array();
+			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
+			$file_array['name'] = basename( $matches[0] );
+			$file_array['tmp_name'] = $tmp;
+
+			// do the validation and storage stuff
+			$image_id = media_handle_sideload( $file_array, $post_id );
+			if ( is_wp_error( $image_id ) ) {
+				@unlink( $file_array['tmp_name'] );
+				return $image_id;
+			}
+
+			add_post_meta( $image_id, 'autoblog_orig_image', $image );
+		}
+
+		return wp_get_attachment_url( $image_id );
+	}
+
+	/**
+	 * Imports post images.
+	 *
+	 * @since 4.0.0
+	 * @action autoblog_post_post_insert 10 2
+	 * @action autoblog_post_post_update 10 2
+	 *
+	 * @access public
+	 * @param int $post_id The post id.
+	 * @param array $details The feed details.
+	 */
+	public function import_post_images( $post_id, $ablog ) {
+		$post = get_post( $post_id );
+		$images = $this->_get_remote_images_in_content( $post->post_content );
+		if ( empty( $images ) ) {
+			return;
+		}
+
 		// Include the file and media libraries as they have the functions we want to use
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -63,58 +124,10 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 
 		// Set a big timelimt for processing as we are pulling in potentially big files.
 		set_time_limit( 600 );
-		// get the image
-		$img = media_sideload_image( $image, $post_ID );
-		if ( !is_wp_error( $img ) ) {
-			preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', $img, $newimage );
 
-			if ( !empty( $newimage[1][0] ) ) {
-				$theimg = $newimage[1][0];
-				$parsed_url = autoblog_parse_mb_url( $theimg );
-
-				if ( function_exists( 'get_blog_option' ) ) {
-					$theimg = str_replace( $parsed_url['scheme'] . '://' . $parsed_url['host'], get_blog_option( $this->_wpdb->blogid, 'siteurl' ), $theimg );
-				}
-
-				$this->_wpdb->query( $this->_wpdb->prepare( "UPDATE {$this->_wpdb->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d;", $orig_image, $theimg, $post_ID ) );
-			}
-		}
-
-		return $image;
-	}
-
-
-	/**
-	 * Caches images on post saving.
-	 *
-	 * @since 4.0.0
-	 * @action autoblog_post_post_insert 10 3
-	 *
-	 * @access public
-	 * @param type $post_id
-	 * @param type $details
-	 * @param SimplePie_Item $item
-	 */
-	public function check_post_for_images( $post_id, $ablog, $item ) {
-		// Reload the content as we need to work with the full content not just the excerpts
-		$post_content = trim( $item->get_content() );
-		// Set the encoding to UTF8
-		$post_content = html_entity_decode( $post_content, ENT_QUOTES, 'UTF-8' );
-
-		// Backup in case we can't get the post content again from the item
-		if ( empty( $post_content ) ) {
-			// Get the post so we can edit it.
-			$post = get_post( $post_id );
-			$post_content = $post->post_content;
-		}
-
-		$images = $this->_get_remote_images_in_content( $post_content );
-		if ( empty( $images ) ) {
-			return $post_id;
-		}
-
+		$new_images = array();
 		foreach ( $images as $image ) {
-			if ( !preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches ) ) {
+			if ( !preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image ) ) {
 				continue;
 			}
 
@@ -136,10 +149,14 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 					: $furl['scheme'] . '://' . $newimage;
 			}
 
-			$this->_grab_image_from_url( $newimage, $post_id, $image );
+			$newimage = $this->_download_image( $newimage, $post_id );
+			if ( $newimage ) {
+				$new_images[$image] = $newimage;
+			}
 		}
 
-		return $post_id;
+		$post->post_content = str_replace( array_keys( $new_images ), array_values( $new_images ), $post->post_content );
+		wp_update_post( $post->to_array() );
 	}
 
 }

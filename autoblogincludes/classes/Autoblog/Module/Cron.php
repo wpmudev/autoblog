@@ -474,42 +474,41 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @return int|boolean Operation log code on success, otherwise FALSE.
 	 */
 	private function _process_item( SimplePie_Item $item, $details, $post_id ) {
-		$updated = false;
 		if ( $post_id ) {
 			// looks like the item has already been imported, then try to update a post
 			$post = get_post( $post_id );
 			if ( $post ) {
 				$post_id = wp_update_post( apply_filters( 'autoblog_pre_post_update', $post->to_array(), $details, $item ) );
-				$updated = $post_id && !is_wp_error( $post_id );
+				if ( $post_id && !is_wp_error( $post_id ) ) {
+					do_action( 'autoblog_post_post_update', $post_id, $details, $item );
+
+					$this->_log_message( Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS, array(
+						'post_id' => $post_id,
+						'title'   => trim( $item->get_title() ),
+						'link'    => $item->get_permalink(),
+					) );
+
+					return Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS;
+				}
 			}
 		}
 
-		if ( !$updated ) {
-			// if post has not been updated, then insert new one
-			$post_id = wp_insert_post( apply_filters( 'autoblog_pre_post_insert', array(), $details, $item ) );
-			if ( is_wp_error( $post_id ) ) {
-				$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_FAILED, $post_id->get_error_messages() );
-				return false;
-			}
-
-			do_action( 'autoblog_post_post_insert', $post_id, $details, $item );
-
-			$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_SUCCESS, array(
-				'post_id' => $post_id,
-				'title'   => trim( $item->get_title() ),
-				'link'    => $item->get_permalink(),
-			) );
-
-			return Autoblog_Plugin::LOG_POST_INSERT_SUCCESS;
+		// post has not been updated, then insert new one
+		$post_id = wp_insert_post( apply_filters( 'autoblog_pre_post_insert', array(), $details, $item ) );
+		if ( is_wp_error( $post_id ) ) {
+			$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_FAILED, $post_id->get_error_messages() );
+			return false;
 		}
 
-		$this->_log_message( Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS, array(
+		do_action( 'autoblog_post_post_insert', $post_id, $details, $item );
+
+		$this->_log_message( Autoblog_Plugin::LOG_POST_INSERT_SUCCESS, array(
 			'post_id' => $post_id,
 			'title'   => trim( $item->get_title() ),
 			'link'    => $item->get_permalink(),
 		) );
 
-		return Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS;
+		return Autoblog_Plugin::LOG_POST_INSERT_SUCCESS;
 	}
 
 	/**

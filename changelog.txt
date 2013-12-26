@@ -7,3 +7,4 @@
 * Implemented force feed addon
 * Implemented disable sanitization addon
 * Implemented ability to update posts when duplicate is found
+* Reworked images import to prevent downloading the same image multiple times
