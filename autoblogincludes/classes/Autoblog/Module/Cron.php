@@ -98,15 +98,14 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @param array $details The feed details.
 	 */
 	public function update_feed_check_timestamps( $feed_id, array $details ) {
+		$time = current_time( 'timestamp', 1 );
+
+		$data = array( 'lastupdated' => $time );
 		if ( !$this->_is_forced ) {
-			$time = current_time( 'timestamp', 1 );
-			$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, array(
-				'lastupdated' => $time,
-				'nextcheck'   => $time + absint( $details['processfeed'] ) * MINUTE_IN_SECONDS,
-			), array(
-				'feed_id' => $feed_id,
-			), array( '%d', '%d' ), array( '%d' ) );
+			$data['nextcheck'] = $time + absint( $details['processfeed'] ) * MINUTE_IN_SECONDS;
 		}
+
+		$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $data, array( 'feed_id' => $feed_id ), array( '%d', '%d' ), array( '%d' ) );
 	}
 
 	/**
