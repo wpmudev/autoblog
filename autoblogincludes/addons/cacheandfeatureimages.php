@@ -6,7 +6,7 @@ Author: Incsub
 Author URI: http://premium.wpmudev.org
 */
 
-class A_FeatureImageCacheAddon extends Autoblog_Addon {
+class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 
 	const SOURCE_THE_FIRST_IMAGE = 'ASC';
 	const SOURCE_THE_LAST_IMAGE  = 'DESC';
@@ -66,105 +66,16 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon {
 	}
 
 	/**
-	 * Finds all images in a feed content.
-	 *
-	 * @access private
-	 * @param string $content The content of a feed item.
-	 * @return array The array of images in the content.
-	 */
-	private function _get_remote_images_in_content( $content ) {
-		$images = $matches = array();
-		if ( preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', $content, $matches ) ) {
-			foreach ( $matches[1] as $url ) {
-				if ( filter_var( $url, FILTER_VALIDATE_URL ) && preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $url ) ) {
-					$images[] = $url;
-				}
-			}
-		}
-
-		return $images;
-	}
-
-	/**
-	 * Downloads image and attaches it to a post.
-	 *
-	 * @access private
-	 * @param string $image The image URL to download.
-	 * @param int $post_id The post id to attach image to.
-	 * @param string $orig_image The original image URL.
-	 */
-	private function _grab_image_from_url( $image, $post_id, $orig_image = false ) {
-		// Include the file and media libraries as they have the functions we want to use
-		require_once ABSPATH . 'wp-admin/includes/media.php';
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/image.php';
-
-		// Set a big timelimt for processing as we are pulling in potentially big files.
-		set_time_limit( 600 );
-		// Download file to temp location
-		$tmp = download_url( $image );
-
-		// add an extension if image URL doesn't have it
-		$parts = explode( '?', $image );
-		if ( !preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', current( $parts ) ) ) {
-			$parts[0] .= '.png';
-		}
-		$image = implode( '?', $parts );
-
-		// Set variables for storage
-		// fix file filename for query strings
-		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
-		$file_array['name'] = basename( $matches[0] );
-		$file_array['tmp_name'] = $tmp;
-
-		// If error storing temporarily, unlink
-		if ( is_wp_error( $tmp ) ) {
-			@unlink( $file_array['tmp_name'] );
-			$file_array['tmp_name'] = '';
-		}
-
-		// do the validation and storage stuff
-		$id = media_handle_sideload( $file_array, $post_id );
-		// If error storing permanently, unlink
-		if ( is_wp_error( $id ) ) {
-			@unlink( $file_array['tmp_name'] );
-			return false;
-		}
-
-		$newimage = array();
-		if ( preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', wp_get_attachment_url( $id ), $newimage ) ) {
-			if ( !empty( $newimage[1][0] ) ) {
-				$theimg = $newimage[1][0];
-				$parsed_url = autoblog_parse_mb_url( $theimg );
-				if ( function_exists( 'get_blog_option' ) ) {
-					$theimg = str_replace( "{$parsed_url['scheme']}://{$parsed_url['host']}", get_blog_option( $this->_wpdb->blogid, 'siteurl' ), $theimg );
-				}
-
-				if ( $orig_image ) {
-					$this->_wpdb->query( $this->_wpdb->prepare(
-						"UPDATE {$this->_wpdb->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d",
-						$orig_image,
-						$theimg,
-						$post_id
-					) );
-				}
-			}
-		}
-
-		return $id;
-	}
-
-	/**
 	 * Finds featured image and attached it to the post.
 	 *
 	 * @action autoblog_feed_edit_form_end
 	 *
 	 * @access public
-	 * @param int $post_ID The post ID to attach featured image to.
+	 * @param int $post_id The post ID to attach featured image to.
 	 * @param array $ablog The actual settings.
 	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
 	 */
-	public function check_post_for_images( $post_ID, $ablog, SimplePie_Item $item ) {
+	public function check_post_for_images( $post_id, $ablog, SimplePie_Item $item ) {
 		$method = trim( isset( $ablog['featuredimage'] ) ? $ablog['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
 		if ( empty( $method ) ) {
 			return;
@@ -173,27 +84,21 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon {
 		if ( $method == self::SOURCE_MEDIA_THUMBNAIL ) {
 			$resutls = $item->get_item_tags( SIMPLEPIE_NAMESPACE_MEDIARSS, 'thumbnail' );
 			if ( isset( $resutls[0]['attribs']['']['url'] ) && filter_var( $resutls[0]['attribs']['']['url'], FILTER_VALIDATE_URL ) ) {
-				$thumbnail_id = $this->_grab_image_from_url( $resutls[0]['attribs']['']['url'], $post_ID );
+				$thumbnail_id = $this->_download_image( $resutls[0]['attribs']['']['url'], $post_id );
 				if ( $thumbnail_id ) {
-					set_post_thumbnail( $post_ID, $thumbnail_id );
+					set_post_thumbnail( $post_id, $thumbnail_id );
 				}
 			}
 			return;
 		}
 
-		// Reload the content as we need to work with the full content not just the excerpts
-		$post_content = trim( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
-		// Backup in case we can't get the post content again from the item
-		if ( empty( $post_content ) ) {
-			// Get the post so we can edit it.
-			$post = get_post( $post_ID );
-			if ( $post ) {
-				$post_content = $post->post_content;
-			}
+		$post = get_post( $post_id );
+		$images = $this->_get_remote_images_from_content( $post->post_content );
+		if ( empty( $images ) ) {
+			return;
 		}
 
 		$image = null;
-		$images = $this->_get_remote_images_in_content( $post_content );
 		switch ( $method ) {
 			case self::SOURCE_THE_FIRST_IMAGE: $image = array_shift( $images ); break;
 			case self::SOURCE_THE_LAST_IMAGE:  $image = array_pop( $images );   break;
@@ -202,6 +107,14 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon {
 		if ( empty( $image ) ) {
 			return;
 		}
+
+		// Include the file and media libraries as they have the functions we want to use
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		// Set a big timelimt for processing as we are pulling in potentially big files.
+		set_time_limit( 600 );
 
 		$newimage = $image;
 		$image_url = autoblog_parse_mb_url( $newimage );
@@ -218,9 +131,9 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon {
 				: $blog_url['scheme'] . '://' . $newimage;
 		}
 
-		$thumbnail_id = $this->_grab_image_from_url( $newimage, $post_ID, $image );
+		$thumbnail_id = $this->_download_image( $newimage, $post_id );
 		if ( $thumbnail_id ) {
-			set_post_thumbnail( $post_ID, $thumbnail_id );
+			set_post_thumbnail( $post_id, $thumbnail_id );
 		}
 	}
 

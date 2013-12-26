@@ -6,7 +6,7 @@ Author: Barry (Incsub)
 Author URI: http://premium.wpmudev.org
 */
 
-class A_ImageCacheAddon extends Autoblog_Addon {
+class A_ImageCacheAddon extends Autoblog_Addon_Image {
 
 	/**
 	 * Constructor
@@ -23,83 +23,6 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 	}
 
 	/**
-	 * Returns remote images from content.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @param string $content The feed item content.
-	 * @return array The array of remote images.
-	 */
-	private function _get_remote_images_in_content( $content ) {
-		$images = $matches = array();
-		$siteurl = parse_url( get_option( 'siteurl' ) );
-
-		if ( preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|is', $content, $matches ) ) {
-			foreach ( $matches[1] as $url ) {
-				$purl = autoblog_parse_mb_url( $url );
-				if ( !isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] ) {
-					// we seem to have an external images
-					$images[] = $url;
-				}
-			}
-		}
-
-		return $images;
-	}
-
-	/**
-	 * Grabs remote image.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @param string $image The image URL.
-	 * @param int $post_id The post id to attach the image to.
-	 * @return string|boolean Local image URL on success, otherwise FALSE.
-	 */
-	private function _download_image( $image, $post_id ) {
-		$query = new WP_Query( array(
-			'post_type'   => 'attachment',
-			'post_status' => 'inherit',
-			'meta_query'  => array(
-				array(
-					'key'     => 'autoblog_orig_image',
-					'value'   => $image,
-					'compare' => '='
-				)
-			)
-		) );
-
-		if ( $query->have_posts() ) {
-			$image_id = $query->next_post()->ID;
-		} else {
-			// Download file to temp location
-			$tmp = download_url( $image );
-			if ( is_wp_error( $tmp ) ) {
-				return false;
-			}
-
-			// Set variables for storage, fix file filename for query strings
-			$matches = array();
-			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
-			$file_array['name'] = basename( $matches[0] );
-			$file_array['tmp_name'] = $tmp;
-
-			// do the validation and storage stuff
-			$image_id = media_handle_sideload( $file_array, $post_id );
-			if ( is_wp_error( $image_id ) ) {
-				@unlink( $file_array['tmp_name'] );
-				return $image_id;
-			}
-
-			add_post_meta( $image_id, 'autoblog_orig_image', $image );
-		}
-
-		return wp_get_attachment_url( $image_id );
-	}
-
-	/**
 	 * Imports post images.
 	 *
 	 * @since 4.0.0
@@ -112,7 +35,7 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 	 */
 	public function import_post_images( $post_id, $ablog ) {
 		$post = get_post( $post_id );
-		$images = $this->_get_remote_images_in_content( $post->post_content );
+		$images = $this->_get_remote_images_from_content( $post->post_content );
 		if ( empty( $images ) ) {
 			return;
 		}
@@ -149,9 +72,9 @@ class A_ImageCacheAddon extends Autoblog_Addon {
 					: $furl['scheme'] . '://' . $newimage;
 			}
 
-			$newimage = $this->_download_image( $newimage, $post_id );
-			if ( $newimage ) {
-				$new_images[$image] = $newimage;
+			$newimage_id = $this->_download_image( $newimage, $post_id );
+			if ( $newimage_id ) {
+				$new_images[$image] = wp_get_attachment_url( $newimage_id );
 			}
 		}
 
