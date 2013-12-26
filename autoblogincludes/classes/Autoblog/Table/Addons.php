@@ -256,12 +256,28 @@ class Autoblog_Table_Addons extends Autoblog_Table {
 			), 'plugin' ) + array( 'Source' => $this->items[$i] );
 		}
 
+		usort( $this->items, array( $this, 'sort_items' ) );
+
 		$total_items = count( $items );
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
 			'per_page' => $per_page,
 			'total_pages' => ceil( $total_items / $per_page )
 		) );
+	}
+
+	/**
+	 * Sorts addons by name.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @param array $a The first addon to compare with.
+	 * @param array $b The second addon to compare.
+	 * @return int Less than 0 if str1 is less than str2; More than 0 if str1 is greater than str2, and 0 if they are equal.
+	 */
+	public function sort_items( $a, $b ) {
+		return strcmp( $a['Name'], $b['Name'] );
 	}
 
 }
