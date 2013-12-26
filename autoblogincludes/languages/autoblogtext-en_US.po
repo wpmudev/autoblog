@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-25 16:01+0300\n"
-"PO-Revision-Date: 2013-12-25 16:01+0300\n"
+"POT-Creation-Date: 2013-12-26 12:35+0300\n"
+"PO-Revision-Date: 2013-12-26 12:35+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -94,15 +94,21 @@ msgstr "Feed has been skipped because it is too late to process it."
 msgid "Feed processing was finished. No new items were imported."
 msgstr "Feed processing was finished. No new items were imported."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:320
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:334
 #, php-format
-msgctxt "... and will be regenerated at {Wednesday, 25-Dec-13 14:01:54}."
-msgid "* This page has been taken from cache and will be regenerated at %s."
-msgstr "* This page has been taken from cache and will be regenerated at %s."
+msgctxt "... and will be regenerated at {14:01:54} on {Wednesday, 25-Dec-13}."
+msgid ""
+"* This page has been taken from cache and will be regenerated at %s on %s."
+msgstr ""
+"* This page has been taken from cache and will be regenerated at %s on %s."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:321
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:339
 msgid "* This page has been taken from cache."
 msgstr "* This page has been taken from cache."
+
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:342
+msgid "Regenerate the page."
+msgstr "Regenerate the page."
 
 #: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:45
 msgid "Auto Blog Addons"
@@ -124,36 +130,36 @@ msgstr "The addon(s) has been deactivated successfully."
 msgid "The addon(s) has not been deactivated."
 msgstr "The addon(s) has not been deactivated."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:51
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:49
 msgid "Auto Blog Feeds"
 msgstr "Auto Blog Feeds"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:52
-#: autoblogincludes/addons/twitter.addon.php:28
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:50
+#: autoblogincludes/addons/twitter.addon.php:47
 msgid "Add New"
 msgstr "Add New"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:75
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:76
 msgid "The feed has been created successfully."
 msgstr "The feed has been created successfully."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:77
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:78
 msgid "The feed has not been created."
 msgstr "The feed has not been created."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:83
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:84
 msgid "The feed has been updated successfully."
 msgstr "The feed has been updated successfully."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:85
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:86
 msgid "The feed has not been updated."
 msgstr "The feed has not been updated."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:91
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:92
 msgid "The feed(s) has been deleted successfully."
 msgstr "The feed(s) has been deleted successfully."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:97
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:98
 msgid "The feed(s) processing has been launched successfully."
 msgstr "The feed(s) processing has been launched successfully."
 
@@ -166,7 +172,7 @@ msgid "Create Auto Blog Feed"
 msgstr "Create Auto Blog Feed"
 
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:70
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:239
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:260
 msgid "Feed"
 msgstr "Feed"
 
@@ -613,7 +619,7 @@ msgid "unknown"
 msgstr "unknown"
 
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:66
-#: autoblogincludes/addons/twitter.addon.php:30
+#: autoblogincludes/addons/twitter.addon.php:49
 msgid "Edit"
 msgstr "Edit"
 
@@ -625,97 +631,97 @@ msgstr "Validate"
 msgid "Never"
 msgstr "Never"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:243
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:264
 msgid "Target Blog"
 msgstr "Target Blog"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:246
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:267
 msgid "Post Type"
 msgstr "Post Type"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:247
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:268
 msgid "Last Processed"
 msgstr "Last Processed"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:248
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:269
 msgid "Next Check"
 msgstr "Next Check"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:269
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:290
 msgid "now"
 msgstr "now"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:276
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:297
 msgid "just now"
 msgstr "just now"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:280
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:301
 msgid "1 minute ago"
 msgstr "1 minute ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:284
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:305
 msgid " minutes ago"
 msgstr " minutes ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:288
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:309
 msgid "1 hour ago"
 msgstr "1 hour ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:292
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:313
 msgid " hours ago"
 msgstr " hours ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:297
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:318
 msgid "Yesterday"
 msgstr "Yesterday"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:301
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:322
 msgid " days ago"
 msgstr " days ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:305
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:326
 msgid " weeks ago"
 msgstr " weeks ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:309
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:330
 msgid "last month"
 msgstr "last month"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:319
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:340
 msgid "in a minute"
 msgstr "in a minute"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:323
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:331
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:347
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:344
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:352
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:368
 msgid "in "
 msgstr "in "
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:323
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:344
 msgid " minutes"
 msgstr " minutes"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:327
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:348
 msgid "in an hour"
 msgstr "in an hour"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:331
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:352
 msgid " hours"
 msgstr " hours"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:335
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:356
 msgid "Tomorrow"
 msgstr "Tomorrow"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:343
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:364
 msgid "next week"
 msgstr "next week"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:347
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:368
 msgid " weeks"
 msgstr " weeks"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:351
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:372
 msgid "next month"
 msgstr "next month"
 
@@ -747,72 +753,72 @@ msgstr "Active"
 msgid "Inactive"
 msgstr "Inactive"
 
-#: autoblogincludes/addons/twitter.addon.php:26
-msgid "Tweets"
-msgstr "Tweets"
-
-#: autoblogincludes/addons/twitter.addon.php:27
-msgid "Tweet"
-msgstr "Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:29
-msgid "Add New Tweet"
-msgstr "Add New Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:31
-msgid "Edit Tweet"
-msgstr "Edit Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:32
-msgid "New Tweet"
-msgstr "New Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:33
-#: autoblogincludes/addons/twitter.addon.php:34
-msgid "View Tweet"
-msgstr "View Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:35
-msgid "Search Tweets"
-msgstr "Search Tweets"
-
-#: autoblogincludes/addons/twitter.addon.php:36
-msgid "No Tweets found"
-msgstr "No Tweets found"
-
-#: autoblogincludes/addons/twitter.addon.php:37
-msgid "No Tweets found in Trash"
-msgstr "No Tweets found in Trash"
-
-#: autoblogincludes/addons/twitter.addon.php:38
-msgid "Parent Tweet"
-msgstr "Parent Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:46
+#: autoblogincludes/addons/twitter.addon.php:43
 msgid "tweet"
 msgstr "tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:93
+#: autoblogincludes/addons/twitter.addon.php:45
+msgid "Tweets"
+msgstr "Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:46
+msgid "Tweet"
+msgstr "Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:48
+msgid "Add New Tweet"
+msgstr "Add New Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:50
+msgid "Edit Tweet"
+msgstr "Edit Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:51
+msgid "New Tweet"
+msgstr "New Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:52
+#: autoblogincludes/addons/twitter.addon.php:53
+msgid "View Tweet"
+msgstr "View Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:54
+msgid "Search Tweets"
+msgstr "Search Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:55
+msgid "No Tweets found"
+msgstr "No Tweets found"
+
+#: autoblogincludes/addons/twitter.addon.php:56
+msgid "No Tweets found in Trash"
+msgstr "No Tweets found in Trash"
+
+#: autoblogincludes/addons/twitter.addon.php:57
+msgid "Parent Tweet"
+msgstr "Parent Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:119
 msgid "The most recent tweets on your site"
 msgstr "The most recent tweets on your site"
 
-#: autoblogincludes/addons/twitter.addon.php:94
+#: autoblogincludes/addons/twitter.addon.php:120
 msgid "Recent Tweets"
 msgstr "Recent Tweets"
 
-#: autoblogincludes/addons/twitter.addon.php:116
+#: autoblogincludes/addons/twitter.addon.php:142
 msgid "Recent Posts"
 msgstr "Recent Posts"
 
-#: autoblogincludes/addons/twitter.addon.php:128
+#: autoblogincludes/addons/twitter.addon.php:154
 msgid " at "
 msgstr " at "
 
-#: autoblogincludes/addons/twitter.addon.php:164
+#: autoblogincludes/addons/twitter.addon.php:190
 msgid "Title:"
 msgstr "Title:"
 
-#: autoblogincludes/addons/twitter.addon.php:167
+#: autoblogincludes/addons/twitter.addon.php:193
 msgid "Number of tweets to show:"
 msgstr "Number of tweets to show:"
 
@@ -820,11 +826,11 @@ msgstr "Number of tweets to show:"
 msgid "Feed Check"
 msgstr "Feed Check"
 
-#: autoblogincludes/addons/check.feedentries.php:27
+#: autoblogincludes/addons/check.feedentries.php:24
 msgid "Ok"
 msgstr "Ok"
 
-#: autoblogincludes/addons/check.feedentries.php:29
+#: autoblogincludes/addons/check.feedentries.php:25
 msgid "Problem"
 msgstr "Problem"
 
@@ -836,94 +842,100 @@ msgstr "Debug Image Importing"
 msgid "Email debug log to"
 msgstr "Email debug log to"
 
-#: autoblogincludes/addons/debugcacheimages.php:95
+#: autoblogincludes/addons/debugcacheimages.php:104
 msgid "Successfully grabbed image - "
 msgstr "Successfully grabbed image - "
 
-#: autoblogincludes/addons/debugcacheimages.php:108
+#: autoblogincludes/addons/debugcacheimages.php:117
 msgid "Replacing image url with - "
 msgstr "Replacing image url with - "
 
-#: autoblogincludes/addons/debugcacheimages.php:114
+#: autoblogincludes/addons/debugcacheimages.php:122
 msgid "I came across an error grabbing image - "
 msgstr "I came across an error grabbing image - "
 
-#: autoblogincludes/addons/debugcacheimages.php:141
-msgid "Hello, I am processing the post "
-msgstr "Hello, I am processing the post "
+#: autoblogincludes/addons/debugcacheimages.php:162
+#, php-format
+msgctxt "Hello, I am processing the post {post id}"
+msgid "Hello, I am processing the post %d"
+msgstr "Hello, I am processing the post %d"
 
-#: autoblogincludes/addons/debugcacheimages.php:148
-msgid "I found the following images - "
-msgstr "I found the following images - "
+#: autoblogincludes/addons/debugcacheimages.php:166
+#, php-format
+msgctxt "I found the following images - {images list}"
+msgid "I found the following images - %s"
+msgstr "I found the following images - %s"
 
-#: autoblogincludes/addons/debugcacheimages.php:179
-msgid "I am going to try to grab the image - "
-msgstr "I am going to try to grab the image - "
+#: autoblogincludes/addons/debugcacheimages.php:188
+#, php-format
+msgctxt "I am going to try to grab the image - {image URL}"
+msgid "I am going to try to grab the image - %s"
+msgstr "I am going to try to grab the image - %s"
 
-#: autoblogincludes/addons/debugcacheimages.php:192
+#: autoblogincludes/addons/debugcacheimages.php:193
 msgid "Autoblog debug message"
 msgstr "Autoblog debug message"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:56
+#: autoblogincludes/addons/cacheandfeatureimages.php:45
 msgid "Don't import featured image"
 msgstr "Don't import featured image"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:57
+#: autoblogincludes/addons/cacheandfeatureimages.php:46
 msgid "Use media:thumbnail tag of a feed item"
 msgstr "Use media:thumbnail tag of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:58
+#: autoblogincludes/addons/cacheandfeatureimages.php:47
 msgid "Find the first image withing content of a feed item"
 msgstr "Find the first image withing content of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:59
+#: autoblogincludes/addons/cacheandfeatureimages.php:48
 msgid "Find the last image withing content of a feed item"
 msgstr "Find the last image withing content of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:64
+#: autoblogincludes/addons/cacheandfeatureimages.php:62
 msgid "Featured Image Importing"
 msgstr "Featured Image Importing"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:68
+#: autoblogincludes/addons/cacheandfeatureimages.php:65
 msgid "Select a way to import featured image"
 msgstr "Select a way to import featured image"
 
-#: autoblogincludes/addons/post.formats.php:16
+#: autoblogincludes/addons/post.formats.php:39
 msgid "Post format for new posts"
 msgstr "Post format for new posts"
 
-#: autoblogincludes/addons/post.formats.php:28
-msgid "Select the post format the imported posts will have in the blog."
-msgstr "Select the post format the imported posts will have in the blog."
+#: autoblogincludes/addons/post.formats.php:53
+msgid "Select post format"
+msgstr "Select post format"
 
-#: autoblogincludes/addons/forcefeed.php:38
+#: autoblogincludes/addons/forcefeed.php:78
 msgid "Force Feed"
 msgstr "Force Feed"
 
-#: autoblogincludes/addons/forcefeed.php:43
+#: autoblogincludes/addons/forcefeed.php:81
 msgid "Enable Force Feed"
 msgstr "Enable Force Feed"
 
-#: autoblogincludes/addons/stripimages.php:34
+#: autoblogincludes/addons/stripimages.php:62
 msgid "Strip Images"
 msgstr "Strip Images"
 
-#: autoblogincludes/addons/stripimages.php:39
-msgid "Strip image tags"
-msgstr "Strip image tags"
+#: autoblogincludes/addons/stripimages.php:65
+msgid "Strip Image Tags"
+msgstr "Strip Image Tags"
 
-#: autoblogincludes/addons/stripimages.php:47
-msgid "Replace with"
-msgstr "Replace with"
+#: autoblogincludes/addons/stripimages.php:70
+msgid "Replace With"
+msgstr "Replace With"
 
-#: autoblogincludes/addons/appendtexttopost.php:24
-msgid "Append text to post content"
-msgstr "Append text to post content"
-
-#: autoblogincludes/addons/appendtexttopost.php:27
+#: autoblogincludes/addons/appendtexttopost.php:61
 msgid "Post footer text"
 msgstr "Post footer text"
 
-#: autoblogincludes/addons/appendtexttopost.php:30
+#: autoblogincludes/addons/appendtexttopost.php:62
 msgid "You can use the following placeholders in your footer:"
 msgstr "You can use the following placeholders in your footer:"
+
+#: autoblogincludes/addons/appendtexttopost.php:74
+msgid "Append text to post content"
+msgstr "Append text to post content"

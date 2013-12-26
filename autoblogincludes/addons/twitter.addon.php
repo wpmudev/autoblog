@@ -6,81 +6,107 @@ Author: Barry (Incsub)
 Author URI: http://premium.wpmudev.org
 */
 
-class A_twitter_addon {
+class A_twitter_addon extends Autoblog_Addon {
 
-	function __construct() {
+	/**
+	 * Construcotr.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 */
+	public function __construct() {
+		parent::__construct();
 
-		add_action('init', array(&$this, 'initialise_addon'));
-		add_action( 'widgets_init', array(&$this, 'register_widgets') );
+		$this->_add_action( 'init', 'initialise_addon' );
+		$this->_add_action( 'widgets_init', 'register_widgets' );
 
-		add_filter( 'autoblog_pre_post_insert', array(&$this, 'process_tweet'), 10, 3 );
+		$this->_add_filter( 'autoblog_pre_post_insert', 'process_tweet', 10, 3 );
 	}
 
-	function A_twitter_addon() {
-		$this->__construct();
+	/**
+	 * Initializes custom post type.
+	 *
+	 * @since 4.0.0
+	 * @action init
+	 *
+	 * @access public
+	 */
+	public function initialise_addon() {
+		register_post_type( 'tweet', array(
+			'public'              => true,
+			'show_ui'             => true,
+			'publicly_queryable'  => true,
+			'exclude_from_search' => true,
+			'hierarchical'        => false,
+			'supports'            => array( 'title', 'editor', 'custom-fields', 'thumbnail', 'page-attributes' ),
+			'rewrite'             => array( 'slug' => __( 'tweet', 'autoblogtext' ), 'with_front' => false ),
+			'labels'              => array(
+				'name'               => __( 'Tweets', 'autoblogtext' ),
+				'singular_name'      => __( 'Tweet', 'autoblogtext' ),
+				'add_new'            => __( 'Add New', 'autoblogtext' ),
+				'add_new_item'       => __( 'Add New Tweet', 'autoblogtext' ),
+				'edit'               => __( 'Edit', 'autoblogtext' ),
+				'edit_item'          => __( 'Edit Tweet', 'autoblogtext' ),
+				'new_item'           => __( 'New Tweet', 'autoblogtext' ),
+				'view'               => __( 'View Tweet', 'autoblogtext' ),
+				'view_item'          => __( 'View Tweet', 'autoblogtext' ),
+				'search_items'       => __( 'Search Tweets', 'autoblogtext' ),
+				'not_found'          => __( 'No Tweets found', 'autoblogtext' ),
+				'not_found_in_trash' => __( 'No Tweets found in Trash', 'autoblogtext' ),
+				'parent'             => __( 'Parent Tweet', 'autoblogtext' ),
+			),
+		) );
 	}
 
-	function initialise_addon() {
-
-		register_post_type('tweet', array(	'labels' => array(
-																					'name' => __('Tweets', 'autoblogtext'),
-																					'singular_name' => __('Tweet', 'autoblogtext'),
-																					'add_new' => __( 'Add New', 'autoblogtext' ),
-																					'add_new_item' => __( 'Add New Tweet', 'autoblogtext' ),
-																					'edit' => __( 'Edit', 'autoblogtext' ),
-																					'edit_item' => __( 'Edit Tweet', 'autoblogtext' ),
-																					'new_item' => __( 'New Tweet', 'autoblogtext' ),
-																					'view' => __( 'View Tweet', 'autoblogtext' ),
-																					'view_item' => __( 'View Tweet', 'autoblogtext' ),
-																					'search_items' => __( 'Search Tweets', 'autoblogtext' ),
-																					'not_found' => __( 'No Tweets found', 'autoblogtext' ),
-																					'not_found_in_trash' => __( 'No Tweets found in Trash', 'autoblogtext' ),
-																					'parent' => __( 'Parent Tweet', 'autoblogtext' ),
-																				),
-																	'public' => true,
-																	'show_ui' => true,
-																	'publicly_queryable' => true,
-																	'exclude_from_search' => true,
-																	'hierarchical' => false,
-																	'supports' => array( 'title', 'editor', 'custom-fields', 'thumbnail', 'page-attributes' ),
-																	'rewrite' => array( 'slug' => __('tweet','autoblogtext'),
-																						'with_front' => false )
-																)
-											);
-
-
-
+	/**
+	 * Registers widgets.
+	 *
+	 * @since 4.0.0
+	 * @action widgets_init
+	 *
+	 * @access public
+	 */
+	public function register_widgets() {
+		register_widget( 'A_Widget_Recent_Tweets' );
 	}
 
-	function register_widgets() {
-		register_widget('A_Widget_Recent_Tweets');
-	}
-
-	function process_tweet( $post_data, $ablog, $item ) {
-
-		extract($post_data);
-
-		if($post_type == 'tweet' || strpos($item->get_permalink(), 'twitter.com') !== false) {
-			$post_title = $this->strip_account($post_title);
-			$post_content = $this->twitterify($post_content);
+	/**
+	 * Processes tweet item.
+	 *
+	 * @since 4.0.0
+	 * @filter autoblog_pre_post_insert 10 3
+	 *
+	 * @param type $post_data
+	 * @param type $details
+	 * @param type $item
+	 * @return type
+	 */
+	public function process_tweet( $post_data, $details, $item ) {
+		if ( $post_data['post_type'] == 'tweet' || stripos( $item->get_permalink(), 'twitter.com' ) !== false ) {
+			$post_data['post_title'] = preg_replace("^(\w+): (.*)^", "\\2", $post_data['post_title'] );
+			$post_data['post_content'] = $this->_twitterify( $post_data['post_content'] );
 		}
 
-		return compact('blog_ID', 'post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_title', 'post_category', 'post_status', 'post_type', 'tax_input');
-
+		return $post_data;
 	}
 
-	// Function to generate twitter based links from http://www.snipe.net/2009/09/php-twitter-clickable-links/
-	function twitterify($ret) {
-		$ret = preg_replace("^(\w+): (.*)^", "\\2", $ret);
-	  	$ret = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $ret);
-	  	$ret = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $ret);
-	  	$ret = preg_replace("/@(\w+)/", "<a href=\"http://www.twitter.com/\\1\" target=\"_blank\">@\\1</a>", $ret);
-	  	$ret = preg_replace("/#(\w+)/", "<a href=\"http://search.twitter.com/search?q=\\1\" target=\"_blank\">#\\1</a>", $ret);
-		return $ret;
-	}
-
-	function strip_account($ret) {
-		$ret = preg_replace("^(\w+): (.*)^", "\\2", $ret);
+	/**
+	 * Generates twitter based links.
+	 *
+	 * @since 4.0.0
+	 * @link http://www.snipe.net/2009/09/php-twitter-clickable-links/
+	 *
+	 * @access private
+	 * @param type $ret
+	 * @return type
+	 */
+	private function _twitterify( $ret ) {
+		$ret = preg_replace( "^(\w+): (.*)^", "\\2", $ret );
+		$ret = preg_replace( "#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $ret );
+		$ret = preg_replace( "#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $ret );
+		$ret = preg_replace( "/@(\w+)/", "<a href=\"http://www.twitter.com/\\1\" target=\"_blank\">@\\1</a>", $ret );
+		$ret = preg_replace( "/#(\w+)/", "<a href=\"http://search.twitter.com/search?q=\\1\" target=\"_blank\">#\\1</a>", $ret );
 		return $ret;
 	}
 
@@ -171,5 +197,3 @@ class A_Widget_Recent_Tweets extends WP_Widget {
 }
 
 $atwitteraddon = new A_twitter_addon();
-
-?>

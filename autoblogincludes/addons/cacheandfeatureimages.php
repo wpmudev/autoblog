@@ -6,35 +6,24 @@ Author: Incsub
 Author URI: http://premium.wpmudev.org
 */
 
-class A_FeatureImageCacheAddon {
+class A_FeatureImageCacheAddon extends Autoblog_Addon {
 
 	const SOURCE_THE_FIRST_IMAGE = 'ASC';
 	const SOURCE_THE_LAST_IMAGE  = 'DESC';
 	const SOURCE_MEDIA_THUMBNAIL = 'MEDIA';
 
-	var $build = 1;
-
-	/**
-	 * The current database connection.
-	 *
-	 * @access private
-	 * @var wpdb
-	 */
-	private $_db;
-
 	/**
 	 * Constructor.
 	 *
+	 * @since 4.0.0
+	 *
 	 * @access public
-	 * @global wpdb $wpdb The current database connection.
 	 */
 	public function __construct() {
-		global $wpdb;
+		parent::__construct();
 
-		$this->_db = $wpdb;
-
-		add_action( 'autoblog_post_post_insert', array( $this, 'check_post_for_images' ), 10, 3 );
-		add_action( 'autoblog_feed_edit_form_end', array( $this, 'render_image_options' ), 10, 2 );
+		$this->_add_action( 'autoblog_post_post_insert', 'check_post_for_images', 10, 3 );
+		$this->_add_action( 'autoblog_feed_edit_form_end', 'render_image_options', 10, 2 );
 	}
 
 	/**
@@ -59,23 +48,21 @@ class A_FeatureImageCacheAddon {
 			self::SOURCE_THE_LAST_IMAGE  => __( 'Find the last image withing content of a feed item', 'autoblogtext' ),
 		);
 
-		?><tr class="spacer">
-			<td colspan="2" class="spacer">
-				<span><?php _e( 'Featured Image Importing', 'autoblogtext' ) ?></span>
-			</td>
-		</tr>
-		<tr>
-			<td valign="top" class="heading"><?php _e( 'Select a way to import featured image', 'autoblogtext' ) ?></td>
-			<td valign="top">
-				<?php foreach ( $options as $key => $label ) : ?>
-				<div>
-					<label>
-						<input type="radio" name="abtble[featuredimage]" value="<?php echo $key ?>"<?php checked( $key, $selected_option ) ?>> <?php echo $label ?>
-					</label>
-				</div>
-				<?php endforeach; ?>
-			</td>
-		</tr><?php
+		$element = '';
+		foreach ( $options as $key => $label ) {
+			$element .= sprintf(
+				'<div><label><input type="radio" name="abtble[featuredimage]" value="%s"%s> %s</label></div>',
+				esc_attr( $key ),
+				checked( $key, $selected_option, false ),
+				esc_html( $label )
+			);
+		}
+
+		// render block header
+		$this->_render_block_header( __( 'Featured Image Importing', 'autoblogtext' ) );
+
+		// render block elements
+		$this->_render_block_element( __( 'Select a way to import featured image', 'autoblogtext' ), $element );
 	}
 
 	/**
@@ -150,12 +137,12 @@ class A_FeatureImageCacheAddon {
 				$theimg = $newimage[1][0];
 				$parsed_url = autoblog_parse_mb_url( $theimg );
 				if ( function_exists( 'get_blog_option' ) ) {
-					$theimg = str_replace( "{$parsed_url['scheme']}://{$parsed_url['host']}", get_blog_option( $this->_db->blogid, 'siteurl' ), $theimg );
+					$theimg = str_replace( "{$parsed_url['scheme']}://{$parsed_url['host']}", get_blog_option( $this->_wpdb->blogid, 'siteurl' ), $theimg );
 				}
 
 				if ( $orig_image ) {
-					$this->_db->query( $this->_db->prepare(
-						"UPDATE {$this->_db->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d",
+					$this->_wpdb->query( $this->_wpdb->prepare(
+						"UPDATE {$this->_wpdb->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID = %d",
 						$orig_image,
 						$theimg,
 						$post_id

@@ -6,48 +6,83 @@ Author: Alexander Rohmann (Incsub)
 Author URI: http://premium.wpmudev.org
 */
 
-class A_ForceFeedAddon {
+class A_ForceFeedAddon extends Autoblog_Addon {
 
+	/**
+	 * Determines whether or not to force feed.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @var boolean
+	 */
 	private $_force_feed = false;
 
+	/**
+	 * Constructor
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 */
     public function __construct() {
-		add_filter( 'autoblog_pre_process_feed', array( $this, 'check_force_feed' ), 10, 3 );
-		add_filter( 'autoblog_pre_test_feed', array( $this, 'check_force_feed' ), 10, 3 );
+		parent::__construct();
 
-		add_action( 'autoblog_feed_edit_form_end', array( $this, 'add_feed_option' ), 12, 2 );
-		add_action( 'wp_feed_options', array( $this, 'enable_force_feed' ), 10, 2 );
+		$this->_add_action( 'autoblog_pre_process_feed', 'check_force_feed', 10, 3 );
+		$this->_add_action( 'autoblog_feed_edit_form_end', 'add_feed_option', 12, 2 );
+		$this->_add_action( 'wp_feed_options', 'enable_force_feed' );
 	}
 
-	public function check_force_feed( $feed_id, $ablog ) {
-		$this->_force_feed = !empty( $ablog['enableforcefeed'] ) && $ablog['enableforcefeed'] == 1;
+	/**
+	 * Saves whether or not we need to force a feed.
+	 *
+	 * @since 4.0.0
+	 * @action autoblog_pre_process_feed 10 2
+	 *
+	 * @access public
+	 * @param int $feed_id The feed id.
+	 * @param array $details The feed details.
+	 */
+	public function check_force_feed( $feed_id, $details ) {
+		$this->_force_feed = !empty( $details['enableforcefeed'] ) && $details['enableforcefeed'] == 1;
 	}
 
-	public function enable_force_feed( $feed, $url ) {
+	/**
+	 * Forces a feed if need be.
+	 *
+	 * @since 4.0.0
+	 * @action wp_feed_options
+	 *
+	 * @access public
+	 * @param SimplePie $feed The feed object.
+	 */
+	public function enable_force_feed( $feed ) {
 		if ( $this->_force_feed ) {
 			$feed->force_feed( true );
 		}
-
-		return $feed;
 	}
 
+	/**
+	 * Renders feed options.
+	 *
+	 * @since 4.0.0
+	 * @action autoblog_feed_edit_form_end 10 2
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param array $details The feed details.
+	 */
 	public function add_feed_option( $key, $details ) {
         $table = !empty( $details->feed_meta ) ? maybe_unserialize( $details->feed_meta ) : array();
 
-        ?><tr class="spacer">
-			<td colspan="2" class="spacer">
-				<span><?php esc_html_e( 'Force Feed', 'autoblogtext' ) ?></span>
-			</td>
-		</tr>
-        <tr>
-			<td valign="top" class="heading">
-				<?php esc_html_e( 'Enable Force Feed', 'autoblogtext' ) ?>
-			</td>
-			<td valign="top">
-				<input type="checkbox" name="abtble[enableforcefeed]" value="1"<?php checked( isset( $table['enableforcefeed'] ) && $table['enableforcefeed'] == '1' ) ?>>
-			</td>
-        <tr><?php
+		$this->_render_block_header( esc_html__( 'Force Feed', 'autoblogtext' ) );
+
+		$this->_render_block_element(
+			esc_html__( 'Enable Force Feed', 'autoblogtext' ),
+			sprintf( '<input type="checkbox" name="abtble[enableforcefeed]" value="1"%s>', checked( isset( $table['enableforcefeed'] ) && $table['enableforcefeed'] == '1', true, false ) )
+		);
     }
 
 }
 
-new A_ForceFeedAddon();
+$a_forcefeedaddon = new A_ForceFeedAddon();

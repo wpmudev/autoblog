@@ -48,15 +48,8 @@ class Autoblog_Module_System extends Autoblog_Module {
 		$this->_add_action( 'plugins_loaded', 'load_textdomain' );
 
 		// load network wide and blog wide addons
-		$this->_add_action( 'autoblog_feed_edit', 'load_network_addons', 1 );
-		$this->_add_action( 'autoblog_pre_process_feeds', 'load_network_addons', 1 );
-		$this->_add_action( 'wp', 'load_network_addons', 1 );
-		$this->_add_action( 'autoblog_before_feeds_table', 'load_network_addons', 1 );
-
-		$this->_add_action( 'autoblog_feed_edit', 'load_addons', 2 );
-		$this->_add_action( 'autoblog_pre_process_feeds', 'load_addons', 2 );
-		$this->_add_action( 'wp', 'load_addons', 2 );
-		$this->_add_action( 'autoblog_before_feeds_table', 'load_addons', 2 );
+		$this->load_network_addons();
+		$this->load_addons();
 
 		// setup cron stuff
 		$this->_add_action( 'plugins_loaded', 'check_schedules' );
@@ -271,10 +264,6 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * Loads autoblog addons.
 	 *
 	 * @since 4.0.0
-	 * @action autoblog_feed_edit 2
-	 * @action autoblog_pre_process_feeds 2
-	 * @action wp 2
-	 * @action autoblog_before_feeds_table 2
 	 *
 	 * @access public
 	 * @param array $feed The feed data.
@@ -320,10 +309,6 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * Loads network wide autoblog addons.
 	 *
 	 * @since 4.0.0
-	 * @action autoblog_feed_edit 1
-	 * @action autoblog_pre_process_feeds 1
-	 * @action wp 1
-	 * @action autoblog_before_feeds_table 1
 	 *
 	 * @access public
 	 */

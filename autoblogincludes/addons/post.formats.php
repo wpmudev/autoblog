@@ -2,49 +2,73 @@
 /*
 Addon Name: Post formats addon
 Description: Allows a post format to be selected for a feed.
-Author: Barry (Incsub)
+Author: Incsub
 Author URI: http://premium.wpmudev.org
 */
-//get_post_format_strings
 
-function A_show_post_formats( $key, $details ) {
+class A_PostFormats extends Autoblog_Addon {
 
-	$table = maybe_unserialize($details->feed_meta);
+	/**
+	 * Constructor.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 */
+	public function __construct() {
+		parent::__construct();
 
-	echo "<tr>";
-	echo "<td valign='top' class='heading'>";
-	echo __('Post format for new posts','autoblogtext');
-	echo "</td>";
-	echo "<td valign='top' class=''>";
-
-	$formats = get_post_format_strings();
-
-	echo "<select name='abtble[postformat]' class='field'>";
-	foreach ($formats as $key => $format ) {
-		echo "<option value='" . $key . "'";
-		echo (isset($table['postformat']) && $table['postformat'] == $key) ? " selected='selected'" : "";
-		echo ">" . $format . "</option>";
-	}
-	echo "</select>" . "<a href='#' class='info' title='" . __('Select the post format the imported posts will have in the blog.', 'autoblogtext') . "'></a>";
-
-	echo "</td>";
-	echo "</tr>\n";
-
-
-}
-
-add_action( 'autoblog_feed_edit_form_details_end', 'A_show_post_formats', 10, 2 );
-
-function A_insert_post_format( $post_ID, $ablog, $item ) {
-
-	if(!empty($ablog['postformat'])) {
-		set_post_format( $post_ID, $ablog['postformat'] );
-	} else {
-		set_post_format( $post_ID, 'standard' );
+		$this->_add_action( 'autoblog_feed_edit_form_details_end', 'add_post_formats_options', 10, 2 );
+		$this->_add_action( 'autoblog_post_post_insert', 'set_post_format', 10, 2 );
 	}
 
+	/**
+	 * Renders options.
+	 *
+	 * @since 4.0.0
+	 * @action autoblog_feed_edit_form_details_end 10 2
+	 *
+	 * @access public
+	 * @param type $key
+	 * @param array $details The array of feed options.
+	 */
+	public function add_post_formats_options( $key, $details ) {
+		$table = maybe_unserialize( $details->feed_meta );
+
+		// render block header
+		$this->_render_block_header( __( 'Post format for new posts', 'autoblogtext' ) );
+
+		// render block elements
+		$element = '<select name="abtble[postformat]" class="field">';
+		foreach ( get_post_format_strings() as $key => $format ) {
+			$element .= sprintf(
+				'<option value="%s"%s>%s</option>',
+				esc_attr( $key ),
+				selected( isset( $table['postformat'] ) && $table['postformat'] == $key, true, false ),
+				esc_html( $format )
+			);
+		}
+		$element .= '</select>';
+
+		$this->_render_block_element( __( 'Select post format', 'autoblogtext' ), $element );
+	}
+
+	/**
+	 * Sets post format.
+	 *
+	 * @since 4.0.0
+	 * @action autoblog_post_post_insert 10 2
+	 *
+	 * @access public
+	 * @param int $post_id The post id.
+	 * @param array $details The array of feed settings.
+	 */
+	public function set_post_format( $post_id, $details ) {
+		if ( !empty( $details['postformat'] ) ) {
+			set_post_format( $post_id, $details['postformat'] );
+		} else {
+			set_post_format( $post_id, 'standard' );
+		}
+	}
+
 }
-
-add_action( 'autoblog_post_post_insert', 'A_insert_post_format', 10, 3 );
-
-?>

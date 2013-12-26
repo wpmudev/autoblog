@@ -16,10 +16,6 @@ class A_youtube_addon {
 		add_filter( 'autoblog_pre_post_insert', array(&$this, 'process_video'), 10, 3 );
 	}
 
-	function A_youtube_addon() {
-		$this->__construct();
-	}
-
 	function initialise_addon() {
 
 	}
@@ -43,5 +39,3 @@ class A_youtube_addon {
 }
 
 $ayoutubeaddon = new A_youtube_addon();
-
-?>
