@@ -44,8 +44,8 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		$options = array(
 			''                           => __( "Don't import featured image", 'autobogtext' ),
 			self::SOURCE_MEDIA_THUMBNAIL => __( 'Use media:thumbnail tag of a feed item', 'autoblogtext' ),
-			self::SOURCE_THE_FIRST_IMAGE => __( 'Find the first image withing content of a feed item', 'autoblogtext' ),
-			self::SOURCE_THE_LAST_IMAGE  => __( 'Find the last image withing content of a feed item', 'autoblogtext' ),
+			self::SOURCE_THE_FIRST_IMAGE => __( 'Find the first image within content of a feed item', 'autoblogtext' ),
+			self::SOURCE_THE_LAST_IMAGE  => __( 'Find the last image within content of a feed item', 'autoblogtext' ),
 		);
 
 		$element = '';
