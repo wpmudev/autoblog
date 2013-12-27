@@ -119,10 +119,13 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	 * @access private
 	 */
 	private function _render_form_general_section() {
+		$post_types = get_post_types( array( 'public' => true ), 'objects' );
+		$post_statuses = get_post_stati( array( 'public' => true, 'protected' => true, 'private' => true ), 'objects', 'or' );
+
 		?><tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Your Title', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[title]" value="<?php echo esc_attr( stripslashes( $this->title ) ) ?>"  class="long title field">
+				<input type="text" name="abtble[title]" value="<?php echo esc_attr( stripslashes( $this->title ) ) ?>"  class="long title field">
 				<?php echo $this->_tips->add_tip( __( 'Enter a memorable title.', 'autoblogtext' ) ); ?>
 			</td>
 		</tr>
@@ -130,18 +133,18 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Feed URL', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[url]" value="<?php echo esc_attr( stripslashes( $this->url ) ) ?>"  class="long url field">
+				<input type="text" name="abtble[url]" value="<?php echo esc_attr( stripslashes( $this->url ) ) ?>"  class="long url field">
 				<?php echo $this->_tips->add_tip( __( 'Enter the feed URL.', 'autoblogtext' ) ); ?>
 			</td>
 		</tr>
 
-		<tr><td colspan='2'>&nbsp;</td></tr>
+		<tr><td colspan="2">&nbsp;</td></tr>
 
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Add posts to', 'autoblogtext' ) ?></td>
 			<td valign="top">
 			<?php if ( is_multisite() && is_network_admin() ) : ?>
-				<select name="abtble[blog]"  class="field blog">
+				<select name="abtble[blog]" class="field blog">
 					<?php foreach ( $this->_get_blogs_of_site() as $bkey => $blog ) : ?>
 					<option value="<?php echo esc_attr( $bkey ) ?>"<?php selected( $blog->id, $this->blog ) ?>>
 						<?php echo esc_html( $blog->domain . $blog->path ) ?>
@@ -153,7 +156,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 				<strong>
 					<?php echo esc_html( function_exists( 'get_blog_option' ) ? get_blog_option( (int)$this->blog, 'blogname' ) : get_option( 'blogname' ) ) ?>
 				</strong>
-				<input type='hidden' name="abtble[blog]" value="<?php echo esc_attr( $this->blog ) ?>">
+				<input type="hidden" name="abtble[blog]" value="<?php echo esc_attr( $this->blog ) ?>">
 			<?php endif; ?>
 			</td>
 		</tr>
@@ -161,9 +164,11 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Post type for new posts', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<select name="abtble[posttype]" class="field">
-					<?php foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $key => $post_type ) : ?>
-						<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->posttype ) ?>><?php echo esc_html( $post_type->name ) ?></option>
+				<select id="abtble_posttype" name="abtble[posttype]" class="field">
+					<?php foreach ( $post_types as $key => $post_type ) : ?>
+						<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->posttype ) ?>>
+							<?php echo esc_html( $post_type->label ) ?>
+						</option>
 					<?php endforeach; ?>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'Select the post type the imported posts will have in the blog.', 'autoblogtext' ) ) ?>
@@ -174,8 +179,10 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 			<td valign="top" class="heading"><?php esc_html_e( 'Default status for new posts', 'autoblogtext' ) ?></td>
 			<td valign="top">
 				<select name="abtble[poststatus]" class="field">
-					<?php foreach ( get_post_stati( array( 'internal' => false ), 'objects' ) as $key => $post_status ) : ?>
-						<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->poststatus ) ?>><?php echo esc_html( $post_status->label ) ?></option>
+					<?php foreach ( $post_statuses as $key => $post_status ) : ?>
+						<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->poststatus ) ?>>
+							<?php echo esc_html( $post_status->label ) ?>
+						</option>
 					<?php endforeach; ?>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'Select the status the imported posts will have in the blog.', 'autoblogtext' ) ) ?>
@@ -248,8 +255,36 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	 * @access private
 	 */
 	private function _render_form_taxonomies_section() {
+		// backward compatibility
+		switch ( $this->feedcatsare ) {
+			case 'tags':       $this->feedcatsare = 'post_tag'; break;
+			case 'categories': $this->feedcatsare = 'category'; break;
+		}
+
+		// fetch all public taxonomies
+		$taxonomies = get_taxonomies( array( 'public' => true, 'show_ui' => true ), 'objects' );
+
 		?><tr class="spacer">
-			<td colspan="2" class="spacer"><span><?php esc_html_e( 'Categories and Tags', 'autoblogtext' ) ?></span></td>
+			<td colspan="2" class="spacer"><span><?php esc_html_e( 'Taxonomies', 'autoblogtext' ) ?></span></td>
+		</tr>
+
+		<tr>
+			<td valign="top" class="heading"><?php esc_html_e( 'Treat feed categories as', 'autoblogtext' ) ?></td>
+			<td valign="top">
+				<select id="abtble_feedcatsare" name="abtble[feedcatsare]">
+					<option></option>
+					<?php foreach ( $taxonomies as $taxonomy_id => $taxonomy ) : ?>
+					<option value="<?php echo esc_attr( $taxonomy_id ) ?>"<?php selected( $this->feedcatsare, $taxonomy_id ) ?> data-objects="<?php echo implode( ',', $taxonomy->object_type ) ?>">
+						<?php echo esc_html( $taxonomy->label ) ?>
+					</option>
+					<?php endforeach; ?>
+				</select>
+				<label>
+					<input type="checkbox" name="abtble[originalcategories]"  class="case field" value="1"<?php checked( $this->originalcategories == 1 ) ?>>
+					<span><?php esc_html_e( 'Add any that do not exist.', 'autoblogtext' ) ?></span>
+				</label>
+				<?php echo $this->_tips->add_tip( __( 'Create any taxonomy terms that are needed.', 'autoblogtext' ) ) ?>
+			</td>
 		</tr>
 
 		<tr>
@@ -271,23 +306,9 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		</tr>
 
 		<tr>
-			<td valign="top" class="heading"><?php esc_html_e( 'Treat feed categories as', 'autoblogtext' ) ?></td>
-			<td valign="top">
-				<select name="abtble[feedcatsare]">
-					<option value="tags"<?php selected( $this->feedcatsare, 'tags' ) ?>><?php esc_html_e( 'tags', 'autoblogtext' ) ?></option>
-					<option value="categories"<?php selected( $this->feedcatsare, 'categories' ) ?>><?php esc_html_e( 'categories', 'autoblogtext' ) ?></option>
-				</select>
-
-				<input type='checkbox' name="abtble[originalcategories]"  class="case field" value="1"<?php checked( $this->originalcategories == 1 ) ?>>
-				<span><?php esc_html_e( 'Add any that do not exist.', 'autoblogtext' ) ?></span>
-				<?php echo $this->_tips->add_tip( __( 'Create any tags or categories that are needed.', 'autoblogtext' ) ) ?>
-			</td>
-		</tr>
-
-		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Add these tags to the posts', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[tag]" value="<?php echo esc_attr( stripslashes( $this->tag ) ) ?>"  class="long tag field">
+				<input type="text" name="abtble[tag]" value="<?php echo esc_attr( stripslashes( $this->tag ) ) ?>"  class="long tag field">
 				<?php echo $this->_tips->add_tip( __( 'Enter a comma separated list of tags to add.', 'autoblogtext' ) ) ?>
 			</td>
 		</tr><?php
@@ -306,13 +327,13 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		</tr>
 
 		<tr>
-			<td colspan='2'><?php esc_html_e( 'Include posts that contain (separate words with commas)', 'autoblogtext' ) ?></td>
+			<td colspan="2"><?php esc_html_e( 'Include posts that contain (separate words with commas)', 'autoblogtext' ) ?></td>
 		</tr>
 
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'All of these words', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[allwords]" value="<?php echo esc_attr( stripslashes( $this->allwords ) ) ?>"  class="long title field">
+				<input type="text" name="abtble[allwords]" value="<?php echo esc_attr( stripslashes( $this->allwords ) ) ?>"  class="long title field">
 				<?php echo $this->_tips->add_tip( __( 'A post to be imported must have ALL of these words in the title or content.', 'autoblogtext' ) ) ?>
 			</td>
 		</tr>
@@ -320,7 +341,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Any of these words', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[anywords]" value="<?php echo esc_attr( stripslashes( $this->anywords ) ) ?>"  class="long title field">
+				<input type="text" name="abtble[anywords]" value="<?php echo esc_attr( stripslashes( $this->anywords ) ) ?>"  class="long title field">
 				<?php echo $this->_tips->add_tip( __( 'A post to be imported must have ANY of these words in the title or content.', 'autoblogtext' ) ) ?>
 			</td>
 		</tr>
@@ -328,7 +349,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'The exact phrase', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[phrase]" value="<?php echo esc_attr( stripslashes( $this->phrase ) ) ?>"  class="long title field">
+				<input type="text" name="abtble[phrase]" value="<?php echo esc_attr( stripslashes( $this->phrase ) ) ?>"  class="long title field">
 				<?php echo $this->_tips->add_tip( __( 'A post to be imported must have this exact phrase in the title or content.', 'autoblogtext' ) ) ?>
 			</td>
 		</tr>
@@ -336,7 +357,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'None of these words', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[nonewords]" value="<?php echo esc_attr( stripslashes( $this->nonewords ) ) ?>"  class="long title field">
+				<input type="text" name="abtble[nonewords]" value="<?php echo esc_attr( stripslashes( $this->nonewords ) ) ?>"  class="long title field">
 				<?php echo $this->_tips->add_tip( __( 'A post to be imported must NOT have any of these words in the title or content.', 'autoblogtext' ) ) ?>
 			</td>
 		</tr>
@@ -344,7 +365,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Any of these tags', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[anytags]" value="<?php echo esc_attr( stripslashes( $this->anytags ) ) ?>"  class="long title field">
+				<input type="text" name="abtble[anytags]" value="<?php echo esc_attr( stripslashes( $this->anytags ) ) ?>"  class="long title field">
 				<?php echo $this->_tips->add_tip( __( 'A post to be imported must be marked with any of these categories or tags.', 'autoblogtext' ) ) ?>
 				<br>
 				<span><?php esc_html_e( 'Tags should be comma separated', 'autoblogtext' ) ?></span>
@@ -378,7 +399,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'For excerpts use', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[excerptnumber]" value="<?php echo esc_attr( stripslashes( $this->excerptnumber ) ) ?>"  class="narrow field" style='width: 3em;'>
+				<input type="text" name="abtble[excerptnumber]" value="<?php echo esc_attr( stripslashes( $this->excerptnumber ) ) ?>"  class="narrow field" style='width: 3em;'>
 				<select name="abtble[excerptnumberof]" class="field">
 					<option value="words"<?php selected( 'words', $this->excerptnumberof ) ?>><?php esc_html_e( 'Words', 'autoblogtext' ) ?></option>
 					<option value="sentences"<?php selected( 'words', $this->excerptnumberof ) ?>><?php esc_html_e( 'Sentences', 'autoblogtext' ) ?></option>
@@ -391,16 +412,16 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Link to original source', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<input type='text' name="abtble[source]" value="<?php echo esc_attr( stripslashes( $this->source ) ) ?>"  class="long source field">
+				<input type="text" name="abtble[source]" value="<?php echo esc_attr( stripslashes( $this->source ) ) ?>"  class="long source field">
 				<?php echo $this->_tips->add_tip( __( 'If you want to link back to original source, enter a phrase to use here.', 'autoblogtext' ) ) ?>
 				<br>
 				<label>
-					<input type='checkbox' name="abtble[nofollow]" value="1"<?php checked( $this->nofollow == 1 ) ?>>
+					<input type="checkbox" name="abtble[nofollow]" value="1"<?php checked( $this->nofollow == 1 ) ?>>
 					<?php esc_html_e( 'Ensure this link is a nofollow one', 'autoblogtext' ) ?>
 				</label>
 				<br>
 				<label>
-					<input type='checkbox' name="abtble[newwindow]" value="1"<?php checked( $this->newwindow == 1 ) ?>>
+					<input type="checkbox" name="abtble[newwindow]" value="1"<?php checked( $this->newwindow == 1 ) ?>>
 					<?php esc_html_e( 'Open this link in a new window', 'autoblogtext' ) ?>
 				</label>
 			</td>

@@ -29,5 +29,24 @@
 				});
 			}
 		});
+
+		$('#abtble_posttype').change(function() {
+			var post_type = $(this).val();
+
+			$('#abtble_feedcatsare option').each(function() {
+				var $this = $(this),
+					objects = $this.attr('data-objects');
+
+				if (objects) {
+					if ( objects.split(',').indexOf(post_type) < 0 ) {
+						$this.attr('disabled', 'disabled');
+					} else {
+						$this.removeAttr('disabled');
+					}
+				}
+			});
+
+			$("#abtble_feedcatsare").val($('#abtble_feedcatsare option[value]:not(:disabled):first').val());
+		});
 	});
 })(jQuery);

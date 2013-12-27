@@ -796,36 +796,46 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @param SimplePie_Item $item The feed item object.
 	 */
 	public function add_post_taxonomies( $post_id, array $details, SimplePie_Item $item ) {
-		$tags = !empty( $details['tag'] ) ? array_filter( array_map( 'trim', explode( ',', $details['tag'] ) ) ) : array();
-		$post_category = (int)$details['category'] >= 0 ? array( (int)$details['category'] ) : array();
+		$post_type = $details['posttype'];
 
-		if ( $details['feedcatsare'] == 'categories' ) {
+		// assign post tags
+		if ( is_object_in_taxonomy( $post_type, 'post_tag' ) ) {
+			$tags = !empty( $details['tag'] ) ? array_filter( array_map( 'trim', explode( ',', $details['tag'] ) ) ) : array();
+			if ( !empty( $tags ) ) {
+				wp_set_object_terms( $post_id, $tags, 'post_tag', true );
+			}
+		}
+
+		// assign post categories
+		if ( is_object_in_taxonomy( $post_type, 'category' ) ) {
+			$post_category = (int)$details['category'] >= 0 ? array( (int)$details['category'] ) : array();
+			if ( !empty( $post_category ) ) {
+				wp_set_object_terms( $post_id, $post_category, 'category', true );
+			}
+ 		}
+
+		// assign custom taxonomy terms
+		if ( is_object_in_taxonomy( $post_type, $details['feedcatsare'] ) ) {
+			$terms = array();
 			foreach ( $item->get_categories() as $category ) {
-				$cat_name = trim( $category->get_label() );
-				$term_id = term_exists( $cat_name, 'category' );
+				$term_name = trim( $category->get_label() );
+				$term_id = term_exists( $term_name, $details['feedcatsare'] );
 				if ( !empty( $term_id ) ) {
-					$post_category[] = is_array( $term_id ) ? $term_id['term_id'] : $term_id;
+					$terms[] = is_array( $term_id ) ? $term_id['term_id'] : $term_id;
 				} else {
-					if ( $details['originalcategories'] == '1' ) {
-						$term_id = wp_create_category( $cat_name );
+					if ( $details['originalcategories'] == 1 ) {
+						$term_id = wp_create_term( $term_name, $details['feedcatsare'] );
 						if ( !empty( $term_id ) && !is_wp_error( $term_id ) ) {
-							$post_category[] = $term_id;
+							$terms[] = is_array( $term_id ) ? $term_id['term_id'] : $term_id;
 						}
 					}
 				}
 			}
-		} else {
-			$thecats = array();
-			if ( isset( $details['originalcategories'] ) && $details['originalcategories'] == '1' ) {
-				$thecats = (array)$item->get_categories();
-				foreach ( $thecats as $category ) {
-					$tags[] = trim( $category->get_label() );
-				}
+
+			if ( !empty( $terms ) ) {
+				wp_set_object_terms( $post_id, $terms, $details['feedcatsare'], true );
 			}
 		}
-
-		wp_set_post_terms( $post_id, $post_category, 'category', true );
-		wp_set_post_terms( $post_id, $tags, 'post_tag', true );
 	}
 
 }
