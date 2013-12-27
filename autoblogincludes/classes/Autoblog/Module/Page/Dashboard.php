@@ -30,7 +30,9 @@
 class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 
 	const NAME = __CLASS__;
+
 	const ACTION_REGENERATE_PAGE = 'regenerate';
+	const ACTION_CLEAR_LOG       = 'clear-log';
 
 	/**
 	 * Constructor.
@@ -46,6 +48,56 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 	}
 
 	/**
+	 * Returns nonce action.
+	 *
+	 * @sicne 4.0.0
+	 *
+	 * @access private
+	 * @param string $action The initial action.
+	 * @return string Nonce action.
+	 */
+	private function _build_nonce_action( $action ) {
+		return $action . get_current_user_id() . NONCE_KEY;
+	}
+
+	/**
+	 * Processes requested actions.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 */
+	private function _process_actions() {
+		$action = filter_input( INPUT_GET, 'action' );
+		if ( $action ) {
+			$template = new Autoblog_Render_Dashboard_Page();
+
+			switch ( $action ) {
+				case self::ACTION_REGENERATE_PAGE:
+					if ( check_admin_referer( $this->_build_nonce_action( self::ACTION_REGENERATE_PAGE ) ) ) {
+						$template->delete_cache();
+					}
+					break;
+				case self::ACTION_CLEAR_LOG:
+					if ( check_admin_referer( $this->_build_nonce_action( self::ACTION_CLEAR_LOG ) ) ) {
+						$feeds = is_network_admin()
+							? $this->_wpdb->get_col( 'SELECT feed_id FROM ' . AUTOBLOG_TABLE_FEEDS )
+							: $this->_wpdb->get_col( sprintf( 'SELECT feed_id FROM %s WHERE blog_id = %d', AUTOBLOG_TABLE_FEEDS, get_current_blog_id() ) );
+
+						if ( !empty( $feeds ) ) {
+							$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE feed_id IN (%s)', AUTOBLOG_TABLE_LOGS, implode( ', ', $feeds ) ) );
+							$template->delete_cache();
+						}
+					}
+					break;
+			}
+
+			wp_safe_redirect( add_query_arg( array( 'action' => false, '_wpnonce' => false, 'noheader' => false ), wp_get_referer() ) );
+			exit;
+		}
+	}
+
+	/**
 	 * Handles dashboard page.
 	 *
 	 * @since 4.0.0
@@ -54,29 +106,17 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 	 * @access public
 	 */
 	public function handle_dashboard_page() {
+		$this->_process_actions();
+
 		$template = new Autoblog_Render_Dashboard_Page();
 
-		// check page regeneration
-		$nonce_action = 'regenerate-dashboard-' . get_current_user_id();
-		if ( filter_input( INPUT_GET, 'action' ) == self::ACTION_REGENERATE_PAGE && check_admin_referer( $nonce_action ) ) {
-			$template->delete_cache();
+		$template->regenerate_url = wp_nonce_url(
+			add_query_arg( array( 'action' => self::ACTION_REGENERATE_PAGE, 'noheader' => 'true' ) ),
+			$this->_build_nonce_action( self::ACTION_REGENERATE_PAGE )
+		);
 
-			wp_safe_redirect( add_query_arg( array(
-				'action'   => false,
-				'_wpnonce' => false,
-				'noheader' => false,
-			), wp_get_referer() ) );
-			exit;
-		}
-
-		// set regenerate page url
-		$template->regenerate_url = wp_nonce_url( add_query_arg( array(
-			'action'   => self::ACTION_REGENERATE_PAGE,
-			'noheader' => 'true',
-		) ), $nonce_action );
-
-		// try to fetch html from cache first
 		if ( !filter_input( INPUT_GET, 'nocache', FILTER_VALIDATE_BOOLEAN ) ) {
+			// try to fetch html from cache first
 			$html = $template->get_html_from_cahce();
 			if ( $html !== false ) {
 				echo $html;
@@ -84,11 +124,13 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 			}
 		}
 
-		// clean up log records older than a week
-		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE cron_id < %d', AUTOBLOG_TABLE_LOGS, strtotime( '-1 week' ) ) );
-
 		// html is not cached, so we need to build it and cache it
 		$template->log_records = $this->_get_log_records();
+
+		$template->clear_log_url = wp_nonce_url(
+			add_query_arg( array( 'action' => self::ACTION_CLEAR_LOG, 'noheader' => 'true' ) ),
+			$this->_build_nonce_action( self::ACTION_CLEAR_LOG )
+		);
 
 		// enable output caching
 		$template->cache_output( true );
@@ -142,6 +184,9 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		if ( empty( $feeds ) ) {
 			return array();
 		}
+
+		// clean up log records older than a week
+		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE cron_id < %d', AUTOBLOG_TABLE_LOGS, strtotime( '-1 week' ) ) );
 
 		$records = $this->_wpdb->get_results( sprintf(
 			'SELECT * FROM %s WHERE feed_id IN (%s) AND cron_id >= %d ORDER BY log_at DESC, log_type DESC',
