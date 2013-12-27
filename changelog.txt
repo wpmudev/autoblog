@@ -8,6 +8,7 @@
 * Implemented disable sanitization addon
 * Implemented ability to update posts when duplicate is found
 * Implemented ability to create/assign custom taxonomies to custom post type during import
+* Implemented new dashboard pivot chart
 * Reworked images import to prevent downloading the same image multiple times
 * Reworked featured images importing to prevent double downloading the same images
 * Removed debug images addon

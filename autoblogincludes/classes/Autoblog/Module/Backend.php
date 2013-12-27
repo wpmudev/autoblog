@@ -82,7 +82,15 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 			wp_enqueue_style( 'autoblog-bootstrap-glyphs', AUTOBLOG_ABSURL . 'css/bootstrap-glyphs.min.css', array(), '3.0.2' );
 
 			wp_enqueue_script( 'autoblog-slimscroll', AUTOBLOG_ABSURL . 'js/jquery.slimscroll.min.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
-			wp_enqueue_script( 'autoblog-dashboard', AUTOBLOG_ABSURL . 'js/dashboard.js', array( 'jquery', 'autoblog-slimscroll' ), Autoblog_Plugin::VERSION, true );
+			wp_enqueue_script( 'autoblog-google-jsapi', '//www.google.com/jsapi', null, null, true );
+			wp_enqueue_script( 'autoblog-dashboard', AUTOBLOG_ABSURL . 'js/dashboard.js', array( 'jquery', 'autoblog-google-jsapi', 'autoblog-slimscroll' ), Autoblog_Plugin::VERSION, true );
+
+			wp_localize_script( 'autoblog-dashboard', 'autoblog', array(
+				'date_column'      => __( 'Date', 'autoblogtext' ),
+				'processes_column' => __( 'Processed Feeds', 'autoblogtext' ),
+				'imports_column'   => __( 'Imported Items', 'autoblogtext' ),
+				'errors_column'    => __( 'Errors', 'autoblogtext' ),
+			) );
 		}
 
 		// feeds page scripts

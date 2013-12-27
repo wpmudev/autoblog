@@ -1,3 +1,86 @@
+/**
+ * =============================================================================
+ * Charts
+ * =============================================================================
+ */
+
+#autoblog-dashboard-chart {
+	height: 450px;
+	border: 2px solid #aaa;
+	position: relative;
+	margin: 20px 0;
+	background-color: white;
+}
+
+
+
+/**
+ * =============================================================================
+ * Spinner
+ * =============================================================================
+ */
+
+.autoblog-spinner {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -30px;
+  margin-top: -30px;
+}
+
+.autoblog-spinner-cube1,
+.autoblog-spinner-cube2 {
+  background-color: #999;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-animation: cubemove 1.8s infinite ease-in-out;
+  animation: cubemove 1.8s infinite ease-in-out;
+}
+
+.autoblog-spinner-cube2 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+@-webkit-keyframes cubemove {
+  25% { -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5) }
+  50% { -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg) }
+  75% { -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5) }
+  100% { -webkit-transform: rotate(-360deg) }
+}
+
+@keyframes cubemove {
+  25% {
+    transform: translateX(42px) rotate(-90deg) scale(0.5);
+    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+  } 50% {
+    transform: translateX(42px) translateY(42px) rotate(-179deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+  } 50.1% {
+    transform: translateX(42px) translateY(42px) rotate(-180deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+  } 75% {
+    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+  } 100% {
+    transform: rotate(-360deg);
+    -webkit-transform: rotate(-360deg);
+  }
+}
+
+
+
+/**
+ * =============================================================================
+ * Logs
+ * =============================================================================
+ */
+
 .autoblog-table .column-post_type,
 .autoblog-table .column-addon {
 	width: 200px;
@@ -18,18 +101,21 @@
 }
 
 .autoblog-log-date {
-	border: 3px solid #00487f;
+	border: 2px solid #00487f;
 	border-top-width: 0;
 	background-color: white;
 	margin-bottom: 10px;
 }
 
-.autoblog-log-date:first-child {
-	margin-top: 30px;
+.autoblog-log-date:last-child {
+	border-bottom-width: 2px;
 }
 
-.autoblog-log-date:last-child {
-	border-bottom-width: 3px;
+.autoblog-log-date-icon {
+	display: block;
+	float: left;
+	margin-right: 7px;
+	margin-top: 3px;
 }
 
 .autoblog-log-date > .autoblog-log-row {
@@ -171,4 +257,129 @@
 	margin-right: 20px;
 	padding: 3px 5px;
 	font-size: 0.85em;
+}
+
+
+
+/**
+ * =============================================================================
+ * Skins
+ * =============================================================================
+ */
+
+/* coffee */
+
+.admin-color-coffee .autoblog-log-date,
+.admin-color-coffee #autoblog-dashboard-chart,
+.admin-color-coffee .autoblog-log-date > .autoblog-log-row {
+	border-color: #59524c;
+}
+
+.admin-color-coffee .autoblog-spinner-cube1,
+.admin-color-coffee .autoblog-spinner-cube2,
+.admin-color-coffee .autoblog-log-date > .autoblog-log-row {
+	background-color: #59524c;
+}
+
+/* sunrise */
+
+.admin-color-sunrise .autoblog-log-date,
+.admin-color-sunrise #autoblog-dashboard-chart,
+.admin-color-sunrise .autoblog-log-date > .autoblog-log-row {
+	border-color: #cf4944;
+}
+
+.admin-color-sunrise .autoblog-spinner-cube1,
+.admin-color-sunrise .autoblog-spinner-cube2,
+.admin-color-sunrise .autoblog-log-date > .autoblog-log-row {
+	background-color: #cf4944;
+}
+
+/* ocean */
+
+.admin-color-ocean .autoblog-log-date,
+.admin-color-ocean #autoblog-dashboard-chart,
+.admin-color-ocean .autoblog-log-date > .autoblog-log-row {
+	border-color: #738e96;
+}
+
+.admin-color-ocean .autoblog-spinner-cube1,
+.admin-color-ocean .autoblog-spinner-cube2,
+.admin-color-ocean .autoblog-log-date > .autoblog-log-row {
+	background-color: #738e96;
+}
+
+/* blue */
+
+.admin-color-blue .autoblog-log-date,
+.admin-color-blue #autoblog-dashboard-chart,
+.admin-color-blue .autoblog-log-date > .autoblog-log-row {
+	border-color: #52accc;
+}
+
+.admin-color-blue .autoblog-spinner-cube1,
+.admin-color-blue .autoblog-spinner-cube2,
+.admin-color-blue .autoblog-log-date > .autoblog-log-row {
+	background-color: #52accc;
+}
+
+/* midnight */
+
+.admin-color-midnight .autoblog-log-date,
+.admin-color-midnight #autoblog-dashboard-chart,
+.admin-color-midnight .autoblog-log-date > .autoblog-log-row {
+	border-color: #363b3f;
+}
+
+.admin-color-midnight .autoblog-spinner-cube1,
+.admin-color-midnight .autoblog-spinner-cube2,
+.admin-color-midnight .autoblog-log-date > .autoblog-log-row {
+	background-color: #363b3f;
+}
+
+/* light */
+
+.admin-color-light .autoblog-log-date,
+.admin-color-light #autoblog-dashboard-chart,
+.admin-color-light .autoblog-log-date > .autoblog-log-row {
+	border-color: #e5e5e5;
+}
+
+.admin-color-light .autoblog-spinner-cube1,
+.admin-color-light .autoblog-spinner-cube2,
+.admin-color-light .autoblog-log-date > .autoblog-log-row {
+	background-color: #888;
+}
+
+.admin-color-light .autoblog-log-date > .autoblog-log-row {
+	color: #888;
+	background-color: #e5e5e5;
+}
+
+/* ectoplasm */
+
+.admin-color-ectoplasm .autoblog-log-date,
+.admin-color-ectoplasm #autoblog-dashboard-chart,
+.admin-color-ectoplasm .autoblog-log-date > .autoblog-log-row {
+	border-color: #523f6d;
+}
+
+.admin-color-ectoplasm .autoblog-spinner-cube1,
+.admin-color-ectoplasm .autoblog-spinner-cube2,
+.admin-color-ectoplasm .autoblog-log-date > .autoblog-log-row {
+	background-color: #523f6d;
+}
+
+/* fresh */
+
+.admin-color-fresh .autoblog-log-date,
+.admin-color-fresh #autoblog-dashboard-chart,
+.admin-color-fresh .autoblog-log-date > .autoblog-log-row {
+	border-color: #222;
+}
+
+.admin-color-fresh .autoblog-spinner-cube1,
+.admin-color-fresh .autoblog-spinner-cube2,
+.admin-color-fresh .autoblog-log-date > .autoblog-log-row {
+	background-color: #222;
 }

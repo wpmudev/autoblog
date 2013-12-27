@@ -42,7 +42,6 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 	 */
 	public function __construct( Autoblog_Plugin $plugin ) {
 		parent::__construct( $plugin );
-
 		$this->_add_action( 'autoblog_handle_dashboard_page', 'handle_dashboard_page' );
 	}
 
@@ -61,7 +60,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		$nonce_action = 'regenerate-dashboard-' . get_current_user_id();
 		if ( filter_input( INPUT_GET, 'action' ) == self::ACTION_REGENERATE_PAGE && check_admin_referer( $nonce_action ) ) {
 			$template->delete_cache();
-			
+
 			wp_safe_redirect( add_query_arg( array(
 				'action'   => false,
 				'_wpnonce' => false,
@@ -77,10 +76,12 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		) ), $nonce_action );
 
 		// try to fetch html from cache first
-		$html = $template->get_html_from_cahce();
-		if ( $html !== false ) {
-			echo $html;
-			return;
+		if ( !filter_input( INPUT_GET, 'nocache', FILTER_VALIDATE_BOOLEAN ) ) {
+			$html = $template->get_html_from_cahce();
+			if ( $html !== false ) {
+				echo $html;
+				return;
+			}
 		}
 
 		// clean up log records older than a week
@@ -154,7 +155,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		}
 
 		$log_records = $date_items = array();
-		$date_pattern = get_option( 'date_format' );
+		$date_pattern = 'Y-m-d';
 
 		$record = current( $records );
 		while( $record != false ) {
@@ -171,7 +172,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 			$record = next( $records );
 			if ( $record == false || $last_cron_date != date( $date_pattern, $record['cron_id'] ) ) {
 				ksort( $date_items );
-				$log_records[$last_cron_date] = $date_items;
+				$log_records[strtotime( $last_cron_date )] = $date_items;
 				$date_items = array();
 			}
 		}

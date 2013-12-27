@@ -54,6 +54,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 			<div class="icon32" id="icon-edit"><br></div>
 			<h2><?php esc_html_e( 'Auto Blog Dashboard', 'autoblogtext' ) ?></h2>
 
+			<div class="autoblog-charts"><?php $this->_render_charts() ?></div>
 			<div class="autoblog-logs"><?php $this->_render_log_table() ?></div>
 		</div><?php
 	}
@@ -75,10 +76,14 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 		$switch_to_blog = function_exists( 'switch_to_blog' );
 		$restore_blog = function_exists( 'restore_current_blog' );
 
+		$date_pattern = get_option( 'date_format' );
+
 		// dates
 		foreach ( $this->log_records as $date => $feeds ) :
-			?><div class="autoblog-log-date">
-				<div class="autoblog-log-row"><?php echo $date ?></div><?php
+			?><div id="autoblog-log-date-<?php echo date( 'Y-m-d', $date ) ?>" class="autoblog-log-date">
+				<div class="autoblog-log-row">
+					<i class="autoblog-log-date-icon glyphicon glyphicon-calendar"></i>  <?php echo date( $date_pattern, $date ) ?>
+				</div><?php
 
 				// feeds
 				foreach ( $feeds as $feed_id => $feed ) :
@@ -363,6 +368,22 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 		}
 
 		return $cache;
+	}
+
+	/**
+	 * Renders dashboard charts.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 */
+	private function _render_charts() {
+		?><div id="autoblog-dashboard-chart">
+			<div class="autoblog-spinner">
+				<div class="autoblog-spinner-cube1"></div>
+				<div class="autoblog-spinner-cube2"></div>
+			</div>
+		</div><?php
 	}
 
 }
