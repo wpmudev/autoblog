@@ -81,16 +81,6 @@ function autoblog_setup_constants() {
 		define( 'AUTOBLOG_FEED_FETCHING_TIMEOUT', 10 );
 	}
 
-	// Processing will stop after 6 seconds (default) so as not to overload your server
-	if ( !defined( 'AUTOBLOG_PROCESSING_TIMELIMIT' ) ) {
-		define( 'AUTOBLOG_PROCESSING_TIMELIMIT', 6 );
-	}
-
-	// In a multisite install will attempt to process feeds for all sites rather than just local ones
-	if ( !defined( 'AUTOBLOG_FORCE_PROCESS_ALL' ) ) {
-		define( 'AUTOBLOG_FORCE_PROCESS_ALL', false );
-	}
-
 	// To switch from a CRON processing method set this to 'pageload' (default is 'cron' to use the wp-cron).
 	if ( !defined( 'AUTOBLOG_PROCESSING_METHOD' ) ) {
 		define( 'AUTOBLOG_PROCESSING_METHOD', 'cron' );
