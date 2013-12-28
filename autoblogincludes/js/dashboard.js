@@ -64,6 +64,8 @@ function drawDashboardCharts() {
 			parent.find('.autoblog-log-feed-collapse').toggle();
 			parent.find('.slimScrollDiv').toggle();
 
+			drawDashboardCharts();
+
 			return false;
 		});
 
