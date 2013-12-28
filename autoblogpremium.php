@@ -110,11 +110,6 @@ function autoblog_setup_constants() {
 	if ( !defined( 'AUTOBLOG_IMAGE_CHECK_ORDER' ) ) {
 		define( 'AUTOBLOG_IMAGE_CHECK_ORDER', 'ASC' );
 	}
-
-	// Processing will log more information about the progress
-	if ( !defined( 'AUTOBLOG_VERBOSE_PROCESSING' ) ) {
-		define( 'AUTOBLOG_VERBOSE_PROCESSING', false );
-	}
 }
 
 /**

@@ -577,23 +577,11 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @param string|array $info The log information.
 	 */
 	private function _log_message( $type, $info = '' ) {
-		$inerts = array(
-			Autoblog_Plugin::LOG_DUPLICATE_POST,
-			Autoblog_Plugin::LOG_POST_DOESNT_MATCH,
-			Autoblog_Plugin::LOG_POST_INSERT_FAILED,
-			Autoblog_Plugin::LOG_POST_INSERT_SUCCESS,
-		);
-
-		// if verbose processing is disabled then do not log inert messages
-		if ( !AUTOBLOG_VERBOSE_PROCESSING && in_array( $type, $inerts ) ) {
-			return;
-		}
-
 		// insert log message
 		$this->_wpdb->insert( AUTOBLOG_TABLE_LOGS, array(
 			'feed_id'  => $this->_feed_id,
 			'cron_id'  => $this->_cron_timestamp,
-			'log_at'   => current_time( 'timestamp' ),
+			'log_at'   => current_time( 'timestamp', 1 ),
 			'log_type' => $type,
 			'log_info' => is_array( $info ) ? serialize( $info ) : $info,
 		), array( '%d', '%d', '%d', '%d', '%s' ) );

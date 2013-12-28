@@ -331,7 +331,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 		?><div class="autoblog-log-row">
 			<span class="autoblog-log-record-time<?php echo !in_array( $log['log_type'], $special_types ) ? ' autoblog-log-record-time-alt' : '' ?>">
-				<?php echo esc_html( date( $this->time_pattern, $log['log_at'] ) ) ?>
+				<?php echo esc_html( date( $this->time_pattern, $log['log_at'] + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ) ) ?>
 			</span>
 
 			<?php if ( $glyph ) : ?>
