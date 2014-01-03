@@ -5,6 +5,8 @@ function drawDashboardCharts() {
 	var date, chart, table, i, today, imports, errors, processed;
 
 	today = new Date();
+	today.setDate(today.getDate() - 6);
+
 	table = new google.visualization.DataTable();
 
 	table.addColumn('date', autoblog.date_column);
@@ -15,14 +17,14 @@ function drawDashboardCharts() {
 	for (i = 1; i <= 7; i++) {
 		imports = errors = processed = 0;
 
-		date = jQuery('#autoblog-log-date-' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + (today.getDate() - 7 + i));
+		date = jQuery('#autoblog-log-date-' + today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate());
 
 		date.find('.autoblog-log-feed-imports').each(function() { imports += parseInt(jQuery(this).text()) });
 		date.find('.autoblog-log-feed-iterations').each(function() { processed += parseInt(jQuery(this).text()) });
 		date.find('.autoblog-log-feed-errors').each(function() { errors = parseInt(jQuery(this).text()) });
 
-		date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7 + i);
-		table.addRow([date, processed, imports, errors]);
+		table.addRow([new Date(today.getFullYear(), today.getMonth(), today.getDate()), processed, imports, errors]);
+		today.setDate(today.getDate() + 1);
 	}
 
 	chart = new google.visualization.ColumnChart(document.getElementById('autoblog-dashboard-chart'));

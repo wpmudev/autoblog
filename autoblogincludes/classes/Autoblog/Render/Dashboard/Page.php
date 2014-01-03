@@ -85,7 +85,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 		// dates
 		foreach ( $this->log_records as $date => $feeds ) :
-			?><div id="autoblog-log-date-<?php echo date( 'Y-m-d', $date ) ?>" class="autoblog-log-date">
+			?><div id="autoblog-log-date-<?php echo date( 'Y-n-j', $date ) ?>" class="autoblog-log-date">
 				<div class="autoblog-log-row">
 					<i class="autoblog-log-date-icon glyphicon glyphicon-calendar"></i>  <?php echo date( $date_pattern, $date ) ?>
 				</div><?php
