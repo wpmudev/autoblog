@@ -83,6 +83,24 @@ class Autoblog_Module {
 	}
 
 	/**
+	 * Removes an action hook.
+	 *
+	 * @since 4.0.0
+	 * @uses remove_action() To remove action hook.
+	 *
+	 * @access protected
+	 * @param string $tag The name of the action to which the $method is hooked.
+	 * @param string $method The name of the method to be called.
+	 * @param int $priority optional. Used to specify the order in which the functions associated with a particular action are executed (default: 10). Lower numbers correspond with earlier execution, and functions with the same priority are executed in the order in which they were added to the action.
+	 * @param int $accepted_args optional. The number of arguments the function accept (default 1).
+	 * @return Autoblog_Module
+	 */
+	protected function _remove_action( $tag, $method = '', $priority = 10, $accepted_args = 1 ) {
+		remove_action( $tag, array( $this, !empty( $method ) ? $method : $tag ), $priority, $accepted_args );
+		return $this;
+	}
+
+	/**
 	 * Registers AJAX action hook.
 	 *
 	 * @since 4.0.0
@@ -107,6 +125,30 @@ class Autoblog_Module {
 	}
 
 	/**
+	 * Removes AJAX action hook.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access public
+	 * @param string $tag The name of the AJAX action to which the $method is hooked.
+	 * @param string $method Optional. The name of the method to be called. If the name of the method is not provided, tag name will be used as method name.
+	 * @param boolean $private Optional. Determines if we should register hook for logged in users.
+	 * @param boolean $public Optional. Determines if we should register hook for not logged in users.
+	 * @return Autoblog_Module
+	 */
+	protected function _remove_ajax_action( $tag, $method = '', $private = true, $public = false ) {
+		if ( $private ) {
+			$this->_remove_action( 'wp_ajax_' . $tag, $method );
+		}
+
+		if ( $public ) {
+			$this->_remove_action( 'wp_ajax_nopriv_' . $tag, $method );
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Registers a filter hook.
 	 *
 	 * @since 4.0.0
@@ -121,6 +163,24 @@ class Autoblog_Module {
 	 */
 	protected function _add_filter( $tag, $method = '', $priority = 10, $accepted_args = 1 ) {
 		add_filter( $tag, array( $this, empty( $method ) ? $tag : $method ), $priority, $accepted_args );
+		return $this;
+	}
+
+	/**
+	 * Removes a filter hook.
+	 *
+	 * @since 4.0.0
+	 * @uses remove_filter() To remove filter hook.
+	 *
+	 * @access protected
+	 * @param string $tag The name of the filter to remove the $method to.
+	 * @param type $method The name of the method to remove.
+	 * @param int $priority optional. The priority of the function (default: 10).
+	 * @param int $accepted_args optional. The number of arguments the function accepts (default: 1).
+	 * @return Autoblog_Module
+	 */
+	protected function _remove_filter( $tag, $method = '', $priority = 10, $accepted_args = 1 ) {
+		remove_filter( $tag, array( $this, !empty( $method ) ? $method : $tag ), $priority, $accepted_args );
 		return $this;
 	}
 

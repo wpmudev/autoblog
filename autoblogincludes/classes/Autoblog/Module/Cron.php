@@ -187,8 +187,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			set_time_limit( 0 );
 		}
 
-		// setup simplepie stuff
+		// setup temporary actions and filters
 		$this->_add_action( 'wp_feed_options', 'setup_simplepie_options' );
+		$this->_add_action( 'http_api_curl', 'setup_curl_options' );
 		$this->_add_filter( 'wp_feed_cache_transient_lifetime', 'get_feed_cahce_lifetime', PHP_INT_MAX );
 
 		do_action( 'autoblog_pre_process_feeds' );
@@ -235,6 +236,11 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		}
 
 		do_action( 'autoblog_post_process_feeds' );
+
+		// remove temporary actions and filters
+		$this->_remove_action( 'wp_feed_options', 'setup_simplepie_options' );
+		$this->_remove_action( 'http_api_curl', 'setup_curl_options' );
+		$this->_remove_filter( 'wp_feed_cache_transient_lifetime', 'get_feed_cahce_lifetime', PHP_INT_MAX );
 	}
 
 	/**
@@ -261,6 +267,21 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	public function setup_simplepie_options( SimplePie $feed ) {
 		$timeout = absint( AUTOBLOG_FEED_FETCHING_TIMEOUT );
 		$feed->set_timeout( $timeout ? $timeout : 10 );
+	}
+
+	/**
+	 * Prevents CURL #18 error.
+	 *
+	 * @sicne 4.0.0
+	 * @link http://stackoverflow.com/a/1847591/531994
+	 *
+	 * @access public
+	 * @param resource $curl The CURL resource.
+	 */
+	public function setup_curl_options( $curl ) {
+		if ( is_resource( $curl ) ) {
+			curl_setopt( $curl, CURLOPT_HTTPHEADER, array( 'Expect:' ) );
+		}
 	}
 
 	/**
