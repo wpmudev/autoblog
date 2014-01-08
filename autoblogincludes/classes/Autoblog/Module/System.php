@@ -251,7 +251,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 
 		// update options
 		if ( is_multisite() && function_exists( 'get_blog_option' ) ) {
-			update_site_options( 'autoblog_networkactivated_addons', get_blog_option( 1, 'autoblog_networkactivated_addons' ) );
+			update_site_option( 'autoblog_networkactivated_addons', get_blog_option( 1, 'autoblog_networkactivated_addons' ) );
 			delete_blog_option( 1, 'autoblog_networkactivated_addons' );
 		}
 
