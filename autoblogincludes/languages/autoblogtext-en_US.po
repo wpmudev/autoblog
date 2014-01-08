@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-08 12:53+0300\n"
-"PO-Revision-Date: 2014-01-08 12:53+0300\n"
+"POT-Creation-Date: 2014-01-08 13:11+0300\n"
+"PO-Revision-Date: 2014-01-08 13:11+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -173,17 +173,25 @@ msgstr "The feed has been updated successfully."
 msgid "The feed has not been updated."
 msgstr "The feed has not been updated."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:92
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:91
 msgid "The feed(s) has been deleted successfully."
 msgstr "The feed(s) has been deleted successfully."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:98
-msgid "The feed(s) has been processed successfully."
-msgstr "The feed(s) has been processed successfully."
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:95
+msgid ""
+"The feed(s) has been processed successfully. Visit the Autoblog Dashboard "
+"for details."
+msgstr ""
+"The feed(s) has been processed successfully. Visit the Autoblog Dashboard "
+"for details."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:104
-msgid "The feed(s) processing has been launched successfully."
-msgstr "The feed(s) processing has been launched successfully."
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:99
+msgid ""
+"The feed(s) processing has been launched in the background. Visit the "
+"Autoblog Dashboard for details."
+msgstr ""
+"The feed(s) processing has been launched in the background. Visit the "
+"Autoblog Dashboard for details."
 
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:66
 msgid "Edit Auto Blog Feed"

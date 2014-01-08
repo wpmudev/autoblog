@@ -87,22 +87,16 @@ class Autoblog_Render_Feeds_Table extends Autoblog_Render {
 			}
 		}
 
-		if ( isset( $_GET['deleted'] ) ) {
-			if ( filter_input( INPUT_GET, 'deleted', FILTER_VALIDATE_BOOLEAN ) ) {
-				echo '<div class="updated fade"><p>', esc_html__( 'The feed(s) has been deleted successfully.', 'autoblogtext' ), '</p></div>';
-			}
+		if ( isset( $_GET['deleted'] ) && filter_input( INPUT_GET, 'deleted', FILTER_VALIDATE_BOOLEAN ) ) {
+			echo '<div class="updated fade"><p>', esc_html__( 'The feed(s) has been deleted successfully.', 'autoblogtext' ), '</p></div>';
 		}
 
-		if ( isset( $_GET['processed'] ) ) {
-			if ( filter_input( INPUT_GET, 'processed', FILTER_VALIDATE_BOOLEAN ) ) {
-				echo '<div class="updated fade"><p>', esc_html__( 'The feed(s) has been processed successfully.', 'autoblogtext' ), '</p></div>';
-			}
+		if ( isset( $_GET['processed'] ) && filter_input( INPUT_GET, 'processed', FILTER_VALIDATE_BOOLEAN ) ) {
+			echo '<div class="updated fade"><p>', esc_html__( 'The feed(s) has been processed successfully. Visit the Autoblog Dashboard for details.', 'autoblogtext' ), '</p></div>';
 		}
 
-		if ( isset( $_GET['launched'] ) ) {
-			if ( filter_input( INPUT_GET, 'processed', FILTER_VALIDATE_BOOLEAN ) ) {
-				echo '<div class="updated fade"><p>', esc_html__( 'The feed(s) processing has been launched successfully.', 'autoblogtext' ), '</p></div>';
-			}
+		if ( isset( $_GET['launched'] ) && filter_input( INPUT_GET, 'launched', FILTER_VALIDATE_BOOLEAN ) ) {
+			echo '<div class="updated fade"><p>', esc_html__( 'The feed(s) processing has been launched in the background. Visit the Autoblog Dashboard for details.', 'autoblogtext' ), '</p></div>';
 		}
 	}
 
