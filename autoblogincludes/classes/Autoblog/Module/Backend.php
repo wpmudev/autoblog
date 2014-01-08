@@ -79,6 +79,7 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 
 		// dashboard page scripts
 		if ( $page_hook == $this->_admin_pages['dashboard'] ) {
+			wp_enqueue_style( 'dashicons' );
 			wp_enqueue_style( 'autoblog-bootstrap-glyphs', AUTOBLOG_ABSURL . 'css/bootstrap-glyphs.min.css', array(), '3.0.2' );
 
 			wp_enqueue_script( 'autoblog-slimscroll', AUTOBLOG_ABSURL . 'js/jquery.slimscroll.min.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );

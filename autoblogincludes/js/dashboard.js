@@ -1,7 +1,9 @@
-google.load('visualization', '1', {packages: ['corechart']});
-google.setOnLoadCallback(drawDashboardCharts);
+jQuery('html').css('overflow-y', 'scroll');
 
-function drawDashboardCharts() {
+google.load('visualization', '1', {packages: ['corechart']});
+google.setOnLoadCallback(autoblogDrawChart);
+
+function autoblogDrawChart() {
 	var date, chart, table, i, today, imports, errors, processed;
 
 	today = new Date();
@@ -40,9 +42,14 @@ function drawDashboardCharts() {
 			textPosition: 'in',
 			minorGridlines: {
 				count: 4
+			},
+			viewWindow: {
+				min: 0
 			}
 		},
-		hAxis: { baselineColor: 'white' },
+		hAxis: {
+			baselineColor: 'white'
+		},
 		dataOpacity: 0.9,
 		focusTarget: 'category',
 		colors: ['green', '#01b1f3', 'red'],
@@ -55,24 +62,25 @@ function drawDashboardCharts() {
 
 (function($) {
 	$(document).ready(function() {
-		$('.autoblog-log-feed-url').click(function(e) {
-			e.stopPropagation();
-			return true;
-		});
-
 		$('.autoblog-log-feed > .autoblog-log-row').click(function() {
-			var parent = $(this).parent();
+			var parent = $(this).parent(), rows, height;
 
 			parent.find('.autoblog-log-feed-collapse').toggle();
 			parent.find('.slimScrollDiv').toggle();
 
-			drawDashboardCharts();
+			rows = parent.find('.slimScrollDiv .autoblog-log-feed-records .autoblog-log-record');
+			height = rows.length * $(rows[0]).outerHeight();
+			if (height < 400) {
+				parent.find('.slimScrollDiv, .autoblog-log-feed-records').height(height + 'px');
+			} else {
+				parent.find('.slimScrollDiv, .autoblog-log-feed-records').height('400px');
+			}
 
 			return false;
 		});
 
 		$('.autoblog-log-feed-records').slimScroll({height: '400px'}).show();
 
-		$(window).resize(drawDashboardCharts);
+		$(window).resize(autoblogDrawChart);
 	});
 })(jQuery);

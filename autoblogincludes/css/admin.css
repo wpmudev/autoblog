@@ -77,6 +77,21 @@
 
 /**
  * =============================================================================
+ * Empty box
+ * =============================================================================
+ */
+
+#autoblog-empty-box {
+	border: 2px dashed gray;
+	text-align: center;
+	padding: 4em 0;
+	color: #c2c4c5;
+}
+
+
+
+/**
+ * =============================================================================
  * Logs
  * =============================================================================
  */
@@ -132,6 +147,10 @@
 	padding-left: 10px;
 	border-bottom: 1px dotted #ddd;
 	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .autoblog-log-feed > .autoblog-log-row .autoblog-log-feed-url {
@@ -269,6 +288,7 @@
 
 /* coffee */
 
+#autoblog-empty-box,
 .admin-color-coffee .autoblog-log-date,
 .admin-color-coffee #autoblog-dashboard-chart,
 .admin-color-coffee .autoblog-log-date > .autoblog-log-row {
@@ -283,6 +303,7 @@
 
 /* sunrise */
 
+#autoblog-empty-box,
 .admin-color-sunrise .autoblog-log-date,
 .admin-color-sunrise #autoblog-dashboard-chart,
 .admin-color-sunrise .autoblog-log-date > .autoblog-log-row {
@@ -297,6 +318,7 @@
 
 /* ocean */
 
+#autoblog-empty-box,
 .admin-color-ocean .autoblog-log-date,
 .admin-color-ocean #autoblog-dashboard-chart,
 .admin-color-ocean .autoblog-log-date > .autoblog-log-row {
@@ -311,6 +333,7 @@
 
 /* blue */
 
+#autoblog-empty-box,
 .admin-color-blue .autoblog-log-date,
 .admin-color-blue #autoblog-dashboard-chart,
 .admin-color-blue .autoblog-log-date > .autoblog-log-row {
@@ -325,6 +348,7 @@
 
 /* midnight */
 
+#autoblog-empty-box,
 .admin-color-midnight .autoblog-log-date,
 .admin-color-midnight #autoblog-dashboard-chart,
 .admin-color-midnight .autoblog-log-date > .autoblog-log-row {
@@ -339,6 +363,7 @@
 
 /* light */
 
+#autoblog-empty-box,
 .admin-color-light .autoblog-log-date,
 .admin-color-light #autoblog-dashboard-chart,
 .admin-color-light .autoblog-log-date > .autoblog-log-row {
@@ -358,6 +383,7 @@
 
 /* ectoplasm */
 
+#autoblog-empty-box,
 .admin-color-ectoplasm .autoblog-log-date,
 .admin-color-ectoplasm #autoblog-dashboard-chart,
 .admin-color-ectoplasm .autoblog-log-date > .autoblog-log-row {
@@ -372,6 +398,7 @@
 
 /* fresh */
 
+#autoblog-empty-box,
 .admin-color-fresh .autoblog-log-date,
 .admin-color-fresh #autoblog-dashboard-chart,
 .admin-color-fresh .autoblog-log-date > .autoblog-log-row {

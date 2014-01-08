@@ -60,7 +60,26 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 			</h2>
 
 			<div class="autoblog-charts"><?php $this->_render_charts() ?></div>
-			<div class="autoblog-logs"><?php $this->_render_log_table() ?></div>
+			<div class="autoblog-logs">
+				<?php if ( !empty( $this->log_records ) ) : ?>
+					<?php $this->_render_log_table() ?>
+				<?php else : ?>
+					<?php $this->_render_empty_message() ?>
+				<?php endif; ?>
+			</div>
+		</div><?php
+	}
+
+	/**
+	 * Renders message that the log is empty.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access private
+	 */
+	private function _render_empty_message() {
+		?><div id="autoblog-empty-box">
+			<h1><?php esc_html_e( 'No log records were found.', 'autoblogtext' ) ?></h1>
 		</div><?php
 	}
 
@@ -72,10 +91,6 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 	 * @access private
 	 */
 	private function _render_log_table() {
-		if ( empty( $this->log_records ) ) {
-			return;
-		}
-
 		$this->time_pattern = get_option( 'time_format' );
 
 		$switch_to_blog = function_exists( 'switch_to_blog' );
@@ -105,9 +120,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 							<span class="autoblog-log-feed-collapse autoblog-log-feed-collapse-down">&plusb;</span>
 							<span class="autoblog-log-feed-collapse autoblog-log-feed-collapse-up">&minusb;</span>
-							<a class="autoblog-log-feed-url" href="admin.php?page=autoblog_admin&action=edit&item=<?php echo $feed_id ?>" title="<?php esc_attr_e( 'Edit feed', 'autoblogtext' ) ?>">
-								<?php echo esc_html( $feed['title'] ) ?>
-							</a>
+							<span class="autoblog-log-feed-url"><?php echo esc_html( $feed['title'] ) ?></span>
 						</div>
 						<div class="autoblog-log-feed-records"><?php
 
