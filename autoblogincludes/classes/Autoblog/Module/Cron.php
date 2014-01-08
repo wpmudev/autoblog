@@ -823,17 +823,23 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			}
  		}
 
+		// backward compatibility fix
+		$feedcatsare = $details['feedcatsare'];
+		if ( $feedcatsare == 'tag' ) {
+			$feedcatsare = 'post_tag';
+		}
+
 		// assign custom taxonomy terms
-		if ( is_object_in_taxonomy( $post_type, $details['feedcatsare'] ) ) {
+		if ( is_object_in_taxonomy( $post_type, $feedcatsare ) ) {
 			$terms = array();
 			foreach ( $item->get_categories() as $category ) {
 				$term_name = trim( $category->get_label() );
-				$term_id = term_exists( $term_name, $details['feedcatsare'] );
+				$term_id = term_exists( $term_name, $feedcatsare );
 				if ( !empty( $term_id ) ) {
 					$terms[] = is_array( $term_id ) ? $term_id['term_id'] : $term_id;
 				} else {
 					if ( $details['originalcategories'] == 1 ) {
-						$term_id = wp_create_term( $term_name, $details['feedcatsare'] );
+						$term_id = wp_create_term( $term_name, $feedcatsare );
 						if ( !empty( $term_id ) && !is_wp_error( $term_id ) ) {
 							$terms[] = is_array( $term_id ) ? $term_id['term_id'] : $term_id;
 						}
@@ -842,7 +848,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			}
 
 			if ( !empty( $terms ) ) {
-				wp_set_object_terms( $post_id, $terms, $details['feedcatsare'], true );
+				wp_set_object_terms( $post_id, $terms, $feedcatsare, true );
 			}
 		}
 	}
