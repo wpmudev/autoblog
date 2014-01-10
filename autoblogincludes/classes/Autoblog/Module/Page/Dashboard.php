@@ -134,7 +134,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 
 		// enable output caching
 		$template->cache_output( true );
-		$template->set_cache_ttl( 5 * MINUTE_IN_SECONDS );
+		$template->set_cache_ttl( AUTOBLOG_DASHBOARD_CACHE_TTL );
 
 		// render template
 		$template->render();

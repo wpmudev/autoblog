@@ -100,6 +100,11 @@ function autoblog_setup_constants() {
 	if ( !defined( 'AUTOBLOG_IMAGE_CHECK_ORDER' ) ) {
 		define( 'AUTOBLOG_IMAGE_CHECK_ORDER', 'ASC' );
 	}
+
+	// The time to live for dashboard cache, default is 30 minutes
+	if ( !defined( 'AUTOBLOG_DASHBOARD_CACHE_TTL' ) ) {
+		define( 'AUTOBLOG_DASHBOARD_CACHE_TTL', HOUR_IN_SECONDS / 2 );
+	}
 }
 
 /**

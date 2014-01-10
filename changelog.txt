@@ -1,3 +1,8 @@
+== 4.0.1 ==
+
+* Added ability to adjust dashboard cache TTL time
+* Fixed dashboard styles for feeds with long title
+
 == 4.0.0 ==
 
 * Fixed Append Text To Post add-on issue with multi byte string position detection
