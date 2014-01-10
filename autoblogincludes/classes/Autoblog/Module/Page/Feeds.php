@@ -63,9 +63,15 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			wp_send_json_error();
 		}
 
-		switch_to_blog( $bid );
+		if ( function_exists( 'switch_to_blog' ) ) {
+			switch_to_blog( $bid );
+		}
+
 		$categories = get_categories();
-		restore_current_blog();
+
+		if ( function_exists( 'restore_current_blog' ) ) {
+			restore_current_blog();
+		}
 
 		$data = array();
 		$data[] = array(

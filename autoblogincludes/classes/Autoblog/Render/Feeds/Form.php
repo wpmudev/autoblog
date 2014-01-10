@@ -290,7 +290,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Assign posts to this category', 'autoblogtext' ) ?></td>
 			<td valign="top">
-				<?php switch_to_blog( $this->blog ) ?>
+				<?php if ( functions_exists( 'switch_to_blog' ) ) switch_to_blog( $this->blog ) ?>
 				<?php wp_dropdown_categories( array(
 					'hide_empty'       => 0,
 					'name'             => 'abtble[category]',
@@ -300,7 +300,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 					'show_option_none' => __( 'None', 'autoblogtext' ),
 					'class'            => 'field cat'
 				) ) ?>
-				<?php restore_current_blog() ?>
+				<?php if ( functions_exists( 'restore_current_blog' ) ) restore_current_blog() ?>
 				<?php echo $this->_tips->add_tip( __( 'Assign this category to the imported posts.', 'autoblogtext' ) ) ?>
 			</td>
 		</tr>
