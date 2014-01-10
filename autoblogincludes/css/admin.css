@@ -157,6 +157,8 @@
 	font-weight: bold;
 	text-decoration: none;
 	margin-left: 10px;
+	word-wrap: break-word;
+	white-space: pre;
 }
 
 .autoblog-log-feed > .autoblog-log-row:hover {

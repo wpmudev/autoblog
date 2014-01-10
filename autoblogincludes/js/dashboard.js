@@ -1,5 +1,3 @@
-jQuery('html').css('overflow-y', 'scroll');
-
 google.load('visualization', '1', {packages: ['corechart']});
 google.setOnLoadCallback(autoblogDrawChart);
 
@@ -75,6 +73,8 @@ function autoblogDrawChart() {
 			} else {
 				parent.find('.slimScrollDiv, .autoblog-log-feed-records').height('400px');
 			}
+
+			autoblogDrawChart();
 
 			return false;
 		});
