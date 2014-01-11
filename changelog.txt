@@ -2,6 +2,7 @@
 
 * Added ability to adjust dashboard cache TTL time
 * Fixed dashboard styles for feeds with long title
+* Fixed taxonomy processing issue
 
 == 4.0.0 ==
 

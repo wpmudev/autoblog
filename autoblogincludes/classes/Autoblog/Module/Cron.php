@@ -847,8 +847,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 				}
 			}
 
+			$terms = array_unique( array_filter( array_map( 'absint', $terms ) ) );
 			if ( !empty( $terms ) ) {
-				wp_set_object_terms( $post_id, $terms, $feedcatsare, true );
+				wp_add_object_terms( $post_id, $terms, $feedcatsare );
 			}
 		}
 	}
