@@ -806,12 +806,14 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 */
 	public function add_post_taxonomies( $post_id, array $details, SimplePie_Item $item ) {
 		$post_type = $details['posttype'];
+		$added = array();
 
 		// assign post tags
 		if ( is_object_in_taxonomy( $post_type, 'post_tag' ) ) {
 			$tags = !empty( $details['tag'] ) ? array_filter( array_map( 'trim', explode( ',', $details['tag'] ) ) ) : array();
 			if ( !empty( $tags ) ) {
 				wp_set_object_terms( $post_id, $tags, 'post_tag' );
+				$added[] = 'post_tag';
 			}
 		}
 
@@ -820,6 +822,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			$post_category = (int)$details['category'] >= 0 ? array( (int)$details['category'] ) : array();
 			if ( !empty( $post_category ) ) {
 				wp_set_object_terms( $post_id, $post_category, 'category' );
+				$added[] = 'category';
 			}
  		}
 
@@ -849,7 +852,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 			$terms = array_unique( array_filter( array_map( 'absint', $terms ) ) );
 			if ( !empty( $terms ) ) {
-				wp_add_object_terms( $post_id, $terms, $feedcatsare );
+				wp_set_object_terms( $post_id, $terms, $feedcatsare, in_array( $feedcatsare, $added ) );
 			}
 		}
 	}
