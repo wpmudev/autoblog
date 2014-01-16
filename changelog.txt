@@ -1,3 +1,7 @@
+== 4.0.3 ==
+
+* Fixed Uncategorized taxonomy issue
+
 == 4.0.2 ==
 
 * Added YouTube feeds importer add-on.
