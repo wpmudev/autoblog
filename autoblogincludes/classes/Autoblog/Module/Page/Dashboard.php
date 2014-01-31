@@ -33,6 +33,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 
 	const ACTION_REGENERATE_PAGE = 'regenerate';
 	const ACTION_CLEAR_LOG       = 'clear-log';
+	const ACTION_EXPORT_LOG      = 'export-log';
 
 	/**
 	 * Constructor.
@@ -90,6 +91,10 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 						}
 					}
 					break;
+				case self::ACTION_EXPORT_LOG:
+					header( sprintf( 'Content-disposition: attachment; filename=%s-autoblog-log.json', parse_url( site_url(), PHP_URL_HOST ) ) );
+					wp_send_json( $this->_get_log_records() );
+					break;
 			}
 
 			wp_safe_redirect( add_query_arg( array( 'action' => false, '_wpnonce' => false, 'noheader' => false ), wp_get_referer() ) );
@@ -126,11 +131,8 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 
 		// html is not cached, so we need to build it and cache it
 		$template->log_records = $this->_get_log_records();
-
-		$template->clear_log_url = wp_nonce_url(
-			add_query_arg( array( 'action' => self::ACTION_CLEAR_LOG, 'noheader' => 'true' ) ),
-			$this->_build_nonce_action( self::ACTION_CLEAR_LOG )
-		);
+		$template->clear_log_url = wp_nonce_url( add_query_arg( array( 'action' => self::ACTION_CLEAR_LOG, 'noheader' => 'true' ) ), $this->_build_nonce_action( self::ACTION_CLEAR_LOG ) );
+		$template->export_log_url = wp_nonce_url( add_query_arg( array( 'action' => self::ACTION_EXPORT_LOG, 'noheader' => 'true' ) ), $this->_build_nonce_action( self::ACTION_EXPORT_LOG ) );
 
 		// enable output caching
 		$template->cache_output( true );

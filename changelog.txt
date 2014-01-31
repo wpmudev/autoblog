@@ -2,6 +2,7 @@
 
 * Fixed feed post excerpts settings saving
 * Implemented fatal errors catching during feed processing.
+* Implemented ability to export log records.
 
 == 4.0.3 ==
 

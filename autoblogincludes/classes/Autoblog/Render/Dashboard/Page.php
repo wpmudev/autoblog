@@ -57,6 +57,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 				<a class="add-new-h2" href="<?php echo esc_url( $this->clear_log_url ) ?>" onclick="return confirm('<?php esc_html_e( 'Do you really want to delete log records?', 'autoblogtext' ) ?>')">
 					<?php esc_html_e( 'Clear Log', 'autoblogtext' ) ?>
 				</a>
+				<a class="add-new-h2" href="<?php echo esc_url( $this->export_log_url ) ?>"><?php esc_html_e( 'Export Log', 'autoblogtext' ) ?></a>
 			</h2>
 
 			<div class="autoblog-charts"><?php $this->_render_charts() ?></div>
