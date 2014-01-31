@@ -402,8 +402,8 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 				<input type="text" name="abtble[excerptnumber]" value="<?php echo esc_attr( stripslashes( $this->excerptnumber ) ) ?>"  class="narrow field" style='width: 3em;'>
 				<select name="abtble[excerptnumberof]" class="field">
 					<option value="words"<?php selected( 'words', $this->excerptnumberof ) ?>><?php esc_html_e( 'Words', 'autoblogtext' ) ?></option>
-					<option value="sentences"<?php selected( 'words', $this->excerptnumberof ) ?>><?php esc_html_e( 'Sentences', 'autoblogtext' ) ?></option>
-					<option value="paragraphs"<?php selected( 'words', $this->excerptnumberof ) ?>><?php esc_html_e( 'Paragraphs', 'autoblogtext' ) ?></option>
+					<option value="sentences"<?php selected( 'sentences', $this->excerptnumberof ) ?>><?php esc_html_e( 'Sentences', 'autoblogtext' ) ?></option>
+					<option value="paragraphs"<?php selected( 'paragraphs', $this->excerptnumberof ) ?>><?php esc_html_e( 'Paragraphs', 'autoblogtext' ) ?></option>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'Specify the size of the excerpt to create (if selected)', 'autoblogtext' ) ) ?>
 			</td>

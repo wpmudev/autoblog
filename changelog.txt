@@ -1,3 +1,7 @@
+== 4.0.4 ==
+
+* Fixed feed post excerpts settings saving
+
 == 4.0.3 ==
 
 * Fixed Uncategorized taxonomy issue
