@@ -148,6 +148,9 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			case 'delete':
 				$this->_delete_feeds();
 				break;
+			case 'duplicate':
+				$this->_duplicate_feed();
+				break;
 			default:
 				if ( filter_input( INPUT_GET, 'noheader', FILTER_VALIDATE_BOOLEAN ) ) {
 					wp_redirect( add_query_arg( 'noheader', false ) );
@@ -159,6 +162,36 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 				$template->render();
 				break;
 		}
+	}
+
+	/**
+	 * Duplicates feed and redirects to feed edit page.
+	 *
+	 * @since 4.0.4
+	 *
+	 * @access private
+	 */
+	private function _duplicate_feed() {
+		check_admin_referer( 'autoblog_feeds' );
+
+		$feed_id = filter_input( INPUT_GET, 'items', FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+		if ( !$feed_id ) {
+			wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] );
+			exit;
+		}
+
+		$feed = $this->_wpdb->get_row( sprintf( 'SELECT * FROM %s WHERE feed_id = %d', AUTOBLOG_TABLE_FEEDS, $feed_id ), ARRAY_A );
+		if ( !$feed ) {
+			wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] );
+			exit;
+		}
+
+		unset( $feed['feed_id'] );
+		$this->_wpdb->insert( AUTOBLOG_TABLE_FEEDS, $feed );
+		$feed_id = $this->_wpdb->insert_id;
+
+		wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&action=edit&item=' . $feed_id );
+		exit;
 	}
 
 	/**

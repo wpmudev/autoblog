@@ -2,8 +2,9 @@
 
 * Fixed image import bug
 * Fixed feed post excerpts settings saving
-* Implemented fatal errors catching during feed processing.
-* Implemented ability to export log records.
+* Implemented fatal errors catching during feed processing
+* Implemented ability to export log records
+* Implemented ability to clone a feed
 
 == 4.0.3 ==
 
@@ -11,7 +12,7 @@
 
 == 4.0.2 ==
 
-* Added YouTube feeds importer add-on.
+* Added YouTube feeds importer add-on
 
 == 4.0.1 ==
 

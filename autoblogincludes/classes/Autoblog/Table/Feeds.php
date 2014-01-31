@@ -66,6 +66,17 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 				__( 'Edit', 'autoblogtext' )
 			),
 
+			'clone' => sprintf(
+				'<a href="%s">%s</a>',
+				add_query_arg( array(
+					'action'               => 'duplicate',
+					'_wpnonce'             => $this->_args['nonce'],
+					'noheader'             => 'true',
+					$this->_args['plural'] => $item['feed_id'],
+				) ),
+				__( 'Clone', 'autoblogtext' )
+			),
+
 			'process' => sprintf(
 				'<a href="%s">%s</a>',
 				add_query_arg( array(

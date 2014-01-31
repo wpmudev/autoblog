@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-31 18:30+0300\n"
-"PO-Revision-Date: 2014-01-31 18:30+0300\n"
+"POT-Creation-Date: 2014-01-31 20:38+0300\n"
+"PO-Revision-Date: 2014-01-31 20:38+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -206,7 +206,7 @@ msgid "Create Auto Blog Feed"
 msgstr "Create Auto Blog Feed"
 
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:90
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:259
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:270
 msgid "Feed"
 msgstr "Feed"
 
@@ -644,16 +644,16 @@ msgid "No entries found in the feed."
 msgstr "No entries found in the feed."
 
 #: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:133
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:77
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:88
 msgid "Process"
 msgstr "Process"
 
 #: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:134
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:94
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:105
 msgid "Delete"
 msgstr "Delete"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:270
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:303
 msgid "Feed not found."
 msgstr "Feed not found."
 
@@ -670,7 +670,7 @@ msgid "Deactivate"
 msgstr "Deactivate"
 
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:58
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:112
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:123
 msgid "unknown"
 msgstr "unknown"
 
@@ -679,106 +679,110 @@ msgstr "unknown"
 msgid "Edit"
 msgstr "Edit"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:83
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:77
+msgid "Clone"
+msgstr "Clone"
+
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:94
 msgid "Validate"
 msgstr "Validate"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:190
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:224
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:201
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:235
 msgid "Never"
 msgstr "Never"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:263
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:274
 msgid "Target Blog"
 msgstr "Target Blog"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:266
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:277
 msgid "Post Type"
 msgstr "Post Type"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:267
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:278
 msgid "Last Processed"
 msgstr "Last Processed"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:268
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:279
 msgid "Next Check"
 msgstr "Next Check"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:289
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:300
 msgid "now"
 msgstr "now"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:296
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:307
 msgid "just now"
 msgstr "just now"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:300
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:311
 msgid "1 minute ago"
 msgstr "1 minute ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:304
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:315
 msgid " minutes ago"
 msgstr " minutes ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:308
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:319
 msgid "1 hour ago"
 msgstr "1 hour ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:312
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:323
 msgid " hours ago"
 msgstr " hours ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:317
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:328
 msgid "Yesterday"
 msgstr "Yesterday"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:321
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:332
 msgid " days ago"
 msgstr " days ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:325
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:336
 msgid " weeks ago"
 msgstr " weeks ago"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:329
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:340
 msgid "last month"
 msgstr "last month"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:339
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:350
 msgid "in a minute"
 msgstr "in a minute"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:343
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:351
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:367
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:354
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:362
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:378
 msgid "in "
 msgstr "in "
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:343
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:354
 msgid " minutes"
 msgstr " minutes"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:347
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:358
 msgid "in an hour"
 msgstr "in an hour"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:351
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:362
 msgid " hours"
 msgstr " hours"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:355
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:366
 msgid "Tomorrow"
 msgstr "Tomorrow"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:363
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:374
 msgid "next week"
 msgstr "next week"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:367
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:378
 msgid " weeks"
 msgstr " weeks"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:371
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:382
 msgid "next month"
 msgstr "next month"
 
