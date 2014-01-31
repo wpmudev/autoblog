@@ -40,6 +40,7 @@ class Autoblog_Plugin {
 
 	const LOG_INVALID_FEED_URL          = 200;
 	const LOG_FETCHING_ERRORS           = 210;
+	const LOG_PROCESSING_ERRORS         = 211;
 	const LOG_FEED_PROCESSED            = 220;
 	const LOG_FEED_SKIPPED_TOO_EARLY    = 230;
 	const LOG_FEED_SKIPPED_TOO_LATE     = 240;

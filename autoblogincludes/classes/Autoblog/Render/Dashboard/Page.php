@@ -106,7 +106,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 				</div><?php
 
 				// feeds
-				foreach ( $feeds as $feed_id => $feed ) :
+				foreach ( $feeds as $feed ) :
 					if ( !empty( $feed['blog_id'] ) && $switch_to_blog ) :
 						switch_to_blog( $feed['blog_id'] );
 						$this->time_pattern = get_option( 'time_format' );
@@ -165,6 +165,7 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 			switch ( $log['log_type'] ) {
 				case Autoblog_Plugin::LOG_POST_INSERT_FAILED:
 				case Autoblog_Plugin::LOG_FETCHING_ERRORS:
+				case Autoblog_Plugin::LOG_PROCESSING_ERRORS:
 				case Autoblog_Plugin::LOG_INVALID_FEED_URL:
 					$count++;
 					break;

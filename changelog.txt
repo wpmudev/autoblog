@@ -1,6 +1,7 @@
 == 4.0.4 ==
 
 * Fixed feed post excerpts settings saving
+* Implemented fatal errors catching during feed processing.
 
 == 4.0.3 ==
 

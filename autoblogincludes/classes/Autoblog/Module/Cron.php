@@ -89,6 +89,25 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 		$this->_add_action( 'autoblog_post_process_feed', 'reschedule_feed', 5 );
 		$this->_add_action( 'autoblog_post_process_feed', 'restore_switch_blog', 10, 2 );
+
+		$this->_add_action( 'shutdown', 'register_fatal_error_shutdown_handler' );
+	}
+
+	/**
+	 * Registers fatal error shutdown event.
+	 *
+	 * @since 4.0.4
+	 * @action shutdown
+	 *
+	 * @access public
+	 */
+	public function register_fatal_error_shutdown_handler() {
+		if ( $this->_feed_id ) {
+			$last_error = error_get_last();
+			if ( $last_error['type'] === E_ERROR ) {
+				$this->_log_message( Autoblog_Plugin::LOG_PROCESSING_ERRORS, sprintf( '%s at %s:%d', $last_error['message'], $last_error['file'], $last_error['line'] ) );
+			}
+		}
 	}
 
 	/**
@@ -233,6 +252,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 				do_action( 'autoblog_post_process_feed', $feed_id, $details );
 			}
+
+			$this->_feed_id = 0;
 		}
 
 		do_action( 'autoblog_post_process_feeds' );
@@ -598,14 +619,16 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @param string|array $info The log information.
 	 */
 	private function _log_message( $type, $info = '' ) {
-		// insert log message
-		$this->_wpdb->insert( AUTOBLOG_TABLE_LOGS, array(
-			'feed_id'  => $this->_feed_id,
-			'cron_id'  => $this->_cron_timestamp,
-			'log_at'   => current_time( 'timestamp', 1 ),
-			'log_type' => $type,
-			'log_info' => is_array( $info ) ? serialize( $info ) : $info,
-		), array( '%d', '%d', '%d', '%d', '%s' ) );
+		if ( $this->_feed_id && $this->_cron_timestamp ) {
+			// insert log message
+			$this->_wpdb->insert( AUTOBLOG_TABLE_LOGS, array(
+				'feed_id'  => $this->_feed_id,
+				'cron_id'  => $this->_cron_timestamp,
+				'log_at'   => current_time( 'timestamp', 1 ),
+				'log_type' => $type,
+				'log_info' => is_array( $info ) ? serialize( $info ) : $info,
+			), array( '%d', '%d', '%d', '%d', '%s' ) );
+		}
 	}
 
 	/**
