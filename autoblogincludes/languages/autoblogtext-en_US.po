@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-08 13:11+0300\n"
-"PO-Revision-Date: 2014-01-08 13:11+0300\n"
+"POT-Creation-Date: 2014-01-31 18:30+0300\n"
+"PO-Revision-Date: 2014-01-31 18:30+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -34,85 +34,89 @@ msgid "Auto Blog Dashboard"
 msgstr "Auto Blog Dashboard"
 
 #: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:57
+msgid "Export Log"
+msgstr "Export Log"
+
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:58
 msgid "Do you really want to delete log records?"
 msgstr "Do you really want to delete log records?"
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:58
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:59
 msgid "Clear Log"
 msgstr "Clear Log"
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:82
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:83
 msgid "No log records were found."
 msgstr "No log records were found."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:176
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:178
 msgid "The amount of errors"
 msgstr "The amount of errors"
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:206
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:208
 msgid "The amount of times the feed has been procesed"
 msgstr "The amount of times the feed has been procesed"
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:229
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:231
 msgid "The amount of imported items during the day."
 msgstr "The amount of imported items during the day."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:247
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:249
 msgid "Feed URL is invalid and cannot be processed."
 msgstr "Feed URL is invalid and cannot be processed."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:259
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:261
 #, php-format
 msgctxt "{Post title} has been already imported."
 msgid "%s has been already imported."
 msgstr "%s has been already imported."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:265
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:289
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:303
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:267
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:291
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:305
 msgid "view post"
 msgstr "view post"
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:271
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:273
 msgid "Feed item does not contain requested words or tags."
 msgstr "Feed item does not contain requested words or tags."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:276
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:278
 msgid "Feed item importing failed."
 msgstr "Feed item importing failed."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:283
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:285
 #, php-format
 msgctxt "{Post title} has been imported successfully."
 msgid "%s has been imported successfully."
 msgstr "%s has been imported successfully."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:297
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:299
 #, php-format
 msgctxt "{Post title} has been updated successfully."
 msgid "%s has been updated successfully."
 msgstr "%s has been updated successfully."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:311
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:313
 #, php-format
 msgid "%s feed item was imported."
 msgid_plural "%s feed items were imported."
 msgstr[0] "%s feed item was imported."
 msgstr[1] "%s feed items were imported."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:318
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:320
 msgid "Feed has been skipped because it is too early to process it."
 msgstr "Feed has been skipped because it is too early to process it."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:323
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:325
 msgid "Feed has been skipped because it is too late to process it."
 msgstr "Feed has been skipped because it is too late to process it."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:328
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:330
 msgid "Feed processing was finished. No new items were imported."
 msgstr "Feed processing was finished. No new items were imported."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:376
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:378
 #, php-format
 msgctxt "... and will be regenerated at {14:01:54} on {Wednesday, 25-Dec-13}."
 msgid ""
@@ -120,11 +124,11 @@ msgid ""
 msgstr ""
 "* This page has been taken from cache and will be regenerated at %s on %s."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:381
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:383
 msgid "* This page has been taken from cache."
 msgstr "* This page has been taken from cache."
 
-#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:384
+#: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:386
 msgid "Regenerate the page."
 msgstr "Regenerate the page."
 
@@ -323,7 +327,7 @@ msgid "Assign posts to this category"
 msgstr "Assign posts to this category"
 
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:300
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:73
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:79
 msgid "None"
 msgstr "None"
 
@@ -635,21 +639,21 @@ msgstr "Autoblog Add-ons"
 msgid "Add-ons"
 msgstr "Add-ons"
 
-#: autoblogincludes/classes/Autoblog/Module/Cron.php:316
+#: autoblogincludes/classes/Autoblog/Module/Cron.php:337
 msgid "No entries found in the feed."
 msgstr "No entries found in the feed."
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:127
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:133
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:77
 msgid "Process"
 msgstr "Process"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:128
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:134
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:94
 msgid "Delete"
 msgstr "Delete"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:264
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:270
 msgid "Feed not found."
 msgstr "Feed not found."
 

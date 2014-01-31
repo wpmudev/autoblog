@@ -54,10 +54,10 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 			<div class="icon32" id="icon-edit"><br></div>
 			<h2>
 				<?php esc_html_e( 'Auto Blog Dashboard', 'autoblogtext' ) ?>
+				<a class="add-new-h2" href="<?php echo esc_url( $this->export_log_url ) ?>"><?php esc_html_e( 'Export Log', 'autoblogtext' ) ?></a>
 				<a class="add-new-h2" href="<?php echo esc_url( $this->clear_log_url ) ?>" onclick="return confirm('<?php esc_html_e( 'Do you really want to delete log records?', 'autoblogtext' ) ?>')">
 					<?php esc_html_e( 'Clear Log', 'autoblogtext' ) ?>
 				</a>
-				<a class="add-new-h2" href="<?php echo esc_url( $this->export_log_url ) ?>"><?php esc_html_e( 'Export Log', 'autoblogtext' ) ?></a>
 			</h2>
 
 			<div class="autoblog-charts"><?php $this->_render_charts() ?></div>
