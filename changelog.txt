@@ -1,5 +1,6 @@
 == 4.0.4 ==
 
+* Fixed image import bug
 * Fixed feed post excerpts settings saving
 * Implemented fatal errors catching during feed processing.
 * Implemented ability to export log records.

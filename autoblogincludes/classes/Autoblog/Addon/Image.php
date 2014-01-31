@@ -18,6 +18,10 @@
 // | MA 02110-1301 USA                                                    |
 // +----------------------------------------------------------------------+
 
+require_once ABSPATH . 'wp-admin/includes/media.php';
+require_once ABSPATH . 'wp-admin/includes/file.php';
+require_once ABSPATH . 'wp-admin/includes/image.php';
+
 /**
  * Base class for autoblog images related addon.
  *

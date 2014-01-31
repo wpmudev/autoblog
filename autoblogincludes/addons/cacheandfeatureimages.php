@@ -108,11 +108,6 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			return;
 		}
 
-		// Include the file and media libraries as they have the functions we want to use
-		require_once ABSPATH . 'wp-admin/includes/media.php';
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		require_once ABSPATH . 'wp-admin/includes/image.php';
-
 		// Set a big timelimt for processing as we are pulling in potentially big files.
 		set_time_limit( 600 );
 
