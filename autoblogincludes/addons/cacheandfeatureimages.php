@@ -29,7 +29,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Renders add-on's options.
 	 *
-	 * @action autoblog_post_post_insert
+	 * @action autoblog_feed_edit_form_end
 	 *
 	 * @access public
 	 * @param type $key
@@ -68,15 +68,15 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Finds featured image and attached it to the post.
 	 *
-	 * @action autoblog_feed_edit_form_end
+	 * @action autoblog_post_post_insert
 	 *
 	 * @access public
 	 * @param int $post_id The post ID to attach featured image to.
-	 * @param array $ablog The actual settings.
+	 * @param array $details The actual feed settings.
 	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
 	 */
-	public function check_post_for_images( $post_id, $ablog, SimplePie_Item $item ) {
-		$method = trim( isset( $ablog['featuredimage'] ) ? $ablog['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
+	public function check_post_for_images( $post_id, $details, SimplePie_Item $item ) {
+		$method = trim( isset( $details['featuredimage'] ) ? $details['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
 		if ( empty( $method ) ) {
 			return;
 		}
@@ -113,7 +113,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 
 		$newimage = $image;
 		$image_url = autoblog_parse_mb_url( $newimage );
-		$blog_url = parse_url( $ablog['url'] );
+		$blog_url = parse_url( $details['url'] );
 
 		if ( empty( $image_url['host'] ) && !empty( $blog_url['host'] ) ) {
 			// We need to add in a host name as the images look like they are relative to the feed

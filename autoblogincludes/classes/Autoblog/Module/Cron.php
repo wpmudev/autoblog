@@ -767,7 +767,14 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 
 			// an author has not been found, then set default
 			if ( empty( $data['post_author'] ) ) {
-				$data['post_author'] = $details['altauthor'];
+				$altauthor = absint( $details['altauthor'] );
+				if ( !$altauthor ) {
+					$user_query = new WP_User_Query( array( 'role' => 'Administrator' ) );
+					if ( !empty( $user_query->results ) ) {
+						$altauthor = $user_query->results[0]->ID;
+					}
+				}
+				$data['post_author'] = $altauthor;
 			}
 		} else {
 			$data['post_author'] = $details['author'];

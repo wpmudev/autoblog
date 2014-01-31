@@ -31,9 +31,9 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 	 *
 	 * @access public
 	 * @param int $post_id The post id.
-	 * @param array $details The feed details.
+	 * @param array $details The feed settings.
 	 */
-	public function import_post_images( $post_id, $ablog ) {
+	public function import_post_images( $post_id, $details ) {
 		$post = get_post( $post_id );
 		$images = $this->_get_remote_images_from_content( $post->post_content );
 		if ( empty( $images ) ) {
@@ -54,7 +54,7 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 			// Parse the image url
 			$purl = autoblog_parse_mb_url( $newimage );
 			// Parse the feed url
-			$furl = autoblog_parse_mb_url( $ablog['url'] );
+			$furl = autoblog_parse_mb_url( $details['url'] );
 
 			if ( empty( $purl['host'] ) && !empty( $furl['host'] ) ) {
 				// We need to add in a host name as the images look like they are relative to the feed

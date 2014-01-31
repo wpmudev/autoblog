@@ -98,7 +98,8 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 		$file_array['tmp_name'] = $tmp;
 
 		// do the validation and storage stuff
-		$image_id = media_handle_sideload( $file_array, $post_id );
+		$post = get_post( $post_id );
+		$image_id = media_handle_sideload( $file_array, $post_id, null, array( 'post_author' => $post->post_author ) );
 		if ( is_wp_error( $image_id ) ) {
 			@unlink( $file_array['tmp_name'] );
 		} else {
