@@ -6,6 +6,7 @@
 * Implemented fatal errors catching during feed processing
 * Implemented ability to export log records
 * Implemented ability to clone a feed
+* Implemented ability to select default thumbnail
 
 == 4.0.3 ==
 

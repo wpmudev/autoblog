@@ -96,7 +96,15 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 
 		// feeds page scripts
 		if ( $page_hook == $this->_admin_pages['feeds'] ) {
+			wp_enqueue_media();
+
 			wp_enqueue_script( 'autoblog-feeds', AUTOBLOG_ABSURL . 'js/feeds.js', array( 'jquery' ), Autoblog_Plugin::VERSION, true );
+			wp_localize_script( 'autoblog-feeds', 'autoblog', array(
+				'fileframe' => array(
+					'title' => __( 'Chose Defaul Thumbnail', 'autoblogtext' ),
+					'button' => __( 'Select Thumbnail', 'autoblogtext' ),
+				),
+			) );
 		}
 	}
 

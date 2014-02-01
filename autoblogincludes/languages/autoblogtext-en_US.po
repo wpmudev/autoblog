@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-31 20:38+0300\n"
-"PO-Revision-Date: 2014-01-31 20:38+0300\n"
+"POT-Creation-Date: 2014-02-01 16:56+0300\n"
+"PO-Revision-Date: 2014-02-01 16:56+0300\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -29,7 +29,7 @@ msgid "Search"
 msgstr "Search"
 
 #: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:56
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:124
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:132
 msgid "Auto Blog Dashboard"
 msgstr "Auto Blog Dashboard"
 
@@ -619,23 +619,31 @@ msgstr "Imported Items"
 msgid "Errors"
 msgstr "Errors"
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:119
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:104
+msgid "Chose Defaul Thumbnail"
+msgstr "Chose Defaul Thumbnail"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:105
+msgid "Select Thumbnail"
+msgstr "Select Thumbnail"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:127
 msgid "Auto Blog"
 msgstr "Auto Blog"
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:125
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:133
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:129
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:137
 msgid "All feeds"
 msgstr "All feeds"
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:133
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:141
 msgid "Autoblog Add-ons"
 msgstr "Autoblog Add-ons"
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:134
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:142
 msgid "Add-ons"
 msgstr "Add-ons"
 
@@ -911,13 +919,25 @@ msgstr "Find the first image within content of a feed item"
 msgid "Find the last image within content of a feed item"
 msgstr "Find the last image within content of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:62
+#: autoblogincludes/addons/cacheandfeatureimages.php:77
+msgid "Select Default Image"
+msgstr "Select Default Image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:78
+msgid "Delete Image"
+msgstr "Delete Image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:83
 msgid "Featured Image Importing"
 msgstr "Featured Image Importing"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:65
+#: autoblogincludes/addons/cacheandfeatureimages.php:86
 msgid "Select a way to import featured image"
 msgstr "Select a way to import featured image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:87
+msgid "Default thumbnail image"
+msgstr "Default thumbnail image"
 
 #: autoblogincludes/addons/post.formats.php:39
 msgid "Post format for new posts"

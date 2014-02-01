@@ -48,21 +48,43 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			self::SOURCE_THE_LAST_IMAGE  => __( 'Find the last image within content of a feed item', 'autoblogtext' ),
 		);
 
-		$element = '';
+		$radio = '';
 		foreach ( $options as $key => $label ) {
-			$element .= sprintf(
+			$radio .= sprintf(
 				'<div><label><input type="radio" name="abtble[featuredimage]" value="%s"%s> %s</label></div>',
 				esc_attr( $key ),
 				checked( $key, $selected_option, false ),
 				esc_html( $label )
 			);
 		}
+		$radio .= '<br>';
+
+		$thumbnail_src = '';
+		$thumbnail_id = isset( $table['featureddefault'] ) ? absint( $table['featureddefault'] ) : 0;
+		if ( $thumbnail_id ) {
+			$image = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
+			if ( !empty( $image ) ) {
+				$thumbnail_src = $image[0];
+			}
+		}
+
+		$default = sprintf(
+			'<input type="hidden" name="abtble[featureddefault]" value="%s">
+			<button type="button" class="button button-secondary" id="featureddefault_select">%s</button>
+			<button type="button" class="button button-secondary" id="featureddefault_delete">%s</button>
+			<div><img src="%s" style="width:150px;height:auto;margin-top:10px;"></div>',
+			$thumbnail_id,
+			__( 'Select Default Image', 'autoblogtext' ),
+			__( 'Delete Image', 'autoblogtext' ),
+			$thumbnail_src
+		);
 
 		// render block header
 		$this->_render_block_header( __( 'Featured Image Importing', 'autoblogtext' ) );
 
 		// render block elements
-		$this->_render_block_element( __( 'Select a way to import featured image', 'autoblogtext' ), $element );
+		$this->_render_block_element( __( 'Select a way to import featured image', 'autoblogtext' ), $radio );
+		$this->_render_block_element( __( 'Default thumbnail image', 'autoblogtext' ), $default );
 	}
 
 	/**
@@ -82,12 +104,17 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		}
 
 		if ( $method == self::SOURCE_MEDIA_THUMBNAIL ) {
+			$set = false;
 			$resutls = $item->get_item_tags( SIMPLEPIE_NAMESPACE_MEDIARSS, 'thumbnail' );
 			if ( isset( $resutls[0]['attribs']['']['url'] ) && filter_var( $resutls[0]['attribs']['']['url'], FILTER_VALIDATE_URL ) ) {
 				$thumbnail_id = $this->_download_image( $resutls[0]['attribs']['']['url'], $post_id );
 				if ( $thumbnail_id ) {
-					set_post_thumbnail( $post_id, $thumbnail_id );
+					$set = set_post_thumbnail( $post_id, $thumbnail_id );
 				}
+			}
+
+			if ( !$set ) {
+				$this->_set_default_image( $post_id, $details );
 			}
 			return;
 		}
@@ -105,6 +132,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		}
 
 		if ( empty( $image ) ) {
+			$this->_set_default_image( $post_id, $details );
 			return;
 		}
 
@@ -129,6 +157,27 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		$thumbnail_id = $this->_download_image( $newimage, $post_id );
 		if ( $thumbnail_id ) {
 			set_post_thumbnail( $post_id, $thumbnail_id );
+		} else {
+			$this->_set_default_image( $post_id, $details );
+		}
+	}
+
+	/**
+	 * Sets default thumbnail if it has been selected.
+	 *
+	 * @since 4.0.4
+	 *
+	 * @access private
+	 * @param int $post_id The post id.
+	 * @param array $details The feed details.
+	 */
+	private function _set_default_image( $post_id, $details ) {
+		$default = isset( $details['featureddefault'] ) ? absint( $details['featureddefault'] ) : 0;
+		if ( $default ) {
+			$image = wp_get_attachment_image_src( $default, 'medium' );
+			if ( !empty( $image ) ) {
+				set_post_thumbnail( $post_id, $default );
+			}
 		}
 	}
 
