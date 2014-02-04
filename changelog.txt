@@ -1,6 +1,7 @@
 == 4.0.5 ==
 
 * Improved images addons to skip all invalid images from being imported
+* Fixed YouTube import addon issue
 
 == 4.0.4 ==
 

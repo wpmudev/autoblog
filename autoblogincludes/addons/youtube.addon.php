@@ -36,7 +36,7 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon {
 	 */
 	public function process_video( array $data, array $details, SimplePie_Item $item ) {
 		$permalink = htmlspecialchars_decode( $item->get_permalink() );
-		if ( stripos( $permalink, 'http://www.youtube.com/watch' ) !== false ) {
+		if ( preg_match( '#^https?://(www\.)?youtube\.com/watch#i', $permalink ) ) {
 			$data['post_content'] = $permalink . PHP_EOL . PHP_EOL . $data['post_content'];
 		}
 
