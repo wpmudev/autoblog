@@ -119,8 +119,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			return;
 		}
 
-		$post = get_post( $post_id );
-		$images = $this->_get_remote_images_from_content( $post->post_content );
+		$images = $this->_get_remote_images_from_content( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
 		if ( empty( $images ) ) {
 			return;
 		}

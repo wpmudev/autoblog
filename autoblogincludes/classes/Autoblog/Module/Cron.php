@@ -855,7 +855,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 				$added[] = 'category';
 			}
  		}
-
+		
 		// backward compatibility fix
 		$feedcatsare = $details['feedcatsare'];
 		if ( $feedcatsare == 'tag' ) {
@@ -871,7 +871,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 				if ( !empty( $term_id ) ) {
 					$terms[] = is_array( $term_id ) ? $term_id['term_id'] : $term_id;
 				} else {
-					if ( $details['originalcategories'] == 1 ) {
+					if ( isset( $details['originalcategories'] ) && $details['originalcategories'] == 1 ) {
 						$term_id = wp_create_term( $term_name, $feedcatsare );
 						if ( !empty( $term_id ) && !is_wp_error( $term_id ) ) {
 							$terms[] = is_array( $term_id ) ? $term_id['term_id'] : $term_id;

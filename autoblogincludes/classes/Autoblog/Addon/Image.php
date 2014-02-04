@@ -47,8 +47,9 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 
 		if ( preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|is', $content, $matches ) ) {
 			foreach ( $matches[1] as $url ) {
+				$url = current( explode( '?', $url, 2 ) );
 				$purl = autoblog_parse_mb_url( $url );
-				if ( !isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] ) {
+				if ( !isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] && preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $url ) ) {
 					// we seem to have an external images
 					$images[] = $url;
 				}

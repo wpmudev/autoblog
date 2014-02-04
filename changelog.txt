@@ -1,3 +1,7 @@
+== 4.0.5 ==
+
+* Improved images addons to skip all invalid images from being imported
+
 == 4.0.4 ==
 
 * Fixed image import bug
