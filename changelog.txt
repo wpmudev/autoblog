@@ -1,6 +1,7 @@
 == 4.0.5 ==
 
 * Improved images addons to skip all invalid images from being imported
+* Improved feed items filtering, now the plugin filters them by whole words
 * Fixed YouTube import addon issue
 
 == 4.0.4 ==

@@ -427,16 +427,15 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @return boolean TRUE if feed item content matched, otherwise FALSE.
 	 */
 	private function _check_item_content( SimplePie_Item $item, $details ) {
-		$pos_func = function_exists( 'mb_stripos' ) ? 'mb_stripos' : 'stripos';
-		$item_content = trim( $item->get_title() ) . ' ' . trim( $item->get_content() );
-
 		$matchall = $matchany = $matchphrase = $matchnone = $matchtags = true;
+		$item_content = trim( $item->get_title() ) . ' ' . trim( $item->get_content() );
 
 		if ( !empty( $details['allwords'] ) ) {
 			$matchall = true;
 			$words = array_filter( array_map( 'trim', explode( ',', $details['allwords'] ) ) );
 			foreach ( $words as $word ) {
-				if ( $pos_func( $item_content, $word ) === false ) {
+				$word = preg_quote( $word, '/' );
+				if ( !preg_match( "/\b({$word})\b/is", $item_content ) ) {
 					$matchall = false;
 					break;
 				}
@@ -447,7 +446,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			$matchany = false;
 			$words = array_filter( array_map( 'trim', explode( ',', $details['anywords'] ) ) );
 			foreach ( $words as $word ) {
-				if ( $pos_func( $item_content, $word ) !== false ) {
+				$word = preg_quote( $word, '/' );
+				if ( preg_match( "/\b({$word})\b/is", $item_content ) ) {
 					$matchany = true;
 					break;
 				}
@@ -455,9 +455,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		}
 
 		if ( !empty( $details['phrase'] ) ) {
-			$word = trim( $details['phrase'] );
+			$word = preg_quote( trim( $details['phrase'] ), '/' );
 			if ( !empty( $word ) ) {
-				$matchphrase = $pos_func( $item_content, $word ) !== false;
+				$matchphrase = preg_match( "/\b({$word})\b/is", $item_content );
 			}
 		}
 
@@ -465,7 +465,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			$matchnone = true;
 			$words = array_filter( array_map( 'trim', explode( ',', $details['nonewords'] ) ) );
 			foreach ( $words as $word ) {
-				if ( $pos_func( $item_content, $word ) !== false ) {
+				$word = preg_quote( $word, '/' );
+				if ( preg_match( "/\b({$word})\b/is", $item_content ) ) {
 					$matchnone = false;
 					break;
 				}
@@ -855,7 +856,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 				$added[] = 'category';
 			}
  		}
-		
+
 		// backward compatibility fix
 		$feedcatsare = $details['feedcatsare'];
 		if ( $feedcatsare == 'tag' ) {

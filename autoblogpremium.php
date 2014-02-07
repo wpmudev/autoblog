@@ -27,9 +27,6 @@ WDP ID: 97
 // | MA 02110-1301 USA                                                    |
 // +----------------------------------------------------------------------+
 
-// Modify the next line to change the user agent reported to web sites.
-//define('SIMPLEPIE_USERAGENT', 'ABlogPremium/0.1 (Feed Parser; http://premium.wpmudev.org; Allow like Gecko) Build/1');
-
 // prevent reloading the plugin, if it has been already loaded
 if ( class_exists( 'Autoblog_Plugin', false ) ) {
 	return;
