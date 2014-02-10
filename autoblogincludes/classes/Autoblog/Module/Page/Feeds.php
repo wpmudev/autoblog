@@ -380,7 +380,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 			exit;
 		}
 
-		if ( AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
+		if ( Autoblog_Plugin::use_cron() ) {
 			wp_schedule_single_event( time(), Autoblog_Plugin::SCHEDULE_PROCESS, array( $feeds, true ) );
 			wp_safe_redirect( 'admin.php?page=' . $_REQUEST['page'] . '&launched=true' );
 			exit;

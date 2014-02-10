@@ -65,7 +65,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * @access public
 	 */
 	public function check_schedules() {
-		if ( AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
+		if ( Autoblog_Plugin::use_cron() ) {
 			$transient = 'autoblog-feeds-launching';
 			if ( get_transient( $transient ) === false ) {
 				$this->register_schedules();
@@ -108,7 +108,7 @@ class Autoblog_Module_System extends Autoblog_Module {
 	 * @access public
 	 */
 	public function register_schedules() {
-		if ( AUTOBLOG_PROCESSING_METHOD != 'cron' ) {
+		if ( !Autoblog_Plugin::use_cron() ) {
 			return;
 		}
 

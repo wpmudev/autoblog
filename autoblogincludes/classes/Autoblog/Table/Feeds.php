@@ -218,7 +218,7 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	 * @return string Next check time.
 	 */
 	public function column_nextcheck( $item ) {
-		$next_check = AUTOBLOG_PROCESSING_METHOD == 'cron'
+		$next_check = Autoblog_Plugin::use_cron()
 			? wp_next_scheduled( Autoblog_Plugin::SCHEDULE_PROCESS, array( absint( $item['feed_id'] ) ) )
 			: absint( $item['nextcheck'] );
 

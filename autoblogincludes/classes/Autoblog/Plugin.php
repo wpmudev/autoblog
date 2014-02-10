@@ -139,4 +139,20 @@ class Autoblog_Plugin {
 		$this->_modules[$class] = new $class( $this );
 	}
 
+	/**
+	 * Determines whether or not to use cron jobs to process feeds import.
+	 *
+	 * @since 4.0.5
+	 *
+	 * @static
+	 * @access public
+	 * @return boolean TRUE if cron jobs could be used, otherwise FALSE.
+	 */
+	public static function use_cron() {
+		$disable_wp_cron = defined( 'DISABLE_WP_CRON' ) && filter_var( DISABLE_WP_CRON, FILTER_VALIDATE_BOOLEAN );
+		$autoblog_cron_method = AUTOBLOG_PROCESSING_METHOD == 'cron';
+
+		return apply_filters( 'autoblog_use_cron', !$disable_wp_cron && $autoblog_cron_method );
+	}
+
 }

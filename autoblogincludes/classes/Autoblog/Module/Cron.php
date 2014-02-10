@@ -141,7 +141,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 * @param int $feed_id The id of the feed.
 	 */
 	public function reschedule_feed( $feed_id ) {
-		if ( !$this->_is_forced && AUTOBLOG_PROCESSING_METHOD == 'cron' ) {
+		if ( !$this->_is_forced && Autoblog_Plugin::use_cron() ) {
 			$nextcheck = $this->_wpdb->get_var( sprintf( 'SELECT nextcheck FROM %s WHERE feed_id = %d', AUTOBLOG_TABLE_FEEDS, $feed_id ) );
 			wp_schedule_single_event( $nextcheck, Autoblog_Plugin::SCHEDULE_PROCESS, array( absint( $feed_id ) ) );
 		}
