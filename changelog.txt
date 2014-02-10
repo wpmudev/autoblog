@@ -5,6 +5,7 @@
 * Improved feed items filtering, now the plugin filters them by whole words
 * Fixed YouTube import addon issue
 * Fixed dashboard chart date range rendering
+* Fixed dashboard log cleanup process
 * Implemented ability to filter feed details before processing
 
 == 4.0.4 ==

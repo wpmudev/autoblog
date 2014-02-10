@@ -191,7 +191,7 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		$timeframe = sprintf( '-%d days', $timeframe ? $timeframe : 2 );
 
 		// clean up log records older than a week
-		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE cron_id < %d', AUTOBLOG_TABLE_LOGS, strtotime( $timeframe ) ) );
+		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE cron_id < %d', AUTOBLOG_TABLE_LOGS, strtotime( $timeframe, current_time( 'timestamp' ) ) ) );
 
 		$records = $this->_wpdb->get_results( sprintf(
 			'SELECT * FROM %s WHERE feed_id IN (%s) ORDER BY log_at DESC, log_type DESC',
