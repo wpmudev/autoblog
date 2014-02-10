@@ -222,7 +222,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			if ( $details ) {
 				$details = @unserialize( $details );
 			}
-			
+
 			$details = apply_filters( 'autoblog_feed_details', $details, $feed_id );
 
 			// do not process the feed if we are not in the requested period to process
@@ -868,7 +868,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		// assign custom taxonomy terms
 		if ( is_object_in_taxonomy( $post_type, $feedcatsare ) ) {
 			$terms = array();
-			foreach ( $item->get_categories() as $category ) {
+			foreach ( (array)$item->get_categories() as $category ) {
 				$term_name = trim( $category->get_label() );
 				$term_id = term_exists( $term_name, $feedcatsare );
 				if ( !empty( $term_id ) ) {
