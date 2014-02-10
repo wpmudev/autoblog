@@ -99,6 +99,15 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 
 		$date_pattern = get_option( 'date_format' );
 
+		$show_detailed_report = filter_input( INPUT_GET, 'detailed', FILTER_VALIDATE_BOOLEAN );
+		$skip_types = array(
+			Autoblog_Plugin::LOG_DUPLICATE_POST,
+			Autoblog_Plugin::LOG_POST_DOESNT_MATCH,
+			Autoblog_Plugin::LOG_POST_INSERT_FAILED,
+			Autoblog_Plugin::LOG_POST_INSERT_SUCCESS,
+			Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS,
+		);
+
 		// dates
 		foreach ( $this->log_records as $date => $feeds ) :
 			?><div id="autoblog-log-date-<?php echo date( 'Y-n-j', $date ) ?>" class="autoblog-log-date">
@@ -128,6 +137,10 @@ class Autoblog_Render_Dashboard_Page extends Autoblog_Render {
 						// logs
 						$tick = true; $cron_id = false;
 						foreach ( $feed['logs'] as $log ) :
+							if ( !$show_detailed_report && in_array( $log['log_type'], $skip_types ) ) {
+								continue;
+							}
+
 							if ( $cron_id != false && $cron_id != $log['cron_id'] ) :
 								$tick = !$tick;
 							endif;

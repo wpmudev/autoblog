@@ -1,5 +1,6 @@
 == 4.0.5 ==
 
+* Improved performance of dashboard page
 * Improved images addons to skip all invalid images from being imported
 * Improved feed items filtering, now the plugin filters them by whole words
 * Fixed YouTube import addon issue

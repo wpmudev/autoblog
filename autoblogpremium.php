@@ -102,6 +102,11 @@ function autoblog_setup_constants() {
 	if ( !defined( 'AUTOBLOG_DASHBOARD_CACHE_TTL' ) ) {
 		define( 'AUTOBLOG_DASHBOARD_CACHE_TTL', HOUR_IN_SECONDS / 2 );
 	}
+
+	// The amount of days to keep log alive
+	if ( !defined( 'AUTOBLOG_DASHBOARD_LOG_TTL' ) ) {
+		define( 'AUTOBLOG_DASHBOARD_LOG_TTL', 2 );
+	}
 }
 
 /**
