@@ -193,10 +193,20 @@ class Autoblog_Module_Page_Dashboard extends Autoblog_Module {
 		// clean up log records older than a week
 		$this->_wpdb->query( sprintf( 'DELETE FROM %s WHERE cron_id < %d', AUTOBLOG_TABLE_LOGS, strtotime( $timeframe, current_time( 'timestamp' ) ) ) );
 
+		$show_detailed_report = filter_input( INPUT_GET, 'detailed', FILTER_VALIDATE_BOOLEAN );
+		$skip_types = array(
+			Autoblog_Plugin::LOG_DUPLICATE_POST,
+			Autoblog_Plugin::LOG_POST_DOESNT_MATCH,
+			Autoblog_Plugin::LOG_POST_INSERT_FAILED,
+			Autoblog_Plugin::LOG_POST_INSERT_SUCCESS,
+			Autoblog_Plugin::LOG_POST_UPDATE_SUCCESS,
+		);
+
 		$records = $this->_wpdb->get_results( sprintf(
-			'SELECT * FROM %s WHERE feed_id IN (%s) ORDER BY log_at DESC, log_type DESC',
+			'SELECT * FROM %s WHERE feed_id IN (%s)%s ORDER BY log_at DESC, log_type DESC',
 			AUTOBLOG_TABLE_LOGS,
-			implode( ', ', array_keys( $feeds ) )
+			implode( ', ', array_keys( $feeds ) ),
+			!$show_detailed_report ? ' AND log_type NOT IN (' . implode( ', ', $skip_types ) . ')' : ''
 		), ARRAY_A );
 
 		if ( empty( $records ) ) {
