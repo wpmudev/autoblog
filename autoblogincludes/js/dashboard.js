@@ -2,9 +2,15 @@ google.load('visualization', '1', {packages: ['corechart']});
 google.setOnLoadCallback(autoblogDrawChart);
 
 function autoblogDrawChart() {
-	var date, chart, table, i, today, imports, errors, processed;
+	var date, chart, table, i, today, stamp, imports, errors, processed;
 
 	today = new Date();
+
+	stamp = Date.parse(autoblog.date);
+	if (!isNaN(stamp)) {
+		today.setTime(stamp);
+	}
+
 	today.setDate(today.getDate() - 6);
 
 	table = new google.visualization.DataTable();

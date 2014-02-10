@@ -91,6 +91,7 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 				'processes_column' => __( 'Processed Feeds', 'autoblogtext' ),
 				'imports_column'   => __( 'Imported Items', 'autoblogtext' ),
 				'errors_column'    => __( 'Errors', 'autoblogtext' ),
+				'date'             => date( 'm-d-Y', current_time( 'timestamp' ) ),
 			) );
 		}
 
