@@ -201,6 +201,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		$this->_is_forced = $force;
 		$this->_cron_timestamp = current_time( 'timestamp' );
 
+		@ini_set( 'memory_limit', apply_filters( 'admin_memory_limit', WP_MAX_MEMORY_LIMIT ) );
 		ignore_user_abort( true );
 		if ( function_exists( 'set_time_limit' ) ) {
 			set_time_limit( 0 );
