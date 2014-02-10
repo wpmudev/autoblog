@@ -217,11 +217,13 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		foreach ( $feed_ids as $feed_id ) {
 			$this->_feed_id = $feed_id;
 			$time = current_time( 'timestamp' );
-			$details = @unserialize( $this->_wpdb->get_var( sprintf(
-				'SELECT feed_meta FROM %s WHERE feed_id = %d',
-				AUTOBLOG_TABLE_FEEDS,
-				$feed_id
-			) ) );
+
+			$details = $this->_wpdb->get_var( sprintf( 'SELECT feed_meta FROM %s WHERE feed_id = %d', AUTOBLOG_TABLE_FEEDS, $feed_id ) );
+			if ( $details ) {
+				$details = @unserialize( $details );
+			}
+			
+			$details = apply_filters( 'autoblog_feed_details', $details, $feed_id );
 
 			// do not process the feed if we are not in the requested period to process
 			if ( !$force ) {
