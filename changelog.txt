@@ -6,6 +6,7 @@
 * Fixed YouTube import addon issue
 * Fixed dashboard chart date range rendering
 * Fixed dashboard log cleanup process
+* Fixed feed last processing time and next check time rendering
 * Implemented ability to filter feed details before processing
 
 == 4.0.4 ==

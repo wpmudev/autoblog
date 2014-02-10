@@ -291,10 +291,6 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 	 * @return string Interval value.
 	 */
 	private function _convert_time_to_str( $timestamp ) {
-		if ( !ctype_digit( $timestamp ) ) {
-			$timestamp = strtotime( $timestamp );
-		}
-
 		$diff = current_time( 'timestamp' ) - $timestamp;
 		if ( $diff == 0 ) {
 			return __( 'now', 'autoblogtext' );
