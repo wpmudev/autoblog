@@ -201,11 +201,8 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 			return '<code>' . __( 'Never', 'autoblogtext' ) . '</code>';
 		}
 
-		return sprintf(
-			'<code title="%s">%s</code>',
-			date_i18n( $this->_args['date_i18n_format'], $item['lastupdated'] ),
-			$this->_convert_time_to_str( $item['lastupdated'] + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS )
-		);
+		$last_updated = $item['lastupdated'] + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+		return sprintf( '<code title="%s">%s</code>', date_i18n( $this->_args['date_i18n_format'], $last_updated ), $this->_convert_time_to_str( $last_updated ) );
 	}
 
 	/**
