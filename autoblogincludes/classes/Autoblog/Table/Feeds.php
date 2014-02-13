@@ -124,11 +124,18 @@ class Autoblog_Table_Feeds extends Autoblog_Table {
 		}
 
 		$post_type = get_post_type_object( $item['feed_meta']['posttype'] );
-		if ( is_null( $post_type ) ) {
-			return $item['feed_meta']['posttype'];
+		if ( !is_null( $post_type ) ) {
+			$labels = get_post_type_labels( $post_type );
+			if ( is_object( $labels ) && isset( $labels->name ) ) {
+				return $labels->name;
+			}
+
+			if ( is_array( $labels ) && isset( $labels['name'] ) ) {
+				return $labels['name'];
+			}
 		}
 
-		return get_post_type_labels( $post_type )->name;
+		return $item['feed_meta']['posttype'];
 	}
 
 	/**

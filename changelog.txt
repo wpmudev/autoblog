@@ -2,6 +2,7 @@
 
 * Fixed feed "Last Processed" date column to render it with gmt offset
 * Implemented ability to import featured image from enclosure
+* Improved post type rendering at all feeds screen
 
 == 4.0.5 ==
 
