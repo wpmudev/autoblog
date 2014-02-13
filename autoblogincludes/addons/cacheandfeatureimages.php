@@ -11,6 +11,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	const SOURCE_THE_FIRST_IMAGE = 'ASC';
 	const SOURCE_THE_LAST_IMAGE  = 'DESC';
 	const SOURCE_MEDIA_THUMBNAIL = 'MEDIA';
+	const SOURCE_ENCLOSURE       = 'ENCLOSURE';
 
 	/**
 	 * Constructor.
@@ -44,6 +45,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		$options = array(
 			''                           => __( "Don't import featured image", 'autobogtext' ),
 			self::SOURCE_MEDIA_THUMBNAIL => __( 'Use media:thumbnail tag of a feed item', 'autoblogtext' ),
+			self::SOURCE_ENCLOSURE       => __( 'Use enclosure tag of a feed item', 'autoblogtext' ),
 			self::SOURCE_THE_FIRST_IMAGE => __( 'Find the first image within content of a feed item', 'autoblogtext' ),
 			self::SOURCE_THE_LAST_IMAGE  => __( 'Find the last image within content of a feed item', 'autoblogtext' ),
 		);
@@ -88,37 +90,73 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	}
 
 	/**
-	 * Finds featured image and attached it to the post.
+	 * Finds image in media:thumbnail tag.
 	 *
-	 * @action autoblog_post_post_insert
+	 * @since 4.0.6
 	 *
-	 * @access public
+	 * @access private
+	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
 	 * @param int $post_id The post ID to attach featured image to.
 	 * @param array $details The actual feed settings.
-	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
 	 */
-	public function check_post_for_images( $post_id, $details, SimplePie_Item $item ) {
-		$method = trim( isset( $details['featuredimage'] ) ? $details['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
-		if ( empty( $method ) ) {
-			return;
+	private function _check_post_for_media_thumbnail_images( SimplePie_Item $item, $post_id, $details ) {
+		$set = false;
+		$resutls = $item->get_item_tags( SIMPLEPIE_NAMESPACE_MEDIARSS, 'thumbnail' );
+		if ( isset( $resutls[0]['attribs']['']['url'] ) && filter_var( $resutls[0]['attribs']['']['url'], FILTER_VALIDATE_URL ) ) {
+			$thumbnail_id = $this->_download_image( $resutls[0]['attribs']['']['url'], $post_id );
+			if ( $thumbnail_id ) {
+				$set = set_post_thumbnail( $post_id, $thumbnail_id );
+			}
 		}
 
-		if ( $method == self::SOURCE_MEDIA_THUMBNAIL ) {
-			$set = false;
-			$resutls = $item->get_item_tags( SIMPLEPIE_NAMESPACE_MEDIARSS, 'thumbnail' );
-			if ( isset( $resutls[0]['attribs']['']['url'] ) && filter_var( $resutls[0]['attribs']['']['url'], FILTER_VALIDATE_URL ) ) {
-				$thumbnail_id = $this->_download_image( $resutls[0]['attribs']['']['url'], $post_id );
+		if ( !$set ) {
+			$this->_set_default_image( $post_id, $details );
+		}
+	}
+
+	/**
+	 * Finds image in enclosure tag.
+	 *
+	 * @since 4.0.6
+	 *
+	 * @access private
+	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
+	 * @param int $post_id The post ID to attach featured image to.
+	 * @param array $details The actual feed settings.
+	 */
+	private function _check_post_for_enclosure_images( SimplePie_Item $item, $post_id, $details ) {
+		$set = false;
+
+		$enclosure = $item->get_enclosure();
+		if ( is_a( $enclosure, 'SimplePie_Enclosure' ) ) {
+			$mime_type = $enclosure->get_type();
+			$type = current( explode( '/', $mime_type, 2 ) );
+			$link = $enclosure->get_link();
+			if ( in_array( $mime_type, get_allowed_mime_types() ) && $type == 'image' && filter_var( $link, FILTER_VALIDATE_URL ) ) {
+				$thumbnail_id = $this->_download_image( $link, $post_id );
 				if ( $thumbnail_id ) {
 					$set = set_post_thumbnail( $post_id, $thumbnail_id );
 				}
 			}
-
-			if ( !$set ) {
-				$this->_set_default_image( $post_id, $details );
-			}
-			return;
 		}
 
+		if ( !$set ) {
+			$this->_set_default_image( $post_id, $details );
+		}
+	}
+
+	/**
+	 * Findes featured image in the item content.
+	 *
+	 * @since 4.0.6
+	 *
+	 * @access private
+	 * @param string $method The method of finding.
+	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
+	 * @param int $post_id The post ID to attach featured image to.
+	 * @param array $details The actual feed settings.
+	 */
+	private function _check_post_for_content_images( $method, SimplePie_Item $item, $post_id, $details ) {
 		$images = $this->_get_remote_images_from_content( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
 		if ( empty( $images ) ) {
 			return;
@@ -158,6 +196,32 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			set_post_thumbnail( $post_id, $thumbnail_id );
 		} else {
 			$this->_set_default_image( $post_id, $details );
+		}
+	}
+
+	/**
+	 * Finds featured image and attached it to the post.
+	 *
+	 * @since 4.0.0
+	 * @action autoblog_post_post_insert
+	 *
+	 * @access public
+	 * @param int $post_id The post ID to attach featured image to.
+	 * @param array $details The actual feed settings.
+	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
+	 */
+	public function check_post_for_images( $post_id, $details, SimplePie_Item $item ) {
+		$method = trim( isset( $details['featuredimage'] ) ? $details['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
+		if ( empty( $method ) ) {
+			return;
+		}
+
+		if ( $method == self::SOURCE_MEDIA_THUMBNAIL ) {
+			$this->_check_post_for_media_thumbnail_images( $item, $post_id, $details );
+		} elseif ( $method == self::SOURCE_ENCLOSURE ) {
+			$this->_check_post_for_enclosure_images( $item, $post_id, $details );
+		} else {
+			$this->_check_post_for_content_images( $method, $item, $post_id, $details );
 		}
 	}
 
