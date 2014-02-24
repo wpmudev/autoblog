@@ -47,7 +47,7 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 
 		if ( preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|is', $content, $matches ) ) {
 			foreach ( $matches[1] as $url ) {
-				$url = current( explode( '?', $url, 2 ) );
+				$url = str_replace( ' ', '%20', current( explode( '?', $url, 2 ) ) );
 				$purl = autoblog_parse_mb_url( $url );
 				if ( !isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] && preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $url ) ) {
 					// we seem to have an external images
@@ -95,7 +95,7 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 		// Set variables for storage, fix file filename for query strings
 		$matches = array();
 		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
-		$file_array['name'] = basename( $matches[0] );
+		$file_array['name'] = str_replace( '%20', '-', basename( $matches[0] ) );
 		$file_array['tmp_name'] = $tmp;
 
 		// do the validation and storage stuff

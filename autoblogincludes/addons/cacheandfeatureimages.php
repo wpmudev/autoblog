@@ -30,7 +30,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Renders add-on's options.
 	 *
-	 * @action autoblog_feed_edit_form_end
+	 * @action autoblog_feed_edit_form_end 10 2
 	 *
 	 * @access public
 	 * @param type $key
@@ -203,7 +203,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	 * Finds featured image and attached it to the post.
 	 *
 	 * @since 4.0.0
-	 * @action autoblog_post_post_insert
+	 * @action autoblog_post_post_insert 10 3
 	 *
 	 * @access public
 	 * @param int $post_id The post ID to attach featured image to.

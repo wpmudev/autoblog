@@ -816,11 +816,11 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			}
 		} else {
 			if ( empty( $data['post_date'] ) ) {
-				$data['post_date'] = date( 'Y-m-d H:i:s', $thedate );
+				$data['post_date'] = date( 'Y-m-d H:i:s', $thedate + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
 			}
 
 			if ( empty( $data['post_date_gmt'] ) ) {
-				$data['post_date_gmt'] = date( 'Y-m-d H:i:s', $thedate + get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );
+				$data['post_date_gmt'] = date( 'Y-m-d H:i:s', $thedate );
 			}
 		}
 

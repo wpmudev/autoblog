@@ -1,6 +1,9 @@
 == 4.0.6 ==
 
 * Fixed feed "Last Processed" date column to render it with gmt offset
+* Fixed original date importing issue
+* Fixed strip all images addon
+* Fixed images import which contains spaces in the name
 * Implemented ability to import featured image from enclosure
 * Improved post type rendering at all feeds screen
 

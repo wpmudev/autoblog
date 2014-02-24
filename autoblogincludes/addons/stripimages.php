@@ -18,7 +18,7 @@ class A_StripImagesAddon extends Autoblog_Addon {
     public function __construct() {
 		parent::__construct();
 
-		$this->_add_filter( 'autoblog_pre_post_insert', 'filter_post', 10, 2 );
+		$this->_add_filter( 'autoblog_pre_post_insert', 'filter_post', 11, 2 );
 		$this->_add_action( 'autoblog_feed_edit_form_end', 'add_feed_option', 12, 2 );
 	}
 
@@ -26,20 +26,20 @@ class A_StripImagesAddon extends Autoblog_Addon {
 	 * Filters post content to strip images.
 	 *
 	 * @since 4.0.0
-	 * @filter autoblog_pre_post_insert 10 2
+	 * @filter autoblog_pre_post_insert 11 2
 	 *
 	 * @access public
-	 * @param type $post_data
-	 * @param type $ablog
-	 * @return type
+	 * @param array $data The post data.
+	 * @param array $details The array of feed details.
+	 * @return array The post data.
 	 */
-	public function filter_post( $post_data, $ablog ) {
-		if ( !empty( $ablog['stripimgtags'] ) && addslashes( $ablog['stripimgtags'] ) == '1' ) {
-			$placeholder = isset( $ablog['stripimgtagsreplace'] ) ? $ablog['stripimgtagsreplace'] : '';
-			$post_data['post_content'] = preg_replace( "/<img[^>]+\>/", $placeholder, $post_data['post_content'] );
+	public function filter_post( array $data, array $details ) {
+		if ( !empty( $details['stripimgtags'] ) && addslashes( $details['stripimgtags'] ) == '1' ) {
+			$placeholder = isset( $details['stripimgtagsreplace'] ) ? $details['stripimgtagsreplace'] : '';
+			$data['post_content'] = preg_replace( "/<img[^>]+\>/", $placeholder, $data['post_content'] );
 		}
 
-		return $post_data;
+		return $data;
 	}
 
 	/**
