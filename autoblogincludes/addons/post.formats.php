@@ -72,3 +72,5 @@ class A_PostFormats extends Autoblog_Addon {
 	}
 
 }
+
+new A_PostFormats;

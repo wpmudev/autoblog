@@ -201,6 +201,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		</tr><?php
 
 		do_action( 'autoblog_feed_edit_form_details_end', $this->feed_id, $this );
+
 	}
 
 	/**
