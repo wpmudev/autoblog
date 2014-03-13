@@ -1,4 +1,10 @@
 
+== 4.0.8 ==
+* Create a new Add-on "Clean Face" , which Cleans and Patches the Fackbook RSS Feed which doesn't validate in the ffirst place.
+* Created a new Add-on "WPML Languages", to properly inform WPML of autoblog posts. Without it it WPML will not display the autoblogged posts.
+* Filter to repair Facebook spoofed relative links.
+* Fixed the "Any tags" filter. Previously rejected multiple tags.
+
 == 4.0.7 ==
 * Fixed Post Formats Addon
 

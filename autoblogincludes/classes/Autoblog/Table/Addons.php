@@ -210,7 +210,7 @@ class Autoblog_Table_Addons extends Autoblog_Table {
 	public function prepare_items() {
 		parent::prepare_items();
 
-		$per_page = 10;
+		$per_page = 20;
 		$offset = ( $this->get_pagenum() - 1 ) * $per_page;
 
 		$items = array();
