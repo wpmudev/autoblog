@@ -47,18 +47,6 @@ class Autoblog_Clean_Face{
 		return $data;
 	}
 
-	function write_to_log($error, $log = 'feeds') {
-
-		//create filename for each month
-		$filename = AUTOBLOG_ABSPATH . "{$log}_" . date('Y_m') . '.log';
-
-		//add timestamp to error
-		$message = gmdate("[Y-m-d H:i:s]\n") . $error;
-
-		//write to file
-		file_put_contents($filename, $message . "\n", FILE_APPEND);
-	}
-
 }
 
 new Autoblog_Clean_Face;
@@ -66,16 +54,17 @@ new Autoblog_Clean_Face;
 endif;
 
 if( !function_exists('write_to_log') ):
-	function write_to_log($error, $log = 'feeds') {
+function write_to_log($error, $log = 'feeds') {
 
-		//create filename for each month
-		$filename = AUTOBLOG_ABSPATH . "{$log}_" . date('Y_m') . '.log';
+	//create filename for each month
+	$filename = AUTOBLOG_ABSPATH . "{$log}_" . date('Y_m') . '.log';
 
-		//add timestamp to error
-		$message = gmdate("[Y-m-d H:i:s]\n") . $error;
+	//add timestamp to error
+	$message = gmdate("[Y-m-d H:i:s]\n") . $error;
 
-		//write to file
-		file_put_contents($filename, $message . "\n", FILE_APPEND);
-	}
+	//write to file
+	file_put_contents($filename, $message . "\n", FILE_APPEND);
+}
 
 endif;
+

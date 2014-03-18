@@ -62,24 +62,8 @@ class Autoblog_WPML_languages{
 			$languages['all'] += 1; 
 			icl_cache_set('posts_per_language', $languages);
 		}
-		
-
 
 	}
-
-	function write_to_log($error, $log = 'feeds') {
-
-		//create filename for each month
-		$filename = AUTOBLOG_ABSPATH . "{$log}_" . date('Y_m') . '.log';
-
-		//add timestamp to error
-		$message = gmdate("[Y-m-d H:i:s]\n") . $error;
-
-		//write to file
-		file_put_contents($filename, $message . "\n", FILE_APPEND);
-	}
-}
-
 
 new Autoblog_WPML_languages;
 

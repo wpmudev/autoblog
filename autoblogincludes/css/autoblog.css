@@ -72,10 +72,13 @@ div.inside table.feedtable tbody tr.top td {
 }
 
 
-input.long {
+input.long,
+textarea.long {
 	width: 70%;
 }
-input.short {
+
+input.short,
+textarea.short {
 	width: 50%;
 }
 

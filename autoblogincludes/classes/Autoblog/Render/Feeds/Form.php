@@ -19,34 +19,34 @@
 // +----------------------------------------------------------------------+
 
 /**
- * Feed form template class.
- *
- * @category Autoblog
- * @package Render
- * @subpackage Feeds
- *
- * @since 4.0.0
- */
+* Feed form template class.
+*
+* @category Autoblog
+* @package Render
+* @subpackage Feeds
+*
+* @since 4.0.0
+*/
 class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 
 	/**
-	 * Tips rendering object.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @var WPMUDEV_Help_Tooltips
-	 */
+	* Tips rendering object.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	* @var WPMUDEV_Help_Tooltips
+	*/
 	private $_tips;
 
 	/**
-	 * Constructor.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access public
-	 * @param array $data The data what has to be associated with this render.
-	 */
+	* Constructor.
+	*
+	* @since 4.0.0
+	*
+	* @access public
+	* @param array $data The data what has to be associated with this render.
+	*/
 	public function __construct( $data = array() ) {
 		parent::__construct( $data );
 
@@ -55,16 +55,16 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Renders template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access protected
-	 */
+	* Renders template.
+	*
+	* @since 4.0.0
+	*
+	* @access protected
+	*/
 	protected function _to_html() {
 		$title = !empty( $this->feed_id )
-			? esc_html__( 'Edit Auto Blog Feed', 'autoblogtext' )
-			: esc_html__( 'Create Auto Blog Feed', 'autoblogtext' );
+		? esc_html__( 'Edit Auto Blog Feed', 'autoblogtext' )
+		: esc_html__( 'Create Auto Blog Feed', 'autoblogtext' );
 
 		?><div class="wrap">
 			<div class="icon32" id="icon-edit"><br></div>
@@ -78,12 +78,12 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Renders form template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
+	* Renders form template.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	*/
 	private function _render_form() {
 		?><div class="postbox autoblogeditbox" id="ab-<?php echo esc_attr( $this->feed_id ) ?>">
 
@@ -112,12 +112,12 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Renders form general section template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
+	* Renders form general section template.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	*/
 	private function _render_form_general_section() {
 		$post_types = get_post_types( array( 'public' => true ), 'objects' );
 		$post_statuses = get_post_stati( array( 'public' => true, 'protected' => true, 'private' => true ), 'objects', 'or' );
@@ -143,7 +143,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Add posts to', 'autoblogtext' ) ?></td>
 			<td valign="top">
-			<?php if ( is_multisite() && is_network_admin() ) : ?>
+				<?php if ( is_multisite() && is_network_admin() ) : ?>
 				<select name="abtble[blog]" class="field blog">
 					<?php foreach ( $this->_get_blogs_of_site() as $bkey => $blog ) : ?>
 					<option value="<?php echo esc_attr( $bkey ) ?>"<?php selected( $blog->id, $this->blog ) ?>>
@@ -152,12 +152,12 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 					<?php endforeach; ?>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'Select a blog to add the post to.', 'autoblogtext' ) ) ?>
-			<?php else : ?>
+				<?php else : ?>
 				<strong>
 					<?php echo esc_html( function_exists( 'get_blog_option' ) ? get_blog_option( (int)$this->blog, 'blogname' ) : get_option( 'blogname' ) ) ?>
 				</strong>
 				<input type="hidden" name="abtble[blog]" value="<?php echo esc_attr( $this->blog ) ?>">
-			<?php endif; ?>
+				<?php endif; ?>
 			</td>
 		</tr>
 
@@ -166,9 +166,9 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 			<td valign="top">
 				<select id="abtble_posttype" name="abtble[posttype]" class="field">
 					<?php foreach ( $post_types as $key => $post_type ) : ?>
-						<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->posttype ) ?>>
-							<?php echo esc_html( $post_type->label ) ?>
-						</option>
+					<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->posttype ) ?>>
+						<?php echo esc_html( $post_type->label ) ?>
+					</option>
 					<?php endforeach; ?>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'Select the post type the imported posts will have in the blog.', 'autoblogtext' ) ) ?>
@@ -180,9 +180,9 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 			<td valign="top">
 				<select name="abtble[poststatus]" class="field">
 					<?php foreach ( $post_statuses as $key => $post_status ) : ?>
-						<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->poststatus ) ?>>
-							<?php echo esc_html( $post_status->label ) ?>
-						</option>
+					<option value="<?php echo esc_attr( $key ) ?>"<?php selected( $key, $this->poststatus ) ?>>
+						<?php echo esc_html( $post_status->label ) ?>
+					</option>
 					<?php endforeach; ?>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'Select the status the imported posts will have in the blog.', 'autoblogtext' ) ) ?>
@@ -205,12 +205,12 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Renders form author section template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
+	* Renders form author section template.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	*/
 	private function _render_form_author_section() {
 		$blogusers = get_users( 'blog_id=' . $this->blog );
 
@@ -224,9 +224,9 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 				<select name="abtble[author]"  class="field author">
 					<option value="0"><?php esc_html_e( 'Use feed author', 'autoblogtext' ) ?></option>
 					<?php foreach ( $blogusers as $bloguser ) : ?>
-						<option value="<?php echo esc_attr( $bloguser->ID ) ?>"<?php selected( $bloguser->ID, $this->author ) ?>>
-							<?php echo esc_html( $bloguser->user_login ) ?>
-						</option>
+					<option value="<?php echo esc_attr( $bloguser->ID ) ?>"<?php selected( $bloguser->ID, $this->author ) ?>>
+						<?php echo esc_html( $bloguser->user_login ) ?>
+					</option>
 					<?php endforeach; ?>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'Select the author you want to use for the posts, or attempt to use the original feed author.', 'autoblogtext' ) ) ?>
@@ -238,9 +238,9 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 			<td valign="top">
 				<select name="abtble[altauthor]"  class="field altauthor">
 					<?php foreach ( $blogusers as $bloguser ) : ?>
-						<option value="<?php echo esc_attr( $bloguser->ID ) ?>"<?php selected( $bloguser->ID, $this->altauthor ) ?>>
-							<?php echo esc_html( $bloguser->user_login ) ?>
-						</option>
+					<option value="<?php echo esc_attr( $bloguser->ID ) ?>"<?php selected( $bloguser->ID, $this->altauthor ) ?>>
+						<?php echo esc_html( $bloguser->user_login ) ?>
+					</option>
 					<?php endforeach; ?>
 				</select>
 				<?php echo $this->_tips->add_tip( __( 'If the feed author does not exist in your blog then use this author.', 'autoblogtext' ) ) ?>
@@ -249,12 +249,12 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Renders form taxonomies section template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
+	* Renders form taxonomies section template.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	*/
 	private function _render_form_taxonomies_section() {
 		// backward compatibility
 		switch ( $this->feedcatsare ) {
@@ -293,13 +293,13 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 			<td valign="top">
 				<?php if ( function_exists( 'switch_to_blog' ) ) switch_to_blog( $this->blog ) ?>
 				<?php wp_dropdown_categories( array(
-					'hide_empty'       => 0,
-					'name'             => 'abtble[category]',
-					'orderby'          => 'name',
-					'selected'         => $this->category,
-					'hierarchical'     => true,
-					'show_option_none' => __( 'None', 'autoblogtext' ),
-					'class'            => 'field cat'
+				'hide_empty'       => 0,
+				'name'             => 'abtble[category]',
+				'orderby'          => 'name',
+				'selected'         => $this->category,
+				'hierarchical'     => true,
+				'show_option_none' => __( 'None', 'autoblogtext' ),
+				'class'            => 'field cat'
 				) ) ?>
 				<?php if ( function_exists( 'restore_current_blog' ) ) restore_current_blog() ?>
 				<?php echo $this->_tips->add_tip( __( 'Assign this category to the imported posts.', 'autoblogtext' ) ) ?>
@@ -316,14 +316,15 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Renders form post filters section template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
+	* Renders form post filters section template.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	*/
 	private function _render_form_post_filters_section() {
-		?><tr class="spacer">
+		?>
+		<tr class="spacer">
 			<td colspan="2" class="spacer"><span><?php esc_html_e( 'Post Filtering', 'autoblogtext' ) ?></span></td>
 		</tr>
 
@@ -364,6 +365,16 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 		</tr>
 
 		<tr>
+			<td style="vertical-align: top" class="heading"><?php esc_html_e( 'Match Regular Expression', 'autoblogtext' ) ?></td>
+			<td>
+				<textarea name="abtble[regex]" class="long title field"><?php echo esc_textarea( stripslashes( $this->regex ) ) ?></textarea>
+			<?php echo $this->_tips->add_tip( __( 'Use the "|" OR operator to combine multple expressions.', 'autoblogtext' ) ) ?>
+				<br>
+				<span><?php _e( 'Use the <a href="http://www.php.net/manual/en/reference.pcre.pattern.syntax.php">PCRE pattern syntax</a> for your regular expression, including delimiters and escaping.', 'autoblogtext' ) ?></span>
+			</td>
+		</tr>
+
+		<tr>
 			<td valign="top" class="heading"><?php esc_html_e( 'Any of these tags', 'autoblogtext' ) ?></td>
 			<td valign="top">
 				<input type="text" name="abtble[anytags]" value="<?php echo esc_attr( stripslashes( $this->anytags ) ) ?>"  class="long title field">
@@ -371,16 +382,17 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 				<br>
 				<span><?php esc_html_e( 'Tags should be comma separated', 'autoblogtext' ) ?></span>
 			</td>
-		</tr><?php
+		</tr>
+		<?php
 	}
 
 	/**
-	 * Renders form post_excerpt section template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
+	* Renders form post_excerpt section template.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	*/
 	private function _render_form_post_excerpt_section() {
 		?><tr class="spacer">
 			<td colspan="2" class="spacer"><span><?php esc_html_e( 'Post excerpts', 'autoblogtext' ) ?></span></td>
@@ -430,12 +442,12 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Renders form feed processing section template.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 */
+	* Renders form feed processing section template.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	*/
 	private function _render_form_feed_processing_section() {
 		?><tr class="spacer">
 			<td colspan="2" class="spacer"><span><?php esc_html_e( 'Feed Processing', 'autoblogtext' ) ?></span></td>
@@ -554,17 +566,17 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render {
 	}
 
 	/**
-	 * Returns blogs of the site.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access private
-	 * @global type $current_site
-	 * @global type $wpdb
-	 * @param type $siteid
-	 * @param type $all
-	 * @return type
-	 */
+	* Returns blogs of the site.
+	*
+	* @since 4.0.0
+	*
+	* @access private
+	* @global type $current_site
+	* @global type $wpdb
+	* @param type $siteid
+	* @param type $all
+	* @return type
+	*/
 	private function _get_blogs_of_site( $siteid = false, $all = false ) {
 		global $current_site, $wpdb;
 		if ( !$siteid && !empty( $current_site ) ) {

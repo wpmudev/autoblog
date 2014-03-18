@@ -8,6 +8,7 @@ Network: False
 */
 
 add_filter( 'post_link', 'autoblog_external_permalink', 10, 2 );
+add_filter( 'post_type_link', 'autoblog_external_permalink', 10, 2 );
 function autoblog_external_permalink( $permalink, $post ) {
 	if ( !is_object( $post ) || !isset( $post->ID ) ) {
 		return $permalink;

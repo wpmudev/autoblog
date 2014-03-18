@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Autoblog 3.3\n"
+"Project-Id-Version: Autoblog 4.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-01 16:56+0300\n"
-"PO-Revision-Date: 2014-02-01 16:56+0300\n"
+"POT-Creation-Date: 2014-03-18 15:01-0500\n"
+"PO-Revision-Date: 2014-03-18 15:01-0500\n"
 "Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
 "Language-Team: Incsub <dev@incsub.com>\n"
 "Language: en_US\n"
@@ -14,24 +14,303 @@ msgstr ""
 "_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
 "esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
 "_n_noop;_nc;_nx;_nx_noop\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ./../../\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-SearchPath-0: autoblogincludes\n"
 
-#: autoblogincludes/classes/WPMUDEV/Help/Tooltips.php:314
-msgid "Help"
-msgstr "Help"
+#: autoblogincludes/addons/appendtexttopost.php:61
+msgid "Post footer text"
+msgstr "Post footer text"
 
-#: autoblogincludes/classes/Autoblog/Table.php:43
-msgid "Search"
-msgstr "Search"
+#: autoblogincludes/addons/appendtexttopost.php:62
+msgid "You can use the following placeholders in your footer:"
+msgstr "You can use the following placeholders in your footer:"
 
+#: autoblogincludes/addons/appendtexttopost.php:74
+msgid "Append text to post content"
+msgstr "Append text to post content"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:46
+msgid "Don't import featured image"
+msgstr "Don't import featured image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:47
+msgid "Use media:thumbnail tag of a feed item"
+msgstr "Use media:thumbnail tag of a feed item"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:48
+#, fuzzy
+msgid "Use enclosure tag of a feed item"
+msgstr "Use media:thumbnail tag of a feed item"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:49
+msgid "Find the first image within content of a feed item"
+msgstr "Find the first image within content of a feed item"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:50
+msgid "Find the last image within content of a feed item"
+msgstr "Find the last image within content of a feed item"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:79
+msgid "Select Default Image"
+msgstr "Select Default Image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:80
+msgid "Delete Image"
+msgstr "Delete Image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:85
+msgid "Featured Image Importing"
+msgstr "Featured Image Importing"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:88
+msgid "Select a way to import featured image"
+msgstr "Select a way to import featured image"
+
+#: autoblogincludes/addons/cacheandfeatureimages.php:89
+msgid "Default thumbnail image"
+msgstr "Default thumbnail image"
+
+#: autoblogincludes/addons/check.feedentries.php:13
+msgid "Feed Check"
+msgstr "Feed Check"
+
+#: autoblogincludes/addons/check.feedentries.php:24
+msgid "Ok"
+msgstr "Ok"
+
+#: autoblogincludes/addons/check.feedentries.php:25
+msgid "Problem"
+msgstr "Problem"
+
+#: autoblogincludes/addons/disablesainitization.php:74
+msgid "Disable Feed Sanitization"
+msgstr "Disable Feed Sanitization"
+
+#: autoblogincludes/addons/disablesainitization.php:77
+msgid "Disable Sanitization"
+msgstr "Disable Sanitization"
+
+#: autoblogincludes/addons/disablesainitization.php:79
+msgid ""
+"Disable feed content sanitization only if you know what you are doing or you "
+"confident in the feed content."
+msgstr ""
+"Disable feed content sanitization only if you know what you are doing or you "
+"confident in the feed content."
+
+#: autoblogincludes/addons/forcefeed.php:78
+msgid "Force Feed"
+msgstr "Force Feed"
+
+#: autoblogincludes/addons/forcefeed.php:81
+msgid "Enable Force Feed"
+msgstr "Enable Force Feed"
+
+#: autoblogincludes/addons/post.formats.php:39
+msgid "Post format for new posts"
+msgstr "Post format for new posts"
+
+#: autoblogincludes/addons/post.formats.php:53
+msgid "Select post format"
+msgstr "Select post format"
+
+#: autoblogincludes/addons/stripimages.php:62
+msgid "Strip Images"
+msgstr "Strip Images"
+
+#: autoblogincludes/addons/stripimages.php:65
+msgid "Strip Image Tags"
+msgstr "Strip Image Tags"
+
+#: autoblogincludes/addons/stripimages.php:70
+msgid "Replace With"
+msgstr "Replace With"
+
+#: autoblogincludes/addons/twitter.addon.php:43
+msgid "tweet"
+msgstr "tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:45
+msgid "Tweets"
+msgstr "Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:46
+msgid "Tweet"
+msgstr "Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:47
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:50
+msgid "Add New"
+msgstr "Add New"
+
+#: autoblogincludes/addons/twitter.addon.php:48
+msgid "Add New Tweet"
+msgstr "Add New Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:49
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:66
+msgid "Edit"
+msgstr "Edit"
+
+#: autoblogincludes/addons/twitter.addon.php:50
+msgid "Edit Tweet"
+msgstr "Edit Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:51
+msgid "New Tweet"
+msgstr "New Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:52
+#: autoblogincludes/addons/twitter.addon.php:53
+msgid "View Tweet"
+msgstr "View Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:54
+msgid "Search Tweets"
+msgstr "Search Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:55
+msgid "No Tweets found"
+msgstr "No Tweets found"
+
+#: autoblogincludes/addons/twitter.addon.php:56
+msgid "No Tweets found in Trash"
+msgstr "No Tweets found in Trash"
+
+#: autoblogincludes/addons/twitter.addon.php:57
+msgid "Parent Tweet"
+msgstr "Parent Tweet"
+
+#: autoblogincludes/addons/twitter.addon.php:119
+msgid "The most recent tweets on your site"
+msgstr "The most recent tweets on your site"
+
+#: autoblogincludes/addons/twitter.addon.php:120
+msgid "Recent Tweets"
+msgstr "Recent Tweets"
+
+#: autoblogincludes/addons/twitter.addon.php:142
+msgid "Recent Posts"
+msgstr "Recent Posts"
+
+#: autoblogincludes/addons/twitter.addon.php:154
+msgid " at "
+msgstr " at "
+
+#: autoblogincludes/addons/twitter.addon.php:190
+msgid "Title:"
+msgstr "Title:"
+
+#: autoblogincludes/addons/twitter.addon.php:193
+msgid "Number of tweets to show:"
+msgstr "Number of tweets to show:"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:90
+msgid "Date"
+msgstr "Date"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:91
+msgid "Processed Feeds"
+msgstr "Processed Feeds"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:92
+msgid "Imported Items"
+msgstr "Imported Items"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:93
+msgid "Errors"
+msgstr "Errors"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:105
+msgid "Chose Defaul Thumbnail"
+msgstr "Chose Defaul Thumbnail"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:106
+msgid "Select Thumbnail"
+msgstr "Select Thumbnail"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:128
+msgid "Auto Blog"
+msgstr "Auto Blog"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:133
 #: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:56
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:132
 msgid "Auto Blog Dashboard"
 msgstr "Auto Blog Dashboard"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:134
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:138
+msgid "All feeds"
+msgstr "All feeds"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:142
+msgid "Autoblog Add-ons"
+msgstr "Autoblog Add-ons"
+
+#: autoblogincludes/classes/Autoblog/Module/Backend.php:143
+msgid "Add-ons"
+msgstr "Add-ons"
+
+#: autoblogincludes/classes/Autoblog/Module/Cron.php:340
+msgid "No entries found in the feed."
+msgstr "No entries found in the feed."
+
+#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:63
+#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:102
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:96
+msgid "Activate"
+msgstr "Activate"
+
+#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:64
+#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:103
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:85
+msgid "Deactivate"
+msgstr "Deactivate"
+
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:79
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:301
+msgid "None"
+msgstr "None"
+
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:133
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:88
+msgid "Process"
+msgstr "Process"
+
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:134
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:105
+msgid "Delete"
+msgstr "Delete"
+
+#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:303
+msgid "Feed not found."
+msgstr "Feed not found."
+
+#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:45
+msgid "Auto Blog Addons"
+msgstr "Auto Blog Addons"
+
+#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:68
+msgid "The addon(s) has been activated successfully."
+msgstr "The addon(s) has been activated successfully."
+
+#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:70
+msgid "The addon(s) has not been activated."
+msgstr "The addon(s) has not been activated."
+
+#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:76
+msgid "The addon(s) has been deactivated successfully."
+msgstr "The addon(s) has been deactivated successfully."
+
+#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:78
+msgid "The addon(s) has not been deactivated."
+msgstr "The addon(s) has not been deactivated."
 
 #: autoblogincludes/classes/Autoblog/Render/Dashboard/Page.php:57
 msgid "Export Log"
@@ -132,71 +411,6 @@ msgstr "* This page has been taken from cache."
 msgid "Regenerate the page."
 msgstr "Regenerate the page."
 
-#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:45
-msgid "Auto Blog Addons"
-msgstr "Auto Blog Addons"
-
-#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:68
-msgid "The addon(s) has been activated successfully."
-msgstr "The addon(s) has been activated successfully."
-
-#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:70
-msgid "The addon(s) has not been activated."
-msgstr "The addon(s) has not been activated."
-
-#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:76
-msgid "The addon(s) has been deactivated successfully."
-msgstr "The addon(s) has been deactivated successfully."
-
-#: autoblogincludes/classes/Autoblog/Render/Addons/Table.php:78
-msgid "The addon(s) has not been deactivated."
-msgstr "The addon(s) has not been deactivated."
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:49
-msgid "Auto Blog Feeds"
-msgstr "Auto Blog Feeds"
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:50
-#: autoblogincludes/addons/twitter.addon.php:47
-msgid "Add New"
-msgstr "Add New"
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:76
-msgid "The feed has been created successfully."
-msgstr "The feed has been created successfully."
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:78
-msgid "The feed has not been created."
-msgstr "The feed has not been created."
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:84
-msgid "The feed has been updated successfully."
-msgstr "The feed has been updated successfully."
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:86
-msgid "The feed has not been updated."
-msgstr "The feed has not been updated."
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:91
-msgid "The feed(s) has been deleted successfully."
-msgstr "The feed(s) has been deleted successfully."
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:95
-msgid ""
-"The feed(s) has been processed successfully. Visit the Autoblog Dashboard "
-"for details."
-msgstr ""
-"The feed(s) has been processed successfully. Visit the Autoblog Dashboard "
-"for details."
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:99
-msgid ""
-"The feed(s) processing has been launched in the background. Visit the "
-"Autoblog Dashboard for details."
-msgstr ""
-"The feed(s) processing has been launched in the background. Visit the "
-"Autoblog Dashboard for details."
-
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:66
 msgid "Edit Auto Blog Feed"
 msgstr "Edit Auto Blog Feed"
@@ -206,7 +420,7 @@ msgid "Create Auto Blog Feed"
 msgstr "Create Auto Blog Feed"
 
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:90
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:270
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:274
 msgid "Feed"
 msgstr "Feed"
 
@@ -278,19 +492,19 @@ msgstr "Original posts date"
 msgid "Select the date imported posts will have."
 msgstr "Select the date imported posts will have."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:217
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:218
 msgid "Author details"
 msgstr "Author details"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:221
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:222
 msgid "Set author for new posts"
 msgstr "Set author for new posts"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:224
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:225
 msgid "Use feed author"
 msgstr "Use feed author"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:231
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:232
 msgid ""
 "Select the author you want to use for the posts, or attempt to use the "
 "original feed author."
@@ -298,94 +512,89 @@ msgstr ""
 "Select the author you want to use for the posts, or attempt to use the "
 "original feed author."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:236
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:237
 msgid "If author in feed does not exist locally use"
 msgstr "If author in feed does not exist locally use"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:245
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:246
 msgid "If the feed author does not exist in your blog then use this author."
 msgstr "If the feed author does not exist in your blog then use this author."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:268
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:269
 msgid "Taxonomies"
 msgstr "Taxonomies"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:272
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:273
 msgid "Treat feed categories as"
 msgstr "Treat feed categories as"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:284
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:285
 msgid "Add any that do not exist."
 msgstr "Add any that do not exist."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:286
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:287
 msgid "Create any taxonomy terms that are needed."
 msgstr "Create any taxonomy terms that are needed."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:291
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:292
 msgid "Assign posts to this category"
 msgstr "Assign posts to this category"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:300
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:79
-msgid "None"
-msgstr "None"
-
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:304
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:305
 msgid "Assign this category to the imported posts."
 msgstr "Assign this category to the imported posts."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:309
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:310
 msgid "Add these tags to the posts"
 msgstr "Add these tags to the posts"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:312
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:313
 msgid "Enter a comma separated list of tags to add."
 msgstr "Enter a comma separated list of tags to add."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:326
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:328
 msgid "Post Filtering"
 msgstr "Post Filtering"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:330
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:332
 msgid "Include posts that contain (separate words with commas)"
 msgstr "Include posts that contain (separate words with commas)"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:334
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:336
 msgid "All of these words"
 msgstr "All of these words"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:337
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:339
 msgid ""
 "A post to be imported must have ALL of these words in the title or content."
 msgstr ""
 "A post to be imported must have ALL of these words in the title or content."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:342
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:344
 msgid "Any of these words"
 msgstr "Any of these words"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:345
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:347
 msgid ""
 "A post to be imported must have ANY of these words in the title or content."
 msgstr ""
 "A post to be imported must have ANY of these words in the title or content."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:350
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:352
 msgid "The exact phrase"
 msgstr "The exact phrase"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:353
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:355
 msgid ""
 "A post to be imported must have this exact phrase in the title or content."
 msgstr ""
 "A post to be imported must have this exact phrase in the title or content."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:358
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:360
 msgid "None of these words"
 msgstr "None of these words"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:361
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:363
 msgid ""
 "A post to be imported must NOT have any of these words in the title or "
 "content."
@@ -393,95 +602,110 @@ msgstr ""
 "A post to be imported must NOT have any of these words in the title or "
 "content."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:366
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:368
+msgid "Match Regular Expression"
+msgstr ""
+
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:371
+msgid "Use the \"|\" OR operator to combine multple expressions."
+msgstr ""
+
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:373
+msgid ""
+"Use the <a href=\"http://www.php.net/manual/en/reference.pcre.pattern.syntax."
+"php\">PCRE pattern syntax</a> for your regular expression, including "
+"delimiters and escaping."
+msgstr ""
+
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:378
 msgid "Any of these tags"
 msgstr "Any of these tags"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:369
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:381
 msgid ""
 "A post to be imported must be marked with any of these categories or tags."
 msgstr ""
 "A post to be imported must be marked with any of these categories or tags."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:371
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:383
 msgid "Tags should be comma separated"
 msgstr "Tags should be comma separated"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:385
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:398
 msgid "Post excerpts"
 msgstr "Post excerpts"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:389
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:402
 msgid "Use full post or an excerpt"
 msgstr "Use full post or an excerpt"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:392
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:405
 msgid "Use Full Post"
 msgstr "Use Full Post"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:393
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:406
 msgid "Use Excerpt"
 msgstr "Use Excerpt"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:395
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:408
 msgid "Use the full post (if available) or create an excerpt."
 msgstr "Use the full post (if available) or create an excerpt."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:400
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:413
 msgid "For excerpts use"
 msgstr "For excerpts use"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:404
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:417
 msgid "Words"
 msgstr "Words"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:405
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:418
 msgid "Sentences"
 msgstr "Sentences"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:406
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:419
 msgid "Paragraphs"
 msgstr "Paragraphs"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:408
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:421
 msgid "Specify the size of the excerpt to create (if selected)"
 msgstr "Specify the size of the excerpt to create (if selected)"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:413
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:426
 msgid "Link to original source"
 msgstr "Link to original source"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:416
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:429
 msgid ""
 "If you want to link back to original source, enter a phrase to use here."
 msgstr ""
 "If you want to link back to original source, enter a phrase to use here."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:420
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:433
 msgid "Ensure this link is a nofollow one"
 msgstr "Ensure this link is a nofollow one"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:425
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:438
 msgid "Open this link in a new window"
 msgstr "Open this link in a new window"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:440
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:453
 msgid "Feed Processing"
 msgstr "Feed Processing"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:444
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:457
 msgid "Import the most recent"
 msgstr "Import the most recent"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:447
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:460
 msgid "posts."
 msgstr "posts."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:450
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:463
 msgid "added posts."
 msgstr "added posts."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:454
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:467
 msgid ""
 "You can set this to only import a specific number of new posts rather than "
 "as many as the plugin can manage."
@@ -489,63 +713,63 @@ msgstr ""
 "You can set this to only import a specific number of new posts rather than "
 "as many as the plugin can manage."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:459
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:472
 msgid "Process this feed"
 msgstr "Process this feed"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:462
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:475
 msgid "Never (paused)"
 msgstr "Never (paused)"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:464
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:477
 msgid "every 5 minutes"
 msgstr "every 5 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:465
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:478
 msgid "every 10 minutes"
 msgstr "every 10 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:466
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:479
 msgid "every 15 minutes"
 msgstr "every 15 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:467
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:480
 msgid "every 20 minutes"
 msgstr "every 20 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:468
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:481
 msgid "every 25 minutes"
 msgstr "every 25 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:470
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:483
 msgid "every 30 minutes"
 msgstr "every 30 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:471
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:484
 msgid "every hour"
 msgstr "every hour"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:472
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:485
 msgid "every 1 hour 30 minutes"
 msgstr "every 1 hour 30 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:473
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:486
 msgid "every 2 hours"
 msgstr "every 2 hours"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:474
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:487
 msgid "every 2 hours 30 minutes"
 msgstr "every 2 hours 30 minutes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:475
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:488
 msgid "every 5 hours"
 msgstr "every 5 hours"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:476
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:489
 msgid "every day"
 msgstr "every day"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:478
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:491
 msgid ""
 "Set the time delay for processing this feed, irregularly updated feeds do "
 "not need to be checked very often."
@@ -553,37 +777,37 @@ msgstr ""
 "Set the time delay for processing this feed, irregularly updated feeds do "
 "not need to be checked very often."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:483
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:496
 msgid "Starting from"
 msgstr "Starting from"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:503
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:516
 msgid "Set the date you want to start processing posts from."
 msgstr "Set the date you want to start processing posts from."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:508
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:521
 msgid "Ending on"
 msgstr "Ending on"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:528
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:541
 msgid "Set the date you want to stop processing posts from this feed."
 msgstr "Set the date you want to stop processing posts from this feed."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:533
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:546
 msgid "Force SSL verification"
 msgstr "Force SSL verification"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:536
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:548
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:549
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:561
 msgid "Yes"
 msgstr "Yes"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:537
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:547
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:550
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:560
 msgid "No"
 msgstr "No"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:539
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:552
 msgid ""
 "If you are getting SSL errors, or your feed uses a self-signed SSL "
 "certificate then set this to <strong>No</strong>."
@@ -591,11 +815,11 @@ msgstr ""
 "If you are getting SSL errors, or your feed uses a self-signed SSL "
 "certificate then set this to <strong>No</strong>."
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:544
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:557
 msgid "Override duplicates"
 msgstr "Override duplicates"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:550
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:563
 msgid ""
 "Select yes if you want to override previously imported items with the new "
 "content. Otherwise duplicates will be skipped."
@@ -603,89 +827,95 @@ msgstr ""
 "Select yes if you want to override previously imported items with the new "
 "content. Otherwise duplicates will be skipped."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:90
-msgid "Date"
-msgstr "Date"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:49
+msgid "Auto Blog Feeds"
+msgstr "Auto Blog Feeds"
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:91
-msgid "Processed Feeds"
-msgstr "Processed Feeds"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:79
+msgid "The feed has been created successfully."
+msgstr "The feed has been created successfully."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:92
-msgid "Imported Items"
-msgstr "Imported Items"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:81
+msgid "The feed has not been created."
+msgstr "The feed has not been created."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:93
-msgid "Errors"
-msgstr "Errors"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:87
+msgid "The feed has been updated successfully."
+msgstr "The feed has been updated successfully."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:104
-msgid "Chose Defaul Thumbnail"
-msgstr "Chose Defaul Thumbnail"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:89
+msgid "The feed has not been updated."
+msgstr "The feed has not been updated."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:105
-msgid "Select Thumbnail"
-msgstr "Select Thumbnail"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:94
+msgid "The feed(s) has been deleted successfully."
+msgstr "The feed(s) has been deleted successfully."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:127
-msgid "Auto Blog"
-msgstr "Auto Blog"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:98
+msgid ""
+"The feed(s) has been processed successfully. Visit the Autoblog Dashboard "
+"for details."
+msgstr ""
+"The feed(s) has been processed successfully. Visit the Autoblog Dashboard "
+"for details."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:133
-msgid "Dashboard"
-msgstr "Dashboard"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:102
+msgid ""
+"The feed(s) processing has been launched in the background. Visit the "
+"Autoblog Dashboard for details."
+msgstr ""
+"The feed(s) processing has been launched in the background. Visit the "
+"Autoblog Dashboard for details."
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:137
-msgid "All feeds"
-msgstr "All feeds"
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:115
+msgid ""
+"The Cron processing file \"wp-cron.php\" cannot be reached from code. This "
+"may be due to your firewall blocking local loopback calls.\n"
+"\t\t\t\t<br />You may be able to work around the firewall by adding this "
+"line to your wp-config.php file.\n"
+"\t\t\t\t<p><code>define(\"ALTERNATE_WP_CRON\", true);</code></p>\n"
+"\t\t\t\tIf that does not clear the problem, then disable using Cron and "
+"enable the \"pageload\" method by adding\n"
+"\t\t\t\t<p><code>\t\tdefine( \"AUTOBLOG_PROCESSING_METHOD\", \"pageload\" );"
+"</code></p>to wp-config.php"
+msgstr ""
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:141
-msgid "Autoblog Add-ons"
-msgstr "Autoblog Add-ons"
+#: autoblogincludes/classes/Autoblog/Table.php:43
+msgid "Search"
+msgstr "Search"
 
-#: autoblogincludes/classes/Autoblog/Module/Backend.php:142
-msgid "Add-ons"
-msgstr "Add-ons"
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:74
+msgid "Network Active"
+msgstr "Network Active"
 
-#: autoblogincludes/classes/Autoblog/Module/Cron.php:337
-msgid "No entries found in the feed."
-msgstr "No entries found in the feed."
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:119
+msgid "Created By"
+msgstr "Created By"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:133
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:88
-msgid "Process"
-msgstr "Process"
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:136
+msgid "Addon"
+msgstr "Addon"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:134
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:105
-msgid "Delete"
-msgstr "Delete"
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:137
+msgid "Description"
+msgstr "Description"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Feeds.php:303
-msgid "Feed not found."
-msgstr "Feed not found."
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:182
+msgid "All"
+msgstr "All"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:63
-#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:102
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:96
-msgid "Activate"
-msgstr "Activate"
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:189
+msgid "Active"
+msgstr "Active"
 
-#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:64
-#: autoblogincludes/classes/Autoblog/Module/Page/Addons.php:103
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:85
-msgid "Deactivate"
-msgstr "Deactivate"
+#: autoblogincludes/classes/Autoblog/Table/Addons.php:196
+msgid "Inactive"
+msgstr "Inactive"
 
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:58
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:123
 msgid "unknown"
 msgstr "unknown"
-
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:66
-#: autoblogincludes/addons/twitter.addon.php:49
-msgid "Edit"
-msgstr "Edit"
 
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:77
 msgid "Clone"
@@ -695,24 +925,24 @@ msgstr "Clone"
 msgid "Validate"
 msgstr "Validate"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:201
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:235
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:208
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:239
 msgid "Never"
 msgstr "Never"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:274
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:278
 msgid "Target Blog"
 msgstr "Target Blog"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:277
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:281
 msgid "Post Type"
 msgstr "Post Type"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:278
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:282
 msgid "Last Processed"
 msgstr "Last Processed"
 
-#: autoblogincludes/classes/Autoblog/Table/Feeds.php:279
+#: autoblogincludes/classes/Autoblog/Table/Feeds.php:283
 msgid "Next Check"
 msgstr "Next Check"
 
@@ -794,203 +1024,6 @@ msgstr " weeks"
 msgid "next month"
 msgstr "next month"
 
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:74
-msgid "Network Active"
-msgstr "Network Active"
-
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:119
-msgid "Created By"
-msgstr "Created By"
-
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:136
-msgid "Addon"
-msgstr "Addon"
-
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:137
-msgid "Description"
-msgstr "Description"
-
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:182
-msgid "All"
-msgstr "All"
-
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:189
-msgid "Active"
-msgstr "Active"
-
-#: autoblogincludes/classes/Autoblog/Table/Addons.php:196
-msgid "Inactive"
-msgstr "Inactive"
-
-#: autoblogincludes/addons/twitter.addon.php:43
-msgid "tweet"
-msgstr "tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:45
-msgid "Tweets"
-msgstr "Tweets"
-
-#: autoblogincludes/addons/twitter.addon.php:46
-msgid "Tweet"
-msgstr "Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:48
-msgid "Add New Tweet"
-msgstr "Add New Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:50
-msgid "Edit Tweet"
-msgstr "Edit Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:51
-msgid "New Tweet"
-msgstr "New Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:52
-#: autoblogincludes/addons/twitter.addon.php:53
-msgid "View Tweet"
-msgstr "View Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:54
-msgid "Search Tweets"
-msgstr "Search Tweets"
-
-#: autoblogincludes/addons/twitter.addon.php:55
-msgid "No Tweets found"
-msgstr "No Tweets found"
-
-#: autoblogincludes/addons/twitter.addon.php:56
-msgid "No Tweets found in Trash"
-msgstr "No Tweets found in Trash"
-
-#: autoblogincludes/addons/twitter.addon.php:57
-msgid "Parent Tweet"
-msgstr "Parent Tweet"
-
-#: autoblogincludes/addons/twitter.addon.php:119
-msgid "The most recent tweets on your site"
-msgstr "The most recent tweets on your site"
-
-#: autoblogincludes/addons/twitter.addon.php:120
-msgid "Recent Tweets"
-msgstr "Recent Tweets"
-
-#: autoblogincludes/addons/twitter.addon.php:142
-msgid "Recent Posts"
-msgstr "Recent Posts"
-
-#: autoblogincludes/addons/twitter.addon.php:154
-msgid " at "
-msgstr " at "
-
-#: autoblogincludes/addons/twitter.addon.php:190
-msgid "Title:"
-msgstr "Title:"
-
-#: autoblogincludes/addons/twitter.addon.php:193
-msgid "Number of tweets to show:"
-msgstr "Number of tweets to show:"
-
-#: autoblogincludes/addons/check.feedentries.php:13
-msgid "Feed Check"
-msgstr "Feed Check"
-
-#: autoblogincludes/addons/check.feedentries.php:24
-msgid "Ok"
-msgstr "Ok"
-
-#: autoblogincludes/addons/check.feedentries.php:25
-msgid "Problem"
-msgstr "Problem"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:45
-msgid "Don't import featured image"
-msgstr "Don't import featured image"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:46
-msgid "Use media:thumbnail tag of a feed item"
-msgstr "Use media:thumbnail tag of a feed item"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:47
-msgid "Find the first image within content of a feed item"
-msgstr "Find the first image within content of a feed item"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:48
-msgid "Find the last image within content of a feed item"
-msgstr "Find the last image within content of a feed item"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:77
-msgid "Select Default Image"
-msgstr "Select Default Image"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:78
-msgid "Delete Image"
-msgstr "Delete Image"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:83
-msgid "Featured Image Importing"
-msgstr "Featured Image Importing"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:86
-msgid "Select a way to import featured image"
-msgstr "Select a way to import featured image"
-
-#: autoblogincludes/addons/cacheandfeatureimages.php:87
-msgid "Default thumbnail image"
-msgstr "Default thumbnail image"
-
-#: autoblogincludes/addons/post.formats.php:39
-msgid "Post format for new posts"
-msgstr "Post format for new posts"
-
-#: autoblogincludes/addons/post.formats.php:53
-msgid "Select post format"
-msgstr "Select post format"
-
-#: autoblogincludes/addons/forcefeed.php:78
-msgid "Force Feed"
-msgstr "Force Feed"
-
-#: autoblogincludes/addons/forcefeed.php:81
-msgid "Enable Force Feed"
-msgstr "Enable Force Feed"
-
-#: autoblogincludes/addons/disablesainitization.php:74
-msgid "Disable Feed Sanitization"
-msgstr "Disable Feed Sanitization"
-
-#: autoblogincludes/addons/disablesainitization.php:77
-msgid "Disable Sanitization"
-msgstr "Disable Sanitization"
-
-#: autoblogincludes/addons/disablesainitization.php:79
-msgid ""
-"Disable feed content sanitization only if you know what you are doing or you "
-"confident in the feed content."
-msgstr ""
-"Disable feed content sanitization only if you know what you are doing or you "
-"confident in the feed content."
-
-#: autoblogincludes/addons/stripimages.php:62
-msgid "Strip Images"
-msgstr "Strip Images"
-
-#: autoblogincludes/addons/stripimages.php:65
-msgid "Strip Image Tags"
-msgstr "Strip Image Tags"
-
-#: autoblogincludes/addons/stripimages.php:70
-msgid "Replace With"
-msgstr "Replace With"
-
-#: autoblogincludes/addons/appendtexttopost.php:61
-msgid "Post footer text"
-msgstr "Post footer text"
-
-#: autoblogincludes/addons/appendtexttopost.php:62
-msgid "You can use the following placeholders in your footer:"
-msgstr "You can use the following placeholders in your footer:"
-
-#: autoblogincludes/addons/appendtexttopost.php:74
-msgid "Append text to post content"
-msgstr "Append text to post content"
+#: autoblogincludes/classes/WPMUDEV/Help/Tooltips.php:314
+msgid "Help"
+msgstr "Help"

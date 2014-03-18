@@ -430,7 +430,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	* @return boolean TRUE if feed item content matched, otherwise FALSE.
 	*/
 	private function _check_item_content( SimplePie_Item $item, $details ) {
-		$matchall = $matchany = $matchphrase = $matchnone = $matchtags = true;
+		$matchall = $matchany = $matchphrase = $matchnone = $matchtags = $matchregex = true;
 		$item_content = trim( $item->get_title() ) . ' ' . trim( $item->get_content() );
 
 		if ( !empty( $details['allwords'] ) ) {
@@ -449,6 +449,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			$matchany = false;
 			$words = array_filter( array_map( 'trim', explode( ',', $details['anywords'] ) ) );
 			foreach ( $words as $word ) {
+				$word = stripslashes($word);
 				$word = preg_quote( $word, '/' );
 				if ( preg_match( "/\b({$word})\b/is", $item_content ) ) {
 					$matchany = true;
@@ -498,7 +499,13 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			}
 		}
 
-		$matched = $matchall && $matchany && $matchphrase && $matchnone && $matchtags;
+		if ( !empty( $details['regex'] ) ) {
+			$matchregex = true;
+			$regex = $details['regex'];
+			$matchregex = preg_match( $regex, $item_content );
+		}
+
+		$matched = $matchall && $matchany && $matchphrase && $matchnone && $matchtags && $matchregex;
 		if ( !$matched ) {
 			$this->_log_message( Autoblog_Plugin::LOG_POST_DOESNT_MATCH );
 		}
