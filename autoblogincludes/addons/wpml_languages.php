@@ -64,6 +64,7 @@ class Autoblog_WPML_languages{
 		}
 
 	}
+}
 
 new Autoblog_WPML_languages;
 

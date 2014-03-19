@@ -1,5 +1,8 @@
 Change Log: Autoblog Plugin
 
+== 4.0.9.1 ==
+* WPML addon missing closing "}" caused crash if activated.
+
 == 4.0.9 ==
 * Added test for proper Cron function on WP and an error message explaining the options to work around the problems.
 * Added Regular Expression Match field to allow generic matching of HTML text like /<img / to select only posts with images.
