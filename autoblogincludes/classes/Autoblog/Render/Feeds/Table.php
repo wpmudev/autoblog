@@ -103,22 +103,27 @@ class Autoblog_Render_Feeds_Table extends Autoblog_Render {
 		}
 	}
 
-	 private function _test_cron(){
+	private function _test_cron(){
 		if ( Autoblog_Plugin::use_cron() ) {
 
 			$cron_url = add_query_arg( 'doing_wp_cron', '', site_url( 'wp-cron.php' ) );
-			$result = wp_remote_post( $cron_url );
+			$response = wp_remote_post( $cron_url );
 
-			if( ($result['response']['code'] != 200) 
-			&& !(defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON ) 
-			) {
-				echo '<div class="error fade"><p>', wp_kses( __( 'The Cron processing file "wp-cron.php" cannot be reached from code. This may be due to your firewall blocking local loopback calls.
-				<br />You may be able to work around the firewall by adding this line to your wp-config.php file.
-				<p><code>define("ALTERNATE_WP_CRON", true);</code></p>
-				If that does not clear the problem, then disable using Cron and enable the "pageload" method by adding
-				<p><code>		define( "AUTOBLOG_PROCESSING_METHOD", "pageload" );</code></p>to wp-config.php', 'autoblogtext' ), wp_kses_allowed_html('post') ), '</p></div>';
+			if( is_wp_error($response)){
+				$error_message = $response->get_error_message();
+				printf('<div class="error fade"><p>%s %s</p></div>', __('Problem communicating with WP_CRON: ', 'autoblogtext'), $error_message );
+			} else {
+				if( ($response['response']['code'] != 200)
+				&& !(defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON )
+				) {
+					echo '<div class="error fade"><p>', wp_kses( __( 'The Cron processing file "wp-cron.php" cannot be reached from code. This may be due to your firewall blocking local loopback calls.
+					<br />You may be able to work around the firewall by adding this line to your wp-config.php file.
+					<p><code>define("ALTERNATE_WP_CRON", true);</code></p>
+					If that does not clear the problem, then disable using Cron and enable the "pageload" method by adding
+					<p><code>		define( "AUTOBLOG_PROCESSING_METHOD", "pageload" );</code></p>to wp-config.php', 'autoblogtext' ), wp_kses_allowed_html('post') ), '</p></div>';
+				}
 			}
 		}
-	}
 
+	}
 }

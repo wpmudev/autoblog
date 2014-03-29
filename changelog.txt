@@ -1,5 +1,10 @@
 Change Log: Autoblog Plugin
 
+== 4.0.9.2 ==
+* CDN Mime Filter  add-on. Wordpress rejects images without extensions, such as are sent by some CDN services. 
+  This add-on checks the files mime type directly and passes it if in the standard Wordpress list of allowed types.
+* Fixed problem with testing for CRON access.  
+  
 == 4.0.9.1 ==
 * WPML addon missing closing "}" caused crash if activated.
 
@@ -17,7 +22,6 @@ Change Log: Autoblog Plugin
 * Fixed Post Formats Addon
 
 == 4.0.6 ==
-
 * Fixed feed "Last Processed" date column to render it with gmt offset
 * Fixed original date importing issue
 * Fixed strip all images addon
@@ -26,7 +30,6 @@ Change Log: Autoblog Plugin
 * Improved post type rendering at all feeds screen
 
 == 4.0.5 ==
-
 * Improved performance of dashboard page
 * Improved images addons to skip all invalid images from being imported
 * Improved feed items filtering, now the plugin filters them by whole words

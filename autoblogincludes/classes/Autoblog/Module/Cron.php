@@ -36,7 +36,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	* @since 4.0.0
 	*
 	* @access private
-	* @var int
+	* @var int	
 	*/
 	private $_cron_timestamp = 0;
 
