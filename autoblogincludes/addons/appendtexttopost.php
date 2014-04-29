@@ -64,7 +64,7 @@ class A_appendtexttopost extends Autoblog_Addon {
 		);
 
 		ob_start();
-		wp_editor( isset( $table['footertext'] ) ? stripcslashes( $table['footertext'] ) : '', "abtble[footertext]", array(
+		wp_editor( isset( $table['footertext'] ) ? stripcslashes( $table['footertext'] ) : '', "abtble-footertext", array(
 			"textarea_name" => "abtble[footertext]",
 			"textarea_rows" => 10,
 		) );
