@@ -29,14 +29,38 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 	}
 
 	/**
+	 *
+	 */
+	public function admin_menu() {
+		add_submenu_page( 'autoblog', __( 'Popup Original Link', 'autoblogtext' ), __( 'Popup Original Link', 'autoblogtext' ), 'manage_options', 'autoblog_olink_popup', array( &$this, 'screen' ) );
+	}
+
+	/**
+	 *
+	 */
+	public function screen() {
+
+	}
+
+	/**
 	 * @param $content
 	 *
 	 * @return mixed
 	 */
 	public function swap_content( $content ) {
-		$swap_content = get_post_meta( get_the_ID(), 'autoblog_open_source_popup', true );
+		//check does this post is an auto post or not
+		if ( get_post_meta( get_the_ID(), 'original_feed_id', true ) > 0 ) {
+			$swap_content = get_post_meta( get_the_ID(), 'autoblog_open_source_popup', true );
 
-		return ! empty( $swap_content ) ? $swap_content : $content;
+			if ( empty( $swap_content ) ) {
+				//so this post still not have swap content, do it
+				$swap_content = $this->generate_source_link_index( get_the_ID() );
+			}
+
+			return $swap_content;
+		}
+
+		return $content;
 	}
 
 	/**
@@ -47,9 +71,9 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 	 * @param $details
 	 * @param $item
 	 */
-	function generate_source_link_index( $post_id, $details, $item ) {
-		$domain = parse_url( $item->get_permalink(), PHP_URL_SCHEME ) . '://' . parse_url( $item->get_permalink(), PHP_URL_HOST );
-		$post   = get_post( $post_id );
+	public function generate_source_link_index( $post_id ) {
+		$domain = parse_url( get_post_meta( $post_id, 'original_source', true ), PHP_URL_HOST );
+		$post = get_post( $post_id );
 		//we will add a custom class to all the links inside this post
 		//find all the anchor tag
 		$content = $post->post_content;
@@ -58,7 +82,7 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 			//we will get all the link from the feed domain and add class
 			foreach ( $matches[0] as $anchor ) {
 				//append the " or ' before the domain,to make sure it in position
-				if ( stristr( $anchor, '"' . $domain ) || stristr( $anchor, "'" . $domain ) ) {
+				if ( stristr( $anchor, '"' . 'http://' . $domain ) || stristr( $anchor, "'" . 'http://' . $domain ) || stristr( $anchor, "'" . 'https://' . $domain ) || stristr( $anchor, "'" . 'https://' . $domain ) ) {
 					//add class
 					$dom = new DOMDocument();
 					$dom->loadHTML( $anchor );
@@ -70,15 +94,17 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 						//replace the old tag with the new
 						$content = str_replace( $anchor, $new_dom->saveHTML(), $content );
 					}
-					//update the clone content
-					update_post_meta( $post_id, 'autoblog_open_source_popup', $content );
+
 				}
 			}
+			//update the clone content
+			update_post_meta( $post_id, 'autoblog_open_source_popup', $content );
 
+			return $content;
 		}
 	}
 
-	public function load_thick_box(){
+	public function load_thick_box() {
 		add_thickbox();
 	}
 
@@ -105,10 +131,47 @@ EOP;
 	 * Check if this plugin load the firs time, generate the links
 	 */
 	public function first_load() {
-		$func = is_multisite() ? 'get_site_option' : 'get_option';
+		$func = is_multisite() ? "get_site_option" : "get_option";
 		if ( $func( 'autoblog_source_index' ) == false ) {
-			$this->generate_original_links_index();
+			//get the current posts
+			$posts = query_posts( array(
+				'meta' => array(
+					'key'     => 'original_feed_id',
+					'value'   => '0',
+					'compare' => '>',
+					'type'    => 'NUMERIC'
+				)
+			) );
+			//generate the option
+			foreach ( $posts as $post ) {
+				$this->generate_source_link_index( $post->ID );
+			}
 		}
+
+		/*if ( is_multisite() && get_site_option( 'autoblog_source_index' ) == false ) {
+			$post = query_posts( array(
+				'meta' => array(
+					'key'     => 'original_feed_id',
+					'value'   => '0',
+					'compare' => '>',
+					'type'    => 'NUMERIC'
+				)
+			) );
+			var_dump( $post );
+		} elseif ( ! is_multisite() && get_option( 'autoblog_source_index' ) == false ) {
+			//get post
+			$post = query_posts( array(
+				'meta' => array(
+					'key'     => 'original_feed_id',
+					'value'   => '0',
+					'compare' => '>',
+					'type'    => 'NUMERIC'
+				)
+			) );
+			var_dump( $post );
+		}*/
+
+
 	}
 
 	/**
