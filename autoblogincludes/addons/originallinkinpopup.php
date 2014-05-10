@@ -1,8 +1,8 @@
 <?php
 
 /*
-Addon Name: Open original link in popup
-Description: When your reader click on the original link, it will open in popup
+Addon Name: Open links in popup
+Description: When your reader clicks on links from the source, they will open in a popup
 Author: Hoang (Incsub)
 Author URI: http://premium.wpmudev.org
  */
@@ -10,6 +10,7 @@ Author URI: http://premium.wpmudev.org
 class A_SourceLinkPopup extends Autoblog_Addon {
 
 	const BROWSER_NATIVE = 'native', WORDPRESS_THICKBOX = 'thickbox';
+	public $feed;
 
 	/**
 	 * Constructor.
@@ -20,26 +21,10 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 	 */
 	public function __construct() {
 		parent::__construct();
-		//do it in very first in case the other adding something
-		$this->_add_filter( 'the_content', 'swap_content', 9 );
+		$this->_add_filter( 'the_content', 'swap_content', PHP_INT_MAX );
 		$this->_add_action( 'wp_enqueue_scripts', 'load_thick_box' );
 		$this->_add_action( 'wp_footer', 'open_link', 20 );
-		$this->_add_action( 'autoblog_post_post_insert', 'generate_source_link_index', 99, 3 );
-		$this->_add_action( 'autoblog_post_post_update', 'generate_source_link_index', 99, 3 );
-	}
-
-	/**
-	 *
-	 */
-	public function admin_menu() {
-		add_submenu_page( 'autoblog', __( 'Popup Original Link', 'autoblogtext' ), __( 'Popup Original Link', 'autoblogtext' ), 'manage_options', 'autoblog_olink_popup', array( &$this, 'screen' ) );
-	}
-
-	/**
-	 *
-	 */
-	public function screen() {
-
+		$this->_add_action( 'autoblog_feed_edit_form_end', 'add_footer_options', 10, 2 );
 	}
 
 	/**
@@ -49,15 +34,18 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 	 */
 	public function swap_content( $content ) {
 		//check does this post is an auto post or not
-		if ( get_post_meta( get_the_ID(), 'original_feed_id', true ) > 0 ) {
-			$swap_content = get_post_meta( get_the_ID(), 'autoblog_open_source_popup', true );
+		if ( ( $feed_id = get_post_meta( get_the_ID(), 'original_feed_id', true ) ) > 0 ) {
+			$feed = $this->get_feed( $feed_id );
+			if ( @$feed['olp_disable'] != 'on' ) {
+				$swap_content  = get_post_meta( get_the_ID(), 'autoblog_open_source_popup', true );
+				$force_refresh = @$feed['olp_force_refresh'] == 'on' ? 1 : 0;
+				if ( $force_refresh == 1 || empty( $swap_content ) ) {
+					//so this post still not have swap content, do it
+					$swap_content = $this->generate_source_link_index( $content, $feed_id );
+				}
 
-			if ( empty( $swap_content ) ) {
-				//so this post still not have swap content, do it
-				$swap_content = $this->generate_source_link_index( get_the_ID() );
+				return $swap_content;
 			}
-
-			return $swap_content;
 		}
 
 		return $content;
@@ -71,34 +59,39 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 	 * @param $details
 	 * @param $item
 	 */
-	public function generate_source_link_index( $post_id ) {
-		$domain = parse_url( get_post_meta( $post_id, 'original_source', true ), PHP_URL_HOST );
-		$post = get_post( $post_id );
-		//we will add a custom class to all the links inside this post
-		//find all the anchor tag
-		$content = $post->post_content;
-		$regex   = '#<\s*?a\b[^>]*>(.*?)</a\b[^>]*>#s';
-		if ( preg_match_all( "$regex", $post->post_content, $matches ) > 0 ) {
+	public function generate_source_link_index( $content, $feed_id ) {
+		$regex = '#<\s*?a\b[^>]*>(.*?)</a\b[^>]*>#s';
+		if ( preg_match_all( "$regex", $content, $matches ) > 0 ) {
 			//we will get all the link from the feed domain and add class
 			foreach ( $matches[0] as $anchor ) {
-				//append the " or ' before the domain,to make sure it in position
-				if ( stristr( $anchor, '"' . 'http://' . $domain ) || stristr( $anchor, "'" . 'http://' . $domain ) || stristr( $anchor, "'" . 'https://' . $domain ) || stristr( $anchor, "'" . 'https://' . $domain ) ) {
-					//add class
-					$dom = new DOMDocument();
-					$dom->loadHTML( $anchor );
-					$new_dom = new DOMDocument();
-					foreach ( $dom->getElementsByTagName( 'a' ) as $node ) {
+				//add class
+				$dom = new DOMDocument();
+				@$dom->loadHTML( trim( $anchor ) );
+				$new_dom = new DOMDocument();
+				foreach ( $dom->getElementsByTagName( 'a' ) as $node ) {
+					//check does this url domain is blog domain
+					$blog_url = strtolower( parse_url( get_site_url( get_current_blog_id() ), PHP_URL_HOST ) );
+					$href     = strtolower( parse_url( $node->getAttribute( 'href' ), PHP_URL_HOST ) );
+					//check does this domain exclude
+					$feed           = $this->get_feed( $feed_id );
+					$domain_exclude = explode( PHP_EOL, $feed['olp_domain_exclude'] );
+					$domain_exclude = array_map( 'trim', $domain_exclude );
+
+					if ( in_array( $href, $domain_exclude )){
+						break;
+					}
+
+					if ( $blog_url != $href ) {
 						$node->setAttribute( 'class', $node->getAttribute( 'class' ) . ' autoblog-load-by-popup thickbox' );
 						//$node->setAttribute( 'href', $node->getAttribute( 'href' ) . '?TB_iframe=true&width=800&height=600' );
 						$new_dom->appendChild( $new_dom->importNode( $node, true ) );
 						//replace the old tag with the new
 						$content = str_replace( $anchor, $new_dom->saveHTML(), $content );
 					}
-
 				}
 			}
 			//update the clone content
-			update_post_meta( $post_id, 'autoblog_open_source_popup', $content );
+			update_post_meta( get_the_ID(), 'autoblog_open_source_popup', $content );
 
 			return $content;
 		}
@@ -127,114 +120,39 @@ EOP;
 		echo $script;
 	}
 
-	/**
-	 * Check if this plugin load the firs time, generate the links
-	 */
-	public function first_load() {
-		$func = is_multisite() ? "get_site_option" : "get_option";
-		if ( $func( 'autoblog_source_index' ) == false ) {
-			//get the current posts
-			$posts = query_posts( array(
-				'meta' => array(
-					'key'     => 'original_feed_id',
-					'value'   => '0',
-					'compare' => '>',
-					'type'    => 'NUMERIC'
-				)
-			) );
-			//generate the option
-			foreach ( $posts as $post ) {
-				$this->generate_source_link_index( $post->ID );
-			}
-		}
-
-		/*if ( is_multisite() && get_site_option( 'autoblog_source_index' ) == false ) {
-			$post = query_posts( array(
-				'meta' => array(
-					'key'     => 'original_feed_id',
-					'value'   => '0',
-					'compare' => '>',
-					'type'    => 'NUMERIC'
-				)
-			) );
-			var_dump( $post );
-		} elseif ( ! is_multisite() && get_option( 'autoblog_source_index' ) == false ) {
-			//get post
-			$post = query_posts( array(
-				'meta' => array(
-					'key'     => 'original_feed_id',
-					'value'   => '0',
-					'compare' => '>',
-					'type'    => 'NUMERIC'
-				)
-			) );
-			var_dump( $post );
-		}*/
-
-
-	}
-
-	/**
-	 * Generate orignial links index
-	 */
-	public function generate_original_links_index() {
-		global $wpdb;
-		$sql = "SELECT meta_value FROM ";
-		if ( is_multisite() ) {
-			$tbl_name = $wpdb->prefix . ( get_current_blog_id() == 1 ? null : get_current_blog_id() . '_' ) . 'postmeta';
-		} else {
-			$tbl_name = $wpdb->prefix . '_postmeta';
-		}
-		$sql .= $tbl_name . " WHERE meta_key='original_source'";
-		$original_urls = $wpdb->get_col( $sql );
-		//we only cache domain
-
-
-		if ( is_multisite() ) {
-			update_site_option( 'autoblog_source_index', $original_urls );
-		} else {
-			update_option( 'autoblog_source_index', $original_urls );
-		}
-	}
-
-	/**
-	 * Renders addon options.
-	 *
-	 * @since  4.0.0
-	 * @action autoblog_feed_edit_form_end 10 2
-	 *
-	 * @access public
-	 *
-	 * @param type $key
-	 * @param type $details
-	 */
 	public function add_footer_options( $key, $details ) {
 		$data = ! empty( $details ) ? maybe_unserialize( $details->feed_meta ) : array();
-		// render block header
-		$this->_render_block_header( __( 'Open source link in popup', 'autoblogtext' ) );
 
-		$options = array(
-			''                       => __( 'No change at all', 'autoblogtext' ),
-			self::BROWSER_NATIVE     => __( 'Browser Native', 'autoblogtext' ),
-			self::WORDPRESS_THICKBOX => __( 'Wordpress Thickbox', 'autoblogtext' )
+		$label = sprintf( '<p>%s</p><p>%s</p><p>%s</p>',
+			__( 'Do you want to turn off this feature for this feed', 'autoblogtext' ),
+			__( 'Domain you want to exclude, seperate by line(without "http(s)://")', 'autoblogtext' ),
+			__( 'Always refresh content', 'autoblogtext' ) );
+
+		$content = sprintf( '<p>%s</p><p>%s</p><p>%s</p>',
+			'<label><input ' . checked( @$data['olp_disable'], 'on', false ) . ' name="abtble[olp_disable]" type="checkbox">' . __( 'Yes' ) . '</label>',
+			'<textarea name="abtble[olp_domain_exclude]" rows="3" class="long field">' . @$data['olp_domain_exclude'] . '</textarea>',
+			'<label><input ' . checked( @$data['olp_force_refresh'], 'on', false ) . ' type="checkbox" name="abtble[olp_force_refresh]"> If this function is activate, it will reindex the link, only use if your content updated </label>'
 		);
+		$this->_render_block_header( __( 'Open Link In Popup', 'autoblogtext' ) );
+		// render block elements
+		$this->_render_block_element( $label, $content );
+	}
 
-		$selected = apply_filters( 'autoblog_open_source_link_type', isset( $data['open_source_link_way'] ) ? $data['open_source_link_way'] : '' );
+	public function get_feed( $feed_id ) {
+		if ( empty( $this->feed ) ) {
+			$feed = $feed = $this->_wpdb->get_row( sprintf(
+				is_network_admin()
+					? 'SELECT * FROM %s WHERE feed_id = %d LIMIT 1'
+					: 'SELECT * FROM %s WHERE feed_id = %d AND blog_id = %d LIMIT 1',
+				AUTOBLOG_TABLE_FEEDS,
+				$feed_id,
+				get_current_blog_id()
+			), ARRAY_A );
 
-		$radios = '';
-
-		foreach ( $options as $key => $label ) {
-			$radios .= sprintf(
-				'<div><label><input type="radio" name="abtble[open_source_link_way]" value="%s"%s> %s</label></div>',
-				esc_attr( $key ),
-				checked( $key, $selected, false ),
-				esc_html( $label )
-			);
-			$radios .= '<br/>';
+			$this->feed = maybe_unserialize( $feed['feed_meta'] );
 		}
 
-		// render block elements
-		$this->_render_block_element( __( 'Please specific the way source link open:', 'autoblogtext' ), $radios );
+		return $this->feed;
 	}
 
 }

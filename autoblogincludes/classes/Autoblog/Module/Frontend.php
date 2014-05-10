@@ -41,7 +41,7 @@ class Autoblog_Module_Frontend extends Autoblog_Module {
 	public function __construct( Autoblog_Plugin $plugin ) {
 		parent::__construct( $plugin );
 
-		$this->_add_filter( 'the_content', 'add_original_feed', PHP_INT_MAX );
+		$this->_add_filter( 'the_content', 'add_original_feed', PHP_INT_MAX-1 );
 	}
 
 	/**
