@@ -1,10 +1,4 @@
 <?php
-/*
-Addon Name: Twitter Add-on
-Description: Adds a Twitter post type and processes tweets to have correct links.
-Author: Barry (Incsub)
-Author URI: http://premium.wpmudev.org
-*/
 
 class A_twitter_addon extends Autoblog_Addon {
 
@@ -196,4 +190,4 @@ class A_Widget_Recent_Tweets extends WP_Widget {
 	}
 }
 
-$atwitteraddon = new A_twitter_addon();
+//$atwitteraddon = new A_twitter_addon();
