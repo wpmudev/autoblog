@@ -129,9 +129,9 @@ EOP;
 			__( 'Always refresh content', 'autoblogtext' ) );
 
 		$content = sprintf( '<p>%s</p><p>%s</p><p>%s</p>',
-			'<label><input ' . checked( @$data['olp_disable'], 'on', false ) . ' name="abtble[olp_disable]" type="checkbox">' . __( 'Yes' ) . '</label>',
+			'<label><input ' . checked( @$data['olp_disable'], 'on', false ) . ' name="abtble[olp_disable]" type="checkbox">' . __( 'Yes','autoblogtext' ) . '</label>',
 			'<textarea name="abtble[olp_domain_exclude]" rows="3" class="long field">' . @$data['olp_domain_exclude'] . '</textarea>',
-			'<label><input ' . checked( @$data['olp_force_refresh'], 'on', false ) . ' type="checkbox" name="abtble[olp_force_refresh]"> If this function is activate, it will reindex the link, only use if your content updated </label>'
+			'<label><input ' . checked( @$data['olp_force_refresh'], 'on', false ) . ' type="checkbox" name="abtble[olp_force_refresh]">'.__('If this function is activated, it will re-index the link. Use this to update content and links','autoblogtext').'</label>'
 		);
 		$this->_render_block_header( __( 'Open Link In Popup', 'autoblogtext' ) );
 		// render block elements
