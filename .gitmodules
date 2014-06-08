@@ -1,0 +1,4 @@
+[submodule "autoblogincludes/extra"]
+	path = autoblogincludes/extra
+	url = git@bitbucket.org:incsub/wpmudev-dashboard-notification.git
+	branch = master
