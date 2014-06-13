@@ -129,9 +129,10 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 
 		$enclosure = $item->get_enclosure();
 		if ( is_a( $enclosure, 'SimplePie_Enclosure' ) ) {
-			$mime_type = $enclosure->get_type();
-			$type = current( explode( '/', $mime_type, 2 ) );
 			$link = $enclosure->get_link();
+			$file_type = wp_check_filetype($link);
+			$mime_type = $file_type['type'];
+			$type = current( explode( '/', $mime_type, 2 ) );
 			if ( in_array( $mime_type, get_allowed_mime_types() ) && $type == 'image' && filter_var( $link, FILTER_VALIDATE_URL ) ) {
 				$thumbnail_id = $this->_download_image( $link, $post_id );
 				if ( $thumbnail_id ) {
