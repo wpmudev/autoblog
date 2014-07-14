@@ -38,12 +38,12 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 			$feed = $this->get_feed( $feed_id );
 			if ( @$feed['olp_disable'] != 'on' ) {
 				$swap_content  = get_post_meta( get_the_ID(), 'autoblog_open_source_popup', true );
+				$swap_content = trim($swap_content);
 				$force_refresh = @$feed['olp_force_refresh'] == 'on' ? 1 : 0;
 				if ( $force_refresh == 1 || empty( $swap_content ) ) {
 					//so this post still not have swap content, do it
 					$swap_content = $this->generate_source_link_index( $content, $feed_id );
 				}
-
 				return $swap_content;
 			}
 		}
@@ -95,6 +95,7 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 
 			return $content;
 		}
+		return $content;
 	}
 
 	public function load_thick_box() {
