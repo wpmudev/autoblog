@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: AutoBlog
-Version: 4.0.9.3
+Version: 4.0.9.4
 Plugin URI: http://premium.wpmudev.org/project/autoblog
 Description: This plugin automatically posts content from RSS feeds to different blogs on your WordPress Multisite...
 Author: WPMU DEV
@@ -88,7 +88,7 @@ function autoblog_setup_constants() {
 
 	// Information to use for duplicate checking - link or guid
 	if ( !defined( 'AUTOBLOG_POST_DUPLICATE_CHECK' ) ) {
-		define( 'AUTOBLOG_POST_DUPLICATE_CHECK', 'link' );
+		define( 'AUTOBLOG_POST_DUPLICATE_CHECK', 'both' );
 	}
 
 	// Information to use for duplicate checking - link or guid
