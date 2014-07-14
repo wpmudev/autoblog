@@ -90,7 +90,6 @@ class A_twitter_addon extends Autoblog_Addon {
 	 * @return type
 	 */
 	public function process_tweet( $post_data, $details, $item ) {
-var_dump($post_data);
 		if ( $post_data['post_type'] == 'tweet' || stripos( $item->get_permalink(), 'twitter.com' ) !== false ) {
 			$post_data['post_title']   = preg_replace( "^(\w+): (.*)^", "\\2", $post_data['post_title'] );
 			$post_data['post_content'] = $this->_twitterify( $post_data['post_content'] );
