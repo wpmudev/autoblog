@@ -2,11 +2,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Autoblog 4.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-29 12:43-0500\n"
-"PO-Revision-Date: 2014-03-29 12:44-0500\n"
-"Last-Translator: Eugene Manuilov <eugene@manuilov.org>\n"
-"Language-Team: Incsub <dev@incsub.com>\n"
-"Language: en_US\n"
+"POT-Creation-Date: 2014-07-15 17:27+0700\n"
+"PO-Revision-Date: 2014-07-15 17:27+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,7 +13,7 @@ msgstr ""
 "_n_noop:1,2;_c;_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;"
 "esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
 "_n_noop;_nc;_nx;_nx_noop\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ./../../\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
@@ -32,44 +31,44 @@ msgstr "You can use the following placeholders in your footer:"
 msgid "Append text to post content"
 msgstr "Append text to post content"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:46
+#: autoblogincludes/addons/cacheandfeatureimages.php:48
 msgid "Don't import featured image"
 msgstr "Don't import featured image"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:47
+#: autoblogincludes/addons/cacheandfeatureimages.php:49
 msgid "Use media:thumbnail tag of a feed item"
 msgstr "Use media:thumbnail tag of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:48
+#: autoblogincludes/addons/cacheandfeatureimages.php:50
 #, fuzzy
 msgid "Use enclosure tag of a feed item"
 msgstr "Use media:thumbnail tag of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:49
+#: autoblogincludes/addons/cacheandfeatureimages.php:51
 msgid "Find the first image within content of a feed item"
 msgstr "Find the first image within content of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:50
+#: autoblogincludes/addons/cacheandfeatureimages.php:52
 msgid "Find the last image within content of a feed item"
 msgstr "Find the last image within content of a feed item"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:79
+#: autoblogincludes/addons/cacheandfeatureimages.php:81
 msgid "Select Default Image"
 msgstr "Select Default Image"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:80
+#: autoblogincludes/addons/cacheandfeatureimages.php:82
 msgid "Delete Image"
 msgstr "Delete Image"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:85
+#: autoblogincludes/addons/cacheandfeatureimages.php:87
 msgid "Featured Image Importing"
 msgstr "Featured Image Importing"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:88
+#: autoblogincludes/addons/cacheandfeatureimages.php:90
 msgid "Select a way to import featured image"
 msgstr "Select a way to import featured image"
 
-#: autoblogincludes/addons/cacheandfeatureimages.php:89
+#: autoblogincludes/addons/cacheandfeatureimages.php:91
 msgid "Default thumbnail image"
 msgstr "Default thumbnail image"
 
@@ -109,6 +108,35 @@ msgstr "Force Feed"
 msgid "Enable Force Feed"
 msgstr "Enable Force Feed"
 
+#: autoblogincludes/addons/originallinkinpopup.php:128
+#, fuzzy
+msgid "Do you want to turn off this feature for this feed"
+msgstr "Set the date you want to stop processing posts from this feed."
+
+#: autoblogincludes/addons/originallinkinpopup.php:129
+msgid "Domain you want to exclude, seperate by line(without \"http(s)://\")"
+msgstr ""
+
+#: autoblogincludes/addons/originallinkinpopup.php:130
+msgid "Always refresh content"
+msgstr ""
+
+#: autoblogincludes/addons/originallinkinpopup.php:133
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:549
+#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:561
+msgid "Yes"
+msgstr "Yes"
+
+#: autoblogincludes/addons/originallinkinpopup.php:135
+msgid ""
+"If this function is activated, it will re-index the link. Use this to update "
+"content and links"
+msgstr ""
+
+#: autoblogincludes/addons/originallinkinpopup.php:137
+msgid "Open Link In Popup"
+msgstr ""
+
 #: autoblogincludes/addons/post.formats.php:39
 msgid "Post format for new posts"
 msgstr "Post format for new posts"
@@ -129,84 +157,108 @@ msgstr "Strip Image Tags"
 msgid "Replace With"
 msgstr "Replace With"
 
-#: autoblogincludes/addons/twitter.addon.php:43
+#: autoblogincludes/addons/twitter.addon.php:49
 msgid "tweet"
 msgstr "tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:45
+#: autoblogincludes/addons/twitter.addon.php:51
 msgid "Tweets"
 msgstr "Tweets"
 
-#: autoblogincludes/addons/twitter.addon.php:46
+#: autoblogincludes/addons/twitter.addon.php:52
 msgid "Tweet"
 msgstr "Tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:47
+#: autoblogincludes/addons/twitter.addon.php:53
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Table.php:50
 msgid "Add New"
 msgstr "Add New"
 
-#: autoblogincludes/addons/twitter.addon.php:48
+#: autoblogincludes/addons/twitter.addon.php:54
 msgid "Add New Tweet"
 msgstr "Add New Tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:49
+#: autoblogincludes/addons/twitter.addon.php:55
 #: autoblogincludes/classes/Autoblog/Table/Feeds.php:66
 msgid "Edit"
 msgstr "Edit"
 
-#: autoblogincludes/addons/twitter.addon.php:50
+#: autoblogincludes/addons/twitter.addon.php:56
 msgid "Edit Tweet"
 msgstr "Edit Tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:51
+#: autoblogincludes/addons/twitter.addon.php:57
 msgid "New Tweet"
 msgstr "New Tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:52
-#: autoblogincludes/addons/twitter.addon.php:53
+#: autoblogincludes/addons/twitter.addon.php:58
+#: autoblogincludes/addons/twitter.addon.php:59
 msgid "View Tweet"
 msgstr "View Tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:54
+#: autoblogincludes/addons/twitter.addon.php:60
 msgid "Search Tweets"
 msgstr "Search Tweets"
 
-#: autoblogincludes/addons/twitter.addon.php:55
+#: autoblogincludes/addons/twitter.addon.php:61
 msgid "No Tweets found"
 msgstr "No Tweets found"
 
-#: autoblogincludes/addons/twitter.addon.php:56
+#: autoblogincludes/addons/twitter.addon.php:62
 msgid "No Tweets found in Trash"
 msgstr "No Tweets found in Trash"
 
-#: autoblogincludes/addons/twitter.addon.php:57
+#: autoblogincludes/addons/twitter.addon.php:63
 msgid "Parent Tweet"
 msgstr "Parent Tweet"
 
-#: autoblogincludes/addons/twitter.addon.php:119
+#: autoblogincludes/addons/twitter.addon.php:127
+msgid "Enable Twitter to this feed"
+msgstr ""
+
+#: autoblogincludes/addons/twitter.addon.php:128
+msgid "Consumer Key"
+msgstr ""
+
+#: autoblogincludes/addons/twitter.addon.php:129
+msgid "Consumer Secret"
+msgstr ""
+
+#: autoblogincludes/addons/twitter.addon.php:130
+msgid "User Screen Name"
+msgstr ""
+
+#: autoblogincludes/addons/twitter.addon.php:138
+msgid "Twitter Timeline"
+msgstr ""
+
+#: autoblogincludes/addons/twitter.addon.php:175
 msgid "The most recent tweets on your site"
 msgstr "The most recent tweets on your site"
 
-#: autoblogincludes/addons/twitter.addon.php:120
+#: autoblogincludes/addons/twitter.addon.php:176
 msgid "Recent Tweets"
 msgstr "Recent Tweets"
 
-#: autoblogincludes/addons/twitter.addon.php:142
+#: autoblogincludes/addons/twitter.addon.php:200
 msgid "Recent Posts"
 msgstr "Recent Posts"
 
-#: autoblogincludes/addons/twitter.addon.php:154
+#: autoblogincludes/addons/twitter.addon.php:215
 msgid " at "
 msgstr " at "
 
-#: autoblogincludes/addons/twitter.addon.php:190
+#: autoblogincludes/addons/twitter.addon.php:252
 msgid "Title:"
 msgstr "Title:"
 
-#: autoblogincludes/addons/twitter.addon.php:193
+#: autoblogincludes/addons/twitter.addon.php:257
 msgid "Number of tweets to show:"
 msgstr "Number of tweets to show:"
+
+#: autoblogincludes/classes/Autoblog/Table.php:43
+msgid "Search"
+msgstr "Search"
 
 #: autoblogincludes/classes/Autoblog/Module/Backend.php:90
 msgid "Date"
@@ -257,7 +309,7 @@ msgstr "Autoblog Add-ons"
 msgid "Add-ons"
 msgstr "Add-ons"
 
-#: autoblogincludes/classes/Autoblog/Module/Cron.php:340
+#: autoblogincludes/classes/Autoblog/Module/Cron.php:351
 msgid "No entries found in the feed."
 msgstr "No entries found in the feed."
 
@@ -797,11 +849,6 @@ msgstr "Set the date you want to stop processing posts from this feed."
 msgid "Force SSL verification"
 msgstr "Force SSL verification"
 
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:549
-#: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:561
-msgid "Yes"
-msgstr "Yes"
-
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:550
 #: autoblogincludes/classes/Autoblog/Render/Feeds/Form.php:560
 msgid "No"
@@ -883,10 +930,6 @@ msgid ""
 "\t\t\t\t\t<p><code>\t\tdefine( \"AUTOBLOG_PROCESSING_METHOD\", \"pageload"
 "\" );</code></p>to wp-config.php"
 msgstr ""
-
-#: autoblogincludes/classes/Autoblog/Table.php:43
-msgid "Search"
-msgstr "Search"
 
 #: autoblogincludes/classes/Autoblog/Table/Addons.php:74
 msgid "Network Active"
