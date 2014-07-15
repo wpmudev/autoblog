@@ -1,4 +1,5 @@
 <?php
+
 /*
 Addon Name: Featured Image Import
 Description: Imports feed item featured image into the media library, attaches it to the imported post and marks it as featured image.
@@ -16,7 +17,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Constructor.
 	 *
-	 * @since 4.0.0
+	 * @since  4.0.0
 	 *
 	 * @access public
 	 */
@@ -33,16 +34,17 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	 * @action autoblog_feed_edit_form_end 10 2
 	 *
 	 * @access public
+	 *
 	 * @param type $key
 	 * @param type $details
 	 */
 	public function render_image_options( $key, $details ) {
-		$table = !empty( $details->feed_meta )
+		$table = ! empty( $details->feed_meta )
 			? maybe_unserialize( $details->feed_meta )
 			: array();
 
 		$selected_option = apply_filters( 'autoblog_featuredimage_from', isset( $table['featuredimage'] ) ? $table['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
-		$options = array(
+		$options         = array(
 			''                           => __( "Don't import featured image", 'autobogtext' ),
 			self::SOURCE_MEDIA_THUMBNAIL => __( 'Use media:thumbnail tag of a feed item', 'autoblogtext' ),
 			self::SOURCE_ENCLOSURE       => __( 'Use enclosure tag of a feed item', 'autoblogtext' ),
@@ -62,10 +64,10 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		$radio .= '<br>';
 
 		$thumbnail_src = '';
-		$thumbnail_id = isset( $table['featureddefault'] ) ? absint( $table['featureddefault'] ) : 0;
+		$thumbnail_id  = isset( $table['featureddefault'] ) ? absint( $table['featureddefault'] ) : 0;
 		if ( $thumbnail_id ) {
 			$image = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
-			if ( !empty( $image ) ) {
+			if ( ! empty( $image ) ) {
 				$thumbnail_src = $image[0];
 			}
 		}
@@ -92,15 +94,16 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Finds image in media:thumbnail tag.
 	 *
-	 * @since 4.0.6
+	 * @since  4.0.6
 	 *
 	 * @access private
-	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
-	 * @param int $post_id The post ID to attach featured image to.
-	 * @param array $details The actual feed settings.
+	 *
+	 * @param SimplePie_Item $item    The instance of SimplePie_Item class.
+	 * @param int            $post_id The post ID to attach featured image to.
+	 * @param array          $details The actual feed settings.
 	 */
 	private function _check_post_for_media_thumbnail_images( SimplePie_Item $item, $post_id, $details ) {
-		$set = false;
+		$set     = false;
 		$resutls = $item->get_item_tags( SIMPLEPIE_NAMESPACE_MEDIARSS, 'thumbnail' );
 		if ( isset( $resutls[0]['attribs']['']['url'] ) && filter_var( $resutls[0]['attribs']['']['url'], FILTER_VALIDATE_URL ) ) {
 			$thumbnail_id = $this->_download_image( $resutls[0]['attribs']['']['url'], $post_id );
@@ -109,7 +112,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			}
 		}
 
-		if ( !$set ) {
+		if ( ! $set ) {
 			$this->_set_default_image( $post_id, $details );
 		}
 	}
@@ -117,22 +120,23 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Finds image in enclosure tag.
 	 *
-	 * @since 4.0.6
+	 * @since  4.0.6
 	 *
 	 * @access private
-	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
-	 * @param int $post_id The post ID to attach featured image to.
-	 * @param array $details The actual feed settings.
+	 *
+	 * @param SimplePie_Item $item    The instance of SimplePie_Item class.
+	 * @param int            $post_id The post ID to attach featured image to.
+	 * @param array          $details The actual feed settings.
 	 */
 	private function _check_post_for_enclosure_images( SimplePie_Item $item, $post_id, $details ) {
 		$set = false;
 
 		$enclosure = $item->get_enclosure();
 		if ( is_a( $enclosure, 'SimplePie_Enclosure' ) ) {
-			$link = $enclosure->get_link();
-			$file_type = wp_check_filetype($link);
+			$link      = $enclosure->get_link();
+			$file_type = wp_check_filetype( $link );
 			$mime_type = $file_type['type'];
-			$type = current( explode( '/', $mime_type, 2 ) );
+			$type      = current( explode( '/', $mime_type, 2 ) );
 			if ( in_array( $mime_type, get_allowed_mime_types() ) && $type == 'image' && filter_var( $link, FILTER_VALIDATE_URL ) ) {
 				$thumbnail_id = $this->_download_image( $link, $post_id );
 				if ( $thumbnail_id ) {
@@ -141,7 +145,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			}
 		}
 
-		if ( !$set ) {
+		if ( ! $set ) {
 			$this->_set_default_image( $post_id, $details );
 		}
 	}
@@ -149,44 +153,71 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Findes featured image in the item content.
 	 *
-	 * @since 4.0.6
+	 * @since  4.0.6
 	 *
 	 * @access private
-	 * @param string $method The method of finding.
-	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
-	 * @param int $post_id The post ID to attach featured image to.
-	 * @param array $details The actual feed settings.
+	 *
+	 * @param string         $method  The method of finding.
+	 * @param SimplePie_Item $item    The instance of SimplePie_Item class.
+	 * @param int            $post_id The post ID to attach featured image to.
+	 * @param array          $details The actual feed settings.
 	 */
 	private function _check_post_for_content_images( $method, SimplePie_Item $item, $post_id, $details ) {
-		$images = $this->_get_remote_images_from_content( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
+		$images = $this->_get_remote_images_from_post_content( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
+		if ( ! empty( $images ) ) {
+			foreach ( $images as $key => $value ) {
+				if ( $this->validate_images( $value ) == false ) {
+					unset( $images[$key] );
+				}
+			}
+		}
+
+		if ( empty( $images ) ) {
+			//we will use the raw content for getting images
+			$images = $this->_get_remote_images_from_post_content( $this->_get_simplepie_item_raw( $item ) );
+			if ( ! empty( $images ) ) {
+				foreach ( $images as $key => $value ) {
+					if ( $this->validate_images( $value ) == false ) {
+						unset( $images[$key] );
+					}
+				}
+			}
+		}
+		//if still empty images, return
 		if ( empty( $images ) ) {
 			return;
 		}
 
+
 		$image = null;
 		switch ( $method ) {
-			case self::SOURCE_THE_FIRST_IMAGE: $image = array_shift( $images ); break;
-			case self::SOURCE_THE_LAST_IMAGE:  $image = array_pop( $images );   break;
+			case self::SOURCE_THE_FIRST_IMAGE:
+				$image = array_shift( $images );
+				break;
+			case self::SOURCE_THE_LAST_IMAGE:
+				$image = array_pop( $images );
+				break;
 		}
 
 		if ( empty( $image ) ) {
 			$this->_set_default_image( $post_id, $details );
+
 			return;
 		}
 
 		// Set a big timelimt for processing as we are pulling in potentially big files.
 		set_time_limit( 600 );
 
-		$newimage = $image;
+		$newimage  = $image;
 		$image_url = autoblog_parse_mb_url( $newimage );
-		$blog_url = parse_url( $details['url'] );
+		$blog_url  = parse_url( $details['url'] );
 
-		if ( empty( $image_url['host'] ) && !empty( $blog_url['host'] ) ) {
+		if ( empty( $image_url['host'] ) && ! empty( $blog_url['host'] ) ) {
 			// We need to add in a host name as the images look like they are relative to the feed
 			$newimage = trailingslashit( $blog_url['host'] ) . ltrim( $newimage, '/' );
 		}
 
-		if ( empty( $image_url['scheme'] ) && !empty( $blog_url['scheme'] ) ) {
+		if ( empty( $image_url['scheme'] ) && ! empty( $blog_url['scheme'] ) ) {
 			$newimage = substr( $newimage, 0, 2 ) == '//'
 				? $blog_url['scheme'] . ':' . $newimage
 				: $blog_url['scheme'] . '://' . $newimage;
@@ -203,13 +234,14 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Finds featured image and attached it to the post.
 	 *
-	 * @since 4.0.0
+	 * @since  4.0.0
 	 * @action autoblog_post_post_insert 10 3
 	 *
 	 * @access public
-	 * @param int $post_id The post ID to attach featured image to.
-	 * @param array $details The actual feed settings.
-	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
+	 *
+	 * @param int            $post_id The post ID to attach featured image to.
+	 * @param array          $details The actual feed settings.
+	 * @param SimplePie_Item $item    The instance of SimplePie_Item class.
 	 */
 	public function check_post_for_images( $post_id, $details, SimplePie_Item $item ) {
 		$method = trim( isset( $details['featuredimage'] ) ? $details['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
@@ -229,20 +261,64 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	/**
 	 * Sets default thumbnail if it has been selected.
 	 *
-	 * @since 4.0.4
+	 * @since  4.0.4
 	 *
 	 * @access private
-	 * @param int $post_id The post id.
+	 *
+	 * @param int   $post_id The post id.
 	 * @param array $details The feed details.
 	 */
 	private function _set_default_image( $post_id, $details ) {
 		$default = isset( $details['featureddefault'] ) ? absint( $details['featureddefault'] ) : 0;
 		if ( $default ) {
 			$image = wp_get_attachment_image_src( $default, 'medium' );
-			if ( !empty( $image ) ) {
+			if ( ! empty( $image ) ) {
 				set_post_thumbnail( $post_id, $default );
 			}
 		}
+	}
+
+	/**
+	 * @param $item
+	 *
+	 * @return string
+	 */
+	private function _get_simplepie_item_raw( $item ) {
+		$content_namespaces = array(
+			SIMPLEPIE_NAMESPACE_ATOM_10                => 'content',
+			SIMPLEPIE_NAMESPACE_ATOM_03                => 'content',
+			SIMPLEPIE_NAMESPACE_RSS_10_MODULES_CONTENT => 'content'
+		);
+
+		$summary_namespaces = array(
+			SIMPLEPIE_NAMESPACE_ATOM_10 => 'summary',
+			SIMPLEPIE_NAMESPACE_ATOM_03 => 'summary',
+			SIMPLEPIE_NAMESPACE_RSS_10  => 'description',
+			SIMPLEPIE_NAMESPACE_RSS_20  => 'description',
+			SIMPLEPIE_NAMESPACE_DC_11   => 'description',
+			SIMPLEPIE_NAMESPACE_DC_10   => 'description',
+			SIMPLEPIE_NAMESPACE_ITUNES  => 'summary',
+			SIMPLEPIE_NAMESPACE_ITUNES  => 'subtitle',
+			SIMPLEPIE_NAMESPACE_RSS_090 => 'description',
+		);
+
+		$raw_content = '';
+		foreach ( $content_namespaces as $key => $val ) {
+			$return = $item->get_item_tags( $key, $val );
+			if ( $return ) {
+				$raw_content = $return[0]['data'];
+			}
+		}
+
+		//if raw content still empty, get from summary
+		foreach ( $summary_namespaces as $key => $val ) {
+			$return = $item->get_item_tags( $key, $val );
+			if ( $return ) {
+				$raw_content = $return[0]['data'];
+			}
+		}
+
+		return $raw_content;
 	}
 
 }

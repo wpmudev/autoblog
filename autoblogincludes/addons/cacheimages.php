@@ -44,10 +44,12 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 		} else {
 			//something happen, we will need to use the raw content, please note that simplepie will
 			//sanitize content, this is the most case cause google news image don't display
-			$new_images       = $this->_import_post_images( $this->_get_simplepie_item_raw( $item ), $details );
-			$replaced_content = $this->_replace_content_with_new_images( $new_images, $post->post_content );
-			$post->post_content = $replaced_content;
-			wp_update_post( $post->to_array() );
+			$new_images = $this->_import_post_images( $this->_get_simplepie_item_raw( $item ), $details );
+			if ( count( $new_images ) ) {
+				$replaced_content   = $this->_replace_content_with_new_images( $new_images, $post->post_content );
+				$post->post_content = $replaced_content;
+				wp_update_post( $post->to_array() );
+			}
 		}
 	}
 
@@ -106,8 +108,10 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 					$img->setAttribute( 'src', $new_source );
 				}
 			}
+
 			return $doc->saveHTML();
 		}
+
 		return $content;
 	}
 
