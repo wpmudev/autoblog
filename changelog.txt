@@ -4,6 +4,7 @@ Change Log: Autoblog Plugin
 * Bring back twitter add-on
 * Fix duplicate bug
 * Fix bug except by paragraph not working properly
+* Update cache images and cache feature images
 
 == 4.0.9.2 ==
 * CDN Mime Filter  add-on. Wordpress rejects images without extensions, such as are sent by some CDN services. 
