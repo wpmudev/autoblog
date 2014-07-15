@@ -123,14 +123,16 @@ class A_twitter_addon extends Autoblog_Addon {
 	public function add_footer_options( $key, $details ) {
 		$data = ! empty( $details ) ? maybe_unserialize( $details->feed_meta ) : array();
 
-		$label = sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>',
+		$label = sprintf( '<p>%s</p><p style="height:43px">%s</p><p style="height: 30px">%s</p><p style="height:30px">%s</p><p>%s</p>',
 			__( 'Enable Twitter to this feed', 'autoblogtext' ),
+			'',
 			__( 'Consumer Key', 'autoblogtext' ),
 			__( 'Consumer Secret', 'autoblogtext' ),
 			__( 'User Screen Name', 'autoblogtext' ) );
 
-		$content = sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p>',
+		$content = sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p><p>%s</p>',
 			'<input type="checkbox" name="abtble[twitter_status]" ' . checked( 'on', @$data['twitter_status'], false ) . ' >',
+			__('For getting Twitter Consumer Key & Secret Key, please visit this url <a target="_blank" href="https://apps.twitter.com/">https://apps.twitter.com/</a>, creating new app. <br/>After the app created, please visit the tab API Keys, you will see the information','autoblogtext'),
 			'<input type="text" name="abtble[twitter_consumer_key]" value="' . esc_html( @$data['twitter_consumer_key'] ) . '" class="long field"/>',
 			'<input type="text" name="abtble[twitter_secret_key]" value="' . esc_html( @$data['twitter_secret_key'] ) . '" class="long field"/>',
 			'<input type="text" name="abtble[twitter_user_name]" value="' . esc_html( @$data['twitter_user_name'] ) . '" class="long field"/>'
