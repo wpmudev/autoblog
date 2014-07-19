@@ -88,12 +88,12 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 			}
 
 			$newimage_id = $this->_download_image( $newimage, $post_id );
+
 			if ( $newimage_id ) {
 				$new_images[$image] = wp_get_attachment_url( $newimage_id );
 			}
-
-			return $new_images;
 		}
+		return $new_images;
 	}
 
 	private function _replace_content_with_new_images( $new_images, $content ) {
