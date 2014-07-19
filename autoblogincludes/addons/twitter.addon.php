@@ -132,7 +132,7 @@ class A_twitter_addon extends Autoblog_Addon {
 
 		$content = sprintf( '<p>%s</p><p>%s</p><p>%s</p><p>%s</p><p>%s</p>',
 			'<input type="checkbox" name="abtble[twitter_status]" ' . checked( 'on', @$data['twitter_status'], false ) . ' >',
-			__('For getting Twitter Consumer Key & Secret Key, please visit this url <a target="_blank" href="https://apps.twitter.com/">https://apps.twitter.com/</a>, creating new app. <br/>After the app created, please visit the tab API Keys, you will see the information','autoblogtext'),
+			__( 'For getting Twitter Consumer Key & Secret Key, please visit this url <a target="_blank" href="https://apps.twitter.com/">https://apps.twitter.com/</a>, creating new app. <br/>After the app created, please visit the tab API Keys, you will see the information', 'autoblogtext' ),
 			'<input type="text" name="abtble[twitter_consumer_key]" value="' . esc_html( @$data['twitter_consumer_key'] ) . '" class="long field"/>',
 			'<input type="text" name="abtble[twitter_secret_key]" value="' . esc_html( @$data['twitter_secret_key'] ) . '" class="long field"/>',
 			'<input type="text" name="abtble[twitter_user_name]" value="' . esc_html( @$data['twitter_user_name'] ) . '" class="long field"/>'
@@ -140,7 +140,7 @@ class A_twitter_addon extends Autoblog_Addon {
 		$this->_render_block_header( __( 'Twitter Timeline', 'autoblogtext' ) );
 		// render block elements
 		$this->_render_block_element( $label, $content );
-		$this->footer_scripts($data);
+		$this->footer_scripts( $data );
 	}
 
 	public function footer_scripts( $data ) {
@@ -161,12 +161,15 @@ class A_twitter_addon extends Autoblog_Addon {
 	}
 
 	public function update_feed_url( $feed ) {
-		$meta              = maybe_unserialize( $feed['feed_meta'] );
-		$meta['url']       = AUTOBLOG_ABSURL . 'addons/twitter-addon-files/twitter_json_rss.php?username=' . $meta['twitter_user_name'] . '&feed_id=' . $feed['feed_id'];
-		$feed['feed_meta'] = serialize( $meta );
-		//save the virtual url
-		global $wpdb;
-		$wpdb->update( AUTOBLOG_TABLE_FEEDS, $feed, array( 'feed_id' => $feed['feed_id'] ) );
+		$meta = maybe_unserialize( $feed['feed_meta'] );
+		if ( isset( $meta['twitter_status'] ) && $meta['twitter_status'] == 'on' ) {
+
+			$meta['url']       = AUTOBLOG_ABSURL . 'addons/twitter-addon-files/twitter_json_rss.php?username=' . $meta['twitter_user_name'] . '&feed_id=' . $feed['feed_id'];
+			$feed['feed_meta'] = serialize( $meta );
+			//save the virtual url
+			global $wpdb;
+			$wpdb->update( AUTOBLOG_TABLE_FEEDS, $feed, array( 'feed_id' => $feed['feed_id'] ) );
+		}
 	}
 }
 
