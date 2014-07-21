@@ -19,6 +19,8 @@ class A_StripImagesAddon extends Autoblog_Addon {
 		parent::__construct();
 
 		$this->_add_filter( 'autoblog_pre_post_insert', 'filter_post', 11, 2 );
+		$this->_add_action( 'autoblog_post_post_update', 'filter_post', 11, 2 );
+
 		$this->_add_action( 'autoblog_feed_edit_form_end', 'add_feed_option', 12, 2 );
 	}
 
