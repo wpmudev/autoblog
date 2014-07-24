@@ -1,4 +1,7 @@
 Change Log: Autoblog Plugin
+== 4.0.9.5 ==
+* Fix strip images
+* Fix youtube add-on
 
 == 4.0.9.4 ==
 * Bring back twitter add-on

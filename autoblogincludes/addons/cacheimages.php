@@ -44,7 +44,7 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 		} else {
 			//something happen, we will need to use the raw content, please note that simplepie will
 			//sanitize content, this is the most case cause google news image don't display
-			$new_images = $this->_import_post_images( $this->_get_simplepie_item_raw( $item ), $details, $post_id );
+			$new_images = $this->_import_post_images( $this->get_simplepie_item_raw( $item ), $details, $post_id );
 			if ( count( $new_images ) ) {
 				$replaced_content   = $this->_replace_content_with_new_images( $new_images, $post->post_content );
 				$post->post_content = $replaced_content;
@@ -93,6 +93,7 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 				$new_images[$image] = wp_get_attachment_url( $newimage_id );
 			}
 		}
+
 		return $new_images;
 	}
 
@@ -116,46 +117,6 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 
 		return $content;
 	}
-
-
-	private function _get_simplepie_item_raw( $item ) {
-		$content_namespaces = array(
-			SIMPLEPIE_NAMESPACE_ATOM_10                => 'content',
-			SIMPLEPIE_NAMESPACE_ATOM_03                => 'content',
-			SIMPLEPIE_NAMESPACE_RSS_10_MODULES_CONTENT => 'content'
-		);
-
-		$summary_namespaces = array(
-			SIMPLEPIE_NAMESPACE_ATOM_10 => 'summary',
-			SIMPLEPIE_NAMESPACE_ATOM_03 => 'summary',
-			SIMPLEPIE_NAMESPACE_RSS_10  => 'description',
-			SIMPLEPIE_NAMESPACE_RSS_20  => 'description',
-			SIMPLEPIE_NAMESPACE_DC_11   => 'description',
-			SIMPLEPIE_NAMESPACE_DC_10   => 'description',
-			SIMPLEPIE_NAMESPACE_ITUNES  => 'summary',
-			SIMPLEPIE_NAMESPACE_ITUNES  => 'subtitle',
-			SIMPLEPIE_NAMESPACE_RSS_090 => 'description',
-		);
-
-		$raw_content = '';
-		foreach ( $content_namespaces as $key => $val ) {
-			$return = $item->get_item_tags( $key, $val );
-			if ( $return ) {
-				$raw_content = $return[0]['data'];
-			}
-		}
-
-		//if raw content still empty, get from summary
-		foreach ( $summary_namespaces as $key => $val ) {
-			$return = $item->get_item_tags( $key, $val );
-			if ( $return ) {
-				$raw_content = $return[0]['data'];
-			}
-		}
-
-		return $raw_content;
-	}
-
 }
 
 $aimagecacheaddon = new A_ImageCacheAddon();

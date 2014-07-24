@@ -230,4 +230,52 @@ class Autoblog_Addon {
 		}
 	}
 
+	/**
+	 * Get raw html of a simple pie content, needed in many case
+	 *
+	 * @param SimplePie_Item $item
+	 *
+	 * @return string
+	 */
+	public function get_simplepie_item_raw(SimplePie_Item $item ) {
+		$content_namespaces = array(
+			SIMPLEPIE_NAMESPACE_ATOM_10                => 'content',
+			SIMPLEPIE_NAMESPACE_ATOM_03                => 'content',
+			SIMPLEPIE_NAMESPACE_RSS_10_MODULES_CONTENT => 'encoded'
+		);
+
+		$summary_namespaces = array(
+			SIMPLEPIE_NAMESPACE_ATOM_10 => 'summary',
+			SIMPLEPIE_NAMESPACE_ATOM_03 => 'summary',
+			SIMPLEPIE_NAMESPACE_RSS_10  => 'description',
+			SIMPLEPIE_NAMESPACE_RSS_20  => 'description',
+			SIMPLEPIE_NAMESPACE_DC_11   => 'description',
+			SIMPLEPIE_NAMESPACE_DC_10   => 'description',
+			SIMPLEPIE_NAMESPACE_ITUNES  => 'summary',
+			SIMPLEPIE_NAMESPACE_ITUNES  => 'subtitle',
+			SIMPLEPIE_NAMESPACE_RSS_090 => 'description',
+		);
+
+		$raw_content = '';
+		foreach ( $content_namespaces as $key => $val ) {
+			$return = $item->get_item_tags( $key, $val );
+			if ( $return ) {
+				$raw_content = $return[0]['data'];
+				break;
+			}
+		}
+		if ( empty( $raw_content ) ) {
+			//if raw content still empty, get from summary
+			foreach ( $summary_namespaces as $key => $val ) {
+				$return = $item->get_item_tags( $key, $val );
+				if ( $return ) {
+					$raw_content = $return[0]['data'];
+					break;
+				}
+			}
+		}
+
+		return $raw_content;
+	}
+
 }

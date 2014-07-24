@@ -382,7 +382,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		$processed_count = 0;
 		for ( $x = 0; $x < $max; $x ++ ) {
 			$item = $feed->get_item( $x );
-			if ( is_a( $item, 'SimplePie_Item' ) ) {
+			if ( $item instanceof SimplePie_Item ) {
 				if ( $this->_check_item_content( $item, $details ) ) {
 					$update_duplicates = apply_filters( 'autoblog_update_duplicates', false, $details );
 					$post_id           = $this->_find_item_duplicate( $item, $update_duplicates );
@@ -754,7 +754,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		// post title
 		$data['post_title'] = trim( $item->get_title() );
 		// post content
-		$content = trim( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) );
+		//
+		$content = apply_filters( 'autoblog_post_content_before_import', trim( html_entity_decode( $item->get_content(), ENT_QUOTES, 'UTF-8' ) ), $details, $item );
 		$length  = absint( $details['excerptnumber'] );
 		if ( $details['useexcerpt'] != '1' && $length > 0 ) {
 			$delimiter = ' ';
@@ -764,10 +765,10 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 					break;
 				case 'paragraphs':
 					$delimiter = "\n\n";
-					$content   = str_replace( array( '<br/>','<br />', '<br>', '</p>' ), $delimiter, nl2br( $content ) );
+					$content   = str_replace( array( '<br/>', '<br />', '<br>', '</p>' ), $delimiter, nl2br( $content ) );
 					break;
 			}
-			$content = explode( $delimiter, strip_tags( $content ));
+			$content = explode( $delimiter, strip_tags( $content ) );
 			$content = array_filter( $content );
 			$content = implode( $delimiter, array_splice( $content, 0, $length ) );
 
