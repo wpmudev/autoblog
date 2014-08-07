@@ -104,7 +104,7 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 	 */
 	protected function validate_images( $url ) {
 		//validate images
-		$sizes = getimagesize( $url );
+		$sizes = @getimagesize( $url );
 		if ( is_array( $sizes ) ) {
 			$type = current( explode( '/', $sizes['mime'], 2 ) );
 			if ( in_array( $sizes['mime'], get_allowed_mime_types() ) && $type == 'image' ) {
