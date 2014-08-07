@@ -184,7 +184,6 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			}
 		}
 
-		var_dump( $images );
 		if ( empty( $images ) ) {
 			$this->_set_default_image( $post_id, $details );
 
@@ -226,7 +225,6 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		}
 
 		$thumbnail_id = $this->_download_image( $newimage, $post_id );
-		var_dump( $thumbnail_id );
 		if ( $thumbnail_id ) {
 			set_post_thumbnail( $post_id, $thumbnail_id );
 		} else {
@@ -275,8 +273,6 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		$default = isset( $details['featureddefault'] ) ? absint( $details['featureddefault'] ) : 0;
 		if ( $default ) {
 			$image = wp_get_attachment_image( $default, 'medium' );
-			var_dump($image);
-			var_dump($image);
 			if ( ! empty( $image ) ) {
 				set_post_thumbnail( $post_id, $default );
 			}
