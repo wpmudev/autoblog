@@ -184,7 +184,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 			}
 		}
 
-		if ( empty( $images ) ) {
+		if ( ! is_array( $images ) || count( $images ) == 0 ) {
 			$this->_set_default_image( $post_id, $details );
 
 			return;
@@ -223,7 +223,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 				? $blog_url['scheme'] . ':' . $newimage
 				: $blog_url['scheme'] . '://' . $newimage;
 		}
-
+		
 		$thumbnail_id = $this->_download_image( $newimage, $post_id );
 		if ( $thumbnail_id ) {
 			set_post_thumbnail( $post_id, $thumbnail_id );
