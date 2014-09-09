@@ -101,7 +101,7 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 		$new_images = array_values( $new_images );
 		//get the image by index
 		$doc         = new DOMDocument();
-		$can_use_dom = @$doc->loadHTML( $content );
+		$can_use_dom = @$doc->loadHTML( mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
 		if ( $can_use_dom ) {
 			$imgs = $doc->getElementsByTagName( 'img' );
 			foreach ( $imgs as $key => $img ) {
@@ -111,7 +111,8 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 					$img->setAttribute( 'src', $new_source );
 				}
 			}
-
+            $doc->removeChild($doc->firstChild);
+            $doc->replaceChild($doc->firstChild->firstChild->firstChild, $doc->firstChild);
 			return $doc->saveHTML();
 		}
 
