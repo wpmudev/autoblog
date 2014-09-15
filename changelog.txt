@@ -1,4 +1,7 @@
 Change Log: Autoblog Plugin
+== 4.0.9.6 ==
+* Fix wrong utf character
+
 == 4.0.9.5 ==
 * Fix strip images
 * Fix youtube add-on
