@@ -33,7 +33,8 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon {
 		);
 		$content                   = $item->get_content();
 		$doc                       = new DOMDocument();
-		$can_use_dom               = @$doc->loadHTML( $content );
+		$can_use_dom               = @$doc->loadHTML( mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8') );
+		$doc->preserveWhiteSpace = false;
 		if ( $can_use_dom ) {
 			//now only allow iframe from youtube
 			$iframes = $doc->getElementsByTagName( 'iframe' );
@@ -46,7 +47,8 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon {
 					$iframe->parentNode->removeChild( $iframe );
 				}
 			}
-
+			$doc->removeChild($doc->firstChild);
+			$doc->replaceChild($doc->firstChild->firstChild->firstChild, $doc->firstChild);
 			$new_content = $doc->saveHTML();
 
 			return $new_content;

@@ -102,6 +102,7 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 		//get the image by index
 		$doc         = new DOMDocument();
 		$can_use_dom = @$doc->loadHTML( mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+        $doc->preserveWhiteSpace = false;
 		if ( $can_use_dom ) {
 			$imgs = $doc->getElementsByTagName( 'img' );
 			foreach ( $imgs as $key => $img ) {
