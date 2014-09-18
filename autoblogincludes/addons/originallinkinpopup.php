@@ -66,7 +66,7 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 			foreach ( $matches[0] as $anchor ) {
 				//add class
 				$dom = new DOMDocument();
-				@$dom->loadHTML( trim( $anchor ) );
+				@$dom->loadHTML( mb_convert_encoding($anchor, 'HTML-ENTITIES', 'UTF-8') );
 				$new_dom = new DOMDocument();
 				foreach ( $dom->getElementsByTagName( 'a' ) as $node ) {
 					//check does this url domain is blog domain
