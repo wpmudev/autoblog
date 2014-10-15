@@ -676,7 +676,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render
 
     function _sort_blogs_by_name($a, $b)
     {
-        return strnatcmp($a->path, $b->path);
+        return strcmp($a->path, $b->path);
     }
 
 }
