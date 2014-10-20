@@ -1,4 +1,7 @@
 Change Log: Autoblog Plugin
+== 4.0.9.7 ==
+* Fix can not assign posts to blog in network
+
 == 4.0.9.6 ==
 * Fix wrong utf character
 * Sort blogs as Alphabetically in feed edit -> Add posts to

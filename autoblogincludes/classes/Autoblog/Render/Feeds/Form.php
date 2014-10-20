@@ -658,7 +658,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render
         }
 
         $blogs = array();
-        $results = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = %d ORDER BY blog_id ASC", $siteid));
+        $results = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM {$wpdb->blogs} WHERE site_id = %d ORDER BY path ASC", $siteid));
         foreach ($results as $blog_id) {
             $blog = get_blog_details($blog_id);
             if (!empty($blog) && isset($blog->domain)) {
@@ -668,9 +668,9 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render
         }
         //sort by alphebeta
         //get the main blog out of array
-        $main_blog = array_shift($blogs);
-        usort($blogs, array(&$this, '_sort_blogs_by_name'));
-        $blogs = array_merge(array($main_blog), $blogs);
+        //$main_blog = array_shift($blogs);
+        //usort($blogs, array(&$this, '_sort_blogs_by_name'));
+        //$blogs = array_merge(array($main_blog), $blogs);
         return $blogs;
     }
 
