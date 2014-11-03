@@ -1,4 +1,7 @@
 Change Log: Autoblog Plugin
+== 4.0.9.8 ==
+* Fix bug only pull first paragraph
+
 == 4.0.9.7 ==
 * Fix can not assign posts to blog in network
 
