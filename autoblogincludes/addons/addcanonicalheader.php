@@ -2,7 +2,7 @@
 /*
 Addon Name: Canonical link in header
 Description: Adds a rel='canonical' link in a posts header to point to the original post
-Author: Barry (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 */
 

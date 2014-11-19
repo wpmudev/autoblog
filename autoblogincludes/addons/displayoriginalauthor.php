@@ -2,7 +2,7 @@
 /*
 Addon Name: Replace Author Information
 Description: Replaces the author details shown on a post with the imported sites ones
-Author: Incsub
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 */
 

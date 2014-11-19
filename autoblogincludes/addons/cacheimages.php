@@ -3,7 +3,7 @@
 /*
 Addon Name: Image Import
 Description: Imports any images in a post to the media library and attaches them to the imported post.
-Author: Barry (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 */
 
@@ -20,7 +20,7 @@ class A_ImageCacheAddon extends Autoblog_Addon_Image {
 		parent::__construct();
 
 		$this->_add_action( 'autoblog_post_post_insert', 'import_post_images', 10, 3 );
-		$this->_add_action( 'autoblog_post_post_update', 'import_post_images', 10, 3 );
+		//$this->_add_action( 'autoblog_post_post_update', 'import_post_images', 10, 3 );
 	}
 
 	/**

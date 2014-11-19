@@ -2,7 +2,7 @@
 /*
 Addon Name: Append text to post
 Description: Allows some text to be appended to each post with variable placeholders
-Author: Barry (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
  */
 

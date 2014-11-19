@@ -2,7 +2,7 @@
 /*
 Addon Name: WPML Languages
 Description: Fixes language insertion problem on WPML multilingual sites.
-Author: Arnold Bailey (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 Since version: 4.0.8
 */

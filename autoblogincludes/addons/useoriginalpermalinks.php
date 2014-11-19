@@ -2,8 +2,8 @@
 /*
 Addon Name: Use External Permalinks
 Description: This plugin will allow you to change the post permalink for your imported posts to an original URL
-Author: Barry (Incsub)
-Author URI: http://jakespurlock.com/2009/09/how-to-point-your-post-permalink-to-an-external-site/
+Author: WPMU DEV
+Author URI: http://premium.wpmudev.org
 Network: False
 */
 

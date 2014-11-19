@@ -2,7 +2,7 @@
 /*
 Addon Name: Clean Face
 Description: Cleans non-validating feeds like Facebook. Fixes Facebook spoofed relative links.
-Author: Arnold Bailey (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 Since version: 4.0.8
 */

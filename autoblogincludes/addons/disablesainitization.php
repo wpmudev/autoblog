@@ -2,7 +2,7 @@
 /*
 Addon Name: Disable Sanitization
 Description: Allows you to override feed content sanitization and force a feed to import bare content even if it has usually blocked tags. This can help with compatibility for unusual feeds. Use with caution.
-Author: Incsub
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 */
 

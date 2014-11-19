@@ -2,7 +2,7 @@
 /*
 Addon Name: Check Feed Entries
 Description: Check to make sure blog id entries match in each feed entry.
-Author: Barry (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 Network: True
 */

@@ -3,8 +3,8 @@
 /*
 Addon Name: Twitter Add-on
 Description: Adds a Twitter post type and processes tweets to have correct links.
-Author: Barry (Incsub) Hoang Ngo (Incsub)
-Author URI: http://caffeinatedb.com
+Author: WPMU DEV
+Author URI: http://premium.wpmudev.org
 */
 
 

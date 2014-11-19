@@ -2,7 +2,7 @@
 /*
 Addon Name: Allow Force Feed
 Description: Allows you to override feed validation, and force a feed to process even if it has an incorrect MIME type. This can help with compatibility for unusual feeds. Use with caution.
-Author: Alexander Rohmann (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 */
 

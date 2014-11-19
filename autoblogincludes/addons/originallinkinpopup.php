@@ -3,7 +3,7 @@
 /*
 Addon Name: Open links in popup
 Description: When your reader clicks on links from the source, they will open in a popup
-Author: Hoang (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
  */
 

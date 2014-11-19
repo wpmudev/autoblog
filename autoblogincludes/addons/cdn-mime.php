@@ -2,7 +2,7 @@
 /*
 Addon Name: CDN Mime filter
 Description: Identifies mimetypes from CDN image downloads that do not have file extentions.
-Author: Arnold Bailey (Incsub)
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 Since version: 4.0.8
 */

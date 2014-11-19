@@ -2,7 +2,7 @@
 /*
 Addon Name: Post formats addon
 Description: Allows a post format to be selected for a feed.
-Author: Incsub
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 */
 

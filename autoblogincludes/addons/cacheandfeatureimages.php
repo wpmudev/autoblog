@@ -3,7 +3,7 @@
 /*
 Addon Name: Featured Image Import
 Description: Imports feed item featured image into the media library, attaches it to the imported post and marks it as featured image.
-Author: Incsub
+Author: WPMU DEV
 Author URI: http://premium.wpmudev.org
 */
 
