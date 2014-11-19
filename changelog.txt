@@ -1,4 +1,7 @@
 Change Log: Autoblog Plugin
+== 4.0.9.9 ==
+Fix disable sanitization add-on
+Update Author & Link of all addon
 == 4.0.9.8 ==
 * Fix bug only pull first paragraph
 
