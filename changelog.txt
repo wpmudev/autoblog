@@ -1,4 +1,6 @@
 Change Log: Autoblog Plugin
+== 4.1 ==
+Fix Import Images add-on fail for relative urls
 == 4.0.9.9 ==
 Fix disable sanitization add-on
 Update Author & Link of all addon
