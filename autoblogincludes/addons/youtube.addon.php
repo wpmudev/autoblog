@@ -48,8 +48,8 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
         $selected_option = apply_filters('autoblog_utube_from', isset($table['utubeimport']) ? $table['utubeimport'] : AUTOBLOG_IMAGE_CHECK_ORDER);
         $options = array(
             self::SOURCE_ENCLOSURE => __('Use enclosure tag of a feed item', 'autoblogtext'),
-            self::SOURCE_THE_FIRST_IMAGE => __('Find the first image within content of a feed item', 'autoblogtext'),
-            self::SOURCE_THE_LAST_IMAGE => __('Find the last image within content of a feed item', 'autoblogtext'),
+            self::SOURCE_THE_FIRST_VIDEO => __('Find the first youtube video within content of a feed item', 'autoblogtext'),
+            self::SOURCE_THE_LAST_VIDEO => __('Find the last youtube video within content of a feed item', 'autoblogtext'),
         );
 
         $radio = '';
