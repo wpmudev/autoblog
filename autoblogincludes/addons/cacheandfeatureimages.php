@@ -118,6 +118,20 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image
         }
 
         if (!$set) {
+            //the thumbnail can be in a media group, so we will parse again
+            $resutls = $item->get_item_tags(SIMPLEPIE_NAMESPACE_MEDIARSS, 'group');
+            if (isset($resutls[0]['child'][SIMPLEPIE_NAMESPACE_MEDIARSS]['thumbnail'][0]['attribs'])) {
+                $thumb = $resutls[0]['child'][SIMPLEPIE_NAMESPACE_MEDIARSS]['thumbnail'][0]['attribs'];
+                $thumb = array_shift($thumb);
+                if (is_array($thumb) && isset($thumb['url'])) {
+                    $thumbnail_id = $this->_download_image($thumb['url'], $post_id);
+                    $set = set_post_thumbnail($post_id, $thumbnail_id);
+
+                }
+            }
+        }
+
+        if (!$set) {
             $this->_set_default_image($post_id, $details);
         }
     }

@@ -33,6 +33,14 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
         $this->_add_action('autoblog_feed_edit_form_end', 'render_utube_options', 10, 2);
         //by default, wp will strip iframe, we will need to use the filter autoblog_post_content_before_import
         $this->_add_filter('autoblog_post_content_before_import', 'process_content', 10, 3);
+        $this->_add_action('autoblog_post_post_update', 'enable_post_kses_filter');
+        $this->_add_action('autoblog_post_post_insert', 'enable_post_kses_filter');
+    }
+
+    function enable_post_kses_filter()
+    {
+        add_filter('content_save_pre', 'wp_filter_post_kses');
+        add_filter('content_filtered_save_pre', 'wp_filter_post_kses');
     }
 
     /**
@@ -78,11 +86,12 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
 
     function process_content($old_content, $details, SimplePie_Item $item)
     {
+        //we will remove the post sanitize for cron
+        remove_filter('content_save_pre', 'wp_filter_post_kses');
+        remove_filter('content_filtered_save_pre', 'wp_filter_post_kses');
+
         //we need to check does the disable santinitize add-on activated
-        if (isset($details['disablesanitization']) && $details['disablesanitization'] == 1) {
-            return $old_content;
-        }
-        $method = trim(isset($details['utubeimport']) ? $details['utubeimport'] : AUTOBLOG_IMAGE_CHECK_ORDER);
+        $method = trim(isset($details['utubeimport']) ? $details['utubeimport'] : self::SOURCE_THE_FIRST_VIDEO);
         if (empty($method)) {
             return $old_content;
         }
