@@ -28,8 +28,6 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
     public function __construct()
     {
         parent::__construct();
-        //$this->_add_filter('autoblog_pre_post_insert', 'process_video', 11, 3);
-        //$this->_add_filter('autoblog_pre_post_update', 'process_video', 11, 3);
         $this->_add_action('autoblog_feed_edit_form_end', 'render_utube_options', 10, 2);
         //by default, wp will strip iframe, we will need to use the filter autoblog_post_content_before_import
         $this->_add_filter('autoblog_post_content_before_import', 'process_content', 10, 3);
@@ -129,9 +127,8 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
                 $link = array_pop($links);
             }
             //getting youtube id
-            $regex = "/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/";
-            if (preg_match($regex, $link, $uid)) {
-                $uid = $uid[1];
+            $uid = $this->find_youtube_id($link);
+            if ($uid != false) {
                 $embed_link = "https://www.youtube.com/embed/$uid";
                 $iframe = isset($table['utubeimport_iframe']) ? $table['utubeimport_iframe'] : '<iframe width="560" height="349" src="SRC_LINK" frameborder="0" allowfullscreen="0"></iframe>';
                 $iframe = str_replace('SRC_LINK', esc_url($embed_link), $iframe);
@@ -154,49 +151,29 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
         }
 
         if (!empty($link)) {
-            $iframe = isset($table['utubeimport_iframe']) ? $table['utubeimport_iframe'] : '<iframe width="560" height="349" src="SRC_LINK" frameborder="0" allowfullscreen="0"></iframe>';
-            $iframe = str_replace('SRC_LINK', esc_url($link), $iframe);
-            return $iframe . $old_content;
-        }
-        return $old_content;
-    }
-
-    function process_content1($old_content, $details, SimplePie_Item $item)
-    {
-        //we need to check does the disable santinitize add-on activated
-        if (isset($details['disablesanitization']) && $details['disablesanitization'] == 1) {
-            return $old_content;
-        }
-        global $allowedposttags;
-        $allowedposttags['iframe'] = array(
-            "src" => array(),
-            "height" => array(),
-            "width" => array()
-        );
-        $content = $item->get_content();
-        $doc = new DOMDocument();
-        $can_use_dom = @$doc->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
-        $doc->preserveWhiteSpace = false;
-
-        if ($can_use_dom) {
-            //now only allow iframe from youtube
-            $iframes = $doc->getElementsByTagName('iframe');
-            foreach ($iframes as $iframe) {
-                $url = $iframe->getAttribute('src');
-                if (strpos($url, '//') == 0) {
-                    $url = 'http:' . $url;
-                }
-                if (!stristr(parse_url($url, PHP_URL_HOST), 'youtube.com')) {
-                    $iframe->parentNode->removeChild($iframe);
-                }
+            //getting youtube id
+            $uid = $this->find_youtube_id($link);
+            if ($uid != false) {
+                $embed_link = "https://www.youtube.com/embed/$uid";
+                $iframe = isset($table['utubeimport_iframe']) ? $table['utubeimport_iframe'] : '<iframe width="560" height="349" src="SRC_LINK" frameborder="0" allowfullscreen="0"></iframe>';
+                $iframe = str_replace('SRC_LINK', esc_url($embed_link), $iframe);
+                return $iframe . $old_content;
             }
-            $new_content = preg_replace('~<(?:!DOCTYPE|/?(?:html|body))[^>]*>\s*~i', '', $doc->saveHTML());
-
-            return $new_content;
         }
-
         return $old_content;
     }
+
+    function find_youtube_id($link)
+    {
+        $regex = "/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/";
+        if (preg_match($regex, $link, $uid)) {
+            $uid = $uid[1];
+            return $uid;
+        }
+
+        return false;
+    }
+
 
     /**
      * Finds Youtube link and adds to post content.
@@ -222,37 +199,6 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
         }
 
         return $data;
-    }
-
-
-    private function linkifyYouTubeURLs($text)
-    {
-        $text = preg_replace('~
-        # Match non-linked youtube URL in the wild. (Rev:20130823)
-        https?://         # Required scheme. Either http or https.
-        (?:[0-9A-Z-]+\.)? # Optional subdomain.
-        (?:               # Group host alternatives.
-          youtu\.be/      # Either youtu.be,
-        | youtube         # or youtube.com or
-          (?:-nocookie)?  # youtube-nocookie.com
-          \.com           # followed by
-          \S*             # Allow anything up to VIDEO_ID,
-          [^\w\s-]       # but char before ID is non-ID char.
-        )                 # End host alternatives.
-        ([\w-]{11})      # $1: VIDEO_ID is exactly 11 chars.
-        (?=[^\w-]|$)     # Assert next char is non-ID or EOS.
-        (?!               # Assert URL is not pre-linked.
-          [?=&+%\w.-]*    # Allow URL (query) remainder.
-          (?:             # Group pre-linked alternatives.
-            [\'"][^<>]*>  # Either inside a start tag,
-          | </a>          # or inside <a> element text contents.
-          )               # End recognized pre-linked alts.
-        )                 # End negative lookahead assertion.
-        [?=&+%\w.-]*        # Consume any URL (query) remainder.
-        ~ix',
-            '<a href="http://www.youtube.com/watch?v=$1">YouTube link: $1</a>',
-            $text);
-        return $text;
     }
 
 }
