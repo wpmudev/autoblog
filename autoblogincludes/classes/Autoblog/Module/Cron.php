@@ -119,7 +119,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param int   $feed_id The feed ID.
+	 * @param int $feed_id The feed ID.
 	 * @param array $details The feed details.
 	 */
 	public function update_feed_check_timestamps( $feed_id, array $details ) {
@@ -130,7 +130,10 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			$data['nextcheck'] = $time + absint( $details['processfeed'] ) * MINUTE_IN_SECONDS;
 		}
 
-		$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $data, array( 'feed_id' => $feed_id ), array( '%d', '%d' ), array( '%d' ) );
+		$this->_wpdb->update( AUTOBLOG_TABLE_FEEDS, $data, array( 'feed_id' => $feed_id ), array(
+			'%d',
+			'%d'
+		), array( '%d' ) );
 	}
 
 	/**
@@ -158,7 +161,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param int   $feed_id The feed ID.
+	 * @param int $feed_id The feed ID.
 	 * @param array $details The feed details.
 	 */
 	public function switch_to_feed_blog( $feed_id, array $details ) {
@@ -176,7 +179,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param int   $feed_id The feed ID.
+	 * @param int $feed_id The feed ID.
 	 * @param array $details The feed details.
 	 */
 	public function restore_switch_blog( $feed_id, array $details ) {
@@ -194,8 +197,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array   $feed_ids The array of feed IDs to process.
-	 * @param boolean $force    Determines whether we need to force feed processing or not.
+	 * @param array $feed_ids The array of feed IDs to process.
+	 * @param boolean $force Determines whether we need to force feed processing or not.
 	 */
 	public function process_feeds( $feed_ids = array(), $force = false ) {
 		// return if nothing to process
@@ -266,7 +269,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		}
 
 		do_action( 'autoblog_post_process_feeds' );
-
+		die;
 		// remove temporary actions and filters
 		$this->_remove_action( 'wp_feed_options', 'setup_simplepie_options' );
 		$this->_remove_action( 'http_api_curl', 'setup_curl_options' );
@@ -367,8 +370,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access private
 	 *
-	 * @param SimplePie $feed    The fetched feed object.
-	 * @param array     $details The array of feed details.
+	 * @param SimplePie $feed The fetched feed object.
+	 * @param array $details The array of feed details.
 	 *
 	 * @return int The amount of importent feed items.
 	 */
@@ -405,8 +408,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access private
 	 *
-	 * @param SimplePie_Item $item              The feed item object.
-	 * @param boolean        $update_duplicates Determines whether or not we need to update duplicates.
+	 * @param SimplePie_Item $item The feed item object.
+	 * @param boolean $update_duplicates Determines whether or not we need to update duplicates.
 	 *
 	 * @return int The post id if the feed item has already been imported, otherwise 0.
 	 */
@@ -480,8 +483,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access private
 	 *
-	 * @param SimplePie_Item $item    The feed item object.
-	 * @param array          $details The array of feed details.
+	 * @param SimplePie_Item $item The feed item object.
+	 * @param array $details The array of feed details.
 	 *
 	 * @return boolean TRUE if feed item content matched, otherwise FALSE.
 	 */
@@ -576,9 +579,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access private
 	 *
-	 * @param SimplePie_Item $item    The feed item object.
-	 * @param array          $details The array of feed details.
-	 * @param int            $post_id The id of already imported feed item.
+	 * @param SimplePie_Item $item The feed item object.
+	 * @param array $details The array of feed details.
+	 * @param int $post_id The id of already imported feed item.
 	 *
 	 * @return int|boolean Operation log code on success, otherwise FALSE.
 	 */
@@ -628,9 +631,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param int            $post_id The post id to save meta information for.
-	 * @param array          $details The array of feed details.
-	 * @param SimplePie_Item $item    The feed item object.
+	 * @param int $post_id The post id to save meta information for.
+	 * @param array $details The array of feed details.
+	 * @param SimplePie_Item $item The feed item object.
 	 */
 	public function add_post_meta( $post_id, $details, SimplePie_Item $item ) {
 		$feed_url = trim( $details['url'] );
@@ -684,7 +687,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access private
 	 *
-	 * @param int          $type The log type.
+	 * @param int $type The log type.
 	 * @param string|array $info The log information.
 	 */
 	private function _log_message( $type, $info = '' ) {
@@ -726,8 +729,8 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param boolean $allow   Initial allow value.
-	 * @param array   $details The array of feed details.
+	 * @param boolean $allow Initial allow value.
+	 * @param array $details The array of feed details.
 	 *
 	 * @return boolean Filtered allow value.
 	 */
@@ -744,9 +747,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array          $data    The post data.
-	 * @param array          $details The array of feed details.
-	 * @param SimplePie_Item $item    The feed item object.
+	 * @param array $data The post data.
+	 * @param array $details The array of feed details.
+	 * @param SimplePie_Item $item The feed item object.
 	 *
 	 * @return array The post data.
 	 */
@@ -765,7 +768,12 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 					break;
 				case 'paragraphs':
 					$delimiter = "\n\n";
-					$content   = str_replace( array( '<br/>', '<br />', '<br>', '</p>' ), $delimiter, nl2br( $content ) );
+					$content   = str_replace( array(
+						'<br/>',
+						'<br />',
+						'<br>',
+						'</p>'
+					), $delimiter, nl2br( $content ) );
 					break;
 			}
 			$content = explode( $delimiter, strip_tags( $content ) );
@@ -797,9 +805,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array          $data    The post data.
-	 * @param array          $details The array of feed details.
-	 * @param SimplePie_Item $item    The feed item object.
+	 * @param array $data The post data.
+	 * @param array $details The array of feed details.
+	 * @param SimplePie_Item $item The feed item object.
 	 *
 	 * @return array The post data.
 	 */
@@ -871,9 +879,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param array          $data    The post data.
-	 * @param array          $details The array of feed details.
-	 * @param SimplePie_Item $item    The feed item object.
+	 * @param array $data The post data.
+	 * @param array $details The array of feed details.
+	 * @param SimplePie_Item $item The feed item object.
 	 *
 	 * @return array The post data.
 	 */
@@ -913,9 +921,9 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 	 *
 	 * @access public
 	 *
-	 * @param int            $post_id The post id.
-	 * @param array          $details The array of feed details.
-	 * @param SimplePie_Item $item    The feed item object.
+	 * @param int $post_id The post id.
+	 * @param array $details The array of feed details.
+	 * @param SimplePie_Item $item The feed item object.
 	 */
 	public function add_post_taxonomies( $post_id, array $details, SimplePie_Item $item ) {
 		$post_type = $details['posttype'];
@@ -964,6 +972,7 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 			}
 
 			$terms = array_unique( array_filter( array_map( 'absint', $terms ) ) );
+			$terms = apply_filters( 'autoblog_terms_assigned', $terms );
 			if ( ! empty( $terms ) ) {
 				wp_set_object_terms( $post_id, $terms, $feedcatsare, in_array( $feedcatsare, $added ) );
 			}
