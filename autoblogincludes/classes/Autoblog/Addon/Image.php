@@ -105,11 +105,35 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 	protected function validate_images( $url ) {
 		//validate images
 		$sizes = @getimagesize( $url );
+
 		if ( is_array( $sizes ) ) {
 			$type = current( explode( '/', $sizes['mime'], 2 ) );
 			if ( in_array( $sizes['mime'], get_allowed_mime_types() ) && $type == 'image' ) {
 				return $url;
 			}
+		}
+
+		//if the get fail, maybe 403 error, we try with other method
+		$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
+		if ( in_array( $ext, array(
+			'jpg',
+			'gif',
+			'png',
+			'jpeg'
+		) ) ) {
+			return $url;
+		}
+
+		//in some case, the url will have GET param, try the last with removing the param
+		$url = strtok( $url, '?' );
+		$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
+		if ( in_array( $ext, array(
+			'jpg',
+			'gif',
+			'png',
+			'jpeg'
+		) ) ) {
+			return $url;
 		}
 
 		return false;
@@ -122,8 +146,8 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 	 *
 	 * @access protected
 	 *
-	 * @param string $image   The image URL.
-	 * @param int    $post_id The post id to attach the image to.
+	 * @param string $image The image URL.
+	 * @param int $post_id The post id to attach the image to.
 	 *
 	 * @return string|boolean Local image URL on success, otherwise FALSE.
 	 */
@@ -153,7 +177,7 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 		// Set variables for storage, fix file filename for query strings
 		$matches = array();
 		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $image, $matches );
-		$file_array['name']     = $this->_generate_image_name($image);
+		$file_array['name']     = $this->_generate_image_name( $image );
 		$file_array['tmp_name'] = $tmp;
 
 		// do the validation and storage stuff
