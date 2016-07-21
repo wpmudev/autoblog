@@ -42,7 +42,7 @@ class Autoblog_Render_Addons_Table extends Autoblog_Render {
 		?><div class="wrap">
 			<div class="icon32" id="icon-edit"><br></div>
 			<h2>
-				<?php esc_html_e( 'Auto Blog Addons', 'autoblogtext' ) ?>
+				<?php esc_html_e( 'Autoblog Addons', 'autoblogtext' ) ?>
 			</h2>
 
 			<?php $this->_render_messages() ?>

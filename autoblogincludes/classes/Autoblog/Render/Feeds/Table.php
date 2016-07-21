@@ -46,7 +46,7 @@ class Autoblog_Render_Feeds_Table extends Autoblog_Render {
 		?><div class="wrap">
 			<div class="icon32" id="icon-edit"><br></div>
 			<h2>
-				<?php esc_html_e( 'Auto Blog Feeds', 'autoblogtext' ) ?>
+				<?php esc_html_e( 'Autoblog Feeds', 'autoblogtext' ) ?>
 				<a class="add-new-h2" href="<?php echo esc_url( $add_link ) ?>"><?php esc_html_e( 'Add New','autoblogtext' ) ?></a>
 			</h2>
 

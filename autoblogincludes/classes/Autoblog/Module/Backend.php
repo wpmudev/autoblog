@@ -125,12 +125,12 @@ class Autoblog_Module_Backend extends Autoblog_Module {
 		$capability = $is_network_admin ? 'manage_network_options' : 'manage_options';
 
 		// autoblog menu
-		$page_title = __( 'Auto Blog', 'autoblogtext' );
+		$page_title = __( 'Autoblog', 'autoblogtext' );
 		$icon = AUTOBLOG_ABSURL . 'images/menu.png';
 		add_menu_page( $page_title, $page_title, $capability, 'autoblog', array( $this, 'handle_dashboard_page' ), $icon );
 
 		// adding dashboad submenu page
-		$page_title = __( 'Auto Blog Dashboard', 'autoblogtext' );
+		$page_title = __( 'Autoblog Dashboard', 'autoblogtext' );
 		$menu_title = __( 'Dashboard', 'autoblogtext' );
 		$this->_admin_pages['dashboard'] = add_submenu_page( 'autoblog', $page_title, $menu_title, $capability, 'autoblog',  array( $this, 'handle_dashboard_page' ) );
 

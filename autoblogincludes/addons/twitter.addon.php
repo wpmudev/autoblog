@@ -176,7 +176,7 @@ class A_twitter_addon extends Autoblog_Addon {
 // Based on the default WP_Widget_Recent_Posts default WP widget
 class A_Widget_Recent_Tweets extends WP_Widget {
 
-	function A_Widget_Recent_Tweets() {
+	function __construct() {
 		$widget_ops = array( 'classname' => 'widget_recent_tweets', 'description' => __( 'The most recent tweets on your site', 'autoblogtext' ) );
 		$this->WP_Widget( 'recent-tweets', __( 'Recent Tweets', 'autoblogtext' ), $widget_ops );
 		$this->alt_option_name = 'widget_recent_tweets';
