@@ -37,13 +37,7 @@ class A_SourceLinkPopup extends Autoblog_Addon {
 		if ( ( $feed_id = get_post_meta( get_the_ID(), 'original_feed_id', true ) ) > 0 ) {
 			$feed = $this->get_feed( $feed_id );
 			if ( @$feed['olp_disable'] != 'on' ) {
-				$swap_content  = get_post_meta( get_the_ID(), 'autoblog_open_source_popup', true );
-				$swap_content = trim($swap_content);
-				$force_refresh = @$feed['olp_force_refresh'] == 'on' ? 1 : 0;
-				if ( $force_refresh == 1 || empty( $swap_content ) ) {
-					//so this post still not have swap content, do it
-					$swap_content = $this->generate_source_link_index( $content, $feed_id );
-				}
+				$swap_content = $this->generate_source_link_index( $content, $feed_id );
 				return $swap_content;
 			}
 		}
@@ -124,15 +118,13 @@ EOP;
 	public function add_footer_options( $key, $details ) {
 		$data = ! empty( $details ) ? maybe_unserialize( $details->feed_meta ) : array();
 
-		$label = sprintf( '<p>%s</p><p>%s</p><p>%s</p>',
+		$label = sprintf( '<p>%s</p><p>%s</p>',
 			__( 'Do you want to turn off this feature for this feed', 'autoblogtext' ),
-			__( 'Domain you want to exclude, seperate by line(without "http(s)://")', 'autoblogtext' ),
-			__( 'Always refresh content', 'autoblogtext' ) );
+			__( 'Domain you want to exclude, seperate by line(without "http(s)://")', 'autoblogtext' ));
 
-		$content = sprintf( '<p>%s</p><p>%s</p><p>%s</p>',
+		$content = sprintf( '<p>%s</p><p>%s</p>',
 			'<label><input ' . checked( @$data['olp_disable'], 'on', false ) . ' name="abtble[olp_disable]" type="checkbox">' . __( 'Yes','autoblogtext' ) . '</label>',
-			'<textarea name="abtble[olp_domain_exclude]" rows="3" class="long field">' . @$data['olp_domain_exclude'] . '</textarea>',
-			'<label><input ' . checked( @$data['olp_force_refresh'], 'on', false ) . ' type="checkbox" name="abtble[olp_force_refresh]">'.__('If this function is activated, it will re-index the link. Use this to update content and links','autoblogtext').'</label>'
+			'<textarea name="abtble[olp_domain_exclude]" rows="3" class="long field">' . @$data['olp_domain_exclude'] . '</textarea>'
 		);
 		$this->_render_block_header( __( 'Open Link In Popup', 'autoblogtext' ) );
 		// render block elements
