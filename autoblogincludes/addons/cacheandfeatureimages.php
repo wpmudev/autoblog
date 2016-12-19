@@ -265,7 +265,7 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 	 * @param SimplePie_Item $item The instance of SimplePie_Item class.
 	 */
 	public function check_post_for_images( $post_id, $details, SimplePie_Item $item ) {
-		$method = trim( isset( $details['featuredimage'] ) ? $details['featuredimage'] : AUTOBLOG_IMAGE_CHECK_ORDER );
+		$method = trim( isset( $details['featuredimage'] ) ? $details['featuredimage'] : '' );
 		if ( empty( $method ) ) {
 			return;
 		}

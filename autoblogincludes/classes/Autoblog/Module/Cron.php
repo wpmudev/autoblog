@@ -269,7 +269,6 @@ class Autoblog_Module_Cron extends Autoblog_Module {
 		}
 
 		do_action( 'autoblog_post_process_feeds' );
-		die;
 		// remove temporary actions and filters
 		$this->_remove_action( 'wp_feed_options', 'setup_simplepie_options' );
 		$this->_remove_action( 'http_api_curl', 'setup_curl_options' );
