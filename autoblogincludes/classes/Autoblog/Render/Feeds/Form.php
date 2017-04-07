@@ -576,7 +576,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render
                 </select>
                 <select name="abtble[startfromyear]" class="field">
                     <option></option>
-                    <?php for ($n = date("Y") - 1; $n <= date("Y") + 9; $n++) : ?>
+                    <?php for ($n = date("Y") - 10; $n <= date("Y") + 9; $n++) : ?>
                         <option
                             value="<?php echo $n ?>"<?php selected(!empty($this->startfrom) && $n == date('Y', $this->startfrom)) ?>><?php echo $n ?></option>
                     <?php endfor; ?>
@@ -604,7 +604,7 @@ class Autoblog_Render_Feeds_Form extends Autoblog_Render
                 </select>
                 <select name="abtble[endonyear]" class="field">
                     <option></option>
-                    <?php for ($n = date("Y") - 1; $n <= date("Y") + 9; $n++) : ?>
+                    <?php for ($n = date("Y") - 10; $n <= date("Y") + 9; $n++) : ?>
                         <option
                             value="<?php echo $n ?>"<?php selected(!empty($this->endon) && $n == date('Y', $this->endon)) ?>><?php echo $n ?></option>
                     <?php endfor; ?>
