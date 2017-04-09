@@ -1,5 +1,8 @@
 Change Log: Autoblog Plugin
 
+== 4.1.0.3 ==
+Fix: Added more years in the feed processing date range
+
 == 4.1.0.2 ==
 Fix: "Open Links in Popup" add-on - cache now refreshes content when imported pages/posts are modified manually
 
