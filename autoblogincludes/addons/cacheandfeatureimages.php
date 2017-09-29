@@ -149,7 +149,8 @@ class A_FeatureImageCacheAddon extends Autoblog_Addon_Image {
 		$enclosure = $item->get_enclosure();
 		if ( is_a( $enclosure, 'SimplePie_Enclosure' ) ) {
 			$link      = $enclosure->get_link();
-			var_dump($enclosure->embed());
+			$link = strtok($link, '?');
+//			var_dump($enclosure->embed());
 			$file_type = wp_check_filetype( $link );
 			$mime_type = $file_type['type'];
 			$type      = current( explode( '/', $mime_type, 2 ) );
