@@ -130,7 +130,7 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
             $uid = $this->find_youtube_id($link);
             if ($uid != false) {
                 $embed_link = "https://www.youtube.com/embed/$uid";
-                $iframe = isset($table['utubeimport_iframe']) ? $table['utubeimport_iframe'] : '<iframe width="560" height="349" src="SRC_LINK" frameborder="0" allowfullscreen="0"></iframe>';
+                $iframe = isset($details['utubeimport_iframe']) ? $details['utubeimport_iframe'] : '<iframe width="560" height="349" src="SRC_LINK" frameborder="0" allowfullscreen="0"></iframe>';
                 $iframe = str_replace('SRC_LINK', esc_url($embed_link), $iframe);
                 return $iframe . $old_content;
             }
@@ -155,7 +155,7 @@ class Autoblog_Addon_Youtube extends Autoblog_Addon
             $uid = $this->find_youtube_id($link);
             if ($uid != false) {
                 $embed_link = "https://www.youtube.com/embed/$uid";
-                $iframe = isset($table['utubeimport_iframe']) ? $table['utubeimport_iframe'] : '<iframe width="560" height="349" src="SRC_LINK" frameborder="0" allowfullscreen="0"></iframe>';
+                $iframe = isset($details['utubeimport_iframe']) ? $details['utubeimport_iframe'] : '<iframe width="560" height="349" src="SRC_LINK" frameborder="0" allowfullscreen="0"></iframe>';
                 $iframe = str_replace('SRC_LINK', esc_url($embed_link), $iframe);
                 return $iframe . $old_content;
             }
