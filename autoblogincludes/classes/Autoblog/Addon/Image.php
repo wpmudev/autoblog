@@ -84,9 +84,9 @@ class Autoblog_Addon_Image extends Autoblog_Addon {
 						$url = 'http:' . $url;
 					}
 					$purl = autoblog_parse_mb_url( $url );
-					if ( ! isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] ) {
-						$images[] = $url;
-					}
+					//if ( ! isset( $purl['host'] ) || $purl['host'] != $siteurl['host'] ) {
+					$images[] = $url;
+					//}
 				}
 			}
 		} else {
