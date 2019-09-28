@@ -248,6 +248,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		}
 
 		$feed['feed_meta'] = serialize( $post );
+		$feed['site_id'] = get_current_network_id();
 		$feed['blog_id'] = absint( $post['blog'] );
 		$feed['nextcheck'] = isset( $post['processfeed'] ) && intval( $post['processfeed'] ) > 0
 			? current_time( 'timestamp', 1 ) + absint( $post['processfeed'] ) * MINUTE_IN_SECONDS
@@ -263,6 +264,7 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 				do_action( 'autoblog_feed_updated', $feed );
 			}
 		} else {
+			$feed['site_id'] = get_current_network_id();
 			if ( $this->_wpdb->insert( AUTOBLOG_TABLE_FEEDS, $feed ) ) {
 				$result = 'true';
 				$feed['feed_id'] = $this->_wpdb->insert_id;
