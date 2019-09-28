@@ -248,7 +248,6 @@ class Autoblog_Module_Page_Feeds extends Autoblog_Module {
 		}
 
 		$feed['feed_meta'] = serialize( $post );
-		$feed['site_id'] = get_current_network_id();
 		$feed['blog_id'] = absint( $post['blog'] );
 		$feed['nextcheck'] = isset( $post['processfeed'] ) && intval( $post['processfeed'] ) > 0
 			? current_time( 'timestamp', 1 ) + absint( $post['processfeed'] ) * MINUTE_IN_SECONDS
